@@ -7,7 +7,38 @@
         "organization": "Intellivoid",
         "description": "The official Socialvoid Library used for database management and Socialvoid operator standards",
         "url": "https://github.com/intellivoid/socialvoidlib",
-        "dependencies": [],
+        "dependencies": [
+            {
+                "package": "net.intellivoid.acm",
+                "version": "latest",
+                "source": "default@github/intellivoid/acm",
+                "required": true
+            },
+            {
+                "package": "net.intellivoid.msqg",
+                "version": "latest",
+                "source": "default@github/intellivoid/msqg",
+                "required": true
+            },
+            {
+                "package": "net.intellivoid.tsa",
+                "version": "latest",
+                "source": "default@github/intellivoid/time-signature-authentication",
+                "required": true
+            },
+            {
+                "package": "net.intellivoid.udp",
+                "version": "latest",
+                "source": "default@github/intellivoid/udp_manager",
+                "required": true
+            },
+            {
+                "package": "net.intellivoid.ziproto",
+                "version": "latest",
+                "source": "default@github/intellivoid/ziproto",
+                "required": true
+            }
+        ],
         "configuration": {
             "autoload_method": "generated_spl",
             "main": null,
@@ -55,6 +86,14 @@
         {
             "required": true,
             "file": "SocialvoidLib.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/GenericInternal/DependencyError.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/GenericInternal/ConfigurationError.php"
         },
         {
             "required": true,
