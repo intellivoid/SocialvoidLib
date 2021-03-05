@@ -5,11 +5,21 @@
 
     namespace SocialvoidLib\Objects\User;
 
+    use Exception;
     use SocialvoidLib\Classes\Security\Hashing;
+    use SocialvoidLib\Classes\Validate;
+    use SocialvoidLib\Exceptions\Internal\NoRecoveryCodesAvailableException;
+    use SocialvoidLib\Exceptions\Internal\NoTimeBasedSignatureAvailableException;
     use SocialvoidLib\Exceptions\Internal\RecoveryCodesAlreadyExistsException;
     use SocialvoidLib\Exceptions\Internal\TimeBasedPrivateSignatureAlreadyExistsException;
+    use SocialvoidLib\Exceptions\Standard\Authentication\IncorrectPasswordException;
+    use SocialvoidLib\Exceptions\Standard\Authentication\IncorrectTwoFactorAuthenticationCodeException;
+    use SocialvoidLib\Exceptions\Standard\Authentication\NoPasswordAuthenticationAvailableException;
+    use SocialvoidLib\Exceptions\Standard\Authentication\NoTwoFactorAuthenticationAvailableException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidPasswordException;
     use tsa\Classes\Crypto;
     use tsa\Exceptions\BadLengthException;
+    use tsa\Exceptions\InvalidSecretException;
     use tsa\Exceptions\SecuredRandomProcessorNotFoundException;
 
     /**
@@ -18,8 +28,6 @@
      */
     class UserAuthenticationProperties
     {
-        // TODO: Come up with a secured password storage implementation
-
         /**
          * The password storage string for validation
          *
@@ -32,7 +40,7 @@
          *
          * @var int|null
          */
-        public $PasswordLastUpdatedTimestamp;
+        public $PasswordLastUpdated;
 
         /**
          * The time based private signature used to provide Two-Factor
@@ -112,6 +120,60 @@
         }
 
         /**
+         * Validates a recovery code
+         *
+         * @param string $input
+         * @param bool $throw_exception
+         * @return bool
+         * @throws NoRecoveryCodesAvailableException
+         */
+        public function validateRecoveryCode(string $input, bool $throw_exception=false): bool
+        {
+            if($this->RecoveryCodes == null)
+            {
+                if($throw_exception)
+                    throw new NoRecoveryCodesAvailableException("Recovery codes are set to null", $this);
+                return false;
+            }
+
+            if(is_array($this->RecoveryCodes) && count($this->RecoveryCodes) == 0)
+            {
+                if($throw_exception)
+                    throw new NoRecoveryCodesAvailableException("There are no recovery codes left", $this);
+                return false;
+            }
+
+            return in_array($input, $this->RecoveryCodes);
+        }
+
+        /**
+         * Removes an existing recovery code
+         *
+         * @param string $input
+         * @param bool $throw_exception
+         * @throws NoRecoveryCodesAvailableException
+         */
+        public function removeRecoveryCode(string $input, bool $throw_exception=false): void
+        {
+            if($this->RecoveryCodes == null)
+            {
+                if($throw_exception)
+                    throw new NoRecoveryCodesAvailableException("Recovery codes are set to null", $this);
+                return;
+
+            }
+
+            if(is_array($this->RecoveryCodes) && count($this->RecoveryCodes) == 0)
+            {
+                if($throw_exception)
+                    throw new NoRecoveryCodesAvailableException("There are no recovery codes left", $this);
+                return;
+            }
+
+            $this->RecoveryCodes = array_diff($this->RecoveryCodes, [$input]);
+        }
+
+        /**
          * Disables recovery codes
          */
         public function disableRecoveryCodes(): void
@@ -151,6 +213,46 @@
         }
 
         /**
+         * Returns the current time based signature one-time password
+         *
+         * @return string
+         * @throws NoTimeBasedSignatureAvailableException
+         * @throws InvalidSecretException
+         */
+        public function currentTimeBasedOneTimePassword(): string
+        {
+            if($this->TimeBasedPrivateSignature == null)
+                throw new NoTimeBasedSignatureAvailableException("There are no time based signatures available", $this);
+
+            return Crypto::getCode($this->TimeBasedPrivateSignature);
+        }
+
+        /**
+         * Validates the time based one time password input
+         *
+         * @param string $input
+         * @return bool
+         * @throws NoTimeBasedSignatureAvailableException
+         */
+        public function validateTimeBasedOneTimePassword(string $input): bool
+        {
+            if($this->TimeBasedPrivateSignature == null)
+                throw new NoTimeBasedSignatureAvailableException("There are no time based signatures available", $this);
+
+            try
+            {
+                if(Crypto::verifyCode($this->TimeBasedPrivateSignature, $input) == true)
+                    return True;
+            }
+            catch(Exception $exception)
+            {
+                return False;
+            }
+
+            return False;
+        }
+
+        /**
          * Disables the time based private signature method
          */
         public function disableTimeBasedPrivateSignature(): void
@@ -163,11 +265,15 @@
          * Sets the password property properly.
          *
          * @param string|null $password
+         * @throws InvalidPasswordException
          */
         public function setPassword(?string $password): void
         {
+            if(Validate::password($password) == false)
+                throw new InvalidPasswordException("The given password is considered unsafe or invalid", $password);
+
             $this->Password = Hashing::password($password);
-            $this->PasswordLastUpdatedTimestamp = (int)time();
+            $this->PasswordLastUpdated = (int)time();
         }
 
         /**
@@ -176,7 +282,7 @@
         public function disablePassword(): void
         {
             $this->Password = null;
-            $this->PasswordLastUpdatedTimestamp = (int)time();
+            $this->PasswordLastUpdated = (int)time();
         }
 
         /**
@@ -197,6 +303,133 @@
         {
             $this->CoaApplicationId = null;
             $this->CoaApplicationIdLastUpdatedTimestamp = (int)time();
+        }
+
+        // TODO: Add coa authentication implementation
+
+        /**
+         * Validates the two factor authentication code
+         *
+         * @param string $input
+         * @param bool $update
+         * @return bool
+         * @throws IncorrectTwoFactorAuthenticationCodeException
+         * @throws NoRecoveryCodesAvailableException
+         * @throws NoTwoFactorAuthenticationAvailableException
+         */
+        public function twoFactorAuthentication(string $input, bool $update=true): bool
+        {
+            if($this->RecoveryCodes == null && $this->TimeBasedPrivateSignature == null)
+                throw new NoTwoFactorAuthenticationAvailableException("No recovery codes or time based methods are configured");
+
+            //  Try OTP
+            if($this->TimeBasedPrivateSignature !== null)
+            {
+                try
+                {
+                    if($this->validateTimeBasedOneTimePassword($input))
+                        return True;
+                }
+                catch(Exception $e)
+                {
+                    unset($e);
+                }
+            }
+
+            // Try RecoveryCode
+            if($this->RecoveryCodes !== null)
+            {
+                /** @noinspection PhpRedundantOptionalArgumentInspection */
+                /** @noinspection PhpUnhandledExceptionInspection */
+                if($this->validateRecoveryCode($input, false))
+                {
+                    if($update)
+                        /** @noinspection PhpUnhandledExceptionInspection */
+                        /** @noinspection PhpRedundantOptionalArgumentInspection */
+                        $this->removeRecoveryCode($input, false);
+                    return true;
+                }
+            }
+
+            throw new IncorrectTwoFactorAuthenticationCodeException("Two Factor authentication validation failed");
+        }
+
+        /**
+         * Processes a password authentication method
+         *
+         * @param string $password
+         * @return bool
+         * @throws IncorrectPasswordException
+         * @throws NoPasswordAuthenticationAvailableException
+         */
+        public function passwordAuthentication(string $password): bool
+        {
+            if($this->Password == null)
+                throw new NoPasswordAuthenticationAvailableException("No password authentication method has been configured");
+
+            if(Validate::password($password) == false)
+                throw new IncorrectPasswordException("The given password is invalid");
+
+            if(Hashing::password($password) !== $this->Password)
+                throw new IncorrectPasswordException("The given password is incorrect");
+
+            return true;
+        }
+
+        /**
+         * Returns an array representation of this object
+         *
+         * @return array
+         */
+        public function toArray(): array
+        {
+            return [
+                "password" => $this->Password,
+                "password_last_updated" => $this->PasswordLastUpdated,
+                "time_based_private_signature" => $this->TimeBasedPrivateSignature,
+                "time_based_private_signature_last_updated" => $this->TimeBasedPrivateSignatureLastUpdated,
+                "recovery_codes" => $this->RecoveryCodes,
+                "recovery_codes_last_updated" => $this->RecoveryCodesLastUpdated,
+                "coa_application_id" => $this->CoaApplicationId,
+                "coa_application_id_last_updated" => $this->CoaApplicationIdLastUpdatedTimestamp
+            ];
+        }
+
+        /**
+         * Constructs the object from an array representation
+         *
+         * @param array $data
+         * @return UserAuthenticationProperties
+         */
+        public static function fromArray(array $data): UserAuthenticationProperties
+        {
+            $UserAuthenticationPropertiesObject = new UserAuthenticationProperties();
+
+            if(isset($data["password"]))
+                $UserAuthenticationPropertiesObject->Password = $data["password"];
+
+            if(isset($data["password_last_updated"]))
+                $UserAuthenticationPropertiesObject->PasswordLastUpdated = $data["password_last_updated"];
+
+            if(isset($data["time_based_private_signature"]))
+                $UserAuthenticationPropertiesObject->TimeBasedPrivateSignature = $data["time_based_private_signature"];
+
+            if(isset($data["time_based_private_signature_last_updated"]))
+                $UserAuthenticationPropertiesObject->TimeBasedPrivateSignatureLastUpdated = $data["time_based_private_signature_last_updated"];
+
+            if(isset($data["recovery_codes"]))
+                $UserAuthenticationPropertiesObject->RecoveryCodes = $data["recovery_codes"];
+
+            if(isset($data["recovery_codes_last_updated"]))
+                $UserAuthenticationPropertiesObject->RecoveryCodesLastUpdated = $data["recovery_codes_last_updated"];
+
+            if(isset($data["coa_application_id"]))
+                $UserAuthenticationPropertiesObject->CoaApplicationId = $data["coa_application_id"];
+
+            if(isset($data["coa_application_id_last_updated"]))
+                $UserAuthenticationPropertiesObject->CoaApplicationIdLastUpdatedTimestamp = $data["coa_application_id_last_updated"];
+
+            return $UserAuthenticationPropertiesObject;
         }
 
     }

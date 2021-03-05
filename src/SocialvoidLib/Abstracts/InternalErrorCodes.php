@@ -2,6 +2,9 @@
 
     namespace SocialvoidLib\Abstracts;
 
+    use SocialvoidLib\Exceptions\Internal\AuthenticationFailureException;
+    use SocialvoidLib\Exceptions\Internal\NoRecoveryCodesAvailableException;
+    use SocialvoidLib\Exceptions\Internal\NoTimeBasedSignatureAvailableException;
     use SocialvoidLib\Exceptions\Internal\RecoveryCodesAlreadyExistsException;
     use SocialvoidLib\Exceptions\Internal\TimeBasedPrivateSignatureAlreadyExistsException;
 
@@ -22,4 +25,19 @@
          * @see TimeBasedPrivateSignatureAlreadyExistsException
          */
         const TimeBasedPrivateSignatureAlreadyExistsException = 0x2001;
+
+        /**
+         * @see NoRecoveryCodesAvailableException
+         */
+        const NoRecoveryCodesAvailableException = 0x2002;
+
+        /**
+         * @see NoTimeBasedSignatureAvailableException
+         */
+        const NoTimeBasedSignatureAvailableException = 0x2003;
+
+        /**
+         * @see AuthenticationFailureException
+         */
+        const AuthenticationFailureException = 0x2004;
     }

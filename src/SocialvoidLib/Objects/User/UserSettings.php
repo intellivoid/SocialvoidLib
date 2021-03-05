@@ -4,10 +4,10 @@
     namespace SocialvoidLib\Objects\User;
 
     /**
-     * Class UserProperties
+     * Class UserSettings
      * @package SocialvoidLib\Objects\User
      */
-    class UserProperties
+    class UserSettings
     {
         /**
          * Returns an array representation of the object
@@ -20,15 +20,15 @@
         }
 
         /**
-         * Constructs the user properties object from an array representation
+         * Constructs an object from an array representation
          *
          * @param array $data
-         * @return UserProperties
+         * @return UserSettings
          */
-        public static function fromArray(array $data): UserProperties
+        public static function fromArray(array $data): UserSettings
         {
-            $UserPropertiesObject = new UserProperties();
+            $UserSettingsObject = new UserSettings();
 
-            return $UserPropertiesObject;
+            return $UserSettingsObject;
         }
     }

@@ -32,6 +32,19 @@
          */
         public $Avatars;
 
+        /**
+         * CoaUserEntity constructor.
+         */
+        public function __construct()
+        {
+            $this->Avatars = [];
+        }
+
+        /**
+         * Returns an array representation of the avatars
+         *
+         * @return array
+         */
         public function avatarsToArray(): array
         {
             $results = [];
@@ -53,5 +66,30 @@
                 "username" => $this->Username,
                 "avatars" => $this->avatarsToArray()
             ];
+        }
+
+        /**
+         * Constructs the object from an array
+         *
+         * @param array $data
+         * @return CoaUserEntity
+         */
+        public static function fromArray(array $data): CoaUserEntity
+        {
+            $CoaUserEntityObject = new CoaUserEntity();
+
+            if(isset($data["id"]))
+                $CoaUserEntityObject->ID = $data["id"];
+
+            if(isset($data["username"]))
+                $CoaUserEntityObject->Username = $data["username"];
+
+            if(isset($data["avatars"]))
+            {
+                foreach($data["avatars"] as $avatar)
+                    $CoaUserEntityObject->Avatars[] = CoaAvatar::fromArray($avatar);
+            }
+
+            return $CoaUserEntityObject;
         }
     }

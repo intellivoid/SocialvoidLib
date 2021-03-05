@@ -1,0 +1,17 @@
+Standard for Socialvoid network names
+
+A username must be at least 3 characters long
+A username cannot be larger than 20 characters (?)
+
+Can contain underscores "_"
+Can contain "A-Z" & "a-z" characters
+Can contain "0-9" digits as characters
+
+Cannot contain only numbers
+Cannot begin with "_"
+Cannot end with "_"
+Cannot contain any other special characters other than the mentioned above, "A-Z, a-z & _" (Not including -)
+
+Regex, created by @Justasic
+
+^(?!_)[A-Za-z0-9_]{3,20}(?<!_)$

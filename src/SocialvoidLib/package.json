@@ -1,0 +1,139 @@
+{
+    "package": {
+        "package_name": "net.intellivoid.socialvoidlib",
+        "name": "SocialvoidLib",
+        "version": "1.0.0.0",
+        "author": "Zi Xing Narrakas",
+        "organization": "Intellivoid",
+        "description": "The official Socialvoid Library used for database management and Socialvoid operator standards",
+        "url": "https://github.com/intellivoid/socialvoidlib",
+        "dependencies": [],
+        "configuration": {
+            "autoload_method": "generated_spl",
+            "main": null,
+            "post_installation": [],
+            "pre_installation": []
+        }
+    },
+    "components": [
+        {
+            "required": true,
+            "file": "Abstracts/StatusStates/UserStatus.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/StatusStates/UserPrivacyState.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/InternalErrorCodes.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/UserAuthenticationMethod.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/StandardErrorCodes.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/CoaAvatarSize.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/Flags/UserFlags.php"
+        },
+        {
+            "required": true,
+            "file": "Classes/Security/Hashing.php"
+        },
+        {
+            "required": true,
+            "file": "Classes/Validate.php"
+        },
+        {
+            "required": true,
+            "file": "SocialvoidLib.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Internal/TimeBasedPrivateSignatureAlreadyExistsException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Internal/NoTimeBasedSignatureAvailableException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Internal/AuthenticationFailureException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Internal/NoRecoveryCodesAvailableException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Internal/RecoveryCodesAlreadyExistsException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Validation/InvalidUsernameException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Validation/InvalidPasswordException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Authentication/IncorrectTwoFactorAuthenticationCodeException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Authentication/IncorrectPasswordException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Authentication/NoTwoFactorAuthenticationAvailableException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Authentication/AuthenticationNotApplicableException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Authentication/NoPasswordAuthenticationAvailableException.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/User/UserProperties.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/User/CoaUserEntity.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/User/CoaAvatar.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/User/Profile.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/User/UserAuthenticationProperties.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/User/UserSettings.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/User.php"
+        }
+    ],
+    "files": [
+        "package.json"
+    ]
+}
