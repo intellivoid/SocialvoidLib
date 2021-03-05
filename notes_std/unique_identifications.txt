@@ -1,0 +1,12 @@
+== User ID ==
+A user ID format is a unique SHA256 hash, the algorithm behind it can be anything but must be uniquely random
+in the network, hash conflicts against other netowrks are allowed because users can be from different networks,
+eg; 'daf7dc335e4083ffd82f263aa0a3683746b488854935646484fe1d77babdba9f@socialvoid.cc' or 'netkas@socialvoid.cc'.
+In both scenarios the user can be identified either by the hash ot username, some networks can be configured to
+not allow resolutions via a user ID.
+
+The formula used in SocialvoidLib is the following
+
+a = sha256(UnixTimestamp) + pepper(UnixTimestamp)
+x = sha256(pepper(a + UnixTimestamp))
+result = x

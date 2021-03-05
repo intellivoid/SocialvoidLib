@@ -17,7 +17,7 @@
          */
         public static function username(string $input): bool
         {
-            preg_match('/^(?!_)[A-Za-z0-9_]{3,20}(?<!_)$/m', $input, $matches);
+            preg_match('/^(?!_)[A-Za-z0-9_]{3,32}(?<!_)$/m', $input, $matches);
             return count($matches) >= 1 && $matches !== false;
         }
 
@@ -29,7 +29,52 @@
          */
         public static function password(string $input): bool
         {
-            // Return true for now
+            preg_match('/^(?=.*[A-Z])(?=.*\d.*\d)(?=.*[ -\/:-@\[-`\{-~])[ -~]{12,128}$/m', $input, $matches);
+            return count($matches) >= 1 && $matches !== false;
+        }
+
+        /**
+         * Validates the first name
+         *
+         * @param string $input
+         * @return bool
+         */
+        public static function firstName(string $input): bool
+        {
+            if (strlen($input) == 0)
+                return false;
+
+            if (strlen($input) > 64)
+                return false;
+
+            return true;
+        }
+
+        /**
+         * Validates the last name
+         *
+         * @param string $input
+         * @return bool
+         */
+        public static function lastName(string $input): bool
+        {
+            if (strlen($input) > 64)
+                return false;
+
+            return true;
+        }
+
+        /**
+         * Validates the user biography
+         *
+         * @param string $input
+         * @return bool
+         */
+        public static function biography(string $input): bool
+        {
+            if(strlen($input) > 255)
+                return false;
+
             return true;
         }
     }

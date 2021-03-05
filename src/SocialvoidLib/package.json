@@ -61,6 +61,10 @@
         },
         {
             "required": true,
+            "file": "Abstracts/SearchMethods/UserSearchMethod.php"
+        },
+        {
+            "required": true,
             "file": "Abstracts/UserAuthenticationMethod.php"
         },
         {
@@ -81,7 +85,15 @@
         },
         {
             "required": true,
+            "file": "Classes/Converter.php"
+        },
+        {
+            "required": true,
             "file": "Classes/Validate.php"
+        },
+        {
+            "required": true,
+            "file": "Classes/Standard/BaseIdentification.php"
         },
         {
             "required": true,
@@ -89,7 +101,15 @@
         },
         {
             "required": true,
+            "file": "Exceptions/GenericInternal/DatabaseException.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/GenericInternal/DependencyError.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/GenericInternal/InvalidSearchMethodException.php"
         },
         {
             "required": true,
@@ -117,11 +137,31 @@
         },
         {
             "required": true,
+            "file": "Exceptions/Standard/Network/UserNotFoundException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Validation/UsernameAlreadyExistsException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Validation/InvalidBiographyException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Validation/InvalidLastNameException.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/Standard/Validation/InvalidUsernameException.php"
         },
         {
             "required": true,
             "file": "Exceptions/Standard/Validation/InvalidPasswordException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Validation/InvalidFirstNameException.php"
         },
         {
             "required": true,
@@ -170,6 +210,10 @@
         {
             "required": true,
             "file": "Objects/User.php"
+        },
+        {
+            "required": true,
+            "file": "Managers/UserManager.php"
         }
     ],
     "files": [

@@ -55,11 +55,11 @@
         public $UsernameSafe;
 
         /**
-         * The name of the network that this user is from
+         * The domain of the network that this user is from
          *
          * @var string
          */
-        public $NetworkName;
+        public $Network;
 
         /**
          * The current status of the user which indicates what
@@ -245,7 +245,7 @@
                 "public_id" => $this->PublicID,
                 "username" => $this->Username,
                 "username_safe" => $this->UsernameSafe,
-                "network_name" => $this->NetworkName,
+                "network" => $this->Network,
                 "status" => $this->Status,
                 "status_change_timestamp" => $this->StatusChangeTimestamp,
                 "properties" => $this->Properties->toArray(),
@@ -284,8 +284,8 @@
             if(isset($data["username_safe"]))
                 $UserObject->UsernameSafe = $data["username_safe"];
 
-            if(isset($data["network_name"]))
-                $UserObject->NetworkName = $data["network_name"];
+            if(isset($data["network"]))
+                $UserObject->Network = $data["network"];
 
             if(isset($data["status"]))
                 $UserObject->Status = $data["status"];

@@ -8,8 +8,13 @@
     use SocialvoidLib\Exceptions\Standard\Authentication\IncorrectTwoFactorAuthenticationCodeException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NoPasswordAuthenticationAvailableException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NoTwoFactorAuthenticationAvailableException;
+    use SocialvoidLib\Exceptions\Standard\Network\UserNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidBiographyException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidFirstNameException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidLastNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPasswordException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidUsernameException;
+    use SocialvoidLib\Exceptions\Standard\Validation\UsernameAlreadyExistsException;
 
     /**
      * Class StandardErrorCodes
@@ -32,6 +37,26 @@
          * @see InvalidPasswordException
          */
         const InvalidPasswordException = 0x02101;
+
+        /**
+         * @see InvalidFirstNameException
+         */
+        const InvalidFirstNameException = 0x02102;
+
+        /**
+         * @see InvalidLastNameException
+         */
+        const InvalidLastNameException = 0x02103;
+
+        /**
+         * @see InvalidBiographyException
+         */
+        const InvalidBiographyException = 0x02104;
+
+        /**
+         * @see UsernameAlreadyExistsException
+         */
+        const UsernameAlreadyExistsException = 0x02105;
 
 
         /** 22-Set error codes (Authentication) */
@@ -70,4 +95,15 @@
          * @see AuthenticationNotApplicableException
          */
         const AuthenticationNotApplicableException = 0x02204;
+
+
+
+        /** 31-Set error codes (Network) */
+
+        /**
+         * Raised when the requested user entity was not found
+         *
+         * @see UserNotFoundException
+         */
+        const UserNotFoundException = 0x03100;
     }

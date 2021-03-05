@@ -1,0 +1,8 @@
+First and last names do not have any special limitations other than a character limit
+
+First name cannot be empty, must have a minimum length of 1 cannot be greater than 64 characters
+Last name can be empty, cannot be greater than 64 characters
+
+
+Biographies can be empty, but when applied it cannot be greater than 255 characters.
+Biographies cannot contain only whitespace
