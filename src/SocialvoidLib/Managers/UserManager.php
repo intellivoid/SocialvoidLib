@@ -7,7 +7,6 @@
 
     use Exception;
     use msqg\QueryBuilder;
-    use mysqli;
     use SocialvoidLib\Abstracts\SearchMethods\UserSearchMethod;
     use SocialvoidLib\Abstracts\StatusStates\UserPrivacyState;
     use SocialvoidLib\Abstracts\StatusStates\UserStatus;
@@ -23,6 +22,7 @@
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidUsernameException;
     use SocialvoidLib\Exceptions\Standard\Validation\UsernameAlreadyExistsException;
     use SocialvoidLib\Objects\User;
+    use SocialvoidLib\SocialvoidLib;
     use ZiProto\ZiProto;
 
     /**
@@ -32,28 +32,17 @@
     class UserManager
     {
         /**
-         * The database connection
-         *
-         * @var mysqli
+         * @var SocialvoidLib
          */
-        private mysqli $mysqli;
-
-        /**
-         * The network configuration ACM
-         *
-         * @var array
-         */
-        private array $network_configuration;
+        private SocialvoidLib $socialvoidLib;
 
         /**
          * UserManager constructor.
-         * @param mysqli $mysqli
-         * @param array $network_configuration
+         * @param SocialvoidLib $socialvoidLib
          */
-        public function __construct(mysqli $mysqli, array $network_configuration)
+        public function __construct(SocialvoidLib $socialvoidLib)
         {
-            $this->mysqli = $mysqli;
-            $this->network_configuration = $network_configuration;
+            $this->socialvoidLib = $socialvoidLib;
         }
 
         /**
@@ -99,26 +88,26 @@
             $public_id = BaseIdentification::UserPublicID($timestamp);
 
             $Query = QueryBuilder::insert_into("users", [
-                "public_id" => $this->mysqli->real_escape_string($public_id),
-                "username" => $this->mysqli->real_escape_string($username),
-                "username_safe" => $this->mysqli->real_escape_string(strtolower($username)),
-                "network" => $this->mysqli->real_escape_string($this->network_configuration["Domain"]),
-                "status" => $this->mysqli->real_escape_string(UserStatus::Active),
+                "public_id" => $this->socialvoidLib->getDatabase()->real_escape_string($public_id),
+                "username" => $this->socialvoidLib->getDatabase()->real_escape_string($username),
+                "username_safe" => $this->socialvoidLib->getDatabase()->real_escape_string(strtolower($username)),
+                "network" => $this->socialvoidLib->getDatabase()->real_escape_string($this->socialvoidLib->getNetworkConfiguration()["Domain"]),
+                "status" => $this->socialvoidLib->getDatabase()->real_escape_string(UserStatus::Active),
                 "status_change_timestamp" => 0,
-                "properties" => $this->mysqli->real_escape_string(ZiProto::encode($UserProperties->toArray())),
-                "flags" => $this->mysqli->real_escape_string(ZiProto::encode([])),
-                "authentication_method" => $this->mysqli->real_escape_string(UserAuthenticationMethod::None),
-                "authentication_properties" => $this->mysqli->real_escape_string(ZiProto::encode($UserAuthenticationProperties->toArray())),
+                "properties" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($UserProperties->toArray())),
+                "flags" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
+                "authentication_method" => $this->socialvoidLib->getDatabase()->real_escape_string(UserAuthenticationMethod::None),
+                "authentication_properties" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($UserAuthenticationProperties->toArray())),
                 "private_access_token" => null,
-                "coa_user_entity" => $this->mysqli->real_escape_string(ZiProto::encode($CoaUserEntity->toArray())),
-                "profile" => $this->mysqli->real_escape_string(ZiProto::encode($Profile->toArray())),
-                "settings" => $this->mysqli->real_escape_string(ZiProto::encode($Settings->toArray())),
-                "privacy_state" => $this->mysqli->real_escape_string(UserPrivacyState::Public),
+                "coa_user_entity" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($CoaUserEntity->toArray())),
+                "profile" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Profile->toArray())),
+                "settings" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Settings->toArray())),
+                "privacy_state" => $this->socialvoidLib->getDatabase()->real_escape_string(UserPrivacyState::Public),
                 "last_activity_timestamp" => (int)$timestamp,
                 "created_timestamp" => (int)$timestamp
             ]);
 
-            $QueryResults = $this->mysqli->query($Query);
+            $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
 
             if($QueryResults)
             {
@@ -127,7 +116,7 @@
             else
             {
                 throw new DatabaseException("There was an error while trying to register the user",
-                    $Query, $this->mysqli->error, $this->mysqli
+                    $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
                 );
             }
         }
@@ -147,18 +136,18 @@
             switch($search_method)
             {
                 case UserSearchMethod::ById:
-                    $search_method = $this->mysqli->real_escape_string($search_method);
+                    $search_method = $this->socialvoidLib->getDatabase()->real_escape_string($search_method);
                     $value = (int)$value;
                     break;
 
                 case UserSearchMethod::ByPublicId:
-                    $search_method = $this->mysqli->real_escape_string($search_method);
-                    $value = $this->mysqli->real_escape_string($value);
+                    $search_method = $this->socialvoidLib->getDatabase()->real_escape_string($search_method);
+                    $value = $this->socialvoidLib->getDatabase()->real_escape_string($value);
                     break;
 
                 case UserSearchMethod::ByUsername:
-                    $search_method = $this->mysqli->real_escape_string($search_method);
-                    $value = $this->mysqli->real_escape_string(strtolower($value));
+                    $search_method = $this->socialvoidLib->getDatabase()->real_escape_string($search_method);
+                    $value = $this->socialvoidLib->getDatabase()->real_escape_string(strtolower($value));
                     break;
 
                 default:
@@ -188,7 +177,7 @@
                 "created_timestamp"
             ], $search_method, $value, null, null, 1);
 
-            $QueryResults = $this->mysqli->query($Query);
+            $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
 
             if($QueryResults)
             {
@@ -214,7 +203,7 @@
             {
                 throw new DatabaseException(
                     "There was an error while trying retrieve the user from the network",
-                    $Query, $this->mysqli->error, $this->mysqli
+                    $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
                 );
             }
         }
@@ -230,23 +219,23 @@
         {
             $user->LastActivityTimestamp = (int)time();
             $Query = QueryBuilder::update("users", [
-                "username" => $this->mysqli->real_escape_string($user->Username),
-                "username_safe" => $this->mysqli->real_escape_string($user->UsernameSafe),
-                "network" => $this->mysqli->real_escape_string($user->Network),
+                "username" => $this->socialvoidLib->getDatabase()->real_escape_string($user->Username),
+                "username_safe" => $this->socialvoidLib->getDatabase()->real_escape_string($user->UsernameSafe),
+                "network" => $this->socialvoidLib->getDatabase()->real_escape_string($user->Network),
                 "status" => ($user->StatusChangeTimestamp !== null ? (int)$user->StatusChangeTimestamp : null),
-                "properties" => $this->mysqli->real_escape_string(ZiProto::encode($user->Properties->toArray())),
-                "flags" => $this->mysqli->real_escape_string(ZiProto::encode($user->Flags)),
-                "authentication_method" => $this->mysqli->real_escape_string($user->AuthenticationMethod),
-                "authentication_properties" => $this->mysqli->real_escape_string(ZiProto::encode($user->AuthenticationProperties->toArray())),
-                "private_access_token" => ($user->PrivateAccessToken !== null ? $this->mysqli->real_escape_string($user->PrivateAccessToken) : null),
-                "coa_user_entity" => $this->mysqli->real_escape_string(ZiProto::encode($user->CoaUserEntity->toArray())),
-                "profile" => $this->mysqli->real_escape_string(ZiProto::encode($user->Profile->toArray())),
-                "settings" => $this->mysqli->real_escape_string(ZiProto::encode($user->Settings->toArray())),
-                "privacy_state" => $this->mysqli->real_escape_string($user->PrivacyState),
-                "last_activity_timestamp" => $this->mysqli->real_escape_string($user->LastActivityTimestamp),
+                "properties" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($user->Properties->toArray())),
+                "flags" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($user->Flags)),
+                "authentication_method" => $this->socialvoidLib->getDatabase()->real_escape_string($user->AuthenticationMethod),
+                "authentication_properties" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($user->AuthenticationProperties->toArray())),
+                "private_access_token" => ($user->PrivateAccessToken !== null ? $this->socialvoidLib->getDatabase()->real_escape_string($user->PrivateAccessToken) : null),
+                "coa_user_entity" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($user->CoaUserEntity->toArray())),
+                "profile" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($user->Profile->toArray())),
+                "settings" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($user->Settings->toArray())),
+                "privacy_state" => $this->socialvoidLib->getDatabase()->real_escape_string($user->PrivacyState),
+                "last_activity_timestamp" => $this->socialvoidLib->getDatabase()->real_escape_string($user->LastActivityTimestamp),
             ], "id", $user->ID);
 
-            $QueryResults = $this->mysqli->query($Query);
+            $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
 
             if($QueryResults)
             {
@@ -256,7 +245,7 @@
             {
                 throw new DatabaseException(
                     "There was an error while trying to update the user",
-                    $Query, $this->mysqli->error, $this->mysqli
+                    $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
                 );
             }
         }

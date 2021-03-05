@@ -13,6 +13,7 @@
     use mysqli;
     use SocialvoidLib\Exceptions\GenericInternal\ConfigurationError;
     use SocialvoidLib\Exceptions\GenericInternal\DependencyError;
+    use SocialvoidLib\Managers\UserManager;
     use udp\udp;
 
     /**
@@ -50,6 +51,11 @@
          * @var mysqli|null
          */
         private $database;
+
+        /**
+         * @var UserManager
+         */
+        private UserManager $UserManager;
 
         /**
          * SocialvoidLib constructor.
@@ -110,6 +116,7 @@
                 throw new DependencyError("There was an error while trying to initialize UDP", 0, $e);
             }
 
+            $this->UserManager = new UserManager($this);
         }
 
         /**
@@ -192,5 +199,13 @@
         public function getDatabaseConfiguration()
         {
             return $this->DatabaseConfiguration;
+        }
+
+        /**
+         * @return UserManager
+         */
+        public function getUserManager(): UserManager
+        {
+            return $this->UserManager;
         }
     }
