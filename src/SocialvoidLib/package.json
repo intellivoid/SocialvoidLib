@@ -49,6 +49,10 @@
     "components": [
         {
             "required": true,
+            "file": "Abstracts/StatusStates/FollowerState.php"
+        },
+        {
+            "required": true,
             "file": "Abstracts/StatusStates/UserStatus.php"
         },
         {
@@ -65,6 +69,10 @@
         },
         {
             "required": true,
+            "file": "Abstracts/SearchMethods/FollowerStateSearchMethod.php"
+        },
+        {
+            "required": true,
             "file": "Abstracts/UserAuthenticationMethod.php"
         },
         {
@@ -78,6 +86,10 @@
         {
             "required": true,
             "file": "Abstracts/Flags/UserFlags.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/Flags/FollowerFlag.php"
         },
         {
             "required": true,
@@ -185,6 +197,10 @@
         },
         {
             "required": true,
+            "file": "Objects/Follower.php"
+        },
+        {
+            "required": true,
             "file": "Objects/User/UserProperties.php"
         },
         {
@@ -210,6 +226,10 @@
         {
             "required": true,
             "file": "Objects/User.php"
+        },
+        {
+            "required": true,
+            "file": "Managers/FollowerStateManager.php"
         },
         {
             "required": true,
