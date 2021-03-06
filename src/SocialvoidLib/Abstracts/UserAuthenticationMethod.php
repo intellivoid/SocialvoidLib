@@ -35,4 +35,10 @@
          * The user uses a CrossOverAuthentication provider to authenticate to the network
          */
         const CrossOverAuthentication = "COA";
+
+        /**
+         * The user uses a private access token to authenticate to the network, this option is
+         * not meant to be set to a users account but rather displayed by the network
+         */
+        const PrivateAccessToken = "PRIVATE_ACCESS_TOKEN";
     }

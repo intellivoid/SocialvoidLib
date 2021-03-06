@@ -28,6 +28,9 @@
      */
     class UserAuthenticationProperties
     {
+
+        // TODO: Make recovery codes hashed, and compare the hash against the user input generated hash
+
         /**
          * The password storage string for validation
          *
