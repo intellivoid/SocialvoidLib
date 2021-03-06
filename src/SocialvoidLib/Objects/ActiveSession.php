@@ -8,6 +8,7 @@
     use SocialvoidLib\Abstracts\Flags\ActiveSessionFlag;
     use SocialvoidLib\Abstracts\UserAuthenticationMethod;
     use SocialvoidLib\Objects\ActiveSession\SessionCache;
+    use SocialvoidLib\Objects\ActiveSession\SessionData;
 
     /**
      * Class ActiveSession
@@ -107,6 +108,13 @@
         public $SessionCache;
 
         /**
+         * The data associated with this session
+         *
+         * @var SessionData
+         */
+        public $SessionData;
+
+        /**
          * The Unix Timestamp for when this session was last active
          *
          * @var int
@@ -119,6 +127,15 @@
          * @var int
          */
         public $CreatedTimestamp;
+
+        /**
+         * ActiveSession constructor.
+         */
+        public function __construct()
+        {
+            $this->SessionCache = new SessionCache();
+            $this->SessionData = new SessionData();
+        }
 
         /**
          * Returns an array representation of the object
@@ -141,6 +158,7 @@
                 "client_version" => $this->ClientVersion,
                 "ip_address" => $this->IpAddress,
                 "session_cache" => $this->SessionCache->toArray(),
+                "session_data" => $this->SessionData->toArray(),
                 "last_active_timestamp" => $this->LastActiveTimestamp,
                 "created_timestamp" => $this->CreatedTimestamp
             ];
@@ -194,6 +212,9 @@
 
             if(isset($data["session_cache"]))
                 $ActiveSessionObject->SessionCache = SessionCache::fromArray($data["session_cache"]);
+
+            if(isset($data["session_data"]))
+                $ActiveSessionObject->SessionData = SessionData::fromArray($data["session_data"]);
 
             if(isset($data["last_active_timestamp"]))
                 $ActiveSessionObject->LastActiveTimestamp = $data["last_active_timestamp"];

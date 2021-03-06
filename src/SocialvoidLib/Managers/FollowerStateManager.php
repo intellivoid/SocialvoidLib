@@ -29,7 +29,7 @@
         private SocialvoidLib $socialvoidLib;
 
         /**
-         * UserManager constructor.
+         * FollowerStateManager constructor.
          * @param SocialvoidLib $socialvoidLib
          */
         public function __construct(SocialvoidLib $socialvoidLib)
