@@ -49,7 +49,11 @@
     "components": [
         {
             "required": true,
-            "file": "Abstracts/StatusStates/FollowerState.php"
+            "file": "Abstracts/SearchMethods/FollowerStateSearchMethod.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/SearchMethods/UserSearchMethod.php"
         },
         {
             "required": true,
@@ -61,19 +65,7 @@
         },
         {
             "required": true,
-            "file": "Abstracts/InternalErrorCodes.php"
-        },
-        {
-            "required": true,
-            "file": "Abstracts/SearchMethods/UserSearchMethod.php"
-        },
-        {
-            "required": true,
-            "file": "Abstracts/SearchMethods/FollowerStateSearchMethod.php"
-        },
-        {
-            "required": true,
-            "file": "Abstracts/UserAuthenticationMethod.php"
+            "file": "Abstracts/StatusStates/FollowerState.php"
         },
         {
             "required": true,
@@ -85,6 +77,10 @@
         },
         {
             "required": true,
+            "file": "Abstracts/InternalErrorCodes.php"
+        },
+        {
+            "required": true,
             "file": "Abstracts/Flags/UserFlags.php"
         },
         {
@@ -93,7 +89,19 @@
         },
         {
             "required": true,
-            "file": "Classes/Security/Hashing.php"
+            "file": "Abstracts/Flags/ActiveSessionFlag.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/UserAuthenticationMethod.php"
+        },
+        {
+            "required": true,
+            "file": "InputTypes/SessionClient.php"
+        },
+        {
+            "required": true,
+            "file": "InputTypes/SessionDevice.php"
         },
         {
             "required": true,
@@ -101,39 +109,67 @@
         },
         {
             "required": true,
-            "file": "Classes/Validate.php"
-        },
-        {
-            "required": true,
             "file": "Classes/Standard/BaseIdentification.php"
         },
         {
             "required": true,
-            "file": "SocialvoidLib.php"
+            "file": "Classes/Validate.php"
         },
         {
             "required": true,
-            "file": "Exceptions/GenericInternal/DatabaseException.php"
+            "file": "Classes/Security/Hashing.php"
         },
         {
             "required": true,
-            "file": "Exceptions/GenericInternal/DependencyError.php"
+            "file": "Exceptions/Standard/Network/UserNotFoundException.php"
         },
         {
             "required": true,
-            "file": "Exceptions/GenericInternal/InvalidSearchMethodException.php"
+            "file": "Exceptions/Standard/Validation/InvalidLastNameException.php"
         },
         {
             "required": true,
-            "file": "Exceptions/GenericInternal/ConfigurationError.php"
+            "file": "Exceptions/Standard/Validation/UsernameAlreadyExistsException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Validation/InvalidFirstNameException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Validation/InvalidPasswordException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Validation/InvalidBiographyException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Validation/InvalidUsernameException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Authentication/NoPasswordAuthenticationAvailableException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Authentication/IncorrectTwoFactorAuthenticationCodeException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Authentication/IncorrectPasswordException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Authentication/AuthenticationNotApplicableException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Authentication/NoTwoFactorAuthenticationAvailableException.php"
         },
         {
             "required": true,
             "file": "Exceptions/Internal/TimeBasedPrivateSignatureAlreadyExistsException.php"
-        },
-        {
-            "required": true,
-            "file": "Exceptions/Internal/NoTimeBasedSignatureAvailableException.php"
         },
         {
             "required": true,
@@ -149,51 +185,27 @@
         },
         {
             "required": true,
-            "file": "Exceptions/Standard/Network/UserNotFoundException.php"
+            "file": "Exceptions/Internal/NoTimeBasedSignatureAvailableException.php"
         },
         {
             "required": true,
-            "file": "Exceptions/Standard/Validation/UsernameAlreadyExistsException.php"
+            "file": "Exceptions/GenericInternal/InvalidSearchMethodException.php"
         },
         {
             "required": true,
-            "file": "Exceptions/Standard/Validation/InvalidBiographyException.php"
+            "file": "Exceptions/GenericInternal/DependencyError.php"
         },
         {
             "required": true,
-            "file": "Exceptions/Standard/Validation/InvalidLastNameException.php"
+            "file": "Exceptions/GenericInternal/DatabaseException.php"
         },
         {
             "required": true,
-            "file": "Exceptions/Standard/Validation/InvalidUsernameException.php"
+            "file": "Exceptions/GenericInternal/ConfigurationError.php"
         },
         {
             "required": true,
-            "file": "Exceptions/Standard/Validation/InvalidPasswordException.php"
-        },
-        {
-            "required": true,
-            "file": "Exceptions/Standard/Validation/InvalidFirstNameException.php"
-        },
-        {
-            "required": true,
-            "file": "Exceptions/Standard/Authentication/IncorrectTwoFactorAuthenticationCodeException.php"
-        },
-        {
-            "required": true,
-            "file": "Exceptions/Standard/Authentication/IncorrectPasswordException.php"
-        },
-        {
-            "required": true,
-            "file": "Exceptions/Standard/Authentication/NoTwoFactorAuthenticationAvailableException.php"
-        },
-        {
-            "required": true,
-            "file": "Exceptions/Standard/Authentication/AuthenticationNotApplicableException.php"
-        },
-        {
-            "required": true,
-            "file": "Exceptions/Standard/Authentication/NoPasswordAuthenticationAvailableException.php"
+            "file": "Objects/ActiveSession.php"
         },
         {
             "required": true,
@@ -201,7 +213,23 @@
         },
         {
             "required": true,
+            "file": "Objects/User.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/ActiveSession/SessionData.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/ActiveSession/SessionCache.php"
+        },
+        {
+            "required": true,
             "file": "Objects/User/UserProperties.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/User/UserSettings.php"
         },
         {
             "required": true,
@@ -221,11 +249,7 @@
         },
         {
             "required": true,
-            "file": "Objects/User/UserSettings.php"
-        },
-        {
-            "required": true,
-            "file": "Objects/User.php"
+            "file": "Managers/UserManager.php"
         },
         {
             "required": true,
@@ -233,7 +257,11 @@
         },
         {
             "required": true,
-            "file": "Managers/UserManager.php"
+            "file": "Managers/SessionManager.php"
+        },
+        {
+            "required": true,
+            "file": "SocialvoidLib.php"
         }
     ],
     "files": [
