@@ -206,9 +206,8 @@
                         break;
 
                     case UserAuthenticationMethod::SimpleSecured:
-                        if($otp == null && $ignore_otp !== false)
+                        if($otp == null && $ignore_otp == false)
                             throw new AuthenticationFailureException("Two factor authentication is required");
-
 
                         $this->AuthenticationProperties->passwordAuthentication($password);
 
@@ -231,6 +230,18 @@
             }
 
             return true;
+        }
+
+        /**
+         * Disables all authentication methods for this user
+         */
+        public function disableAllAuthenticationMethods(): void
+        {
+            $this->AuthenticationMethod = UserAuthenticationMethod::None;
+            $this->AuthenticationProperties->disablePassword();
+            $this->AuthenticationProperties->disableCoaApplicationId();
+            $this->AuthenticationProperties->disableRecoveryCodes();
+            $this->AuthenticationProperties->disableTimeBasedPrivateSignature();
         }
 
         /**
@@ -291,7 +302,12 @@
                 $UserObject->Status = $data["status"];
 
             if(isset($data["status_change_timestamp"]))
-                $UserObject->StatusChangeTimestamp = $data["status_change_timestamp"];
+            {
+                if($data["status_change_timestamp"] !== null)
+                {
+                    $UserObject->StatusChangeTimestamp = (int)$data["status_change_timestamp"];
+                }
+            }
 
             if(isset($data["properties"]))
                 $UserObject->Properties = UserProperties::fromArray($data["properties"]);
