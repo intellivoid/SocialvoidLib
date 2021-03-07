@@ -8,6 +8,7 @@
     use SocialvoidLib\Exceptions\Standard\Authentication\IncorrectTwoFactorAuthenticationCodeException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NoPasswordAuthenticationAvailableException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NoTwoFactorAuthenticationAvailableException;
+    use SocialvoidLib\Exceptions\Standard\Network\SessionNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\UserNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidBiographyException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidFirstNameException;
@@ -106,4 +107,11 @@
          * @see UserNotFoundException
          */
         const UserNotFoundException = 0x03100;
+
+        /**
+         * Raised when the request session entity was not found on the network
+         *
+         * @see SessionNotFoundException
+         */
+        const SessionNotFoundException = 0x03101;
     }
