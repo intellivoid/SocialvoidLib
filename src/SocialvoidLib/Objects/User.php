@@ -284,7 +284,10 @@
             $UserObject = new User();
 
             if(isset($data["id"]))
-                $UserObject->ID = $data["id"];
+            {
+                if($data["id"] !== null)
+                    $UserObject->ID = (int)$data["id"];
+            }
 
             if(isset($data["public_id"]))
                 $UserObject->PublicID = $data["public_id"];
@@ -337,10 +340,16 @@
                 $UserObject->PrivacyState = $data["privacy_state"];
 
             if(isset($data["last_activity_timestamp"]))
-                $UserObject->LastActivityTimestamp = $data["last_activity_timestamp"];
+            {
+                if($data["last_activity_timestamp"] !== null)
+                    $UserObject->LastActivityTimestamp = (int)$data["last_activity_timestamp"];
+            }
 
             if(isset($data["created_timestamp"]))
-                $UserObject->CreatedTimestamp = $data["created_timestamp"];
+            {
+                if($data["created_timestamp"] !== null)
+                    $UserObject->CreatedTimestamp = (int)$data["created_timestamp"];
+            }
 
             return $UserObject;
         }

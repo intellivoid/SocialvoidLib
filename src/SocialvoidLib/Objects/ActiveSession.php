@@ -175,7 +175,10 @@
             $ActiveSessionObject = new ActiveSession();
 
             if(isset($data["id"]))
-                $ActiveSessionObject->ID = $data["id"];
+            {
+                if($data["id"] !== null)
+                    $ActiveSessionObject->ID = (int)$data["id"];
+            }
 
             if(isset($data["public_id"]))
                 $ActiveSessionObject->PublicID = $data["public_id"];
@@ -184,10 +187,16 @@
                 $ActiveSessionObject->Flags = $data["flags"];
 
             if(isset($data["authenticated"]))
-                $ActiveSessionObject->Authenticated = $data["authenticated"];
+            {
+                if($data["authenticated"] !== null)
+                    $ActiveSessionObject->Authenticated = (bool)$data["authenticated"];
+            }
 
             if(isset($data["user_id"]))
-                $ActiveSessionObject->UserID = $data["user_id"];
+            {
+                if($data["user_id"] !== null)
+                    $ActiveSessionObject->UserID = (int)$data["user_id"];
+            }
 
             if(isset($data["authentication_method_used"]))
                 $ActiveSessionObject->AuthenticationMethodUsed = $data["authentication_method_used"];
@@ -217,10 +226,16 @@
                 $ActiveSessionObject->SessionData = SessionData::fromArray($data["session_data"]);
 
             if(isset($data["last_active_timestamp"]))
-                $ActiveSessionObject->LastActiveTimestamp = $data["last_active_timestamp"];
+            {
+                if($data["last_active_timestamp"] !== null)
+                    $ActiveSessionObject->LastActiveTimestamp = (int)$data["last_active_timestamp"];
+            }
 
             if(isset($data["created_timestamp"]))
-                $ActiveSessionObject->CreatedTimestamp = $data["created_timestamp"];
+            {
+                if($data["created_timestamp"] !== null)
+                    $ActiveSessionObject->CreatedTimestamp = (int)$data["created_timestamp"];
+            }
 
             return $ActiveSessionObject;
         }

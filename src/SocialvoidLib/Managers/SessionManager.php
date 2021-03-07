@@ -121,7 +121,7 @@
 
             $Query = QueryBuilder::select("sessions", [
                 "id",
-                "public_Id",
+                "public_id",
                 "flags",
                 "authenticated",
                 "user_id",
