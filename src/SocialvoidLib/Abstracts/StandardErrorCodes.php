@@ -7,7 +7,9 @@
     use SocialvoidLib\Exceptions\Standard\Authentication\IncorrectPasswordException;
     use SocialvoidLib\Exceptions\Standard\Authentication\IncorrectTwoFactorAuthenticationCodeException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NoPasswordAuthenticationAvailableException;
+    use SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NoTwoFactorAuthenticationAvailableException;
+    use SocialvoidLib\Exceptions\Standard\Network\SessionNoLongerAuthenticatedException;
     use SocialvoidLib\Exceptions\Standard\Network\SessionNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\UserNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidBiographyException;
@@ -114,4 +116,18 @@
          * @see SessionNotFoundException
          */
         const SessionNotFoundException = 0x03101;
+
+        /**
+         * Raised when the requested session is no longer authenticated
+         *
+         * @see SessionNoLongerAuthenticatedException
+         */
+        const SessionNoLongerAuthenticatedException = 0x03102;
+
+        /**
+         * Raised when the user attempts to preform an action that requires authentication
+         *
+         * @see NotAuthenticatedException
+         */
+        const NotAuthenticatedException = 0x03103;
     }

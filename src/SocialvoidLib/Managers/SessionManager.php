@@ -48,12 +48,12 @@
          * @param User $user
          * @param string $authentication_method_used
          * @param string $ip_address
-         * @return null
+         * @return string
          * @throws DatabaseException
          */
         public function createSession(
             SessionClient $sessionClient, SessionDevice $sessionDevice,
-            User $user, string $authentication_method_used, string $ip_address)
+            User $user, string $authentication_method_used, string $ip_address): string
         {
             $SessionCache = new SessionCache();
             $SessionData = new SessionData();
@@ -81,7 +81,7 @@
             $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
             if($QueryResults)
             {
-                return null;
+                return $PublicID;
             }
             else
             {

@@ -2,6 +2,7 @@
 
     namespace SocialvoidLib\Abstracts;
 
+    use SocialvoidLib\Exceptions\Internal\AlreadyAuthenticatedToNetwork;
     use SocialvoidLib\Exceptions\Internal\AuthenticationFailureException;
     use SocialvoidLib\Exceptions\Internal\NoRecoveryCodesAvailableException;
     use SocialvoidLib\Exceptions\Internal\NoTimeBasedSignatureAvailableException;
@@ -40,4 +41,9 @@
          * @see AuthenticationFailureException
          */
         const AuthenticationFailureException = 0x2004;
+
+        /**
+         * @see AlreadyAuthenticatedToNetwork
+         */
+        const AlreadyAuthenticatedToNetwork = 0x2005;
     }

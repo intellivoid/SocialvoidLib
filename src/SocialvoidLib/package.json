@@ -49,11 +49,23 @@
     "components": [
         {
             "required": true,
+            "file": "NetworkSession.php"
+        },
+        {
+            "required": true,
             "file": "Abstracts/SearchMethods/FollowerStateSearchMethod.php"
         },
         {
             "required": true,
             "file": "Abstracts/SearchMethods/UserSearchMethod.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/SearchMethods/ActiveSessionSearchMethod.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/StandardErrorCodeType.php"
         },
         {
             "required": true,
@@ -82,6 +94,10 @@
         {
             "required": true,
             "file": "Abstracts/Flags/UserFlags.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/Flags/NetworkFlags.php"
         },
         {
             "required": true,
@@ -125,6 +141,14 @@
         },
         {
             "required": true,
+            "file": "Exceptions/Standard/Network/SessionNoLongerAuthenticatedException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Network/SessionNotFoundException.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/Standard/Validation/InvalidLastNameException.php"
         },
         {
@@ -161,6 +185,10 @@
         },
         {
             "required": true,
+            "file": "Exceptions/Standard/Authentication/NotAuthenticatedException.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/Standard/Authentication/AuthenticationNotApplicableException.php"
         },
         {
@@ -170,6 +198,10 @@
         {
             "required": true,
             "file": "Exceptions/Internal/TimeBasedPrivateSignatureAlreadyExistsException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Internal/AlreadyAuthenticatedToNetwork.php"
         },
         {
             "required": true,

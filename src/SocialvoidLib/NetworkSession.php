@@ -1,5 +1,6 @@
 <?php
 
+    /** @noinspection PhpUnused */
     /** @noinspection PhpMissingFieldTypeInspection */
     /** @noinspection PhpUnusedPrivateFieldInspection */
 
@@ -11,6 +12,7 @@
     use SocialvoidLib\Abstracts\SearchMethods\UserSearchMethod;
     use SocialvoidLib\Classes\Converter;
     use SocialvoidLib\Exceptions\Internal\AlreadyAuthenticatedToNetwork;
+    use SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException;
     use SocialvoidLib\Exceptions\Standard\Network\SessionNoLongerAuthenticatedException;
     use SocialvoidLib\InputTypes\SessionClient;
     use SocialvoidLib\InputTypes\SessionDevice;
@@ -21,7 +23,7 @@
      * Class Network
      * @package SocialvoidLib
      */
-    class Network
+    class NetworkSession
     {
         /**
          * Flags associated with this network session
@@ -78,6 +80,11 @@
         public function authenticateUser(SessionClient $sessionClient, SessionDevice $sessionDevice,
                                          User $user, string $authentication_method_used, string $ip_address): ActiveSession
         {
+            if($this->isAuthenticated())
+            {
+                throw new AlreadyAuthenticatedToNetwork("There is a user already authenticated to this network session", $this);
+            }
+
             $active_session_id = $this->socialvoidLib->getSessionManager()->createSession(
                 $sessionClient, $sessionDevice, $user,
                 $authentication_method_used, $ip_address
@@ -101,9 +108,9 @@
          */
         public function declareActiveSession(string $session_public_id, string $ip_address=null): void
         {
-            if(Converter::hasFlag($this->flags, NetworkFlags::Authenticated))
+            if($this->isAuthenticated())
             {
-                throw new AlreadyAuthenticatedToNetwork("There is a user already authenticated to this network object", $this);
+                throw new AlreadyAuthenticatedToNetwork("There is a user already authenticated to this network session", $this);
             }
 
             $active_session = $this->socialvoidLib->getSessionManager()->getSession(
@@ -139,6 +146,40 @@
         }
 
         /**
+         * Destroys the current session
+         *
+         * @throws Exceptions\GenericInternal\DatabaseException
+         * @throws NotAuthenticatedException
+         */
+        public function logout(): void
+        {
+            if($this->isAuthenticated() == false)
+            {
+                throw new NotAuthenticatedException("You cannot logout when there are no active sessions");
+            }
+
+            $this->active_session->Authenticated = false;
+            $this->socialvoidLib->getSessionManager()->updateSession($this->active_session);
+            $this->active_session = null;
+            $this->authenticated_user = null;
+
+            // Remove authentication flags
+            Converter::removeFlag($this->flags, NetworkFlags::Authenticated);
+            Converter::removeFlag($this->flags, NetworkFlags::AdministratorAccess);
+            Converter::removeFlag($this->flags, NetworkFlags::ModeratorAccess);
+        }
+
+        /**
+         * Indicates if the user is currently authenticated
+         *
+         * @return bool
+         */
+        public function isAuthenticated(): bool
+        {
+            return Converter::hasFlag($this->flags, NetworkFlags::Authenticated);
+        }
+
+        /**
          * Returns the current authenticated user on the network
          *
          * @return User|null
@@ -166,5 +207,19 @@
         public function getFlags(): array
         {
             return $this->flags;
+        }
+
+        /**
+         * Returns an array representation of the current network session
+         *
+         * @return array
+         */
+        public function dumpNetworkSession(): array
+        {
+            return [
+                "flags" => $this->flags,
+                "active_session" => $this->active_session->toArray(),
+                "authenticated_user" => $this->authenticated_user->toArray()
+            ];
         }
     }

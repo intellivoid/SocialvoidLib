@@ -3,6 +3,8 @@
 
     namespace SocialvoidLib\Classes;
 
+    use SocialvoidLib\Abstracts\StandardErrorCodeType;
+
     /**
      * Class Validation
      * @package SocialvoidLib\Classes
@@ -29,6 +31,7 @@
          */
         public static function password(string $input): bool
         {
+            /** @noinspection RegExpRedundantEscape */
             preg_match('/^(?=.*[A-Z])(?=.*\d.*\d)(?=.*[ -\/:-@\[-`\{-~])[ -~]{12,128}$/m', $input, $matches);
             return count($matches) >= 1 && $matches !== false;
         }
@@ -69,11 +72,67 @@
          *
          * @param string $input
          * @return bool
+         * @noinspection PhpUnused
          */
         public static function biography(string $input): bool
         {
             if(strlen($input) > 255)
                 return false;
+
+            return true;
+        }
+
+        /**
+         * Determines the standard error code type by checking the error code range
+         *
+         * @param int $error_code
+         * @return string
+         */
+        public static function determineStandardErrorType(int $error_code): string
+        {
+            /**
+             * 31-Set error codes (Network)
+             * 12544 - *
+             */
+            if($error_code >= 12544)
+            {
+                return StandardErrorCodeType::NetworkError;
+            }
+
+            /**
+             * 22-Set Error codes (Authentication)
+             * 8704 - 12543
+             */
+            if($error_code >= 8704)
+            {
+                return StandardErrorCodeType::AuthenticationError;
+            }
+
+            /**
+             * 21-Set Error codes (Validation)
+             * 8448 - 8703
+             */
+            if($error_code >= 8448)
+            {
+                return StandardErrorCodeType::ValidationError;
+            }
+
+            return StandardErrorCodeType::Unknown;
+        }
+
+        /**
+         * Determines if the error code is a standard to Socialvoid or not
+         *
+         * @param int $error_code
+         * @return bool
+         * @noinspection PhpUnused
+         */
+        public static function isStandardError(int $error_code): bool
+        {
+            if(self::determineStandardErrorType($error_code) == StandardErrorCodeType::Unknown)
+            {
+                return false;
+            }
 
             return true;
         }

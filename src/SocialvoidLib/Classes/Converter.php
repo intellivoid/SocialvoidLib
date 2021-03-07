@@ -22,4 +22,55 @@
 
             return $input;
         }
+
+        /**
+         * Adds a flag to the flag object
+         *
+         * @param array $flags
+         * @param $flag
+         */
+        public static function addFlag(array &$flags, $flag): void
+        {
+            if(in_array($flag, $flags))
+                return;
+
+            $flags[] = $flag;
+        }
+
+        /**
+         * Removes a flag from the flag object
+         *
+         * @param array $flags
+         * @param $flag
+         */
+        public static function removeFlag(array &$flags, $flag): void
+        {
+            if(in_array($flag, $flags) == false)
+                return;
+
+            $flags = array_diff($flags, [$flag]);
+        }
+
+        /**
+         * Determines if a flag set has a flag
+         *
+         * @param array $flags
+         * @param mixed $flag
+         * @return bool
+         */
+        public static function hasFlag(array &$flags, $flag): bool
+        {
+            if(is_array($flag))
+            {
+                foreach($flag as $value)
+                {
+                    if(in_array($value, $flags))
+                        return true;
+                }
+
+                return false;
+            }
+
+            return in_array($flag, $flags);
+        }
     }

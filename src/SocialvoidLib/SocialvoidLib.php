@@ -14,6 +14,7 @@
     use SocialvoidLib\Exceptions\GenericInternal\ConfigurationError;
     use SocialvoidLib\Exceptions\GenericInternal\DependencyError;
     use SocialvoidLib\Managers\FollowerStateManager;
+    use SocialvoidLib\Managers\SessionManager;
     use SocialvoidLib\Managers\UserManager;
     use udp\udp;
 
@@ -62,6 +63,11 @@
          * @var FollowerStateManager
          */
         private FollowerStateManager $FollowerStateManager;
+
+        /**
+         * @var SessionManager
+         */
+        private SessionManager $SessionManager;
 
         /**
          * SocialvoidLib constructor.
@@ -124,6 +130,7 @@
 
             $this->UserManager = new UserManager($this);
             $this->FollowerStateManager = new FollowerStateManager($this);
+            $this->SessionManager = new SessionManager($this);
         }
 
         /**
@@ -222,5 +229,13 @@
         public function getFollowerStateManager(): FollowerStateManager
         {
             return $this->FollowerStateManager;
+        }
+
+        /**
+         * @return SessionManager
+         */
+        public function getSessionManager(): SessionManager
+        {
+            return $this->SessionManager;
         }
     }
