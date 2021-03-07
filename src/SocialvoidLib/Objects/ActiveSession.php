@@ -228,7 +228,14 @@
             if(isset($data["last_active_timestamp"]))
             {
                 if($data["last_active_timestamp"] !== null)
+                {
                     $ActiveSessionObject->LastActiveTimestamp = (int)$data["last_active_timestamp"];
+
+                    if($ActiveSessionObject->LastActiveTimestamp > 1209600) // Two weeks
+                    {
+                        $ActiveSessionObject->Authenticated = false;
+                    }
+                }
             }
 
             if(isset($data["created_timestamp"]))
