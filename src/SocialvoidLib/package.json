@@ -145,6 +145,10 @@
         },
         {
             "required": true,
+            "file": "Exceptions/Standard/Network/InvalidPeerInputException.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/Standard/Network/SessionNoLongerAuthenticatedException.php"
         },
         {
@@ -254,6 +258,10 @@
         {
             "required": true,
             "file": "Objects/User.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/ActiveSession/SessionCache/PeerResolveCache.php"
         },
         {
             "required": true,

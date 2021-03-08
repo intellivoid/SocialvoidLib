@@ -9,6 +9,7 @@
     use SocialvoidLib\Exceptions\Standard\Authentication\NoPasswordAuthenticationAvailableException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NoTwoFactorAuthenticationAvailableException;
+    use SocialvoidLib\Exceptions\Standard\Network\InvalidPeerInputException;
     use SocialvoidLib\Exceptions\Standard\Network\SessionNoLongerAuthenticatedException;
     use SocialvoidLib\Exceptions\Standard\Network\SessionNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\UserNotFoundException;
@@ -130,4 +131,11 @@
          * @see NotAuthenticatedException
          */
         const NotAuthenticatedException = 0x03103;
+
+        /**
+         * Raised when the client provided a invalid peer identification input
+         *
+         * @see InvalidPeerInputException
+         */
+        const InvalidPeerInputException = 0x03104;
     }

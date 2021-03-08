@@ -76,6 +76,11 @@
         private FollowerDataManager $FollowerDataManager;
 
         /**
+         * @var mixed
+         */
+        private $EngineSchema;
+
+        /**
          * SocialvoidLib constructor.
          * @throws ConfigurationError
          * @throws DependencyError
@@ -100,6 +105,11 @@
             $NetworkSchema->setDefinition("Name", "Socialvoid");
             $this->acm->defineSchema("Network", $NetworkSchema);
 
+            // Engine Schema Configuration
+            $EngineSchema = new Schema();
+            $EngineSchema->setDefinition("MaxPeerResolveCacheCount", 20);
+            $this->acm->defineSchema("Engine", $EngineSchema);
+
             // Data storage Schema Configuration
             $DataStorageSchema = new Schema();
             $DataStorageSchema->setDefinition("ProfilesLocation_Unix", "/etc/socialvoid_avatars");
@@ -111,11 +121,15 @@
                 $this->DatabaseConfiguration = $this->acm->getConfiguration("Database");
                 $this->NetworkConfiguration = $this->acm->getConfiguration("Network");
                 $this->DataStorageSchema = $this->acm->getConfiguration("DataStorage");
+                $this->EngineSchema = $this->acm->getConfiguration("Engine");
             }
             catch(Exception $e)
             {
                 throw new ConfigurationError("There was an error while trying to load ACM", 0, $e);
             }
+
+            // Initialize constants
+            self::defineLibConstant("SOCIALVOID_LIB_MAX_PEER_RESOLVE_CACHE_COUNT", $this->getEngineSchema()["MaxPeerResolveCacheCount"]);
 
             // Initialize UDP
             try
@@ -139,6 +153,24 @@
             $this->SessionManager = new SessionManager($this);
             $this->FollowerDataManager = new FollowerDataManager($this);
         }
+
+        /**
+         * Defines a library constant
+         *
+         * @param string $name
+         * @param $value
+         * @return bool
+         */
+        private static function defineLibConstant(string $name, $value): bool
+        {
+            if(defined($name))
+                return false;
+
+            define($name, $value);
+            return true;
+        }
+
+
 
         /**
          * @return acm
@@ -252,5 +284,13 @@
         public function getFollowerDataManager(): FollowerDataManager
         {
             return $this->FollowerDataManager;
+        }
+
+        /**
+         * @return mixed
+         */
+        public function getEngineSchema()
+        {
+            return $this->EngineSchema;
         }
     }

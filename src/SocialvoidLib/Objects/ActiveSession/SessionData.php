@@ -1,5 +1,7 @@
 <?php
 
+    /** @noinspection PhpUnused */
+    /** @noinspection PhpMissingFieldTypeInspection */
 
     namespace SocialvoidLib\Objects\ActiveSession;
 

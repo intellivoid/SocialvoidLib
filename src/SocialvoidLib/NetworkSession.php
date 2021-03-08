@@ -207,6 +207,18 @@
         }
 
         /**
+         * Updates the current active session
+         *
+         * @throws Exceptions\GenericInternal\DatabaseException
+         */
+        public function updateActiveSession(): void
+        {
+            $this->active_session = $this->socialvoidLib->getSessionManager()->updateSession(
+                $this->active_session
+            );
+        }
+
+        /**
          * Returns the current flags on the network
          *
          * @return array
