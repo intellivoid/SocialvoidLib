@@ -125,6 +125,14 @@
         },
         {
             "required": true,
+            "file": "Classes/PostText/Extractor.php"
+        },
+        {
+            "required": true,
+            "file": "Classes/PostText/PostRegex.php"
+        },
+        {
+            "required": true,
             "file": "Classes/Validate.php"
         },
         {
@@ -274,6 +282,26 @@
         {
             "required": true,
             "file": "Objects/Follower.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/Post/Entities.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/Post/Reply.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/Post/Quote.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/Post/Repost.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/Post.php"
         },
         {
             "required": true,
