@@ -13,6 +13,7 @@
     use mysqli;
     use SocialvoidLib\Exceptions\GenericInternal\ConfigurationError;
     use SocialvoidLib\Exceptions\GenericInternal\DependencyError;
+    use SocialvoidLib\Managers\FollowerDataManager;
     use SocialvoidLib\Managers\FollowerStateManager;
     use SocialvoidLib\Managers\SessionManager;
     use SocialvoidLib\Managers\UserManager;
@@ -68,6 +69,11 @@
          * @var SessionManager
          */
         private SessionManager $SessionManager;
+
+        /**
+         * @var FollowerDataManager
+         */
+        private FollowerDataManager $FollowerDataManager;
 
         /**
          * SocialvoidLib constructor.
@@ -131,6 +137,7 @@
             $this->UserManager = new UserManager($this);
             $this->FollowerStateManager = new FollowerStateManager($this);
             $this->SessionManager = new SessionManager($this);
+            $this->FollowerDataManager = new FollowerDataManager($this);
         }
 
         /**
@@ -237,5 +244,13 @@
         public function getSessionManager(): SessionManager
         {
             return $this->SessionManager;
+        }
+
+        /**
+         * @return FollowerDataManager
+         */
+        public function getFollowerDataManager(): FollowerDataManager
+        {
+            return $this->FollowerDataManager;
         }
     }

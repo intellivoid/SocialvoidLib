@@ -57,6 +57,10 @@
         },
         {
             "required": true,
+            "file": "Abstracts/SearchMethods/FollowerDataSearchMethod.php"
+        },
+        {
+            "required": true,
             "file": "Abstracts/SearchMethods/UserSearchMethod.php"
         },
         {
@@ -205,6 +209,10 @@
         },
         {
             "required": true,
+            "file": "Exceptions/Internal/FollowerDataNotFound.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/Internal/AuthenticationFailureException.php"
         },
         {
@@ -257,6 +265,10 @@
         },
         {
             "required": true,
+            "file": "Objects/FollowerData.php"
+        },
+        {
+            "required": true,
             "file": "Objects/User/UserProperties.php"
         },
         {
@@ -281,6 +293,10 @@
         },
         {
             "required": true,
+            "file": "Network/Users.php"
+        },
+        {
+            "required": true,
             "file": "Managers/UserManager.php"
         },
         {
@@ -290,6 +306,10 @@
         {
             "required": true,
             "file": "Managers/SessionManager.php"
+        },
+        {
+            "required": true,
+            "file": "Managers/FollowerDataManager.php"
         },
         {
             "required": true,

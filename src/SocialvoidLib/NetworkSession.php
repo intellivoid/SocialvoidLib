@@ -16,6 +16,7 @@
     use SocialvoidLib\Exceptions\Standard\Network\SessionNoLongerAuthenticatedException;
     use SocialvoidLib\InputTypes\SessionClient;
     use SocialvoidLib\InputTypes\SessionDevice;
+    use SocialvoidLib\Network\Users;
     use SocialvoidLib\Objects\ActiveSession;
     use SocialvoidLib\Objects\User;
 
@@ -52,6 +53,11 @@
         private SocialvoidLib $socialvoidLib;
 
         /**
+         * @var Users
+         */
+        private Users $users;
+
+        /**
          * Network constructor.
          * @param SocialvoidLib $socialvoidLib
          */
@@ -59,6 +65,7 @@
         {
             $this->flags = [];
             $this->socialvoidLib = $socialvoidLib;
+            $this->users = new Users($this);
         }
 
         /**
@@ -221,5 +228,21 @@
                 "active_session" => $this->active_session->toArray(),
                 "authenticated_user" => $this->authenticated_user->toArray()
             ];
+        }
+
+        /**
+         * @return Users
+         */
+        public function getUsers(): Users
+        {
+            return $this->users;
+        }
+
+        /**
+         * @return SocialvoidLib
+         */
+        public function getSocialvoidLib(): SocialvoidLib
+        {
+            return $this->socialvoidLib;
         }
     }
