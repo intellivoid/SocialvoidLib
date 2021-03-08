@@ -100,16 +100,25 @@
             $FollowerObject = new Follower();
 
             if(isset($data["id"]))
-                $FollowerObject->ID = $data["id"];
+            {
+                if($data["id"] !== null)
+                    $FollowerObject->ID = (int)$data["id"];
+            }
 
             if(isset($data["public_id"]))
                 $FollowerObject->PublicID = $data["public_id"];
 
             if(isset($data["user_id"]))
-                $FollowerObject->UserID = $data["user_id"];
+            {
+                if($data["user_id"] !== null)
+                    $FollowerObject->UserID = (int)$data["user_id"];
+            }
 
             if(isset($data["target_user_id"]))
-                $FollowerObject->TargetUserID = $data["target_user_id"];
+            {
+                if($data["target_user_id"] !== null)
+                    $FollowerObject->TargetUserID = (int)$data["target_user_id"];
+            }
 
             if(isset($data["state"]))
                 $FollowerObject->State = $data["state"];
@@ -118,10 +127,16 @@
                 $FollowerObject->Flags = $data["flags"];
 
             if(isset($data["last_updated_timestamp"]))
-                $FollowerObject->LastUpdatedTimestamp = $data["last_updated_timestamp"];
+            {
+                if($data["last_updated_timestamp"] !== null)
+                    $FollowerObject->LastUpdatedTimestamp = (int)$data["last_updated_timestamp"];
+            }
 
             if(isset($data["created_timestamp"]))
-                $FollowerObject->CreatedTimestamp = $data["created_timestamp"];
+            {
+                if(isset($data["created_timestamp"]) !== null)
+                    $FollowerObject->CreatedTimestamp = $data["created_timestamp"];
+            }
 
             return $FollowerObject;
         }
