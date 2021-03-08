@@ -53,12 +53,16 @@
          */
         public function toArray(): array
         {
+            $Urls = $this->Urls;
+            if(count($this->Urls) == 0)
+                $Urls = null;
+
             return [
                 "first_name" => $this->FirstName,
                 "last_name" => $this->LastName,
                 "biography" => $this->Biography,
                 "location" => $this->Location,
-                "urls" => $this->Urls
+                "urls" => $Urls
             ];
         }
 
