@@ -1,6 +1,9 @@
 clean:
 	rm -rf build
 
+update:
+	ppm --generate-package="src/SocialvoidLib"
+
 build:
 	mkdir build
 	ppm --no-intro --compile="src/SocialvoidLib" --directory="build"

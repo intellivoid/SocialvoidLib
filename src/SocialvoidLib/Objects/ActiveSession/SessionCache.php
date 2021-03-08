@@ -105,7 +105,7 @@
                 }
             }
             // It's a public ID
-            elseif(strlen($peer) == 256)
+            elseif(strlen($peer) == 64)
             {
                 foreach($this->PeerResolveCache as $resolveCache)
                 {

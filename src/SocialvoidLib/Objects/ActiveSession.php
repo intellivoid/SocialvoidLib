@@ -231,7 +231,7 @@
                 {
                     $ActiveSessionObject->LastActiveTimestamp = (int)$data["last_active_timestamp"];
 
-                    if($ActiveSessionObject->LastActiveTimestamp > 1209600) // Two weeks
+                    if(((int)time() - $ActiveSessionObject->LastActiveTimestamp) >= 1209600) // Two weeks
                     {
                         $ActiveSessionObject->Authenticated = false;
                     }

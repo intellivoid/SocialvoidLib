@@ -65,16 +65,40 @@
             $UserPropertiesObject = new UserProperties();
 
             if(isset($data["followers_count"]))
+            {
                 $UserPropertiesObject->FollowersCount = $data["followers_count"];
+            }
+            else
+            {
+                $UserPropertiesObject->FollowersCount = 0;
+            }
 
             if(isset($data["followers_count_last_updated"]))
+            {
                 $UserPropertiesObject->FollowersCountLastUpdatedTimestamp = $data["followers_count_last_updated"];
+            }
+            else
+            {
+                $UserPropertiesObject->FollowersCountLastUpdatedTimestamp = 0;
+            }
 
             if(isset($data["following_count"]))
+            {
                 $UserPropertiesObject->FollowingCount = $data["following_count"];
+            }
+            else
+            {
+                $UserPropertiesObject->FollowingCount = 0;
+            }
 
             if(isset($data["following_count_last_updated"]))
+            {
                 $UserPropertiesObject->FollowingCountLastUpdatedTimestamp = $data["following_count_last_updated"];
+            }
+            else
+            {
+                $UserPropertiesObject->FollowingCountLastUpdatedTimestamp = 0;
+            }
 
             return $UserPropertiesObject;
         }

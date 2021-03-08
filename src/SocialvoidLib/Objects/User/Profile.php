@@ -75,6 +75,62 @@
         public $WebsiteURL;
 
         /**
+         * Returns a array of standard URL references
+         *
+         * @return array
+         */
+        public function getUrls(): array
+        {
+            $Results = [];
+
+            if($this->TwitterUsername !== null)
+            {
+                // @ Check
+                if(substr($this->TwitterUsername, 0, 1) == "@")
+                {
+                    $Results["TWITTER"] = "https://twitter.com/" . substr($this->TwitterUsername, 1);
+                }
+                else
+                {
+                    $Results["TWITTER"] = "https://twitter.com/" . $this->TwitterUsername;
+                }
+            }
+
+            if($this->InstagramUsername !== null)
+            {
+                // @ Check
+                if(substr($this->InstagramUsername, 0, 1) == "@")
+                {
+                    $Results["INSTAGRAM"] = "https://instagram.com/" . substr($this->InstagramUsername, 1);
+                }
+                else
+                {
+                    $Results["INSTAGRAM"] = "https://instagram.com/" . $this->InstagramUsername;
+                }
+            }
+
+            if($this->TelegramUsername !== null)
+            {
+                // @ Check
+                if(substr($this->TelegramUsername, 0, 1) == "@")
+                {
+                    $Results["TELEGRAM"] = "https://t.me/" . substr($this->TelegramUsername, 1);
+                }
+                else
+                {
+                    $Results["TELEGRAM"] = "https://t.me/" . $this->TelegramUsername;
+                }
+            }
+
+            if($this->WebsiteURL !== null)
+            {
+                $Results["WEBSITE"] = $this->WebsiteURL;
+            }
+
+            return $Results;
+        }
+
+        /**
          * Returns an array representation of the object
          *
          * @return array

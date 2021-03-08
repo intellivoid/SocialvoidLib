@@ -69,7 +69,7 @@
                 );
             }
             // It's a public ID
-            elseif(strlen($peer) == 256)
+            elseif(strlen($peer) == 64)
             {
                 // Self-Resolved, no need to ask the database.
                 if($peer == $this->networkSession->getAuthenticatedUser()->PublicID)

@@ -243,6 +243,29 @@
         }
 
         /**
+         * Constructs a network session from an array representation
+         *
+         * @param array $data
+         * @param SocialvoidLib $socialvoidLib
+         * @return NetworkSession
+         */
+        public static function loadFromSession(array $data, SocialvoidLib $socialvoidLib): NetworkSession
+        {
+            $NetworkSessionObject = new NetworkSession($socialvoidLib);
+
+            if(isset($data["flags"]))
+                $NetworkSessionObject->flags = $data["flags"];
+
+            if(isset($data["active_session"]))
+                $NetworkSessionObject->active_session = ActiveSession::fromArray($data["active_session"]);
+
+            if(isset($data["authenticated_user"]))
+                $NetworkSessionObject->authenticated_user = User::fromArray($data["authenticated_user"]);
+
+            return $NetworkSessionObject;
+        }
+
+        /**
          * @return Users
          */
         public function getUsers(): Users
