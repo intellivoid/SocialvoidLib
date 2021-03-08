@@ -11,7 +11,7 @@
     use SocialvoidLib\Classes\Standard\BaseIdentification;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
-    use SocialvoidLib\Exceptions\Standard\Network\UserNotFoundException;
+    use SocialvoidLib\Exceptions\Internal\FollowerStateNotFoundException;
     use SocialvoidLib\Objects\Follower;
     use SocialvoidLib\Objects\User;
     use SocialvoidLib\SocialvoidLib;
@@ -40,12 +40,12 @@
         /**
          * Registers a following state into the database
          *
-         * @param User $user
+         * @param int $user_id
          * @param User $target_user
          * @return FollowerState|string
          * @throws DatabaseException
          */
-        public function registerFollowingState(User $user, User $target_user): string
+        public function registerFollowingState(int $user_id, User $target_user): string
         {
             $FollowerState = FollowerState::Following;
 
@@ -54,11 +54,11 @@
                 $FollowerState = FollowerState::AwaitingApproval;
             }
 
-            $PublicID = BaseIdentification::FollowingStateID($user->ID, $target_user->ID);
+            $PublicID = BaseIdentification::FollowingStateID($user_id, $target_user->ID);
 
             $Query = QueryBuilder::insert_into("follower_states", [
                 "public_id" => $this->socialvoidLib->getDatabase()->real_escape_string($PublicID),
-                "user_id" => (int)$user->ID,
+                "user_id" => (int)$user_id,
                 "target_user_id" => (int)$target_user->ID,
                 "state" => $this->socialvoidLib->getDatabase()->real_escape_string($FollowerState),
                 "flags" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
@@ -86,8 +86,8 @@
          * @param string $value
          * @return Follower
          * @throws DatabaseException
+         * @throws FollowerStateNotFoundException
          * @throws InvalidSearchMethodException
-         * @throws UserNotFoundException
          */
         public function getFollowingState(string $search_method, string $value): Follower
         {
@@ -125,7 +125,7 @@
 
                 if ($Row == False)
                 {
-                    throw new UserNotFoundException();
+                    throw new FollowerStateNotFoundException();
                 }
                 else
                 {

@@ -10,6 +10,7 @@
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
     use SocialvoidLib\Exceptions\Internal\FollowerDataNotFound;
+    use SocialvoidLib\Objects\Follower;
     use SocialvoidLib\Objects\FollowerData;
     use SocialvoidLib\SocialvoidLib;
     use ZiProto\ZiProto;
@@ -32,6 +33,30 @@
         public function __construct(SocialvoidLib $socialvoidLib)
         {
             $this->socialvoidLib = $socialvoidLib;
+        }
+
+        /**
+         * Resolves follower data in a smart way 0w0
+         *
+         * @param int $user_id
+         * @return FollowerData
+         * @throws DatabaseException
+         * @throws FollowerDataNotFound
+         * @throws InvalidSearchMethodException
+         */
+        public function resolveRecord(int $user_id): FollowerData
+        {
+            try
+            {
+                return $this->getRecord(FollowerDataSearchMethod::ByUserId, $user_id);
+            }
+            catch(FollowerDataNotFound $e)
+            {
+                unset($e);
+            }
+
+            $this->createRecord($user_id);
+            return $this->getRecord(FollowerDataSearchMethod::ByUserId, $user_id);
         }
 
         /**
@@ -91,7 +116,7 @@
                 "followers",
                 "followers_ids",
                 "following",
-                "followings_ids",
+                "following_ids",
                 "last_updated_timestamp",
                 "created_timestamp"
             ], $search_method, $value, null, null, 1);
@@ -107,6 +132,8 @@
                 }
                 else
                 {
+                    $Row["followers_ids"] = ZiProto::decode($Row["followers_ids"]);
+                    $Row["following_ids"] = ZiProto::decode($Row["following_ids"]);
                     return(FollowerData::fromArray($Row));
                 }
             }

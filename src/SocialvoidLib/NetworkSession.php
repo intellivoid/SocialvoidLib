@@ -38,14 +38,14 @@
          *
          * @var ActiveSession|null
          */
-        private $active_session;
+        public $active_session;
 
         /**
          * The current user that's currently authenticated
          *
          * @var User|null
          */
-        private $authenticated_user;
+        public $authenticated_user;
 
         /**
          * @var SocialvoidLib
@@ -279,5 +279,13 @@
         public function getSocialvoidLib(): SocialvoidLib
         {
             return $this->socialvoidLib;
+        }
+
+        /**
+         * @param User|null $authenticated_user
+         */
+        public function setAuthenticatedUser(?User $authenticated_user): void
+        {
+            $this->authenticated_user = $authenticated_user;
         }
     }

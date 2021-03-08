@@ -5,6 +5,7 @@
     use SocialvoidLib\Exceptions\Internal\AlreadyAuthenticatedToNetwork;
     use SocialvoidLib\Exceptions\Internal\AuthenticationFailureException;
     use SocialvoidLib\Exceptions\Internal\FollowerDataNotFound;
+    use SocialvoidLib\Exceptions\Internal\FollowerStateNotFoundException;
     use SocialvoidLib\Exceptions\Internal\NoRecoveryCodesAvailableException;
     use SocialvoidLib\Exceptions\Internal\NoTimeBasedSignatureAvailableException;
     use SocialvoidLib\Exceptions\Internal\RecoveryCodesAlreadyExistsException;
@@ -52,4 +53,9 @@
          * @see FollowerDataNotFound
          */
         const FollowerDataNotFound = 0x2006;
+
+        /**
+         * @see FollowerStateNotFoundException
+         */
+        const FollowerStateNotFoundException = 0x2007;
     }

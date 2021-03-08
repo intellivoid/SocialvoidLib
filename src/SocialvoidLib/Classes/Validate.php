@@ -39,10 +39,10 @@
         /**
          * Validates the first name
          *
-         * @param string $input
+         * @param string|null $input
          * @return bool
          */
-        public static function firstName(string $input): bool
+        public static function firstName(string $input=null): bool
         {
             if (strlen($input) == 0)
                 return false;
@@ -56,10 +56,10 @@
         /**
          * Validates the last name
          *
-         * @param string $input
+         * @param string|null $input
          * @return bool
          */
-        public static function lastName(string $input): bool
+        public static function lastName(string $input=null): bool
         {
             if (strlen($input) > 64)
                 return false;
@@ -70,11 +70,11 @@
         /**
          * Validates the user biography
          *
-         * @param string $input
+         * @param string|null $input
          * @return bool
          * @noinspection PhpUnused
          */
-        public static function biography(string $input): bool
+        public static function biography(string $input=null): bool
         {
             if(strlen($input) > 255)
                 return false;

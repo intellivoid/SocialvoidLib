@@ -68,6 +68,104 @@
         public $CreatedTimestamp;
 
         /**
+         * FollowerData constructor.
+         */
+        public function __construct()
+        {
+            $this->FollowingIDs = [];
+            $this->FollowersIDs = [];
+        }
+
+        /**
+         * Adds a new follower to the equation
+         *
+         * @param int $user_id
+         */
+        public function addFollower(int $user_id): void
+        {
+            if($this->FollowersIDs == null)
+                $this->FollowersIDs = [];
+
+            if(in_array($user_id, $this->FollowersIDs))
+                return;
+
+            $this->FollowersIDs[] = $user_id;
+            $this->Followers = count($this->FollowersIDs);
+        }
+
+        /**
+         * Removes a follower from the equation
+         *
+         * @param int $user_id
+         */
+        public function removeFollower(int $user_id): void
+        {
+            if($this->FollowersIDs == null)
+                $this->FollowersIDs = [];
+
+            if(in_array($user_id, $this->FollowersIDs) == false)
+                return;
+
+            $this->FollowersIDs = array_diff($this->FollowersIDs, [$user_id]);
+            $this->Followers = count($this->FollowersIDs);
+        }
+
+        /**
+         * Adds a new following to the equation
+         *
+         * @param int $user_id
+         */
+        public function addFollowing(int $user_id): void
+        {
+            if($this->FollowingIDs == null)
+                $this->FollowingIDs = [];
+
+            if(in_array($user_id, $this->FollowingIDs))
+                return;
+
+            $this->FollowingIDs[] = $user_id;
+            $this->Following = count($this->FollowingIDs);
+        }
+
+        /**
+         * Removes a following from the equation
+         *
+         * @param int $user_id
+         */
+        public function removeFollowing(int $user_id): void
+        {
+            if($this->FollowingIDs == null)
+                $this->FollowingIDs = [];
+
+            if(in_array($user_id, $this->FollowingIDs) == false)
+                return;
+
+            $this->FollowingIDs = array_diff($this->FollowingIDs, [$user_id]);
+            $this->Following = count($this->FollowingIDs);
+        }
+
+        /**
+         * Determines if both a user are following each other.
+         *
+         * @param int $user_id
+         * @return bool
+         */
+        public function isMutual(int $user_id): bool
+        {
+            if($this->FollowersIDs == null)
+                $this->FollowersIDs = [];
+            if($this->FollowingIDs == null)
+                $this->FollowingIDs = [];
+
+            if(in_array($user_id, $this->FollowingIDs) && in_array($user_id, $this->FollowersIDs))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        /**
          * Returns an array representation of the object
          *
          * @return array
@@ -114,8 +212,8 @@
                     $FollowerDataObject->Followers = (int)$data["followers"];
             }
 
-            if(isset($ata["followers_ids"]))
-                $FollowerDataObject->FollowingIDs = $data["followers_ids"];
+            if(isset($data["followers_ids"]))
+                $FollowerDataObject->FollowersIDs = $data["followers_ids"];
 
             if(isset($data["following"]))
             {
@@ -123,7 +221,7 @@
                     $FollowerDataObject->Following = (int)$data["following"];
             }
 
-            if(isset($ata["following_ids"]))
+            if(isset($data["following_ids"]))
                 $FollowerDataObject->FollowingIDs = $data["following_ids"];
 
             if(isset($data["last_updated_timestamp"]))

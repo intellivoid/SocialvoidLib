@@ -108,6 +108,262 @@
         public $SessionCache;
 
         /**
+         * @return int
+         */
+        public function getID(): int
+        {
+            return $this->ID;
+        }
+
+        /**
+         * @param int $ID
+         */
+        public function setID(int $ID): void
+        {
+            $this->ID = $ID;
+        }
+
+        /**
+         * @return string
+         */
+        public function getPublicID(): string
+        {
+            return $this->PublicID;
+        }
+
+        /**
+         * @param string $PublicID
+         */
+        public function setPublicID(string $PublicID): void
+        {
+            $this->PublicID = $PublicID;
+        }
+
+        /**
+         * @return ActiveSessionFlag[]
+         */
+        public function getFlags(): array
+        {
+            return $this->Flags;
+        }
+
+        /**
+         * @param ActiveSessionFlag[] $Flags
+         */
+        public function setFlags(array $Flags): void
+        {
+            $this->Flags = $Flags;
+        }
+
+        /**
+         * @return bool
+         */
+        public function isAuthenticated(): bool
+        {
+            return $this->Authenticated;
+        }
+
+        /**
+         * @param bool $Authenticated
+         */
+        public function setAuthenticated(bool $Authenticated): void
+        {
+            $this->Authenticated = $Authenticated;
+        }
+
+        /**
+         * @return int
+         */
+        public function getUserID(): int
+        {
+            return $this->UserID;
+        }
+
+        /**
+         * @param int $UserID
+         */
+        public function setUserID(int $UserID): void
+        {
+            $this->UserID = $UserID;
+        }
+
+        /**
+         * @return UserAuthenticationMethod
+         */
+        public function getAuthenticationMethodUsed(): UserAuthenticationMethod
+        {
+            return $this->AuthenticationMethodUsed;
+        }
+
+        /**
+         * @param UserAuthenticationMethod $AuthenticationMethodUsed
+         */
+        public function setAuthenticationMethodUsed(UserAuthenticationMethod $AuthenticationMethodUsed): void
+        {
+            $this->AuthenticationMethodUsed = $AuthenticationMethodUsed;
+        }
+
+        /**
+         * @return string|null
+         */
+        public function getDeviceModel(): ?string
+        {
+            return $this->DeviceModel;
+        }
+
+        /**
+         * @param string|null $DeviceModel
+         */
+        public function setDeviceModel(?string $DeviceModel): void
+        {
+            $this->DeviceModel = $DeviceModel;
+        }
+
+        /**
+         * @return string|null
+         */
+        public function getPlatform(): ?string
+        {
+            return $this->Platform;
+        }
+
+        /**
+         * @param string|null $Platform
+         */
+        public function setPlatform(?string $Platform): void
+        {
+            $this->Platform = $Platform;
+        }
+
+        /**
+         * @return string|null
+         */
+        public function getSystemVersion(): ?string
+        {
+            return $this->SystemVersion;
+        }
+
+        /**
+         * @param string|null $SystemVersion
+         */
+        public function setSystemVersion(?string $SystemVersion): void
+        {
+            $this->SystemVersion = $SystemVersion;
+        }
+
+        /**
+         * @return string
+         */
+        public function getClientName(): string
+        {
+            return $this->ClientName;
+        }
+
+        /**
+         * @param string $ClientName
+         */
+        public function setClientName(string $ClientName): void
+        {
+            $this->ClientName = $ClientName;
+        }
+
+        /**
+         * @return string
+         */
+        public function getClientVersion(): string
+        {
+            return $this->ClientVersion;
+        }
+
+        /**
+         * @param string $ClientVersion
+         */
+        public function setClientVersion(string $ClientVersion): void
+        {
+            $this->ClientVersion = $ClientVersion;
+        }
+
+        /**
+         * @return string
+         */
+        public function getIpAddress(): string
+        {
+            return $this->IpAddress;
+        }
+
+        /**
+         * @param string $IpAddress
+         */
+        public function setIpAddress(string $IpAddress): void
+        {
+            $this->IpAddress = $IpAddress;
+        }
+
+        /**
+         * @return SessionCache
+         */
+        public function getSessionCache(): SessionCache
+        {
+            return $this->SessionCache;
+        }
+
+        /**
+         * @param SessionCache $SessionCache
+         */
+        public function setSessionCache(SessionCache $SessionCache): void
+        {
+            $this->SessionCache = $SessionCache;
+        }
+
+        /**
+         * @return SessionData
+         */
+        public function getSessionData(): SessionData
+        {
+            return $this->SessionData;
+        }
+
+        /**
+         * @param SessionData $SessionData
+         */
+        public function setSessionData(SessionData $SessionData): void
+        {
+            $this->SessionData = $SessionData;
+        }
+
+        /**
+         * @return int
+         */
+        public function getLastActiveTimestamp(): int
+        {
+            return $this->LastActiveTimestamp;
+        }
+
+        /**
+         * @param int $LastActiveTimestamp
+         */
+        public function setLastActiveTimestamp(int $LastActiveTimestamp): void
+        {
+            $this->LastActiveTimestamp = $LastActiveTimestamp;
+        }
+
+        /**
+         * @return int
+         */
+        public function getCreatedTimestamp(): int
+        {
+            return $this->CreatedTimestamp;
+        }
+
+        /**
+         * @param int $CreatedTimestamp
+         */
+        public function setCreatedTimestamp(int $CreatedTimestamp): void
+        {
+            $this->CreatedTimestamp = $CreatedTimestamp;
+        }
+
+        /**
          * The data associated with this session
          *
          * @var SessionData
