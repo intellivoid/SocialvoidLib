@@ -49,35 +49,7 @@
     "components": [
         {
             "required": true,
-            "file": "NetworkSession.php"
-        },
-        {
-            "required": true,
-            "file": "Abstracts/SearchMethods/FollowerStateSearchMethod.php"
-        },
-        {
-            "required": true,
-            "file": "Abstracts/SearchMethods/FollowerDataSearchMethod.php"
-        },
-        {
-            "required": true,
-            "file": "Abstracts/SearchMethods/UserSearchMethod.php"
-        },
-        {
-            "required": true,
-            "file": "Abstracts/SearchMethods/ActiveSessionSearchMethod.php"
-        },
-        {
-            "required": true,
-            "file": "Abstracts/Levels/PostPriorityLevel.php"
-        },
-        {
-            "required": true,
-            "file": "Abstracts/StandardErrorCodeType.php"
-        },
-        {
-            "required": true,
-            "file": "Abstracts/Types/MediaType.php"
+            "file": "Abstracts/StatusStates/FollowerState.php"
         },
         {
             "required": true,
@@ -89,15 +61,7 @@
         },
         {
             "required": true,
-            "file": "Abstracts/StatusStates/FollowerState.php"
-        },
-        {
-            "required": true,
-            "file": "Abstracts/StandardErrorCodes.php"
-        },
-        {
-            "required": true,
-            "file": "Abstracts/CoaAvatarSize.php"
+            "file": "Abstracts/Types/MediaType.php"
         },
         {
             "required": true,
@@ -105,11 +69,51 @@
         },
         {
             "required": true,
-            "file": "Abstracts/Flags/UserFlags.php"
+            "file": "Abstracts/SearchMethods/UserSearchMethod.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/SearchMethods/ActiveSessionSearchMethod.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/SearchMethods/FollowerDataSearchMethod.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/SearchMethods/FollowerStateSearchMethod.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/SearchMethods/PostSearchMethod.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/UserAuthenticationMethod.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/StandardErrorCodeType.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/StandardErrorCodes.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/Levels/PostPriorityLevel.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/CoaAvatarSize.php"
         },
         {
             "required": true,
             "file": "Abstracts/Flags/NetworkFlags.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/Flags/UserFlags.php"
         },
         {
             "required": true,
@@ -121,7 +125,35 @@
         },
         {
             "required": true,
-            "file": "Abstracts/UserAuthenticationMethod.php"
+            "file": "Network/Users.php"
+        },
+        {
+            "required": true,
+            "file": "Classes/Security/Hashing.php"
+        },
+        {
+            "required": true,
+            "file": "Classes/Converter.php"
+        },
+        {
+            "required": true,
+            "file": "Classes/PostText/Extractor.php"
+        },
+        {
+            "required": true,
+            "file": "Classes/PostText/PostRegex.php"
+        },
+        {
+            "required": true,
+            "file": "Classes/Validate.php"
+        },
+        {
+            "required": true,
+            "file": "Classes/Standard/BaseIdentification.php"
+        },
+        {
+            "required": true,
+            "file": "SocialvoidLib.php"
         },
         {
             "required": true,
@@ -133,91 +165,19 @@
         },
         {
             "required": true,
-            "file": "Classes/Converter.php"
+            "file": "Exceptions/GenericInternal/DatabaseException.php"
         },
         {
             "required": true,
-            "file": "Classes/Standard/BaseIdentification.php"
+            "file": "Exceptions/GenericInternal/DependencyError.php"
         },
         {
             "required": true,
-            "file": "Classes/Validate.php"
+            "file": "Exceptions/GenericInternal/InvalidSearchMethodException.php"
         },
         {
             "required": true,
-            "file": "Classes/Security/Hashing.php"
-        },
-        {
-            "required": true,
-            "file": "Classes/PostText/PostRegex.php"
-        },
-        {
-            "required": true,
-            "file": "Classes/PostText/Extractor.php"
-        },
-        {
-            "required": true,
-            "file": "Exceptions/Standard/Network/UserNotFoundException.php"
-        },
-        {
-            "required": true,
-            "file": "Exceptions/Standard/Network/InvalidPeerInputException.php"
-        },
-        {
-            "required": true,
-            "file": "Exceptions/Standard/Network/SessionNoLongerAuthenticatedException.php"
-        },
-        {
-            "required": true,
-            "file": "Exceptions/Standard/Network/SessionNotFoundException.php"
-        },
-        {
-            "required": true,
-            "file": "Exceptions/Standard/Validation/InvalidLastNameException.php"
-        },
-        {
-            "required": true,
-            "file": "Exceptions/Standard/Validation/UsernameAlreadyExistsException.php"
-        },
-        {
-            "required": true,
-            "file": "Exceptions/Standard/Validation/InvalidFirstNameException.php"
-        },
-        {
-            "required": true,
-            "file": "Exceptions/Standard/Validation/InvalidPasswordException.php"
-        },
-        {
-            "required": true,
-            "file": "Exceptions/Standard/Validation/InvalidBiographyException.php"
-        },
-        {
-            "required": true,
-            "file": "Exceptions/Standard/Validation/InvalidUsernameException.php"
-        },
-        {
-            "required": true,
-            "file": "Exceptions/Standard/Authentication/NoPasswordAuthenticationAvailableException.php"
-        },
-        {
-            "required": true,
-            "file": "Exceptions/Standard/Authentication/IncorrectTwoFactorAuthenticationCodeException.php"
-        },
-        {
-            "required": true,
-            "file": "Exceptions/Standard/Authentication/IncorrectPasswordException.php"
-        },
-        {
-            "required": true,
-            "file": "Exceptions/Standard/Authentication/NotAuthenticatedException.php"
-        },
-        {
-            "required": true,
-            "file": "Exceptions/Standard/Authentication/AuthenticationNotApplicableException.php"
-        },
-        {
-            "required": true,
-            "file": "Exceptions/Standard/Authentication/NoTwoFactorAuthenticationAvailableException.php"
+            "file": "Exceptions/GenericInternal/ConfigurationError.php"
         },
         {
             "required": true,
@@ -225,15 +185,11 @@
         },
         {
             "required": true,
-            "file": "Exceptions/Internal/AlreadyAuthenticatedToNetwork.php"
-        },
-        {
-            "required": true,
             "file": "Exceptions/Internal/FollowerStateNotFoundException.php"
         },
         {
             "required": true,
-            "file": "Exceptions/Internal/FollowerDataNotFound.php"
+            "file": "Exceptions/Internal/NoTimeBasedSignatureAvailableException.php"
         },
         {
             "required": true,
@@ -245,47 +201,111 @@
         },
         {
             "required": true,
+            "file": "Exceptions/Internal/AlreadyAuthenticatedToNetwork.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Internal/FollowerDataNotFound.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/Internal/RecoveryCodesAlreadyExistsException.php"
         },
         {
             "required": true,
-            "file": "Exceptions/Internal/NoTimeBasedSignatureAvailableException.php"
+            "file": "Exceptions/Standard/Network/InvalidPeerInputException.php"
         },
         {
             "required": true,
-            "file": "Exceptions/GenericInternal/InvalidSearchMethodException.php"
+            "file": "Exceptions/Standard/Network/PostNotFoundException.php"
         },
         {
             "required": true,
-            "file": "Exceptions/GenericInternal/DependencyError.php"
+            "file": "Exceptions/Standard/Network/UserNotFoundException.php"
         },
         {
             "required": true,
-            "file": "Exceptions/GenericInternal/DatabaseException.php"
+            "file": "Exceptions/Standard/Validation/UsernameAlreadyExistsException.php"
         },
         {
             "required": true,
-            "file": "Exceptions/GenericInternal/ConfigurationError.php"
+            "file": "Exceptions/Standard/Validation/InvalidBiographyException.php"
         },
         {
             "required": true,
-            "file": "Objects/ActiveSession.php"
+            "file": "Exceptions/Standard/Validation/InvalidLastNameException.php"
         },
         {
             "required": true,
-            "file": "Objects/Standard/Peer/Profile.php"
+            "file": "Exceptions/Standard/Validation/InvalidUsernameException.php"
         },
         {
             "required": true,
-            "file": "Objects/Standard/Peer.php"
+            "file": "Exceptions/Standard/Validation/InvalidPasswordException.php"
         },
         {
             "required": true,
-            "file": "Objects/Post/Quote.php"
+            "file": "Exceptions/Standard/Validation/InvalidFirstNameException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Authentication/IncorrectTwoFactorAuthenticationCodeException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Authentication/NotAuthenticatedException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Authentication/SessionNotFoundException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Authentication/SessionNoLongerAuthenticatedException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Authentication/IncorrectPasswordException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Authentication/NoTwoFactorAuthenticationAvailableException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Authentication/AuthenticationNotApplicableException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Authentication/NoPasswordAuthenticationAvailableException.php"
+        },
+        {
+            "required": true,
+            "file": "NetworkSession.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/ActiveSession/SessionCache.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/ActiveSession/SessionData.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/ActiveSession/SessionCache/PeerResolveCache.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/Follower.php"
         },
         {
             "required": true,
             "file": "Objects/Post/Entities.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/Post/Properties.php"
         },
         {
             "required": true,
@@ -297,31 +317,11 @@
         },
         {
             "required": true,
-            "file": "Objects/Post/Properties.php"
+            "file": "Objects/Post/Quote.php"
         },
         {
             "required": true,
             "file": "Objects/Post/Repost.php"
-        },
-        {
-            "required": true,
-            "file": "Objects/Follower.php"
-        },
-        {
-            "required": true,
-            "file": "Objects/User.php"
-        },
-        {
-            "required": true,
-            "file": "Objects/ActiveSession/SessionCache/PeerResolveCache.php"
-        },
-        {
-            "required": true,
-            "file": "Objects/ActiveSession/SessionData.php"
-        },
-        {
-            "required": true,
-            "file": "Objects/ActiveSession/SessionCache.php"
         },
         {
             "required": true,
@@ -333,11 +333,19 @@
         },
         {
             "required": true,
-            "file": "Objects/User/UserProperties.php"
+            "file": "Objects/ActiveSession.php"
         },
         {
             "required": true,
-            "file": "Objects/User/UserSettings.php"
+            "file": "Objects/Standard/Peer.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/Standard/Peer/Profile.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/User/UserProperties.php"
         },
         {
             "required": true,
@@ -357,11 +365,15 @@
         },
         {
             "required": true,
-            "file": "Network/Users.php"
+            "file": "Objects/User/UserSettings.php"
         },
         {
             "required": true,
-            "file": "Managers/UserManager.php"
+            "file": "Objects/User.php"
+        },
+        {
+            "required": true,
+            "file": "Managers/FollowerDataManager.php"
         },
         {
             "required": true,
@@ -373,19 +385,15 @@
         },
         {
             "required": true,
-            "file": "Managers/FollowerDataManager.php"
+            "file": "Managers/UserManager.php"
         },
         {
             "required": true,
             "file": "Managers/PostsManager.php"
-        },
-        {
-            "required": true,
-            "file": "SocialvoidLib.php"
         }
     ],
     "files": [
-        "Objects/Standard/README.md",
-        "package.json"
+        "package.json",
+        "Objects/Standard/README.md"
     ]
 }
