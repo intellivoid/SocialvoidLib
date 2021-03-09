@@ -173,6 +173,7 @@
          *
          * @param array $data
          * @return Post
+         * @noinspection DuplicatedCode
          */
         public static function fromArray(array $data): Post
         {
@@ -269,5 +270,101 @@
                 "last_updated_timestamp" => ($this->LastUpdatedTimestamp == null ? null : (int)$this->LastUpdatedTimestamp),
                 "created_timestamp" => ($this->CreatedTimestamp == null ? null : (int)$this->CreatedTimestamp)
             ];
+        }
+
+        /** @noinspection DuplicatedCode */
+        public static function fromAlternativeArray(array $data): Post
+        {
+            $PostObject = new Post();
+
+            if(isset($data["id"]))
+                $PostObject->ID = ($data["id"] !== null ? null : (int)$data["id"]);
+
+            if(isset($data["public_id"]))
+                $PostObject->PublicID = $data["public_id"];
+
+            if(isset($data["text"]))
+                $PostObject->Text = $data["text"];
+
+            if(isset($data["source"]))
+                $PostObject->Source = $data["source"];
+
+            if(isset($data["properties"]))
+                $PostObject->Properties = ($data["properties"] !== null ? new Properties() : Properties::fromArray($data["properties"]));
+
+            if(isset($data["poster_user_id"]))
+                $PostObject->PosterUserID = $data["poster_user_id"];
+
+            if(isset($data["reply_to_post_id"]))
+            {
+                if($PostObject->Reply == null)
+                    $PostObject->Reply = new Reply();
+                $PostObject->Reply->ReplyToPostID = (int)$data["reply_to_post_id"];
+            }
+
+            if(isset($data["reply_to_user_id"]))
+            {
+                if($PostObject->Reply == null)
+                    $PostObject->Reply = new Reply();
+                $PostObject->Reply->ReplyToUserID = (int)$data["reply_to_user_id"];
+            }
+
+            if(isset($data["quote_original_post_id"]))
+            {
+                if($PostObject->Quote == null)
+                    $PostObject->Quote = new Quote();
+                $PostObject->Quote->OriginalPostID = (int)$data["quote_original_post_id"];
+            }
+
+            if(isset($data["quote_original_user_id"]))
+            {
+                if($PostObject->Quote == null)
+                    $PostObject->Quote = new Quote();
+                $PostObject->Quote->OriginalUserID = (int)$data["quote_original_user_id"];
+            }
+
+            if(isset($data["repost_original_post_id"]))
+            {
+                if($PostObject->Repost == null)
+                    $PostObject->Repost = new Repost();
+                $PostObject->Repost->OriginalPostID = (int)$data["repost_original_post_id"];
+            }
+
+            if(isset($data["repost_original_user_id"]))
+            {
+                if($PostObject->Repost == null)
+                    $PostObject->Repost = new Quote();
+                $PostObject->Repost->OriginalUserID = (int)$data["repost_original_user_id"];
+            }
+
+            if(isset($data["flags"]))
+                $PostObject->Flags = ($data["flags"] !== null ? [] : $data["flags"]);
+
+            if(isset($data["priority_level"]))
+                $PostObject->PriroityLevel = $data["priority_level"];
+
+            if(isset($data["entities"]))
+                $PostObject->Entities = ($data["entities"] !== null ? Entities::fromArray($data["entities"]) : null);
+
+            if(isset($data["likes"]))
+                $PostObject->Likes = ($data["likes"] !== null ? [] : $data["likes"]);
+
+            if(isset($data["reposts"]))
+                $PostObject->Reposts = ($data["reposts"] !== null ? [] : $data["reposts"]);
+
+            if(isset($data["media_content"]))
+            {
+                $PostObject->MediaContent = [];
+                foreach($data["media_content"] as $datum)
+                    $PostObject->MediaContent[] = MediaContent::fromArray($datum);
+            }
+
+            if(isset($data["last_updated_timestamp"]))
+                $PostObject->LastUpdatedTimestamp = ($data["last_updated_timestamp"] !== null ? null : (int)$data["last_updated_timestamp"]);
+
+            if(isset($data["created_timestamp"]))
+                $PostObject->CreatedTimestamp = ($data["created_timestamp"] !== null ? null : (int)$data["created_timestamp"]);
+
+            return $PostObject;
         }
     }
