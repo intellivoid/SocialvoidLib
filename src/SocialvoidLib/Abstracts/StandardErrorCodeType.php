@@ -7,7 +7,7 @@
      * Class StandardErrorCodeType
      * @package SocialvoidLib\Abstracts
      */
-    class StandardErrorCodeType
+    abstract class StandardErrorCodeType
     {
         /**
          * An unknown error code range, non-standard
