@@ -133,7 +133,7 @@
          *
          * @var  string
          */
-        protected $tweet = '';
+        protected $text = '';
 
         /**
          * This constructor is used to populate some variables.
@@ -162,6 +162,6 @@
                 self::$REGEX_REPLY_USERNAME = '/^('.self::REGEX_WHITESPACE.')*[@＠]([a-zA-Z0-9_]{1,20})/';
             }
 
-            $this->tweet = $post;
+            $this->text = $post;
         }
     }

@@ -66,7 +66,7 @@
          */
         public function extractHashtags()
         {
-            preg_match_all(self::REGEX_HASHTAG, $this->tweet, $matches);
+            preg_match_all(self::REGEX_HASHTAG, $this->text, $matches);
             return $matches[3];
         }
 
@@ -78,7 +78,7 @@
          * @noinspection PhpUnusedLocalVariableInspection
          */
         public function extractURLs() {
-            preg_match_all(self::$REGEX_VALID_URL, $this->tweet, $matches);
+            preg_match_all(self::$REGEX_VALID_URL, $this->text, $matches);
             list($all, $before, $url, $protocol, $domain, $path, $query) = array_pad($matches, 7, '');
             $i = count($url)-1;
             for (; $i >= 0; $i--)
@@ -111,7 +111,7 @@
          */
         public function extractMentionedUsernames()
         {
-            preg_match_all(self::REGEX_USERNAME_MENTION, $this->tweet, $matches);
+            preg_match_all(self::REGEX_USERNAME_MENTION, $this->text, $matches);
             list($all, $before, $username, $after) = array_pad($matches, 4, '');
             $usernames = array();
 
@@ -135,7 +135,7 @@
         public function extractRepliedUsernames()
         {
 
-            preg_match(self::$REGEX_REPLY_USERNAME, $this->tweet, $matches);
+            preg_match(self::$REGEX_REPLY_USERNAME, $this->text, $matches);
             return isset($matches[2]) ? $matches[2] : '';
         }
 
@@ -147,14 +147,14 @@
          */
         public function extractHashtagsWithIndices()
         {
-            preg_match_all(self::REGEX_HASHTAG, $this->tweet, $matches, PREG_OFFSET_CAPTURE);
+            preg_match_all(self::REGEX_HASHTAG, $this->text, $matches, PREG_OFFSET_CAPTURE);
             $m = &$matches[3];
 
             for ($i = 0; $i < count($m); $i++)
             {
                 $m[$i] = array_combine(array('hashtag', 'indices'), $m[$i]);
                 # XXX: Fix for PREG_OFFSET_CAPTURE returning byte offsets...
-                $start = mb_strlen(substr($this->tweet, 0, $matches[1][$i][1]));
+                $start = mb_strlen(substr($this->text, 0, $matches[1][$i][1]));
                 $start += mb_strlen($matches[1][$i][0]);
                 $length = mb_strlen($m[$i]['hashtag']);
                 $m[$i]['indices'] = array($start, $start + $length + 1);
@@ -171,14 +171,14 @@
          */
         public function extractURLsWithIndices()
         {
-            preg_match_all(self::$REGEX_VALID_URL, $this->tweet, $matches, PREG_OFFSET_CAPTURE);
+            preg_match_all(self::$REGEX_VALID_URL, $this->text, $matches, PREG_OFFSET_CAPTURE);
             $m = &$matches[2];
 
             for ($i = 0; $i < count($m); $i++)
             {
                 $m[$i] = array_combine(array('url', 'indices'), $m[$i]);
                 # XXX: Fix for PREG_OFFSET_CAPTURE returning byte offsets...
-                $start = mb_strlen(substr($this->tweet, 0, $matches[1][$i][1]));
+                $start = mb_strlen(substr($this->text, 0, $matches[1][$i][1]));
                 $start += mb_strlen($matches[1][$i][0]);
                 $length = mb_strlen($m[$i]['url']);
                 $m[$i]['indices'] = array($start, $start + $length);
@@ -195,14 +195,14 @@
          */
         public function extractMentionedUsernamesWithIndices()
         {
-            preg_match_all(self::REGEX_USERNAME_MENTION, $this->tweet, $matches, PREG_OFFSET_CAPTURE);
+            preg_match_all(self::REGEX_USERNAME_MENTION, $this->text, $matches, PREG_OFFSET_CAPTURE);
             $m = &$matches[2];
 
             for ($i = 0; $i < count($m); $i++)
             {
                 $m[$i] = array_combine(array('screen_name', 'indices'), $m[$i]);
                 # XXX: Fix for PREG_OFFSET_CAPTURE returning byte offsets...
-                $start = mb_strlen(substr($this->tweet, 0, $matches[1][$i][1]));
+                $start = mb_strlen(substr($this->text, 0, $matches[1][$i][1]));
                 $start += mb_strlen($matches[1][$i][0]);
                 $length = mb_strlen($m[$i]['screen_name']);
                 $m[$i]['indices'] = array($start, $start + $length + 1);

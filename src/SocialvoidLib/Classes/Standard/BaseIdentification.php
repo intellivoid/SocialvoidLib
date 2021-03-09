@@ -55,4 +55,18 @@
             $user_hash = hash("sha256", Hashing::pepper($user_id));
             return hash("sha512", $client_hash . $device_hash . $user_hash . $entity_pepper);
         }
+
+        /**
+         * Returns a Post Base ID
+         *
+         * @param int $user_id
+         * @param int $timestamp
+         * @param string $text
+         * @return string
+         */
+        public static function PostID(int $user_id, int $timestamp, string $text): string
+        {
+            $user_hash = hash("sha256", $user_id . $timestamp);
+            return hash("sha256", $user_id . Hashing::pepper($user_hash . $text));
+        }
     }
