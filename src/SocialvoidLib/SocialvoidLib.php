@@ -36,6 +36,7 @@
     use SocialvoidLib\Exceptions\GenericInternal\DependencyError;
     use SocialvoidLib\Managers\FollowerDataManager;
     use SocialvoidLib\Managers\FollowerStateManager;
+    use SocialvoidLib\Managers\PostsManager;
     use SocialvoidLib\Managers\SessionManager;
     use SocialvoidLib\Managers\UserManager;
     use udp\udp;
@@ -100,6 +101,11 @@
          * @var mixed
          */
         private $EngineSchema;
+
+        /**
+         * @var PostsManager
+         */
+        private PostsManager $PostsManager;
 
         /**
          * SocialvoidLib constructor.
@@ -173,6 +179,7 @@
             $this->FollowerStateManager = new FollowerStateManager($this);
             $this->SessionManager = new SessionManager($this);
             $this->FollowerDataManager = new FollowerDataManager($this);
+            $this->PostsManager = new PostsManager($this);
         }
 
         /**
@@ -313,5 +320,13 @@
         public function getEngineSchema()
         {
             return $this->EngineSchema;
+        }
+
+        /**
+         * @return PostsManager
+         */
+        public function getPostsManager(): PostsManager
+        {
+            return $this->PostsManager;
         }
     }

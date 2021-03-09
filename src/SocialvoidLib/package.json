@@ -377,6 +377,10 @@
         },
         {
             "required": true,
+            "file": "Managers/PostsManager.php"
+        },
+        {
+            "required": true,
             "file": "SocialvoidLib.php"
         }
     ],

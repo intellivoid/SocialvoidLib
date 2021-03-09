@@ -26,6 +26,10 @@
      */
     class NetworkSession
     {
+        // TODO: Add auto-update for ActiveSession
+        // TODO: Add auto-update for AuthenticatedUser
+        // TODO: Add function for loading and dumping the network session to a file
+
         /**
          * Flags associated with this network session
          *
