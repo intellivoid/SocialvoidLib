@@ -26,6 +26,10 @@
      * THIS IS A CLOSED SOURCE COMPONENT.
      */
 
+    // TODO: Add likes records table
+    // TODO: Add reposts records table
+    // TODO: Add the ability to retrieve user likes & reposts
+
     namespace SocialvoidLib;
 
     use acm\acm;
