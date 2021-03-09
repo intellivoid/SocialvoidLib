@@ -8,18 +8,25 @@
     use Throwable;
 
     /**
-     * Class SessionNotFoundException
+     * Class PostNotFoundException
      * @package SocialvoidLib\Exceptions\Standard\Network
      */
-    class SessionNotFoundException extends Exception
+    class PostNotFoundException extends Exception
     {
         /**
-         * SessionNotFoundException constructor.
+         * @var Throwable|null
+         */
+        private ?Throwable $previous;
+
+        /**
+         * PostNotFoundException constructor.
          * @param string $message
          * @param Throwable|null $previous
          */
         public function __construct($message = "", Throwable $previous = null)
         {
-            parent::__construct($message, StandardErrorCodes::SessionNotFoundException, $previous);
+            parent::__construct($message, StandardErrorCodes::PostNotFoundException, $previous);
+            $this->message = $message;
+            $this->previous = $previous;
         }
     }

@@ -10,7 +10,7 @@
     use SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NoTwoFactorAuthenticationAvailableException;
     use SocialvoidLib\Exceptions\Standard\Network\InvalidPeerInputException;
-    use SocialvoidLib\Exceptions\Standard\Network\SessionNoLongerAuthenticatedException;
+    use SocialvoidLib\Exceptions\Standard\Network\PostNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\SessionNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\UserNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidBiographyException;
@@ -100,6 +100,27 @@
          */
         const AuthenticationNotApplicableException = 0x02204;
 
+        /**
+         * Raised when the requested session is no longer authenticated
+         *
+         * @see SessionNoLongerAuthenticatedException
+         */
+        const SessionNoLongerAuthenticatedException = 0x02205;
+
+        /**
+         * Raised when the request session entity was not found on the network
+         *
+         * @see SessionNotFoundException
+         */
+        const SessionNotFoundException = 0x02206;
+
+        /**
+         * Raised when the user attempts to preform an action that requires authentication
+         *
+         * @see NotAuthenticatedException
+         */
+        const NotAuthenticatedException = 0x02207;
+
 
 
         /** 31-Set error codes (Network) */
@@ -112,30 +133,16 @@
         const UserNotFoundException = 0x03100;
 
         /**
-         * Raised when the request session entity was not found on the network
-         *
-         * @see SessionNotFoundException
-         */
-        const SessionNotFoundException = 0x03101;
-
-        /**
-         * Raised when the requested session is no longer authenticated
-         *
-         * @see SessionNoLongerAuthenticatedException
-         */
-        const SessionNoLongerAuthenticatedException = 0x03102;
-
-        /**
-         * Raised when the user attempts to preform an action that requires authentication
-         *
-         * @see NotAuthenticatedException
-         */
-        const NotAuthenticatedException = 0x03103;
-
-        /**
          * Raised when the client provided a invalid peer identification input
          *
          * @see InvalidPeerInputException
          */
         const InvalidPeerInputException = 0x03104;
+
+        /**
+         * Raised when the client requested a post that isn't found
+         *
+         * @see PostNotFoundException
+         */
+        const PostNotFoundException = 0x03104;
     }

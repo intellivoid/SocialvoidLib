@@ -1,6 +1,6 @@
 <?php
 
-    namespace SocialvoidLib\Exceptions\Standard\Network;
+    namespace SocialvoidLib\Exceptions\Standard\Authentication;
 
     use Exception;
     use SocialvoidLib\Abstracts\StandardErrorCodes;
