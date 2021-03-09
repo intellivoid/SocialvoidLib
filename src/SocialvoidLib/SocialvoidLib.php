@@ -69,7 +69,7 @@
         /**
          * @var mixed
          */
-        private $DataStorageSchema;
+        private $DataStorageConfiguration;
 
         /**
          * @var udp
@@ -104,7 +104,7 @@
         /**
          * @var mixed
          */
-        private $EngineSchema;
+        private $EngineConfiguration;
 
         /**
          * @var PostsManager
@@ -139,6 +139,11 @@
             // Engine Schema Configuration
             $EngineSchema = new Schema();
             $EngineSchema->setDefinition("MaxPeerResolveCacheCount", 20);
+            $EngineSchema->setDefinition("EnableBackgroundWorker", True);
+            $EngineSchema->setDefinition("EnableWorkerCache", True);
+            $EngineSchema->setDefinition("GearmanHost", "127.0.0.1");
+            $EngineSchema->setDefinition("GearmanPort", 4730);
+            $EngineSchema->setDefinition("MaxWorkers", 30);
             $this->acm->defineSchema("Engine", $EngineSchema);
 
             // Data storage Schema Configuration
@@ -151,8 +156,8 @@
             {
                 $this->DatabaseConfiguration = $this->acm->getConfiguration("Database");
                 $this->NetworkConfiguration = $this->acm->getConfiguration("Network");
-                $this->DataStorageSchema = $this->acm->getConfiguration("DataStorage");
-                $this->EngineSchema = $this->acm->getConfiguration("Engine");
+                $this->DataStorageConfiguration = $this->acm->getConfiguration("DataStorage");
+                $this->EngineConfiguration = $this->acm->getConfiguration("Engine");
             }
             catch(Exception $e)
             {
@@ -160,18 +165,20 @@
             }
 
             // Initialize constants
-            self::defineLibConstant("SOCIALVOID_LIB_MAX_PEER_RESOLVE_CACHE_COUNT", $this->getEngineSchema()["MaxPeerResolveCacheCount"]);
+            self::defineLibConstant("SOCIALVOID_LIB_MAX_PEER_RESOLVE_CACHE_COUNT", $this->getEngineConfiguration()["MaxPeerResolveCacheCount"]);
+            self::defineLibConstant("SOCIALVOID_LIB_CACHE_ENABLED", (bool)$this->getEngineConfiguration()["EnableWorkerCache"]);
+            self::defineLibConstant("SOCIALVOID_LIB_BACKGROUND_WORKER_ENABLED", (bool)$this->getEngineConfiguration()["EnableBackgroundWorker"]);
 
             // Initialize UDP
             try
             {
                 if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN')
                 {
-                    $this->UserDisplayPictureManager = new udp($this->DataStorageSchema['ProfilesLocation_Windows']);
+                    $this->UserDisplayPictureManager = new udp($this->DataStorageConfiguration['ProfilesLocation_Windows']);
                 }
                 else
                 {
-                    $this->UserDisplayPictureManager = new udp($this->DataStorageSchema['ProfilesLocation_Unix']);
+                    $this->UserDisplayPictureManager = new udp($this->DataStorageConfiguration['ProfilesLocation_Unix']);
                 }
             }
             catch(Exception $e)
@@ -201,7 +208,6 @@
             define($name, $value);
             return true;
         }
-
 
 
         /**
@@ -265,9 +271,9 @@
         /**
          * @return mixed
          */
-        public function getDataStorageSchema()
+        public function getDataStorageConfiguration()
         {
-            return $this->DataStorageSchema;
+            return $this->DataStorageConfiguration;
         }
 
         /**
@@ -321,9 +327,9 @@
         /**
          * @return mixed
          */
-        public function getEngineSchema()
+        public function getEngineConfiguration()
         {
-            return $this->EngineSchema;
+            return $this->EngineConfiguration;
         }
 
         /**

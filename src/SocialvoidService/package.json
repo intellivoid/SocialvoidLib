@@ -1,0 +1,54 @@
+{
+    "package": {
+        "package_name": "net.intellivoid.socialvoid_service",
+        "name": "SocialvoidService",
+        "version": "1.0.0.0",
+        "author": "Zi Xing Narrakas",
+        "organization": "Intellivoid",
+        "description": "The service used for managing Socialvoid Events",
+        "url": "https://github.com/intellivoid/socialvoidlib",
+        "dependencies": [
+            {
+                "package": "net.intellivoid.acm",
+                "version": "latest",
+                "source": "default@github/intellivoid/acm",
+                "required": true
+            },
+            {
+                "package": "net.intellivoid.background_worker",
+                "version": "latest",
+                "source": "default@github/intellivoid/BackgroundWorker",
+                "required": true
+            },
+            {
+                "package": "net.intellivoid.verbose_adventure",
+                "version": "latest",
+                "source": "default@github/intellivoid/VerboseAdventure",
+                "required": true
+            }
+        ],
+        "configuration": {
+            "autoload_method": "generated_spl",
+            "main": null,
+            "post_installation": [],
+            "pre_installation": []
+        }
+    },
+    "components": [
+        {
+            "required": true,
+            "file": "service_worker.php"
+        },
+        {
+            "required": true,
+            "file": "SocialvoidService.php"
+        },
+        {
+            "required": true,
+            "file": "cli.php"
+        }
+    ],
+    "files": [
+        "package.json"
+    ]
+}
