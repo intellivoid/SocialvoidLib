@@ -129,6 +129,10 @@
         },
         {
             "required": true,
+            "file": "Network/Timeline.php"
+        },
+        {
+            "required": true,
             "file": "Classes/Security/Hashing.php"
         },
         {

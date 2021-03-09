@@ -173,6 +173,8 @@
             return $FollowerState;
         }
 
+        // TODO: Add the ability to get follower and following data by IDs only rather than the whole user object
+
         /**
          * Gets following data of a peer
          *

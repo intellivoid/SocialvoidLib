@@ -16,6 +16,7 @@
     use SocialvoidLib\Exceptions\Standard\Authentication\SessionNoLongerAuthenticatedException;
     use SocialvoidLib\InputTypes\SessionClient;
     use SocialvoidLib\InputTypes\SessionDevice;
+    use SocialvoidLib\Network\Timeline;
     use SocialvoidLib\Network\Users;
     use SocialvoidLib\Objects\ActiveSession;
     use SocialvoidLib\Objects\User;
@@ -62,6 +63,11 @@
         private Users $users;
 
         /**
+         * @var Timeline
+         */
+        private Timeline $timeline;
+
+        /**
          * Network constructor.
          * @param SocialvoidLib $socialvoidLib
          */
@@ -70,6 +76,7 @@
             $this->flags = [];
             $this->socialvoidLib = $socialvoidLib;
             $this->users = new Users($this);
+            $this->timeline = new Timeline($this);
         }
 
         /**
@@ -270,14 +277,6 @@
         }
 
         /**
-         * @return Users
-         */
-        public function getUsers(): Users
-        {
-            return $this->users;
-        }
-
-        /**
          * @return SocialvoidLib
          */
         public function getSocialvoidLib(): SocialvoidLib
@@ -291,5 +290,21 @@
         public function setAuthenticatedUser(?User $authenticated_user): void
         {
             $this->authenticated_user = $authenticated_user;
+        }
+
+        /**
+         * @return Users
+         */
+        public function getUsers(): Users
+        {
+            return $this->users;
+        }
+
+        /**
+         * @return Timeline
+         */
+        public function getTimeline(): Timeline
+        {
+            return $this->timeline;
         }
     }

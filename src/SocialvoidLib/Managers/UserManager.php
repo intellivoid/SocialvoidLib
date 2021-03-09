@@ -259,6 +259,7 @@
          */
         public function checkUsernameExists(string $username): bool
         {
+            // TODO: Optimize this to request less data
             try
             {
                 $this->getUser(UserSearchMethod::ByUsername, $username);
