@@ -13,7 +13,7 @@
     use SocialvoidLib\Classes\Converter;
     use SocialvoidLib\Exceptions\Internal\AlreadyAuthenticatedToNetwork;
     use SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException;
-    use SocialvoidLib\Exceptions\Standard\Network\SessionNoLongerAuthenticatedException;
+    use SocialvoidLib\Exceptions\Standard\Authentication\SessionNoLongerAuthenticatedException;
     use SocialvoidLib\InputTypes\SessionClient;
     use SocialvoidLib\InputTypes\SessionDevice;
     use SocialvoidLib\Network\Users;
@@ -84,7 +84,7 @@
          * @throws AlreadyAuthenticatedToNetwork
          * @throws Exceptions\GenericInternal\DatabaseException
          * @throws Exceptions\GenericInternal\InvalidSearchMethodException
-         * @throws Exceptions\Standard\Network\SessionNotFoundException
+         * @throws Exceptions\Standard\Authentication\SessionNotFoundException
          * @throws Exceptions\Standard\Network\UserNotFoundException
          * @throws SessionNoLongerAuthenticatedException
          */
@@ -113,9 +113,9 @@
          * @throws AlreadyAuthenticatedToNetwork
          * @throws Exceptions\GenericInternal\DatabaseException
          * @throws Exceptions\GenericInternal\InvalidSearchMethodException
-         * @throws Exceptions\Standard\Network\SessionNotFoundException
-         * @throws SessionNoLongerAuthenticatedException
+         * @throws Exceptions\Standard\Authentication\SessionNotFoundException
          * @throws Exceptions\Standard\Network\UserNotFoundException
+         * @throws SessionNoLongerAuthenticatedException
          */
         public function declareActiveSession(string $session_public_id, string $ip_address=null): void
         {
