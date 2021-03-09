@@ -217,7 +217,7 @@
         },
         {
             "required": true,
-            "file": "Exceptions/Standard/Network/InvalidPeerInputException.php"
+            "file": "Exceptions/Standard/Network/PeerNotFoundException.php"
         },
         {
             "required": true,
@@ -225,7 +225,7 @@
         },
         {
             "required": true,
-            "file": "Exceptions/Standard/Network/UserNotFoundException.php"
+            "file": "Exceptions/Standard/Validation/InvalidPeerInputException.php"
         },
         {
             "required": true,
