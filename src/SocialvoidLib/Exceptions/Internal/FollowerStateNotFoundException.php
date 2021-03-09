@@ -4,6 +4,7 @@
     namespace SocialvoidLib\Exceptions\Internal;
 
 
+    use Exception;
     use SocialvoidLib\Abstracts\InternalErrorCodes;
     use Throwable;
 
@@ -11,7 +12,7 @@
      * Class FollowerStateNotFoundException
      * @package SocialvoidLib\Exceptions\Internal
      */
-    class FollowerStateNotFoundException extends \Exception
+    class FollowerStateNotFoundException extends Exception
     {
         /**
          * @var Throwable|null

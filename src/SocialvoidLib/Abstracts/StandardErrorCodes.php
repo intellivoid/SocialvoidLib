@@ -9,14 +9,13 @@
     use SocialvoidLib\Exceptions\Standard\Authentication\NoPasswordAuthenticationAvailableException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NoTwoFactorAuthenticationAvailableException;
-    use SocialvoidLib\Exceptions\Standard\Network\InvalidPeerInputException;
     use SocialvoidLib\Exceptions\Standard\Network\PostNotFoundException;
-    use SocialvoidLib\Exceptions\Standard\Network\SessionNotFoundException;
-    use SocialvoidLib\Exceptions\Standard\Network\UserNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidBiographyException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidFirstNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidLastNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPasswordException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidPeerInputException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidUsernameException;
     use SocialvoidLib\Exceptions\Standard\Validation\UsernameAlreadyExistsException;
 
@@ -61,6 +60,13 @@
          * @see UsernameAlreadyExistsException
          */
         const UsernameAlreadyExistsException = 0x02105;
+
+        /**
+         * Raised when the client provided a invalid peer identification input
+         *
+         * @see InvalidPeerInputException
+         */
+        const InvalidPeerInputException = 0x02106;
 
 
         /** 22-Set error codes (Authentication) */
@@ -122,27 +128,19 @@
         const NotAuthenticatedException = 0x02207;
 
 
-
         /** 31-Set error codes (Network) */
 
         /**
          * Raised when the requested user entity was not found
          *
-         * @see UserNotFoundException
+         * @see PeerNotFoundException
          */
-        const UserNotFoundException = 0x03100;
-
-        /**
-         * Raised when the client provided a invalid peer identification input
-         *
-         * @see InvalidPeerInputException
-         */
-        const InvalidPeerInputException = 0x03104;
+        const PeerNotFoundException = 0x03100;
 
         /**
          * Raised when the client requested a post that isn't found
          *
          * @see PostNotFoundException
          */
-        const PostNotFoundException = 0x03104;
+        const PostNotFoundException = 0x03101;
     }

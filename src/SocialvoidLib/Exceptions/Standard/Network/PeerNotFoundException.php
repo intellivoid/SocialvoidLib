@@ -9,10 +9,10 @@
     use Throwable;
 
     /**
-     * Class UserNotFoundException
+     * Class PeerNotFoundException
      * @package SocialvoidLib\Exceptions\Standard\Network
      */
-    class UserNotFoundException extends Exception
+    class PeerNotFoundException extends Exception
     {
         /**
          * @var string|null
@@ -30,7 +30,7 @@
         private ?Throwable $previous;
 
         /**
-         * UserNotFoundException constructor.
+         * PeerNotFoundException constructor.
          * @param string $message
          * @param string|null $search_by
          * @param string|null $search_value
@@ -38,7 +38,7 @@
          */
         public function __construct($message = "", string $search_by=null, string $search_value=null, Throwable $previous = null)
         {
-            parent::__construct($message, StandardErrorCodes::UserNotFoundException, $previous);
+            parent::__construct($message, StandardErrorCodes::PeerNotFoundException, $previous);
             $this->message = $message;
             $this->search_by = $search_by;
             $this->search_value = $search_value;

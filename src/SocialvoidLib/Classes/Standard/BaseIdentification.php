@@ -38,15 +38,14 @@
         }
 
         /**
-         * Construts a random Session ID based off the given information
+         * Constructs a random Session ID based off the given information
          *
          * @param int $user_id
          * @param SessionClient $session_client
          * @param SessionDevice $session_device
-         * @param int $timestamp
          * @return string
          */
-        public static function SessionID(int $user_id, SessionClient $session_client, SessionDevice $session_device, int $timestamp): string
+        public static function SessionID(int $user_id, SessionClient $session_client, SessionDevice $session_device): string
         {
             $client_hash = hash("sha256", json_encode($session_client->toArray()));
             $device_hash = hash("sha256", json_encode($session_device->toArray()));

@@ -4,6 +4,7 @@
     namespace SocialvoidLib\Exceptions\Internal;
 
 
+    use Exception;
     use SocialvoidLib\Abstracts\InternalErrorCodes;
     use SocialvoidLib\Objects\User\UserAuthenticationProperties;
     use Throwable;
@@ -12,7 +13,7 @@
      * Class NoTimeBasedSignatureAvailableException
      * @package SocialvoidLib\Exceptions\Internal
      */
-    class NoTimeBasedSignatureAvailableException extends \Exception
+    class NoTimeBasedSignatureAvailableException extends Exception
     {
         /**
          * @var Throwable|null

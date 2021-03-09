@@ -1,7 +1,10 @@
-<?php
+<?php /** @noinspection PhpMissingFieldTypeInspection */
+/** @noinspection PhpMissingFieldTypeInspection */
+
+/** @noinspection PhpMissingFieldTypeInspection */
 
 
-    namespace SocialvoidLib\Objects\Post;
+namespace SocialvoidLib\Objects\Post;
 
     use SocialvoidLib\Abstracts\Types\MediaType;
 

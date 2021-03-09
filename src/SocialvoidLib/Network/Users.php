@@ -14,8 +14,8 @@
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
     use SocialvoidLib\Exceptions\Internal\FollowerDataNotFound;
     use SocialvoidLib\Exceptions\Internal\FollowerStateNotFoundException;
-    use SocialvoidLib\Exceptions\Standard\Network\InvalidPeerInputException;
-    use SocialvoidLib\Exceptions\Standard\Network\UserNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidPeerInputException;
+    use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\NetworkSession;
     use SocialvoidLib\Objects\FollowerData;
     use SocialvoidLib\Objects\User;
@@ -49,7 +49,7 @@
          * @throws InvalidPeerInputException
          * @throws DatabaseException
          * @throws InvalidSearchMethodException
-         * @throws UserNotFoundException
+         * @throws PeerNotFoundException
          */
         public function resolvePeer($peer, bool $cache_session=True): User
         {
@@ -112,7 +112,7 @@
          * @throws DatabaseException
          * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
-         * @throws UserNotFoundException
+         * @throws PeerNotFoundException
          * @throws FollowerDataNotFound
          */
         public function followPeer($peer): string
@@ -184,7 +184,7 @@
          * @throws FollowerDataNotFound
          * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
-         * @throws UserNotFoundException
+         * @throws PeerNotFoundException
          */
         public function getFollowerData($peer): FollowerData
         {
@@ -215,7 +215,7 @@
          * @throws FollowerDataNotFound
          * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
-         * @throws UserNotFoundException
+         * @throws PeerNotFoundException
          */
         public function getFollowers($peer, int $offset=0, int $limit=100): array
         {
@@ -257,7 +257,7 @@
          * @throws FollowerDataNotFound
          * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
-         * @throws UserNotFoundException
+         * @throws PeerNotFoundException
          */
         public function getFollowing($peer, int $offset=0, int $limit=100): array
         {

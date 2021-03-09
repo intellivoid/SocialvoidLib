@@ -43,6 +43,7 @@
          * @param int $user_id
          * @param string $source
          * @param string $text
+         * @param int|null $session_id
          * @param array $media_content
          * @param string $priority
          * @param array $flags
@@ -51,7 +52,7 @@
          * @throws InvalidSearchMethodException
          * @throws PostNotFoundException
          */
-        public function publishPost(int $user_id, string $source, string $text, array $media_content=[], $priority=PostPriorityLevel::None, $flags=[]): Post
+        public function publishPost(int $user_id, string $source, string $text, int $session_id=null, array $media_content=[], $priority=PostPriorityLevel::None, $flags=[]): Post
         {
             $timestamp = (int)time();
 
@@ -75,6 +76,7 @@
                 "public_id" => $this->socialvoidLib->getDatabase()->real_escape_string($PublicID),
                 "text" => $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($text)),
                 "source" => $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($source)),
+                "session_id" => ($session_id == null ? null : (int)$session_id),
                 "properties" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Properties->toArray())),
                 "flags" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($flags)),
                 "priority_level" => $this->socialvoidLib->getDatabase()->real_escape_string($priority),
@@ -132,6 +134,7 @@
                 "text",
                 "source",
                 "properties",
+                "session_id",
                 "poster_user_id",
                 "reply_to_post_id",
                 "reply_to_user_id",
@@ -216,7 +219,7 @@
                 "repost_original_post_id" => ($post->Repost == null || $post->Repost->OriginalPostID == null ? null : (int)$post->Repost->OriginalPostID),
                 "repost_original_user_id" => ($post->Repost == null || $post->Repost->OriginalUserID == null ? null : (int)$post->Repost->OriginalUserID),
                 "flags" => ($post->Flags == null ? [] : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Flags))),
-                "priority_level" => ($post->PriroityLevel == null ? $this->socialvoidLib->getDatabase()->real_escape_string(PostPriorityLevel::None) : $this->socialvoidLib->getDatabase()->real_escape_string($post->PriroityLevel)),
+                "priority_level" => ($post->PriorityLevel == null ? $this->socialvoidLib->getDatabase()->real_escape_string(PostPriorityLevel::None) : $this->socialvoidLib->getDatabase()->real_escape_string($post->PriorityLevel)),
                 "entities" => ($post->Entities == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Entities->toArray()))),
                 "likes" => ($post->Likes == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Likes))),
                 "reposts" => ($post->Reposts == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Reposts))),

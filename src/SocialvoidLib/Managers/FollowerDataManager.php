@@ -10,7 +10,6 @@
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
     use SocialvoidLib\Exceptions\Internal\FollowerDataNotFound;
-    use SocialvoidLib\Objects\Follower;
     use SocialvoidLib\Objects\FollowerData;
     use SocialvoidLib\SocialvoidLib;
     use ZiProto\ZiProto;

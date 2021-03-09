@@ -54,6 +54,13 @@
         public $Properties;
 
         /**
+         * The session ID used to make this post
+         *
+         * @var int|null
+         */
+        public $SessionID;
+
+        /**
          * The original author of this post
          *
          * @var int
@@ -93,7 +100,7 @@
          *
          * @var string
          */
-        public $PriroityLevel;
+        public $PriorityLevel;
 
         /**
          * @var Entities
@@ -153,6 +160,7 @@
                 "text" => $this->Text,
                 "source" => $this->Source,
                 "properties" => ($this->Properties == null ? null : $this->Properties->toArray()),
+                "session_id" => ($this->SessionID == null ? null : (int)$this->SessionID),
                 "poster_user_id" => $this->PosterUserID,
                 "reply" => ($this->Reply == null ? null : $this->Reply->toArray()),
                 "quote" => ($this->Quote == null ? null : $this->Quote->toArray()),
@@ -194,6 +202,9 @@
             if(isset($data["properties"]))
                 $PostObject->Properties = ($data["properties"] !== null ? new Properties() : Properties::fromArray($data["properties"]));
 
+            if(isset($data["session_id"]))
+                $PostObject->SessionID = ($data["session_id"] == null ? null : (int)$data["session_id"]);
+
             if(isset($data["poster_user_id"]))
                 $PostObject->PosterUserID = $data["poster_user_id"];
 
@@ -210,7 +221,7 @@
                 $PostObject->Flags = ($data["flags"] !== null ? [] : $data["flags"]);
 
             if(isset($data["priority_level"]))
-                $PostObject->PriroityLevel = $data["priority_level"];
+                $PostObject->PriorityLevel = $data["priority_level"];
 
             if(isset($data["entities"]))
                 $PostObject->Entities = ($data["entities"] !== null ? Entities::fromArray($data["entities"]) : null);
@@ -254,6 +265,7 @@
                 "text" => $this->Text,
                 "source" => $this->Source,
                 "properties" => ($this->Properties == null ? null : $this->Properties->toArray()),
+                "session_id" => ($this->SessionID == null ? null : (int)$this->SessionID),
                 "poster_user_id" => $this->PosterUserID,
                 "reply_to_post_id" => ($this->Reply == null ? null : $this->Reply->ReplyToPostID),
                 "reply_to_user_id" => ($this->Reply == null ? null : $this->Reply->ReplyToUserID),
@@ -291,6 +303,9 @@
 
             if(isset($data["properties"]))
                 $PostObject->Properties = ($data["properties"] !== null ? new Properties() : Properties::fromArray($data["properties"]));
+
+            if(isset($data["session_id"]))
+                $PostObject->SessionID = ($data["session_id"] == null ? null : (int)$data["session_id"]);
 
             if(isset($data["poster_user_id"]))
                 $PostObject->PosterUserID = $data["poster_user_id"];
@@ -341,7 +356,7 @@
                 $PostObject->Flags = ($data["flags"] !== null ? [] : $data["flags"]);
 
             if(isset($data["priority_level"]))
-                $PostObject->PriroityLevel = $data["priority_level"];
+                $PostObject->PriorityLevel = $data["priority_level"];
 
             if(isset($data["entities"]))
                 $PostObject->Entities = ($data["entities"] !== null ? Entities::fromArray($data["entities"]) : null);

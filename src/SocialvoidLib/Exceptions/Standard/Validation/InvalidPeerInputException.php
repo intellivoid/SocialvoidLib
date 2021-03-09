@@ -1,7 +1,7 @@
 <?php
 
 
-    namespace SocialvoidLib\Exceptions\Standard\Network;
+    namespace SocialvoidLib\Exceptions\Standard\Validation;
 
 
     use Exception;
@@ -28,6 +28,7 @@
          * InvalidPeerInputException constructor.
          * @param string $message
          * @param null $peer
+         * @param Throwable|null $previous
          */
         public function __construct($message = "", $peer=null, Throwable $previous = null)
         {

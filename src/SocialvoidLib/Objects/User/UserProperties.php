@@ -1,9 +1,8 @@
 <?php
 
     /** @noinspection PhpUnused */
-    /** @noinspection PhpMissingFieldTypeInspection */
 
-    namespace SocialvoidLib\Objects\User;
+namespace SocialvoidLib\Objects\User;
 
     /**
      * Class UserProperties

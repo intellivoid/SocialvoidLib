@@ -5,7 +5,7 @@
 
     namespace SocialvoidLib\Objects\ActiveSession;
 
-    use SocialvoidLib\Exceptions\Standard\Network\InvalidPeerInputException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidPeerInputException;
     use SocialvoidLib\Objects\ActiveSession\SessionCache\PeerResolveCache;
     use SocialvoidLib\Objects\User;
 

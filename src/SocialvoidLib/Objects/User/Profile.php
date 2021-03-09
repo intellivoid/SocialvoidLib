@@ -155,6 +155,7 @@
          *
          * @param array $data
          * @return Profile
+         * @noinspection DuplicatedCode
          */
         public static function fromArray(array $data): Profile
         {

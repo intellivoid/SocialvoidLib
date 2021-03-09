@@ -2,9 +2,8 @@
 
     /** @noinspection PhpUnused */
     /** @noinspection PhpMissingFieldTypeInspection */
-    /** @noinspection PhpUnusedPrivateFieldInspection */
 
-    namespace SocialvoidLib;
+namespace SocialvoidLib;
 
     use SocialvoidLib\Abstracts\Flags\NetworkFlags;
     use SocialvoidLib\Abstracts\Flags\UserFlags;
@@ -92,7 +91,7 @@
          * @throws Exceptions\GenericInternal\DatabaseException
          * @throws Exceptions\GenericInternal\InvalidSearchMethodException
          * @throws Exceptions\Standard\Authentication\SessionNotFoundException
-         * @throws Exceptions\Standard\Network\UserNotFoundException
+         * @throws Exceptions\Standard\Network\PeerNotFoundException
          * @throws SessionNoLongerAuthenticatedException
          */
         public function authenticateUser(SessionClient $sessionClient, SessionDevice $sessionDevice,
@@ -121,7 +120,7 @@
          * @throws Exceptions\GenericInternal\DatabaseException
          * @throws Exceptions\GenericInternal\InvalidSearchMethodException
          * @throws Exceptions\Standard\Authentication\SessionNotFoundException
-         * @throws Exceptions\Standard\Network\UserNotFoundException
+         * @throws Exceptions\Standard\Network\PeerNotFoundException
          * @throws SessionNoLongerAuthenticatedException
          */
         public function declareActiveSession(string $session_public_id, string $ip_address=null): void

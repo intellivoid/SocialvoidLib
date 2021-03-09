@@ -343,11 +343,9 @@
             if($this->RecoveryCodes !== null)
             {
                 /** @noinspection PhpRedundantOptionalArgumentInspection */
-                /** @noinspection PhpUnhandledExceptionInspection */
                 if($this->validateRecoveryCode($input, false))
                 {
                     if($update)
-                        /** @noinspection PhpUnhandledExceptionInspection */
                         /** @noinspection PhpRedundantOptionalArgumentInspection */
                         $this->removeRecoveryCode($input, false);
                     return true;

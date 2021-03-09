@@ -58,7 +58,7 @@
             $SessionCache = new SessionCache();
             $SessionData = new SessionData();
             $Timestamp = (int)time();
-            $PublicID = BaseIdentification::SessionID($user->ID, $sessionClient, $sessionDevice, $Timestamp);
+            $PublicID = BaseIdentification::SessionID($user->ID, $sessionClient, $sessionDevice);
 
             $Query = QueryBuilder::insert_into("sessions", [
                 "public_id" => $this->socialvoidLib->getDatabase()->real_escape_string($PublicID),

@@ -1,9 +1,8 @@
 <?php
 
     /** @noinspection PhpUnused */
-    /** @noinspection PhpMissingFieldTypeInspection */
 
-    namespace SocialvoidLib\Objects\ActiveSession;
+namespace SocialvoidLib\Objects\ActiveSession;
 
     /**
      * Class SessionData

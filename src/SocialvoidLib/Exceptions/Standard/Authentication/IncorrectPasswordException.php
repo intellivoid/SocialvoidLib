@@ -4,6 +4,7 @@
     namespace SocialvoidLib\Exceptions\Standard\Authentication;
 
 
+    use Exception;
     use SocialvoidLib\Abstracts\StandardErrorCodes;
     use Throwable;
 
@@ -11,7 +12,7 @@
      * Class IncorrectPasswordException
      * @package SocialvoidLib\Exceptions\Standard\Authentication
      */
-    class IncorrectPasswordException extends \Exception
+    class IncorrectPasswordException extends Exception
     {
         /**
          * @var Throwable|null

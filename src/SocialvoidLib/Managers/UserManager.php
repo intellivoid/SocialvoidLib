@@ -16,7 +16,7 @@
     use SocialvoidLib\Classes\Validate;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
-    use SocialvoidLib\Exceptions\Standard\Network\UserNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidFirstNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidLastNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidUsernameException;
@@ -58,7 +58,7 @@
          * @throws InvalidLastNameException
          * @throws InvalidSearchMethodException
          * @throws InvalidUsernameException
-         * @throws UserNotFoundException
+         * @throws PeerNotFoundException
          * @throws UsernameAlreadyExistsException
          */
         public function registerUser(string $username, string $first_name, string $last_name=null): User
@@ -129,7 +129,7 @@
          * @return User
          * @throws DatabaseException
          * @throws InvalidSearchMethodException
-         * @throws UserNotFoundException
+         * @throws PeerNotFoundException
          */
         public function getUser(string $search_method, $value): User
         {
@@ -185,7 +185,7 @@
 
                 if ($Row == False)
                 {
-                    throw new UserNotFoundException();
+                    throw new PeerNotFoundException();
                 }
                 else
                 {

@@ -5,6 +5,7 @@
 
 
     use SocialvoidLib\NetworkSession;
+    use SocialvoidLib\Objects\Post;
 
     /**
      * Class Timeline
@@ -24,5 +25,9 @@
         public function __construct(NetworkSession $networkSession)
         {
             $this->networkSession = $networkSession;
+        }
+
+        public function postToTimeline(string $text, array $media_content=[], $flags=[]): Post
+        {
         }
     }

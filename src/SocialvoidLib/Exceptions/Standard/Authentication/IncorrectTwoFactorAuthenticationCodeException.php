@@ -4,6 +4,7 @@
     namespace SocialvoidLib\Exceptions\Standard\Authentication;
 
 
+    use Exception;
     use SocialvoidLib\Abstracts\StandardErrorCodes;
     use Throwable;
 
@@ -11,7 +12,7 @@
      * Class IncorrectTwoFactorAuthenticationCodeException
      * @package SocialvoidLib\Exceptions\Standard\Authentication
      */
-    class IncorrectTwoFactorAuthenticationCodeException extends \Exception
+    class IncorrectTwoFactorAuthenticationCodeException extends Exception
     {
         /**
          * @var Throwable|null
