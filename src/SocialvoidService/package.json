@@ -25,11 +25,21 @@
                 "version": "latest",
                 "source": "default@github/intellivoid/VerboseAdventure",
                 "required": true
+            },
+            {
+                "package": "net.intellivoid.ziproto",
+                "version": "latest",
+                "source": "default@github/intellivoid/ziproto",
+                "required": true
             }
         ],
         "configuration": {
             "autoload_method": "generated_spl",
-            "main": null,
+            "main": {
+                "execution_point": "cli.php",
+                "create_symlink": false,
+                "name": null
+            },
             "post_installation": [],
             "pre_installation": []
         }

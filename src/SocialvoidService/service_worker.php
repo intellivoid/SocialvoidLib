@@ -3,12 +3,15 @@
     /** @noinspection PhpUndefinedClassInspection */
     /** @noinspection DuplicatedCode */
 
-    use ppm\ppm;
-    use SocialvoidLib\SocialvoidLib;
+use BackgroundWorker\BackgroundWorker;
+use ppm\ppm;
+use SocialvoidLib\Service\Jobs\UserManager;
+use SocialvoidLib\SocialvoidLib;
     use SocialvoidService\SocialvoidService;
     use VerboseAdventure\Abstracts\EventType;
     use VerboseAdventure\Classes\ErrorHandler;
     use VerboseAdventure\VerboseAdventure;
+    use ZiProto\ZiProto;
 
     // Import all required auto loaders
     /** @noinspection PhpIncludeInspection */
@@ -22,6 +25,8 @@
     ppm::import("net.intellivoid.socialvoidlib");
     /** @noinspection PhpUnhandledExceptionInspection */
     ppm::import("net.intellivoid.verbose_adventure");
+    /** @noinspection PhpUnhandledExceptionInspection */
+    ppm::import("net.intellivoid.ziproto");
 
     $current_directory = getcwd();
     VerboseAdventure::setStdout(true); // Enable stdout
@@ -71,22 +76,10 @@
         exit(255);
     }
 
-    // Define the function "process_batch" to process a batch of Updates from Telegram in the background
-    SocialvoidService::getBackgroundWorker()->getWorker()->getGearmanWorker()->addFunction("process_post", function(GearmanJob $job)
-    {
-        try
-        {
-            SocialvoidService::setLastWorkerActivity((int)time()); // Set the last activity timestamp
-            SocialvoidService::processSleepCycle(); // Wake worker if it's sleeping
-
-            $ServerResponse = new json_decode($job->workload(), true);
-            var_dump($ServerResponse);
-        }
-        catch(Exception $e)
-        {
-            SocialvoidService::getLogHandler()->logException($e, "Service Worker");
-        }
-
+    // get_user
+    SocialvoidService::getBackgroundWorker()->getWorker()->getGearmanWorker()->addFunction("get_user", function(GearmanJob $job){
+        SocialvoidService::processWakeup();
+        return UserManager::getUser($job);
     });
 
     // Start working

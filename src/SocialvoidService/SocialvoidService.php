@@ -108,6 +108,15 @@
         }
 
         /**
+         * Wakes up the worker if it's sleeping
+         */
+        public static function processWakeup()
+        {
+            SocialvoidService::setLastWorkerActivity((int)time()); // Set the last activity timestamp
+            SocialvoidService::processSleepCycle(); // Wake worker if it's sleeping
+        }
+
+        /**
          * Determines if this current worker should save resources by going to sleep or wake up depending on the
          * last activity cycle
          */

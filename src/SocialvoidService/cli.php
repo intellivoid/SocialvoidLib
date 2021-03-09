@@ -22,6 +22,8 @@
     ppm::import("net.intellivoid.socialvoidlib");
     /** @noinspection PhpUnhandledExceptionInspection */
     ppm::import("net.intellivoid.verbose_adventure");
+    /** @noinspection PhpUnhandledExceptionInspection */
+    ppm::import("net.intellivoid.ziproto");
 
     VerboseAdventure::setStdout(true); // Enable stdout
     ErrorHandler::registerHandlers(); // Register error handlers
@@ -41,6 +43,7 @@
         throw new RuntimeException("Cannot locate service class");
     }
 
+    SocialvoidService::setLogHandler(new VerboseAdventure("Socialvoid Service"));
     SocialvoidService::getLogHandler()->log(EventType::INFO, "Starting Service Supervisor", "Main");
 
     try

@@ -34,8 +34,10 @@
 
     use acm\acm;
     use acm\Objects\Schema;
+    use BackgroundWorker\BackgroundWorker;
     use Exception;
     use mysqli;
+    use SocialvoidLib\Exceptions\GenericInternal\BackgroundWorkerNotEnabledException;
     use SocialvoidLib\Exceptions\GenericInternal\ConfigurationError;
     use SocialvoidLib\Exceptions\GenericInternal\DependencyError;
     use SocialvoidLib\Managers\FollowerDataManager;
@@ -110,6 +112,18 @@
          * @var PostsManager
          */
         private PostsManager $PostsManager;
+
+        /**
+         * @var BackgroundWorker
+         */
+        private BackgroundWorker $BackgroundWorker;
+
+        /*
+         * Indicates if background worker was initialized or not
+         *
+         * @var bool
+         */
+        private bool $BackgroundWorkerInitialized = false;
 
         /**
          * SocialvoidLib constructor.
@@ -191,6 +205,7 @@
             $this->SessionManager = new SessionManager($this);
             $this->FollowerDataManager = new FollowerDataManager($this);
             $this->PostsManager = new PostsManager($this);
+            $this->BackgroundWorker = new BackgroundWorker();
         }
 
         /**
@@ -338,5 +353,29 @@
         public function getPostsManager(): PostsManager
         {
             return $this->PostsManager;
+        }
+
+        /**
+         * Returns background worker and initalizes it if it's not already initialized
+         *
+         * @return BackgroundWorker
+         * @throws BackgroundWorkerNotEnabledException
+         */
+        public function getBackgroundWorker(): BackgroundWorker
+        {
+            if((bool)$this->getEngineConfiguration()["EnableBackgroundWorker"] == false)
+                throw new BackgroundWorkerNotEnabledException("BackgroundWorker is not enabled for this build");
+
+            if($this->BackgroundWorkerInitialized == false)
+            {
+                $this->BackgroundWorker->getClient()->addServer(
+                    $this->getEngineConfiguration()["GearmanHost"],
+                    (int)$this->getEngineConfiguration()["GearmanPort"]
+                );
+
+                $this->BackgroundWorkerInitialized = true;
+            }
+
+            return $this->BackgroundWorker;
         }
     }

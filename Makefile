@@ -33,7 +33,7 @@ stop_cache:
 debug_service:
 	# Starts the bot, kills all the workers and focuses on one worker in STDOUT
 	# Run with -i to ignore possible errors.
-	make stop
+	make stop_service
 	screen -dm bash -c 'ppm --main="net.intellivoid.socialvoid_service" --version="latest"'
 	sleep 3
 	make stop_workers

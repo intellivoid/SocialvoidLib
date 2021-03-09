@@ -37,6 +37,12 @@
                 "version": "latest",
                 "source": "default@github/intellivoid/ziproto",
                 "required": true
+            },
+            {
+                "package": "net.intellivoid.background_worker",
+                "version": "latest",
+                "source": "default@github/intellivoid/BackgroundWorker",
+                "required": true
             }
         ],
         "configuration": {
@@ -153,7 +159,23 @@
         },
         {
             "required": true,
+            "file": "Classes/Utilities.php"
+        },
+        {
+            "required": true,
             "file": "Classes/Standard/BaseIdentification.php"
+        },
+        {
+            "required": true,
+            "file": "Service/Jobs/UserManager/GetUserJob.php"
+        },
+        {
+            "required": true,
+            "file": "Service/Jobs/UserManager/GetUserJobResults.php"
+        },
+        {
+            "required": true,
+            "file": "Service/Jobs/UserManager.php"
         },
         {
             "required": true,
@@ -182,6 +204,10 @@
         {
             "required": true,
             "file": "Exceptions/GenericInternal/ConfigurationError.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/GenericInternal/BackgroundWorkerNotEnabledException.php"
         },
         {
             "required": true,

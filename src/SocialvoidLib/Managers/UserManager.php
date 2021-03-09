@@ -6,6 +6,7 @@
     namespace SocialvoidLib\Managers;
 
     use Exception;
+    use GearmanTask;
     use msqg\QueryBuilder;
     use SocialvoidLib\Abstracts\SearchMethods\UserSearchMethod;
     use SocialvoidLib\Abstracts\StatusStates\UserPrivacyState;
@@ -13,7 +14,9 @@
     use SocialvoidLib\Abstracts\UserAuthenticationMethod;
     use SocialvoidLib\Classes\Converter;
     use SocialvoidLib\Classes\Standard\BaseIdentification;
+    use SocialvoidLib\Classes\Utilities;
     use SocialvoidLib\Classes\Validate;
+    use SocialvoidLib\Exceptions\GenericInternal\BackgroundWorkerNotEnabledException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
@@ -22,6 +25,8 @@
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidUsernameException;
     use SocialvoidLib\Exceptions\Standard\Validation\UsernameAlreadyExistsException;
     use SocialvoidLib\Objects\User;
+    use SocialvoidLib\Service\Jobs\UserManager\GetUserJob;
+    use SocialvoidLib\Service\Jobs\UserManager\GetUserJobResults;
     use SocialvoidLib\SocialvoidLib;
     use ZiProto\ZiProto;
 
@@ -268,6 +273,76 @@
             catch(Exception $e)
             {
                 return false;
+            }
+        }
+
+
+        /**
+         * Fetches a multiple user queries, this function performs faster with BackgroundWorker enabled
+         *
+         * @param GetUserJob[] $jobs
+         * @return GetUserJobResults[]
+         * @throws BackgroundWorkerNotEnabledException
+         */
+        public function getMultipleUsers(array $jobs): array
+        {
+            if(Utilities::getBoolDefinition("SOCIALVOID_LIB_BACKGROUND_WORKER_ENABLED"))
+            {
+                $results = [];
+                $context_id = hash("crc32b", time());
+
+                /** @noinspection PhpUnhandledExceptionInspection */
+                $this->socialvoidLib->getBackgroundWorker()->getClient()->getGearmanClient()->clearCallbacks();
+
+                /** @noinspection PhpUnhandledExceptionInspection */
+                $this->socialvoidLib->getBackgroundWorker()->getClient()->getGearmanClient()->setCompleteCallback(
+                    function(GearmanTask $task, $context) use (&$results, $context_id)
+                    {
+                        if($context == "user_lookup_" . $context_id)
+                        {
+                            if($task->data() == null)
+                                return;
+
+                            $results[] = GetUserJobResults::fromArray(ZiProto::decode($task->data()));
+                        }
+                    }
+                );
+
+                // If background worker is enabled, split the query into multiple workers to speed up the process
+                foreach($jobs as $job)
+                {
+                    $this->socialvoidLib->getBackgroundWorker()->getClient()->getGearmanClient()->addTask(
+                        "get_user", ZiProto::encode($job->toArray()), "user_lookup_" . $context_id
+                    );
+                }
+
+                // Run the massive fetch!
+                $this->socialvoidLib->getBackgroundWorker()->getClient()->getGearmanClient()->runTasks();
+
+                return $results;
+            }
+            else
+            {
+                $results = [];
+
+                foreach($jobs as $job)
+                {
+                    $JobResults = new GetUserJobResults();
+                    $JobResults->JobID = $job->JobID;
+
+                    try
+                    {
+                        $JobResults->User = $this->getUser($job->SearchMethod, $job->Value);
+                    }
+                    catch(Exception $e)
+                    {
+                        $JobResults->User = null;
+                    }
+
+                    $results[] = $JobResults;
+                }
+
+                return $results;
             }
         }
     }
