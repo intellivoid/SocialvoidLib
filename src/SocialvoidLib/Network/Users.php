@@ -125,6 +125,7 @@
          */
         public function followPeer($peer): string
         {
+            // TODO: Update the timeline upon a follow event
             // Resolve the Peer ID
             $peer_id = null;
             $cache_peer = $this->networkSession->getActiveSession()->getSessionCache()->getCachedPeer($peer);

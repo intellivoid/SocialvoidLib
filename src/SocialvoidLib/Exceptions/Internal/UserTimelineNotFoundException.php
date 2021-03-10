@@ -1,4 +1,5 @@
 <?php
+
     /*
      * Copyright (c) 2017-2021. Intellivoid Technologies
      *
@@ -11,15 +12,14 @@
     namespace SocialvoidLib\Exceptions\Internal;
 
 
-    use Exception;
     use SocialvoidLib\Abstracts\InternalErrorCodes;
     use Throwable;
 
     /**
-     * Class RepostRecordNotFoundException
+     * Class UserTimelineNotFoundException
      * @package SocialvoidLib\Exceptions\Internal
      */
-    class RepostRecordNotFoundException extends Exception
+    class UserTimelineNotFoundException extends \Exception
     {
         /**
          * @var Throwable|null
@@ -27,13 +27,13 @@
         private ?Throwable $previous;
 
         /**
-         * RepostRecordNotFoundException constructor.
+         * UserTimelineNotFoundException constructor.
          * @param string $message
          * @param Throwable|null $previous
          */
         public function __construct($message = "", Throwable $previous = null)
         {
-            parent::__construct($message, InternalErrorCodes::RepostRecordNotFoundException, $previous);
+            parent::__construct($message, InternalErrorCodes::UserTimelineNotFoundException, $previous);
             $this->message = $message;
             $this->previous = $previous;
         }

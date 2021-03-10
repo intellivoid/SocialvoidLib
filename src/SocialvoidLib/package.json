@@ -67,6 +67,10 @@
         },
         {
             "required": true,
+            "file": "Abstracts/StatusStates/TimelineState.php"
+        },
+        {
+            "required": true,
             "file": "Abstracts/Types/MediaType.php"
         },
         {
@@ -76,6 +80,10 @@
         {
             "required": true,
             "file": "Abstracts/SearchMethods/UserSearchMethod.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/SearchMethods/TimelineSearchMethod.php"
         },
         {
             "required": true,
@@ -252,6 +260,10 @@
         {
             "required": true,
             "file": "Exceptions/Internal/FollowerStateNotFoundException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Internal/UserTimelineNotFoundException.php"
         },
         {
             "required": true,
@@ -459,6 +471,10 @@
         },
         {
             "required": true,
+            "file": "Objects/Timeline/Chunk.php"
+        },
+        {
+            "required": true,
             "file": "Managers/FollowerDataManager.php"
         },
         {
@@ -484,6 +500,10 @@
         {
             "required": true,
             "file": "Managers/RepostsRecordManager.php"
+        },
+        {
+            "required": true,
+            "file": "Managers/TimelineManager.php"
         }
     ],
     "files": [

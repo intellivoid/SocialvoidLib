@@ -20,6 +20,7 @@ namespace SocialvoidLib\Abstracts;
     use SocialvoidLib\Exceptions\Internal\RecoveryCodesAlreadyExistsException;
     use SocialvoidLib\Exceptions\Internal\RepostRecordNotFoundException;
     use SocialvoidLib\Exceptions\Internal\TimeBasedPrivateSignatureAlreadyExistsException;
+    use SocialvoidLib\Exceptions\Internal\UserTimelineNotFoundException;
 
     /**
      * Internal Errors (Library related) starts with 2 as the hex divider.
@@ -78,4 +79,9 @@ namespace SocialvoidLib\Abstracts;
          * @see RepostRecordNotFoundException
          */
         const RepostRecordNotFoundException = 0x2009;
+
+        /**
+         * @see UserTimelineNotFoundException
+         */
+        const UserTimelineNotFoundException = 0x2010;
     }

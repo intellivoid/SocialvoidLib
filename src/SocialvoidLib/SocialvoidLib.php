@@ -30,6 +30,7 @@
     use SocialvoidLib\Managers\PostsManager;
     use SocialvoidLib\Managers\RepostsRecordManager;
     use SocialvoidLib\Managers\SessionManager;
+    use SocialvoidLib\Managers\TimelineManager;
     use SocialvoidLib\Managers\UserManager;
     use udp\udp;
 
@@ -122,6 +123,11 @@
         private RepostsRecordManager $RepostsRecordManager;
 
         /**
+         * @var TimelineManager
+         */
+        private TimelineManager $TimelineManager;
+
+        /**
          * SocialvoidLib constructor.
          * @throws ConfigurationError
          * @throws DependencyError
@@ -203,6 +209,7 @@
             $this->PostsManager = new PostsManager($this);
             $this->LikesRecordManager = new LikesRecordManager($this);
             $this->RepostsRecordManager = new RepostsRecordManager($this);
+            $this->TimelineManager = new TimelineManager($this);
             $this->BackgroundWorker = new BackgroundWorker();
         }
 
@@ -391,5 +398,13 @@
         public function getRepostsRecordManager(): RepostsRecordManager
         {
             return $this->RepostsRecordManager;
+        }
+
+        /**
+         * @return TimelineManager
+         */
+        public function getTimelineManager(): TimelineManager
+        {
+            return $this->TimelineManager;
         }
     }
