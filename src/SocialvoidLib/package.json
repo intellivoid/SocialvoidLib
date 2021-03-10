@@ -147,6 +147,38 @@
         },
         {
             "required": true,
+            "file": "Classes/PostText/TwitterMethod/Regex.php"
+        },
+        {
+            "required": true,
+            "file": "Classes/PostText/TwitterMethod/ParseResults.php"
+        },
+        {
+            "required": true,
+            "file": "Classes/PostText/TwitterMethod/Extractor.php"
+        },
+        {
+            "required": true,
+            "file": "Classes/PostText/TwitterMethod/TldLists.php"
+        },
+        {
+            "required": true,
+            "file": "Classes/PostText/TwitterMethod/Configuration.php"
+        },
+        {
+            "required": true,
+            "file": "Classes/PostText/TwitterMethod/Validator.php"
+        },
+        {
+            "required": true,
+            "file": "Classes/PostText/TwitterMethod/StringUtils.php"
+        },
+        {
+            "required": true,
+            "file": "Classes/PostText/TwitterMethod/Parser.php"
+        },
+        {
+            "required": true,
             "file": "Classes/PostText/Extractor.php"
         },
         {
@@ -375,6 +407,10 @@
         },
         {
             "required": true,
+            "file": "Objects/Timeline.php"
+        },
+        {
+            "required": true,
             "file": "Objects/User/UserProperties.php"
         },
         {
@@ -423,6 +459,7 @@
         }
     ],
     "files": [
+        "Classes/PostText/TwitterMethod/README.md",
         "package.json",
         "Objects/Standard/README.md"
     ]
