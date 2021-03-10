@@ -243,6 +243,10 @@
         },
         {
             "required": true,
+            "file": "Exceptions/Internal/RepostRecordNotFoundException.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/Internal/TimeBasedPrivateSignatureAlreadyExistsException.php"
         },
         {
@@ -272,6 +276,10 @@
         {
             "required": true,
             "file": "Exceptions/Internal/RecoveryCodesAlreadyExistsException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Internal/LikeRecordNotFoundException.php"
         },
         {
             "required": true,
@@ -351,6 +359,10 @@
         },
         {
             "required": true,
+            "file": "Objects/LikeRecord.php"
+        },
+        {
+            "required": true,
             "file": "Objects/ActiveSession/SessionCache.php"
         },
         {
@@ -411,6 +423,10 @@
         },
         {
             "required": true,
+            "file": "Objects/RepostRecord.php"
+        },
+        {
+            "required": true,
             "file": "Objects/Timeline.php"
         },
         {
@@ -460,6 +476,14 @@
         {
             "required": true,
             "file": "Managers/PostsManager.php"
+        },
+        {
+            "required": true,
+            "file": "Managers/LikesRecordManager.php"
+        },
+        {
+            "required": true,
+            "file": "Managers/RepostsRecordManager.php"
         }
     ],
     "files": [

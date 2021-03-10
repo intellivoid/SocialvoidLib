@@ -14,9 +14,11 @@ namespace SocialvoidLib\Abstracts;
     use SocialvoidLib\Exceptions\Internal\AuthenticationFailureException;
     use SocialvoidLib\Exceptions\Internal\FollowerDataNotFound;
     use SocialvoidLib\Exceptions\Internal\FollowerStateNotFoundException;
+    use SocialvoidLib\Exceptions\Internal\LikeRecordNotFoundException;
     use SocialvoidLib\Exceptions\Internal\NoRecoveryCodesAvailableException;
     use SocialvoidLib\Exceptions\Internal\NoTimeBasedSignatureAvailableException;
     use SocialvoidLib\Exceptions\Internal\RecoveryCodesAlreadyExistsException;
+    use SocialvoidLib\Exceptions\Internal\RepostRecordNotFoundException;
     use SocialvoidLib\Exceptions\Internal\TimeBasedPrivateSignatureAlreadyExistsException;
 
     /**
@@ -66,4 +68,14 @@ namespace SocialvoidLib\Abstracts;
          * @see FollowerStateNotFoundException
          */
         const FollowerStateNotFoundException = 0x2007;
+
+        /**
+         * @see LikeRecordNotFoundException
+         */
+        const LikeRecordNotFoundException = 0x2008;
+
+        /**
+         * @see RepostRecordNotFoundException
+         */
+        const RepostRecordNotFoundException = 0x2009;
     }

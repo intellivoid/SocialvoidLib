@@ -15,7 +15,7 @@
         /**
          * The Unique Internal Database ID for this record
          *
-         * @var double
+         * @var double|int
          */
         public $ID;
 
@@ -76,6 +76,7 @@
          *
          * @param array $data
          * @return RepostRecord
+         * @noinspection DuplicatedCode
          */
         public static function fromArray(array $data): RepostRecord
         {

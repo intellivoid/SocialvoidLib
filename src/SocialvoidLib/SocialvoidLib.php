@@ -12,8 +12,6 @@
     /** @noinspection PhpRedundantDocCommentInspection */
     /** @noinspection PhpMissingFieldTypeInspection */
 
-    // TODO: Add likes records table
-    // TODO: Add reposts records table
     // TODO: Add the ability to retrieve user likes & reposts
 
     namespace SocialvoidLib;
@@ -28,7 +26,9 @@
     use SocialvoidLib\Exceptions\GenericInternal\DependencyError;
     use SocialvoidLib\Managers\FollowerDataManager;
     use SocialvoidLib\Managers\FollowerStateManager;
+    use SocialvoidLib\Managers\LikesRecordManager;
     use SocialvoidLib\Managers\PostsManager;
+    use SocialvoidLib\Managers\RepostsRecordManager;
     use SocialvoidLib\Managers\SessionManager;
     use SocialvoidLib\Managers\UserManager;
     use udp\udp;
@@ -112,6 +112,16 @@
         private bool $BackgroundWorkerInitialized = false;
 
         /**
+         * @var LikesRecordManager
+         */
+        private LikesRecordManager $LikesRecordManager;
+
+        /**
+         * @var RepostsRecordManager
+         */
+        private RepostsRecordManager $RepostsRecordManager;
+
+        /**
          * SocialvoidLib constructor.
          * @throws ConfigurationError
          * @throws DependencyError
@@ -191,6 +201,8 @@
             $this->SessionManager = new SessionManager($this);
             $this->FollowerDataManager = new FollowerDataManager($this);
             $this->PostsManager = new PostsManager($this);
+            $this->LikesRecordManager = new LikesRecordManager($this);
+            $this->RepostsRecordManager = new RepostsRecordManager($this);
             $this->BackgroundWorker = new BackgroundWorker();
         }
 
@@ -363,5 +375,21 @@
             }
 
             return $this->BackgroundWorker;
+        }
+
+        /**
+         * @return LikesRecordManager
+         */
+        public function getLikesRecordManager(): LikesRecordManager
+        {
+            return $this->LikesRecordManager;
+        }
+
+        /**
+         * @return RepostsRecordManager
+         */
+        public function getRepostsRecordManager(): RepostsRecordManager
+        {
+            return $this->RepostsRecordManager;
         }
     }
