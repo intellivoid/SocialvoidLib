@@ -8,7 +8,7 @@
      * must have a written permission from Intellivoid Technologies to do so.
      */
 
-namespace SocialvoidLib\Abstracts\SearchMethods;
+    namespace SocialvoidLib\Abstracts\SearchMethods;
 
     /**
      * Class ActiveSessionSearchMethod

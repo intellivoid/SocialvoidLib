@@ -15,7 +15,7 @@
     namespace SocialvoidLib\Objects;
 
     use SocialvoidLib\Abstracts\StatusStates\TimelineState;
-    use SocialvoidLib\Objects\Timeline\Chunk;
+    use SocialvoidLib\Classes\Utilities;
 
     /**
      * Class Timeline
@@ -47,7 +47,7 @@
         /**
          * Array of chunks for the timeline representation
          *
-         * @var Chunk[]
+         * @var array
          */
         public $PostChunks;
 
@@ -73,17 +73,34 @@
         public $CreatedTimestamp;
 
         /**
-         * Returns an array representation of the chunks
+         * Adds a post to the timeline
+         *
+         * @param int $post_id
+         */
+        public function addPost(int $post_id)
+        {
+            $this->PostChunks = Utilities::addToChunk($post_id, $this->PostChunks, 3200, 80);
+            $this->NewPosts += 1;
+        }
+
+        /**
+         * Removes a post from the timeline and rebuilds the chunks
+         *
+         * @param int $post_id
+         */
+        public function removePost(int $post_id)
+        {
+            $this->PostChunks = Utilities::removeFromChunk($post_id, $this->PostChunks, 3200, 80);
+        }
+
+        /**
+         * Returns the full timeline without chunks
          *
          * @return array
          */
-        public function chunksToArray(): array
+        public function getFullTimeline(): array
         {
-            $chunks = [];
-            foreach($this->PostChunks as $chunk)
-                $chunks[] = $chunk->toArray();
-
-            return $chunks;
+            return Utilities::rebuildFromChunks($this->PostChunks);
         }
 
         /**
@@ -93,12 +110,11 @@
          */
         public function toArray(): array
         {
-
             return [
                 "id" => $this->ID,
                 "user_id" => $this->UserID,
                 "state" => $this->State,
-                "post_chunks" => $this->chunksToArray(),
+                "post_chunks" => $this->PostChunks,
                 "new_posts" => $this->NewPosts,
                 "last_updated_timestamp" => $this->LastUpdatedTimestamp,
                 "created_timestamp" => $this->CreatedTimestamp
@@ -125,11 +141,7 @@
                 $TimelineObject->State = $data["state"];
 
             if(isset($data["post_chunks"]))
-            {
-                $TimelineObject->PostChunks = [];
-                foreach($data["post_chunks"] as $chunk)
-                    $TimelineObject->PostChunks[] = Chunk::fromArray($chunk);
-            }
+                $TimelineObject->PostChunks = $data["post_chunks"];
 
             if(isset($data["new_posts"]))
                 $TimelineObject->NewPosts = (int)$data["new_posts"];

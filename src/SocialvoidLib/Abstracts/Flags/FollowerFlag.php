@@ -8,7 +8,7 @@
      * must have a written permission from Intellivoid Technologies to do so.
      */
 
-namespace SocialvoidLib\Abstracts\Flags;
+    namespace SocialvoidLib\Abstracts\Flags;
 
     /**
      * Class FollowerFlag
