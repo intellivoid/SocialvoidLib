@@ -1,17 +1,24 @@
 <?php
+    /*
+     * Copyright (c) 2017-2021. Intellivoid Technologies
+     *
+     * All rights reserved, SocialvoidLib was written by Zi Xing Narrakas <netkas@intellivoid.net> licensed by
+     * Intellivoid Technologies, no part of this source code is open source. SocialvoidLib is a closed-source
+     * solution for the Socialvoid Community Standard, if you wish to redistribute this source code you
+     * must have a written permission from Intellivoid Technologies to do so.
+     */
 
     /** @noinspection PhpUndefinedClassInspection */
     /** @noinspection DuplicatedCode */
 
-use BackgroundWorker\BackgroundWorker;
-use ppm\ppm;
-use SocialvoidLib\Service\Jobs\UserManager;
-use SocialvoidLib\SocialvoidLib;
+    use BackgroundWorker\BackgroundWorker;
+    use ppm\ppm;
+    use SocialvoidLib\Service\Jobs\UserManager;
+    use SocialvoidLib\SocialvoidLib;
     use SocialvoidService\SocialvoidService;
     use VerboseAdventure\Abstracts\EventType;
     use VerboseAdventure\Classes\ErrorHandler;
     use VerboseAdventure\VerboseAdventure;
-    use ZiProto\ZiProto;
 
     // Import all required auto loaders
     /** @noinspection PhpIncludeInspection */

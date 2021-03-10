@@ -1,30 +1,16 @@
 <?php
+    /*
+     * Copyright (c) 2017-2021. Intellivoid Technologies
+     *
+     * All rights reserved, SocialvoidLib was written by Zi Xing Narrakas <netkas@intellivoid.net> licensed by
+     * Intellivoid Technologies, no part of this source code is open source. SocialvoidLib is a closed-source
+     * solution for the Socialvoid Community Standard, if you wish to redistribute this source code you
+     * must have a written permission from Intellivoid Technologies to do so.
+     */
 
     /** @noinspection PhpUnused */
     /** @noinspection PhpRedundantDocCommentInspection */
     /** @noinspection PhpMissingFieldTypeInspection */
-
-    /**
-     *  .d8888b.   .d88888b.   .d8888b. 8888888        d8888 888    888     888  .d88888b. 8888888 8888888b.
-     * d88P  Y88b d88P" "Y88b d88P  Y88b  888         d88888 888    888     888 d88P" "Y88b  888   888  "Y88b
-     * Y88b.      888     888 888    888  888        d88P888 888    888     888 888     888  888   888    888
-     *  "Y888b.   888     888 888         888       d88P 888 888    Y88b   d88P 888     888  888   888    888
-     *     "Y88b. 888     888 888         888      d88P  888 888     Y88b d88P  888     888  888   888    888
-     *       "888 888     888 888    888  888     d88P   888 888      Y88o88P   888     888  888   888    888
-     * Y88b  d88P Y88b. .d88P Y88b  d88P  888    d8888888888 888       Y888P    Y88b. .d88P  888   888  .d88P
-     *  "Y8888P"   "Y88888P"   "Y8888P" 8888888 d88P     888 88888888   Y8P      "Y88888P" 8888888 8888888P"
-     *
-     * =======================================================================================================
-     * SocialvoidLib (PPM REDISTRIBUTABLE)
-     *
-     * Written by Zi Xing Narrakas
-     *
-     * Licensed under Intellivoid Technologies, copyright 2017-2021.
-     * Copyright Intellivoid Technologies (c) All Rights Reserved.
-     *
-     * DO NOT REDISTRIBUTE WITHOUT WRITTEN PERMISSION !
-     * THIS IS A CLOSED SOURCE COMPONENT.
-     */
 
     // TODO: Add likes records table
     // TODO: Add reposts records table
