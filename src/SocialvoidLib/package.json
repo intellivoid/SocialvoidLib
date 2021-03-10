@@ -303,6 +303,10 @@
         },
         {
             "required": true,
+            "file": "Exceptions/Standard/Validation/InvalidPostTextException.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/Standard/Validation/InvalidPasswordException.php"
         },
         {

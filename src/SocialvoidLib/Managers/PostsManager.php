@@ -8,10 +8,12 @@
     use SocialvoidLib\Abstracts\Levels\PostPriorityLevel;
     use SocialvoidLib\Abstracts\SearchMethods\PostSearchMethod;
     use SocialvoidLib\Classes\PostText\Extractor;
+    use SocialvoidLib\Classes\PostText\TwitterMethod\Parser;
     use SocialvoidLib\Classes\Standard\BaseIdentification;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
     use SocialvoidLib\Exceptions\Standard\Network\PostNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidPostTextException;
     use SocialvoidLib\Objects\Post;
     use SocialvoidLib\SocialvoidLib;
     use ZiProto\ZiProto;
@@ -51,12 +53,17 @@
          * @throws DatabaseException
          * @throws InvalidSearchMethodException
          * @throws PostNotFoundException
+         * @throws InvalidPostTextException
          */
         public function publishPost(int $user_id, string $source, string $text, int $session_id=null, array $media_content=[], $priority=PostPriorityLevel::None, $flags=[]): Post
         {
             $timestamp = (int)time();
 
-            // TODO: Add the ability to validate if the text is valid or not
+            $textPostParser = new Parser();
+            $textPostResults = $textPostParser->parseInput($text);
+            if($textPostResults->valid == false)
+                throw new InvalidPostTextException("The given post text is invalid", $text);
+
             $PublicID = BaseIdentification::PostID($user_id, $timestamp, $text);
             $Properties = new Post\Properties();
 

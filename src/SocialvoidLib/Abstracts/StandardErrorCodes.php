@@ -16,6 +16,7 @@
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidLastNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPasswordException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPeerInputException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidPostTextException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidUsernameException;
     use SocialvoidLib\Exceptions\Standard\Validation\UsernameAlreadyExistsException;
 
@@ -67,6 +68,13 @@
          * @see InvalidPeerInputException
          */
         const InvalidPeerInputException = 0x02106;
+
+        /**
+         * Raised when the post text given is invalid
+         *
+         * @see InvalidPostTextException
+         */
+        const InvalidPostTextException = 0x02107;
 
 
         /** 22-Set error codes (Authentication) */

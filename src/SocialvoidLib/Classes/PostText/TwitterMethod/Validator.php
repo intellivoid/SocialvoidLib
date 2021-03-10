@@ -253,6 +253,6 @@
                 $config = $this->config;
             }
 
-            return Parser::create($config)->parseTweet($tweet);
+            return Parser::create($config)->parseInput($tweet);
         }
     }

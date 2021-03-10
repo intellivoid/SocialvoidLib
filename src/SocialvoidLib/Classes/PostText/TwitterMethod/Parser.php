@@ -51,16 +51,16 @@
         /**
          * Parses a given tweet text with the weighted character count configuration
          *
-         * @param string $tweet which is to be parsed
+         * @param string $text which is to be parsed
          * @return ParseResults
          */
-        public function parseTweet($tweet)
+        public function parseInput($text)
         {
-            if ($tweet === null || '' === $tweet) {
+            if ($text === null || '' === $text) {
                 return new ParseResults();
             }
 
-            $normalizedTweet = StringUtils::normalizeFromNFC($tweet);
+            $normalizedTweet = StringUtils::normalizeFromNFC($text);
             $normalizedTweetLength = StringUtils::strlen($normalizedTweet);
 
             $emojiParsingEnabled = $this->config->getEmojiParsingEnabled();
@@ -122,7 +122,7 @@
             $permillage = $scaledWeightedLength * 1000 / $this->config->maxWeightedTweetLength;
             $isValid = !$hasInvalidCharacters && $weightedCount <= $maxWeightedTweetLength;
 
-            $normalizedTweetOffset = StringUtils::strlen($tweet) - $normalizedTweetLength;
+            $normalizedTweetOffset = StringUtils::strlen($text) - $normalizedTweetLength;
             $displayTextRange = array(0, $displayOffset + $normalizedTweetOffset - 1);
             $validTextRange = array(0, $validOffset + $normalizedTweetOffset - 1);
 
