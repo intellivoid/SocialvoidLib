@@ -45,6 +45,29 @@
         }
 
         /**
+         * Retrieves an existing timeline, creates one if it doesn't exist
+         *
+         * @param int $user_id
+         * @return Timeline
+         * @throws DatabaseException
+         * @throws InvalidSearchMethodException
+         * @throws UserTimelineNotFoundException
+         */
+        public function retrieveTimeline(int $user_id): Timeline
+        {
+            try
+            {
+                return $this->getTimeline(TimelineSearchMethod::ByUserId, $user_id);
+            }
+            catch(UserTimelineNotFoundException $e)
+            {
+                $this->createTimeline($user_id);
+            }
+
+            return $this->getTimeline(TimelineSearchMethod::ByUserId, $user_id);
+        }
+
+        /**
          * Creates a new timeline for a user
          *
          * @param int $user_id
