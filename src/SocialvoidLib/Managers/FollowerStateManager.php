@@ -13,12 +13,10 @@
     namespace SocialvoidLib\Managers;
 
     use msqg\QueryBuilder;
-    use SocialvoidLib\Abstracts\SearchMethods\FollowerStateSearchMethod;
     use SocialvoidLib\Abstracts\StatusStates\FollowerState;
     use SocialvoidLib\Abstracts\StatusStates\UserPrivacyState;
     use SocialvoidLib\Classes\Standard\BaseIdentification;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
-    use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
     use SocialvoidLib\Exceptions\Internal\FollowerStateNotFoundException;
     use SocialvoidLib\Objects\Follower;
     use SocialvoidLib\Objects\User;
@@ -62,10 +60,8 @@
                 $FollowerState = FollowerState::AwaitingApproval;
             }
 
-            $PublicID = BaseIdentification::FollowingStateID($user_id, $target_user->ID);
-
             $Query = QueryBuilder::insert_into("follower_states", [
-                "public_id" => $this->socialvoidLib->getDatabase()->real_escape_string($PublicID),
+                "id" => (double)((int)$user_id . (int)$target_user->ID),
                 "user_id" => (int)$user_id,
                 "target_user_id" => (int)$target_user->ID,
                 "state" => $this->socialvoidLib->getDatabase()->real_escape_string($FollowerState),
@@ -90,41 +86,23 @@
         /**
          * Gets an existing following state from the database
          *
-         * @param string $search_method
-         * @param string $value
+         * @param int $user_id
+         * @param int $target_user_id
          * @return Follower
          * @throws DatabaseException
          * @throws FollowerStateNotFoundException
-         * @throws InvalidSearchMethodException
          */
-        public function getFollowingState(string $search_method, string $value): Follower
+        public function getFollowingState(int $user_id, int $target_user_id): Follower
         {
-            switch($search_method)
-            {
-                case FollowerStateSearchMethod::ByPublicId:
-                    $search_method = $this->socialvoidLib->getDatabase()->real_escape_string($search_method);
-                    $value = $this->socialvoidLib->getDatabase()->real_escape_string($value);
-                    break;
-
-                case FollowerStateSearchMethod::ById:
-                    $search_method = $this->socialvoidLib->getDatabase()->real_escape_string($search_method);
-                    $value = (int)$value;
-                    break;
-
-                default:
-                    throw new InvalidSearchMethodException("The given search method is not applicable to getFollowingState()", $search_method, $value);
-            }
-
             $Query = QueryBuilder::select("follower_states", [
                 "id",
-                "public_id",
                 "user_id",
                 "target_user_id",
                 "state",
                 "flags",
                 "last_updated_timestamp",
                 "created_timestamp"
-            ], $search_method, $value, null, null, 1);
+            ], "id", (double)((int)$user_id . (int)$target_user_id), null, null, 1);
             $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
 
             if($QueryResults)
@@ -164,7 +142,7 @@
                 "state" => $this->socialvoidLib->getDatabase()->real_escape_string($follower->State),
                 "flags" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($follower->Flags)),
                 "last_updated_timestamp" => (int)time()
-            ], "id", (int)$follower->ID);
+            ], "id",  (double)((int)$follower->UserID . (int)$follower->TargetUserID));
 
             $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
 

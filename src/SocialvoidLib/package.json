@@ -95,10 +95,6 @@
         },
         {
             "required": true,
-            "file": "Abstracts/SearchMethods/FollowerStateSearchMethod.php"
-        },
-        {
-            "required": true,
             "file": "Abstracts/SearchMethods/PostSearchMethod.php"
         },
         {

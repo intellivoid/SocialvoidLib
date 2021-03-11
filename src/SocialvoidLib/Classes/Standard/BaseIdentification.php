@@ -33,18 +33,6 @@ namespace SocialvoidLib\Classes\Standard;
         }
 
         /**
-         * Generates a unique Following state ID
-         *
-         * @param int $user_id
-         * @param int $target_user_id
-         * @return string
-         */
-        public static function FollowingStateID(int $user_id, int $target_user_id): string
-        {
-            return hash("sha256", hash("crc32b", $user_id) . hash("crc32b", $target_user_id));
-        }
-
-        /**
          * Constructs a random Session ID based off the given information
          *
          * @param int $user_id

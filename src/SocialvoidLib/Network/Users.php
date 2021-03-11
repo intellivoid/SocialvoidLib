@@ -139,12 +139,10 @@
                 $peer_id = $cache_peer->PeerID;
             }
 
-            $PublicID = BaseIdentification::FollowingStateID($this->networkSession->getAuthenticatedUser()->ID, $peer_id);
-
             try
             {
                 $FollowerState = $this->networkSession->getSocialvoidLib()->getFollowerStateManager()->getFollowingState(
-                    FollowerStateSearchMethod::ByPublicId, $PublicID
+                    $this->networkSession->getAuthenticatedUser()->ID, $peer_id
                 );
 
                 return $FollowerState->State;

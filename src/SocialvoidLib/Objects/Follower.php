@@ -25,7 +25,7 @@
         /**
          * The Unique Internal Database ID
          *
-         * @var int
+         * @var double
          */
         public $ID;
 
@@ -110,7 +110,7 @@
             if(isset($data["id"]))
             {
                 if($data["id"] !== null)
-                    $FollowerObject->ID = (int)$data["id"];
+                    $FollowerObject->ID = (double)$data["id"];
             }
 
             if(isset($data["public_id"]))
