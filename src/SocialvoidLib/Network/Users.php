@@ -312,7 +312,7 @@
 
             return $Results;
         }
-        
+
         /**
          * Returns an array of following via IDs
          *
