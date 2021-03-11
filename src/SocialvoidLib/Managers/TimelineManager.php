@@ -14,7 +14,6 @@
     namespace SocialvoidLib\Managers;
 
 
-    use GearmanTask;
     use msqg\QueryBuilder;
     use SocialvoidLib\Abstracts\SearchMethods\TimelineSearchMethod;
     use SocialvoidLib\Abstracts\StatusStates\TimelineState;
@@ -197,7 +196,6 @@
             // If background worker is enabled, split the query into multiple workers to speed up the process
             if(Utilities::getBoolDefinition("SOCIALVOID_LIB_BACKGROUND_WORKER_ENABLED") && $service_jobs == True)
             {
-                $results = [];
                 $context_id = hash("crc32b", time());
 
                 // Split the followers jobs
@@ -211,8 +209,6 @@
                     $chunks_count = (int)round(count($followers) / Utilities::getIntDefinition("SOCIALVOID_LIB_BACKGROUND_WORKERS_AVAILABLE"));
                     $follower_chunks = array_chunk($followers, $chunks_count);
                 }
-
-                //var_dump($follower_chunks);
 
                 foreach($follower_chunks as $follower_chunk)
                 {

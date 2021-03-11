@@ -255,6 +255,23 @@
         }
 
         /**
+         * Returns an array of followers via IDs
+         *
+         * @param $peer
+         * @return array
+         * @throws DatabaseException
+         * @throws FollowerDataNotFound
+         * @throws InvalidPeerInputException
+         * @throws InvalidSearchMethodException
+         * @throws PeerNotFoundException
+         */
+        public function getFollowerIDs($peer): array
+        {
+            $FollowerData = $this->getFollowerData($peer);
+            return $FollowerData->FollowersIDs;
+        }
+
+        /**
          * Gets a list of users that the peer is following
          *
          * @param $peer
@@ -294,5 +311,22 @@
             }
 
             return $Results;
+        }
+        
+        /**
+         * Returns an array of following via IDs
+         *
+         * @param $peer
+         * @return array
+         * @throws DatabaseException
+         * @throws FollowerDataNotFound
+         * @throws InvalidPeerInputException
+         * @throws InvalidSearchMethodException
+         * @throws PeerNotFoundException
+         */
+        public function getFollowingIDs($peer): array
+        {
+            $FollowerData = $this->getFollowerData($peer);
+            return $FollowerData->FollowingIDs;
         }
     }

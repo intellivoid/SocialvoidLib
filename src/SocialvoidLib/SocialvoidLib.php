@@ -160,6 +160,7 @@
             $EngineSchema->setDefinition("GearmanHost", "127.0.0.1");
             $EngineSchema->setDefinition("GearmanPort", 4730);
             $EngineSchema->setDefinition("MaxWorkers", 30);
+            $EngineSchema->setDefinition("MaxHeavyWorkers", 20);
             $this->acm->defineSchema("Engine", $EngineSchema);
 
             // Data storage Schema Configuration
