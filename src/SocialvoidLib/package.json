@@ -275,6 +275,10 @@
         },
         {
             "required": true,
+            "file": "Exceptions/Internal/QuoteRecordNotFoundException.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/Internal/UserTimelineNotFoundException.php"
         },
         {
@@ -435,6 +439,10 @@
         },
         {
             "required": true,
+            "file": "Objects/QuoteRecord.php"
+        },
+        {
+            "required": true,
             "file": "Objects/ActiveSession.php"
         },
         {
@@ -488,6 +496,10 @@
         {
             "required": true,
             "file": "Managers/FollowerStateManager.php"
+        },
+        {
+            "required": true,
+            "file": "Managers/QuotesRecordManager.php"
         },
         {
             "required": true,

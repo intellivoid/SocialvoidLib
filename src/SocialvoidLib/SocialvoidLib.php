@@ -28,6 +28,7 @@
     use SocialvoidLib\Managers\FollowerStateManager;
     use SocialvoidLib\Managers\LikesRecordManager;
     use SocialvoidLib\Managers\PostsManager;
+    use SocialvoidLib\Managers\QuotesRecordManager;
     use SocialvoidLib\Managers\RepostsRecordManager;
     use SocialvoidLib\Managers\SessionManager;
     use SocialvoidLib\Managers\TimelineManager;
@@ -128,6 +129,11 @@
         private TimelineManager $TimelineManager;
 
         /**
+         * @var QuotesRecordManager
+         */
+        private QuotesRecordManager $QuotesRecordManager;
+
+        /**
          * SocialvoidLib constructor.
          * @throws ConfigurationError
          * @throws DependencyError
@@ -211,6 +217,7 @@
             $this->PostsManager = new PostsManager($this);
             $this->LikesRecordManager = new LikesRecordManager($this);
             $this->RepostsRecordManager = new RepostsRecordManager($this);
+            $this->QuotesRecordManager = new QuotesRecordManager($this);
             $this->TimelineManager = new TimelineManager($this);
             $this->BackgroundWorker = new BackgroundWorker();
         }
@@ -408,5 +415,13 @@
         public function getTimelineManager(): TimelineManager
         {
             return $this->TimelineManager;
+        }
+
+        /**
+         * @return QuotesRecordManager
+         */
+        public function getQuotesRecordManager(): QuotesRecordManager
+        {
+            return $this->QuotesRecordManager;
         }
     }

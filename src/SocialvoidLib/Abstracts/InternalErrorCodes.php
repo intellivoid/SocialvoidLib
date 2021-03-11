@@ -17,6 +17,7 @@ namespace SocialvoidLib\Abstracts;
     use SocialvoidLib\Exceptions\Internal\LikeRecordNotFoundException;
     use SocialvoidLib\Exceptions\Internal\NoRecoveryCodesAvailableException;
     use SocialvoidLib\Exceptions\Internal\NoTimeBasedSignatureAvailableException;
+    use SocialvoidLib\Exceptions\Internal\QuoteRecordNotFoundException;
     use SocialvoidLib\Exceptions\Internal\RecoveryCodesAlreadyExistsException;
     use SocialvoidLib\Exceptions\Internal\RepostRecordNotFoundException;
     use SocialvoidLib\Exceptions\Internal\TimeBasedPrivateSignatureAlreadyExistsException;
@@ -84,4 +85,9 @@ namespace SocialvoidLib\Abstracts;
          * @see UserTimelineNotFoundException
          */
         const UserTimelineNotFoundException = 0x2010;
+
+        /**
+         * @see QuoteRecordNotFoundException
+         */
+        const QuoteRecordNotFoundException = 0x2011;
     }

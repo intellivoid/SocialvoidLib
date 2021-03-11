@@ -15,24 +15,23 @@
 
     use msqg\QueryBuilder;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
-    use SocialvoidLib\Exceptions\Internal\RepostRecordNotFoundException;
-    use SocialvoidLib\Objects\RepostRecord;
+    use SocialvoidLib\Exceptions\Internal\QuoteRecordNotFoundException;
+    use SocialvoidLib\Objects\QuoteRecord;
     use SocialvoidLib\SocialvoidLib;
 
     /**
-     * Class RepostsRecordManager
+     * Class QuotesRecordManager
      * @package SocialvoidLib\Managers
      */
-    class RepostsRecordManager
+    class QuotesRecordManager
     {
         /**
          * @var SocialvoidLib
          */
         private SocialvoidLib $socialvoidLib;
 
-
         /**
-         * RepostsRecordManager constructor.
+         * QuotesRecordManager constructor.
          * @param SocialvoidLib $socialvoidLib
          */
         public function __construct(SocialvoidLib $socialvoidLib)
@@ -47,20 +46,20 @@
          * @param int $post_id
          * @throws DatabaseException
          */
-        public function repostRecord(int $user_id, int $post_id)
+        public function quoteRecord(int $user_id, int $post_id)
         {
             try
             {
                 $record = $this->getRecord($user_id, $post_id);
             }
-            catch(RepostRecordNotFoundException $e)
+            catch(QuoteRecordNotFoundException $e)
             {
                 $this->registerRecord($user_id, $post_id, true);
                 return;
             }
 
 
-            $record->Reposted = true;
+            $record->Quoted = true;
             $this->updateRecord($record);
         }
 
@@ -71,37 +70,37 @@
          * @param int $post_id
          * @throws DatabaseException
          */
-        public function unrepostRecord(int $user_id, int $post_id)
+        public function unquoteRecord(int $user_id, int $post_id)
         {
             try
             {
                 $record = $this->getRecord($user_id, $post_id);
             }
-            catch(RepostRecordNotFoundException $e)
+            catch(QuoteRecordNotFoundException $e)
             {
                 $this->registerRecord($user_id, $post_id, false);
                 return;
             }
 
-            $record->Reposted = false;
+            $record->Quoted = false;
             $this->updateRecord($record);
         }
 
         /**
-         * Registers a new repost record into the database
+         * Registers a new quote record into the database
          *
          * @param int $user_id
          * @param int $post_id
-         * @param bool $reposted
+         * @param bool $quoted
          * @throws DatabaseException
          */
-        public function registerRecord(int $user_id, int $post_id, bool $reposted=True): void
+        public function registerRecord(int $user_id, int $post_id, bool $quoted=True): void
         {
             $Query = QueryBuilder::insert_into("reposts", [
                 "id" => (double)((int)$user_id . (int)$post_id),
                 "user_id" => (int)$user_id,
                 "post_id" => (int)$post_id,
-                "reposted" => (int)$reposted,
+                "quoted" => (int)$quoted,
                 "last_updated_timestamp" => (int)time(),
                 "created_timestamp" => (int)time()
             ]);
@@ -109,7 +108,7 @@
             $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
             if($QueryResults == false)
             {
-                throw new DatabaseException("There was an error while trying to create a repost record",
+                throw new DatabaseException("There was an error while trying to create a quote record",
                     $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
                 );
             }
@@ -120,18 +119,18 @@
          *
          * @param int $user_id
          * @param int $post_id
-         * @return RepostRecord
+         * @return QuoteRecord
          * @throws DatabaseException
-         * @throws RepostRecordNotFoundException
+         * @throws QuoteRecordNotFoundException
          * @noinspection DuplicatedCode
          */
-        public function getRecord(int $user_id, int $post_id): RepostRecord
+        public function getRecord(int $user_id, int $post_id): QuoteRecord
         {
             $Query = QueryBuilder::select("reposts", [
                 "id",
                 "user_id",
                 "post_id",
-                "reposted",
+                "quoted",
                 "last_updated_timestamp",
                 "created_timestamp"
             ], "id", (double)((int)$user_id . (int)$post_id));
@@ -143,10 +142,10 @@
 
                 if ($Row == False)
                 {
-                    throw new RepostRecordNotFoundException();
+                    throw new QuoteRecordNotFoundException();
                 }
 
-                return(RepostRecord::fromArray($Row));
+                return(QuoteRecord::fromArray($Row));
             }
             else
             {
@@ -160,15 +159,15 @@
         /**
          * Updates an existing repost record
          *
-         * @param RepostRecord $repostRecord
+         * @param QuoteRecord $QuoteRecord
          * @throws DatabaseException
          */
-        public function updateRecord(RepostRecord $repostRecord): void
+        public function updateRecord(QuoteRecord $QuoteRecord): void
         {
             $Query = QueryBuilder::update("reposts", [
-                "reposted" => (int)$repostRecord->Reposted,
+                "quoted" => (int)$QuoteRecord->Quoted,
                 "last_updated_timestamp" => (int)time()
-            ], "id", (double)((int)$repostRecord->UserID . (int)$repostRecord->PostID));
+            ], "id", (double)((int)$QuoteRecord->UserID . (int)$QuoteRecord->PostID));
             $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
 
             if($QueryResults == false)
