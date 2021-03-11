@@ -13,7 +13,8 @@
 
     use BackgroundWorker\BackgroundWorker;
     use ppm\ppm;
-    use SocialvoidLib\Service\Jobs\UserManager;
+use SocialvoidLib\Service\Jobs\Timeline;
+use SocialvoidLib\Service\Jobs\UserManager;
     use SocialvoidLib\SocialvoidLib;
     use SocialvoidService\SocialvoidService;
     use VerboseAdventure\Abstracts\EventType;
@@ -83,11 +84,21 @@
         exit(255);
     }
 
+    /** START Define the functions  */
+
     // get_user
     SocialvoidService::getBackgroundWorker()->getWorker()->getGearmanWorker()->addFunction("get_user", function(GearmanJob $job){
         SocialvoidService::processWakeup();
         return UserManager::getUser($job);
     });
+
+    // distribute_post
+    SocialvoidService::getBackgroundWorker()->getWorker()->getGearmanWorker()->addFunction("distribute_post", function(GearmanJob $job){
+        SocialvoidService::processWakeup();
+        return Timeline::distributePost($job);
+    });
+
+    /** END Define the functions  */
 
     // Start working
     SocialvoidService::getLogHandler()->log(EventType::INFO, "Worker started successfully", "Service Worker");

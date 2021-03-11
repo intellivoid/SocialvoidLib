@@ -34,6 +34,21 @@ namespace SocialvoidLib\Classes;
         }
 
         /**
+         * Determines a integer definition, returns the default value if all else fails
+         *
+         * @param string $name
+         * @param int $default_value
+         * @return int
+         */
+        public static function getIntDefinition(string $name, int $default_value=0): int
+        {
+            if(defined($name))
+                return (int)constant($name);
+
+            return $default_value;
+        }
+
+        /**
          * Generates a job ID
          *
          * @param array $data

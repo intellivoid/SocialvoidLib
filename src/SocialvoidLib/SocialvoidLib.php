@@ -184,6 +184,7 @@
             self::defineLibConstant("SOCIALVOID_LIB_MAX_PEER_RESOLVE_CACHE_COUNT", $this->getEngineConfiguration()["MaxPeerResolveCacheCount"]);
             self::defineLibConstant("SOCIALVOID_LIB_CACHE_ENABLED", (bool)$this->getEngineConfiguration()["EnableWorkerCache"]);
             self::defineLibConstant("SOCIALVOID_LIB_BACKGROUND_WORKER_ENABLED", (bool)$this->getEngineConfiguration()["EnableBackgroundWorker"]);
+            self::defineLibConstant("SOCIALVOID_LIB_BACKGROUND_WORKERS_AVAILABLE", (int)$this->getEngineConfiguration()["MaxWorkers"]);
 
             // Initialize UDP
             try

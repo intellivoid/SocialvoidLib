@@ -223,6 +223,18 @@
         },
         {
             "required": true,
+            "file": "Service/Jobs/Timeline.php"
+        },
+        {
+            "required": true,
+            "file": "Service/Jobs/Timeline/DistributePostJobResults.php"
+        },
+        {
+            "required": true,
+            "file": "Service/Jobs/Timeline/DistributePostJob.php"
+        },
+        {
+            "required": true,
             "file": "SocialvoidLib.php"
         },
         {

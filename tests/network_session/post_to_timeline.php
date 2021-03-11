@@ -25,5 +25,5 @@
         json_decode(file_get_contents($NetworkSessionPath), true), $Socialvoid); // Load network session
 
 
-    $Post = $NetworkSession->getTimeline()->postToTimeline("Hello World! this is a new tag! @jaytoo #awesome");
+    $Post = $NetworkSession->getTimeline()->postToTimeline("Amazing!");
     print(json_encode($Post->toArray(), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));

@@ -14,13 +14,17 @@
     namespace SocialvoidLib\Managers;
 
 
+    use GearmanTask;
     use msqg\QueryBuilder;
     use SocialvoidLib\Abstracts\SearchMethods\TimelineSearchMethod;
     use SocialvoidLib\Abstracts\StatusStates\TimelineState;
+    use SocialvoidLib\Classes\Utilities;
+    use SocialvoidLib\Exceptions\GenericInternal\BackgroundWorkerNotEnabledException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
     use SocialvoidLib\Exceptions\Internal\UserTimelineNotFoundException;
     use SocialvoidLib\Objects\Timeline;
+    use SocialvoidLib\Service\Jobs\Timeline\DistributePostJob;
     use SocialvoidLib\SocialvoidLib;
     use ZiProto\ZiProto;
 
@@ -182,17 +186,58 @@
          *
          * @param int $post_id
          * @param array $followers
+         * @param bool $service_jobs
          * @throws DatabaseException
          * @throws InvalidSearchMethodException
          * @throws UserTimelineNotFoundException
+         * @throws BackgroundWorkerNotEnabledException
          */
-        public function distributePost(int $post_id, array $followers): void
+        public function distributePost(int $post_id, array $followers, $service_jobs=True): void
         {
-            foreach($followers as $user_id)
+            // If background worker is enabled, split the query into multiple workers to speed up the process
+            if(Utilities::getBoolDefinition("SOCIALVOID_LIB_BACKGROUND_WORKER_ENABLED") && $service_jobs == True)
             {
-                $Timeline = $this->retrieveTimeline($user_id);
-                $Timeline->addPost($post_id);
-                $this->updateTimeline($Timeline);
+                $results = [];
+                $context_id = hash("crc32b", time());
+
+                // Split the followers jobs
+                $follower_chunks = [];
+                if(count($followers) == 1)
+                {
+                    $follower_chunks[] = [$followers];
+                }
+                else
+                {
+                    $chunks_count = (int)round(count($followers) / Utilities::getIntDefinition("SOCIALVOID_LIB_BACKGROUND_WORKERS_AVAILABLE"));
+                    $follower_chunks = array_chunk($followers, $chunks_count);
+                }
+
+                //var_dump($follower_chunks);
+
+                foreach($follower_chunks as $follower_chunk)
+                {
+                    $job_object = new DistributePostJob();
+                    $job_object->PostID = $post_id;
+                    $job_object->Followers = $follower_chunk;
+                    $job_object->JobID = Utilities::generateJobID($job_object->toArray(), (int)time());
+
+                    // Push each job to the background
+                    $this->socialvoidLib->getBackgroundWorker()->getClient()->getGearmanClient()->addTaskBackground(
+                        "distribute_post", ZiProto::encode($job_object->toArray()), "distribute_post_" . $context_id
+                    );
+                }
+
+                $this->socialvoidLib->getBackgroundWorker()->getClient()->getGearmanClient()->runTasks();
+
+            }
+            else
+            {
+                foreach($followers as $user_id)
+                {
+                    $Timeline = $this->retrieveTimeline($user_id);
+                    $Timeline->addPost($post_id);
+                    $this->updateTimeline($Timeline);
+                }
             }
         }
     }
