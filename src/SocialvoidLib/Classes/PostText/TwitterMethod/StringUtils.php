@@ -133,7 +133,10 @@
          */
         public static function normalizeFromNFC($text)
         {
-            return normalizer_normalize($text);
+            if(function_exists("normalizer_normalize"))
+                return normalizer_normalize($text);
+
+            return $text;
         }
 
         /**

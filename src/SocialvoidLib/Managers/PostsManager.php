@@ -92,6 +92,7 @@
                 "text" => $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($text)),
                 "source" => $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($source)),
                 "session_id" => ($session_id == null ? null : (int)$session_id),
+                "poster_user_id" => (int)$user_id,
                 "properties" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Properties->toArray())),
                 "flags" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($flags)),
                 "priority_level" => $this->socialvoidLib->getDatabase()->real_escape_string($priority),

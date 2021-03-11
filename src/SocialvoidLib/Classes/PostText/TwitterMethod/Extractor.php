@@ -8,7 +8,7 @@
      * must have a written permission from Intellivoid Technologies to do so.
      */
 
-namespace SocialvoidLib\Classes\PostText\TwitterMethod;
+    namespace SocialvoidLib\Classes\PostText\TwitterMethod;
 
 
     /**

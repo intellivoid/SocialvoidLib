@@ -161,7 +161,7 @@
         {
             $Query = QueryBuilder::update("user_timelines", [
                 "state" => $this->socialvoidLib->getDatabase()->real_escape_string($timeline->State),
-                "post_chunks" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($timeline->chunksToArray())),
+                "post_chunks" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($timeline->PostChunks)),
                 "new_posts" => (int)$timeline->NewPosts,
                 "last_updated_timestamp" => (int)time()
             ], "id", (int)$timeline->ID);
@@ -174,6 +174,25 @@
                     "There was an error while trying to update the session",
                     $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
                 );
+            }
+        }
+
+        /**
+         * Distributes a post to the array of followers
+         *
+         * @param int $post_id
+         * @param array $followers
+         * @throws DatabaseException
+         * @throws InvalidSearchMethodException
+         * @throws UserTimelineNotFoundException
+         */
+        public function distributePost(int $post_id, array $followers): void
+        {
+            foreach($followers as $user_id)
+            {
+                $Timeline = $this->retrieveTimeline($user_id);
+                $Timeline->addPost($post_id);
+                $this->updateTimeline($Timeline);
             }
         }
     }

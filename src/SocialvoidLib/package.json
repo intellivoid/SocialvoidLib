@@ -159,6 +159,10 @@
         },
         {
             "required": true,
+            "file": "Classes/PostText/TwitterMethod/EmojiRegex.php"
+        },
+        {
+            "required": true,
             "file": "Classes/PostText/TwitterMethod/ParseResults.php"
         },
         {

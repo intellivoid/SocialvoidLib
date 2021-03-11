@@ -65,13 +65,13 @@
             $EntitiesObject = new Entities();
 
             if(isset($data["hashtags"]))
-                $EntitiesObject = $data["hashtags"];
+                $EntitiesObject->Hashtags = $data["hashtags"];
 
             if(isset($data["urls"]))
-                $EntitiesObject = $data["urls"];
+                $EntitiesObject->Urls = $data["urls"];
 
             if(isset($data["user_mentions"]))
-                $EntitiesObject = $data["user_mentions"];
+                $EntitiesObject->UserMentions = $data["user_mentions"];
 
             return $EntitiesObject;
         }

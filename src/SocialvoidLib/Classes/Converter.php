@@ -12,6 +12,7 @@ namespace SocialvoidLib\Classes;
 
     use SocialvoidLib\InputTypes\SessionClient;
     use SocialvoidLib\InputTypes\SessionDevice;
+    use SocialvoidLib\Objects\ActiveSession;
 
     /**
      * Class Converter
@@ -90,20 +91,19 @@ namespace SocialvoidLib\Classes;
         /**
          * Attempts to recognize the source of a post
          *
-         * @param SessionDevice $sessionDevice
-         * @param SessionClient $sessionClient
+         * @param ActiveSession $activeSession
          * @return string|null
          */
-        public static function getSource(SessionDevice $sessionDevice, SessionClient $sessionClient): ?string
+        public static function getSource(ActiveSession $activeSession): ?string
         {
-            if($sessionDevice->Platform !== null && $sessionClient->Name !== null)
-                return $sessionClient->Name . " (" . $sessionDevice->Platform . ")";
+            if($activeSession->Platform !== null && $activeSession->ClientName !== null)
+                return $activeSession->ClientName . " (" . $activeSession->Platform . ")";
 
-            if($sessionClient->Name !== null)
-                return $sessionClient->Name;
+            if($activeSession->ClientName !== null)
+                return $activeSession->ClientName;
 
-            if($sessionDevice->Platform !== null)
-                return $sessionDevice->Platform;
+            if($activeSession->Platform !== null)
+                return $activeSession->Platform;
 
             return null;
         }

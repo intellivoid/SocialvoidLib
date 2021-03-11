@@ -196,7 +196,7 @@
             $PostObject = new Post();
 
             if(isset($data["id"]))
-                $PostObject->ID = ($data["id"] !== null ? null : (int)$data["id"]);
+                $PostObject->ID = ($data["id"] == null ? null : (int)$data["id"]);
 
             if(isset($data["public_id"]))
                 $PostObject->PublicID = $data["public_id"];
@@ -208,13 +208,13 @@
                 $PostObject->Source = $data["source"];
 
             if(isset($data["properties"]))
-                $PostObject->Properties = ($data["properties"] !== null ? new Properties() : Properties::fromArray($data["properties"]));
+                $PostObject->Properties = ($data["properties"] == null ? new Properties() : Properties::fromArray($data["properties"]));
 
             if(isset($data["session_id"]))
                 $PostObject->SessionID = ($data["session_id"] == null ? null : (int)$data["session_id"]);
 
             if(isset($data["poster_user_id"]))
-                $PostObject->PosterUserID = $data["poster_user_id"];
+                $PostObject->PosterUserID = ($data["poster_user_id"] == null ? null : (int)$data["poster_user_id"]);
 
             if(isset($data["reply"]))
                 $PostObject->Reply = Reply::fromArray($data["reply"]);
@@ -226,7 +226,7 @@
                 $PostObject->Repost = Repost::fromArray($data["repost"]);
 
             if(isset($data["flags"]))
-                $PostObject->Flags = ($data["flags"] !== null ? [] : $data["flags"]);
+                $PostObject->Flags = ($data["flags"] == null ? [] : $data["flags"]);
 
             if(isset($data["priority_level"]))
                 $PostObject->PriorityLevel = $data["priority_level"];
@@ -235,10 +235,10 @@
                 $PostObject->Entities = ($data["entities"] !== null ? Entities::fromArray($data["entities"]) : null);
 
             if(isset($data["likes"]))
-                $PostObject->Likes = ($data["likes"] !== null ? [] : $data["likes"]);
+                $PostObject->Likes = ($data["likes"] == null ? [] : $data["likes"]);
 
             if(isset($data["reposts"]))
-                $PostObject->Reposts = ($data["reposts"] !== null ? [] : $data["reposts"]);
+                $PostObject->Reposts = ($data["reposts"] == null ? [] : $data["reposts"]);
 
             if(isset($data["media_content"]))
             {
@@ -248,10 +248,10 @@
             }
 
             if(isset($data["last_updated_timestamp"]))
-                $PostObject->LastUpdatedTimestamp = ($data["last_updated_timestamp"] !== null ? null : (int)$data["last_updated_timestamp"]);
+                $PostObject->LastUpdatedTimestamp = ($data["last_updated_timestamp"] == null ? null : (int)$data["last_updated_timestamp"]);
 
             if(isset($data["created_timestamp"]))
-                $PostObject->CreatedTimestamp = ($data["created_timestamp"] !== null ? null : (int)$data["created_timestamp"]);
+                $PostObject->CreatedTimestamp = ($data["created_timestamp"] == null ? null : (int)$data["created_timestamp"]);
 
             return $PostObject;
         }
@@ -298,7 +298,7 @@
             $PostObject = new Post();
 
             if(isset($data["id"]))
-                $PostObject->ID = ($data["id"] !== null ? null : (int)$data["id"]);
+                $PostObject->ID = ($data["id"] == null ? null : (int)$data["id"]);
 
             if(isset($data["public_id"]))
                 $PostObject->PublicID = $data["public_id"];
@@ -310,13 +310,13 @@
                 $PostObject->Source = $data["source"];
 
             if(isset($data["properties"]))
-                $PostObject->Properties = ($data["properties"] !== null ? new Properties() : Properties::fromArray($data["properties"]));
+                $PostObject->Properties = ($data["properties"] == null ? new Properties() : Properties::fromArray($data["properties"]));
 
             if(isset($data["session_id"]))
                 $PostObject->SessionID = ($data["session_id"] == null ? null : (int)$data["session_id"]);
 
             if(isset($data["poster_user_id"]))
-                $PostObject->PosterUserID = $data["poster_user_id"];
+                $PostObject->PosterUserID = ($data["poster_user_id"] == null ? null : (int)$data["poster_user_id"]);
 
             if(isset($data["reply_to_post_id"]))
             {
@@ -370,10 +370,10 @@
                 $PostObject->Entities = ($data["entities"] !== null ? Entities::fromArray($data["entities"]) : null);
 
             if(isset($data["likes"]))
-                $PostObject->Likes = ($data["likes"] !== null ? [] : $data["likes"]);
+                $PostObject->Likes = ($data["likes"] == null ? [] : $data["likes"]);
 
             if(isset($data["reposts"]))
-                $PostObject->Reposts = ($data["reposts"] !== null ? [] : $data["reposts"]);
+                $PostObject->Reposts = ($data["reposts"] == null ? [] : $data["reposts"]);
 
             if(isset($data["media_content"]))
             {
@@ -383,10 +383,10 @@
             }
 
             if(isset($data["last_updated_timestamp"]))
-                $PostObject->LastUpdatedTimestamp = ($data["last_updated_timestamp"] !== null ? null : (int)$data["last_updated_timestamp"]);
+                $PostObject->LastUpdatedTimestamp = ($data["last_updated_timestamp"] == null ? null : (int)$data["last_updated_timestamp"]);
 
             if(isset($data["created_timestamp"]))
-                $PostObject->CreatedTimestamp = ($data["created_timestamp"] !== null ? null : (int)$data["created_timestamp"]);
+                $PostObject->CreatedTimestamp = ($data["created_timestamp"] == null ? null : (int)$data["created_timestamp"]);
 
             return $PostObject;
         }
