@@ -167,16 +167,15 @@
                     $this->networkSession->getAuthenticatedUser()->ID
                 );
                 $SelfFollowerData->addFollowing($peer_id);
-                
+                $this->networkSession->getSocialvoidLib()->getFollowerDataManager()->updateRecord($SelfFollowerData);
+
                 // This user got a following x
                 $TargetFollowerData = $this->networkSession->getSocialvoidLib()->getFollowerDataManager()->resolveRecord(
                     $peer_id
                 );
-                $TargetFollowerData->addFollower($peer_id);
-
-                // Update the data
-                $this->networkSession->getSocialvoidLib()->getFollowerDataManager()->updateRecord($SelfFollowerData);
+                $TargetFollowerData->addFollower($this->networkSession->getAuthenticatedUser()->ID);
                 $this->networkSession->getSocialvoidLib()->getFollowerDataManager()->updateRecord($TargetFollowerData);
+
             }
             
             return $FollowerState;
