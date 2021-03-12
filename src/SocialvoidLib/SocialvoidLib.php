@@ -24,6 +24,7 @@
     use SocialvoidLib\Exceptions\GenericInternal\BackgroundWorkerNotEnabledException;
     use SocialvoidLib\Exceptions\GenericInternal\ConfigurationError;
     use SocialvoidLib\Exceptions\GenericInternal\DependencyError;
+    use SocialvoidLib\Managers\CoaAuthenticationManager;
     use SocialvoidLib\Managers\FollowerDataManager;
     use SocialvoidLib\Managers\FollowerStateManager;
     use SocialvoidLib\Managers\LikesRecordManager;
@@ -134,6 +135,11 @@
         private QuotesRecordManager $QuotesRecordManager;
 
         /**
+         * @var CoaAuthenticationManager
+         */
+        private CoaAuthenticationManager $CoaAuthenticationManager;
+
+        /**
          * SocialvoidLib constructor.
          * @throws ConfigurationError
          * @throws DependencyError
@@ -219,6 +225,7 @@
             $this->RepostsRecordManager = new RepostsRecordManager($this);
             $this->QuotesRecordManager = new QuotesRecordManager($this);
             $this->TimelineManager = new TimelineManager($this);
+            $this->CoaAuthenticationManager = new CoaAuthenticationManager($this);
             $this->BackgroundWorker = new BackgroundWorker();
         }
 
@@ -423,5 +430,13 @@
         public function getQuotesRecordManager(): QuotesRecordManager
         {
             return $this->QuotesRecordManager;
+        }
+
+        /**
+         * @return CoaAuthenticationManager
+         */
+        public function getCoaAuthenticationManager(): CoaAuthenticationManager
+        {
+            return $this->CoaAuthenticationManager;
         }
     }

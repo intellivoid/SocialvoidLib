@@ -227,7 +227,7 @@
                 "text" => ($post->Text == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($post->Text))),
                 "source" => ($post->Source == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($post->Source))),
                 "properties" => ($post->Properties == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Properties->toArray()))),
-                "post_to_user_id" => ($post->PosterUserID == null ? null : (int)$post->PosterUserID),
+                "poster_user_id" => ($post->PosterUserID == null ? null : (int)$post->PosterUserID),
                 "reply_to_post_id" => ($post->Reply == null || $post->Reply->ReplyToPostID == null ? null : (int)$post->Reply->ReplyToPostID),
                 "reply_to_user_id" => ($post->Reply == null || $post->Reply->ReplyToUserID == null ? null : (int)$post->Reply->ReplyToUserID),
                 "quote_original_post_id" => ($post->Quote == null || $post->Quote->OriginalPostID == null ? null : (int)$post->Quote->OriginalPostID),

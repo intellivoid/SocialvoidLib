@@ -12,6 +12,7 @@ namespace SocialvoidLib\Abstracts;
 
     use SocialvoidLib\Exceptions\Internal\AlreadyAuthenticatedToNetwork;
     use SocialvoidLib\Exceptions\Internal\AuthenticationFailureException;
+    use SocialvoidLib\Exceptions\Internal\CoaAuthenticationRecordNotFoundException;
     use SocialvoidLib\Exceptions\Internal\FollowerDataNotFound;
     use SocialvoidLib\Exceptions\Internal\FollowerStateNotFoundException;
     use SocialvoidLib\Exceptions\Internal\LikeRecordNotFoundException;
@@ -90,4 +91,9 @@ namespace SocialvoidLib\Abstracts;
          * @see QuoteRecordNotFoundException
          */
         const QuoteRecordNotFoundException = 0x2011;
+
+        /**
+         * @see CoaAuthenticationRecordNotFoundException
+         */
+        const CoaAuthenticationRecordNotFoundException = 0x2012;
     }

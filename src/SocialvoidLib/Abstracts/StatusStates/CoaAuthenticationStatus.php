@@ -1,5 +1,4 @@
 <?php
-
     /*
      * Copyright (c) 2017-2021. Intellivoid Technologies
      *
@@ -9,15 +8,13 @@
      * must have a written permission from Intellivoid Technologies to do so.
      */
 
-    namespace SocialvoidLib\Abstracts\SearchMethods;
+    namespace SocialvoidLib\Abstracts\StatusStates;
 
     /**
-     * Class TimelineSearchMethod
-     * @package SocialvoidLib\Abstracts\SearchMethods
+     * Class CoaAuthenticationStatus
+     * @package SocialvoidLib\Abstracts\StatusStates
      */
-    abstract class TimelineSearchMethod
+    abstract class CoaAuthenticationStatus
     {
-        const ById = "id";
-
-        const ByUserId = "user_id";
+        const Available = "AVAILABLE";
     }

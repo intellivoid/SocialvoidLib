@@ -59,6 +59,10 @@
         },
         {
             "required": true,
+            "file": "Abstracts/StatusStates/CoaAuthenticationStatus.php"
+        },
+        {
+            "required": true,
             "file": "Abstracts/StatusStates/UserStatus.php"
         },
         {
@@ -96,6 +100,10 @@
         {
             "required": true,
             "file": "Abstracts/SearchMethods/PostSearchMethod.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/SearchMethods/CoaAuthenticationSearchMethod.php"
         },
         {
             "required": true,
@@ -307,6 +315,10 @@
         },
         {
             "required": true,
+            "file": "Exceptions/Internal/CoaAuthenticationRecordNotFoundException.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/Internal/LikeRecordNotFoundException.php"
         },
         {
@@ -488,6 +500,14 @@
         {
             "required": true,
             "file": "Objects/User.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/CoaAuthentication.php"
+        },
+        {
+            "required": true,
+            "file": "Managers/CoaAuthenticationManager.php"
         },
         {
             "required": true,

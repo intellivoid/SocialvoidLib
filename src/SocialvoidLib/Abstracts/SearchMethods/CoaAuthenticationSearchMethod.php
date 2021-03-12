@@ -12,12 +12,14 @@
     namespace SocialvoidLib\Abstracts\SearchMethods;
 
     /**
-     * Class TimelineSearchMethod
+     * Class CoaAuthenticationSearchMethod
      * @package SocialvoidLib\Abstracts\SearchMethods
      */
-    abstract class TimelineSearchMethod
+    abstract class CoaAuthenticationSearchMethod
     {
         const ById = "id";
+
+        const ByAccountId = "account_id";
 
         const ByUserId = "user_id";
     }
