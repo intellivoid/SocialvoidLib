@@ -134,7 +134,7 @@
                 "reposted",
                 "last_updated_timestamp",
                 "created_timestamp"
-            ], "id", (double)((int)$user_id . (int)$post_id));
+            ], "id", (double)((int)$user_id . (int)$post_id), null, null, 1);
             $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
 
             if($QueryResults)
