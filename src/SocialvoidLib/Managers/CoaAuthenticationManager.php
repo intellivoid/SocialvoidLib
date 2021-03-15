@@ -95,6 +95,7 @@
                 "id",
                 "account_id",
                 "user_id",
+                "application_id",
                 "status",
                 "last_updated_timestamp",
                 "created_timestamp"
@@ -134,6 +135,7 @@
             $Query = QueryBuilder::update("coa_authentication", [
                 "account_id" => ($coaAuthentication->AccountID == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string($coaAuthentication->AccountID)),
                 "user_id" => ($coaAuthentication->UserID == null ? null : (int)$coaAuthentication->UserID),
+                "application_id" => ($coaAuthentication->ApplicationID == null ? null : $coaAuthentication->ApplicationID),
                 "status" => $this->socialvoidLib->getDatabase()->real_escape_string($coaAuthentication->Status),
                 "last_updated_timestamp" => $coaAuthentication->LastUpdatedTimestamp
             ]);

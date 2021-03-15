@@ -44,6 +44,13 @@
         public $UserID;
 
         /**
+         * The Application ID used to authenticate the user
+         *
+         * @var string|null
+         */
+        public $ApplicationID;
+
+        /**
          * @var string|CoaAuthenticationStatus
          */
         public $Status;
@@ -73,6 +80,7 @@
                 "id" => $this->ID,
                 "account_id" => $this->AccountID,
                 "user_id" => $this->UserID,
+                "application_id" => $this->ApplicationID,
                 "status" => $this->Status,
                 "last_updated_timestamp" => $this->LastUpdatedTimestamp,
                 "created_timestamp" => $this->CreatedTimestamp
@@ -95,6 +103,9 @@
 
             if(isset($data["account_id"]))
                 $CoaAuthenticationObject->AccountID = ($data["account_id"] == null ? null : $data["account_id"]);
+
+            if(isset($data["application_id"]))
+                $CoaAuthenticationObject->ApplicationID = ($data["application_id"] == null ? null : $data["application_id"]);
 
             if(isset($data["user_id"]))
                 $CoaAuthenticationObject->UserID = ($data["user_id"] == null ? null : (int)$data["user_id"]);
