@@ -284,16 +284,27 @@
             }
         }
 
-
         /**
          * Fetches a multiple user queries, this function performs faster with BackgroundWorker enabled
          *
-         * @param GetUserJob[] $jobs
+         * @param array $user_ids
          * @return GetUserJobResults[]
          * @throws BackgroundWorkerNotEnabledException
          */
-        public function getMultipleUsers(array $jobs): array
+        public function getMultipleUsers(array $user_ids): array
         {
+            // Generate the jobs
+            $jobs = [];
+            foreach($user_ids as $id)
+            {
+                $GetUserJob = new GetUserJob();
+                $GetUserJob->Value = $id;
+                $GetUserJob->SearchMethod = UserSearchMethod::ById;
+                $GetUserJob->JobID = Utilities::generateJobID($GetUserJob->toArray(), (int)time());
+
+                $jobs[] = $GetUserJob;
+            }
+
             if(Utilities::getBoolDefinition("SOCIALVOID_LIB_BACKGROUND_WORKER_ENABLED"))
             {
                 $results = [];

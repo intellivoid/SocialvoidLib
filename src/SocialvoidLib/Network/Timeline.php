@@ -13,6 +13,7 @@
 
     use SocialvoidLib\Abstracts\Levels\PostPriorityLevel;
     use SocialvoidLib\Classes\Converter;
+    use SocialvoidLib\Exceptions\GenericInternal\BackgroundWorkerNotEnabledException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
     use SocialvoidLib\Exceptions\Internal\FollowerDataNotFound;
@@ -50,11 +51,12 @@
          * @param array $flags
          * @return Post
          * @throws DatabaseException
-         * @throws InvalidSearchMethodException
          * @throws FollowerDataNotFound
-         * @throws UserTimelineNotFoundException
-         * @throws PostNotFoundException
          * @throws InvalidPostTextException
+         * @throws InvalidSearchMethodException
+         * @throws PostNotFoundException
+         * @throws UserTimelineNotFoundException
+         * @throws BackgroundWorkerNotEnabledException
          */
         public function postToTimeline(string $text, array $media_content=[], $flags=[]): Post
         {
