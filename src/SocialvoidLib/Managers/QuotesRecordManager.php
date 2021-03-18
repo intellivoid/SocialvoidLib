@@ -40,7 +40,7 @@
         }
 
         /**
-         * Creates a repost record if one doesn't already exist, or updates an existing one
+         * Creates a quote record if one doesn't already exist, or updates an existing one
          *
          * @param int $user_id
          * @param int $post_id
@@ -91,15 +91,17 @@
          *
          * @param int $user_id
          * @param int $post_id
+         * @param int $original_post_id
          * @param bool $quoted
          * @throws DatabaseException
          */
-        public function registerRecord(int $user_id, int $post_id, bool $quoted=True): void
+        public function registerRecord(int $user_id, int $post_id, int $original_post_id,bool $quoted=True): void
         {
-            $Query = QueryBuilder::insert_into("reposts", [
+            $Query = QueryBuilder::insert_into("quotes", [
                 "id" => (double)((int)$user_id . (int)$post_id),
                 "user_id" => (int)$user_id,
                 "post_id" => (int)$post_id,
+                "original_post_id" => (int)$original_post_id,
                 "quoted" => (int)$quoted,
                 "last_updated_timestamp" => (int)time(),
                 "created_timestamp" => (int)time()
@@ -126,10 +128,11 @@
          */
         public function getRecord(int $user_id, int $post_id): QuoteRecord
         {
-            $Query = QueryBuilder::select("reposts", [
+            $Query = QueryBuilder::select("quotes", [
                 "id",
                 "user_id",
                 "post_id",
+                "original_post_id",
                 "quoted",
                 "last_updated_timestamp",
                 "created_timestamp"
@@ -150,21 +153,21 @@
             else
             {
                 throw new DatabaseException(
-                    "There was an error while trying retrieve the repost record from the network",
+                    "There was an error while trying retrieve the quote record from the network",
                     $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
                 );
             }
         }
 
         /**
-         * Updates an existing repost record
+         * Updates an existing quote record
          *
          * @param QuoteRecord $QuoteRecord
          * @throws DatabaseException
          */
         public function updateRecord(QuoteRecord $QuoteRecord): void
         {
-            $Query = QueryBuilder::update("reposts", [
+            $Query = QueryBuilder::update("quotes", [
                 "quoted" => (int)$QuoteRecord->Quoted,
                 "last_updated_timestamp" => (int)time()
             ], "id", (double)((int)$QuoteRecord->UserID . (int)$QuoteRecord->PostID));
@@ -173,7 +176,7 @@
             if($QueryResults == false)
             {
                 throw new DatabaseException(
-                    "There was an error while trying to update the repost record",
+                    "There was an error while trying to update the quote record",
                     $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
                 );
             }
