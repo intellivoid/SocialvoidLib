@@ -179,7 +179,6 @@
 
             // Engine Schema Configuration
             $ServiceEngineSchema = new Schema();
-            $ServiceEngineSchema->setDefinition("MaxPeerResolveCacheCount", 20);
             $ServiceEngineSchema->setDefinition("EnableBackgroundWorker", True);
             $ServiceEngineSchema->setDefinition("GearmanHost", "127.0.0.1");
             $ServiceEngineSchema->setDefinition("GearmanPort", 4730);
