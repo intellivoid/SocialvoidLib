@@ -130,6 +130,20 @@
         public $Reposts;
 
         /**
+         * Array if Post IDs that quoted this post
+         *
+         * @var int[]
+         */
+        public $Quotes;
+
+        /**
+         * Array of Post IDs that replied to this post
+         *
+         * @var int[]
+         */
+        public $Replies;
+
+        /**
          * The media content associated with this post
          *
          * @var MediaContent[]
@@ -178,6 +192,8 @@
                 "entities" => ($this->Entities == null ? null : $this->Entities->toArray()),
                 "likes" => ($this->Likes == null ? [] : $this->Likes),
                 "reposts" => ($this->Reposts == null ? [] : $this->Reposts),
+                "quotes" => ($this->Quotes == null ? [] : $this->Quotes),
+                "replies" => ($this->Replies == null ? []: $this->Replies),
                 "media_content" => $media_content_results,
                 "last_updated_timestamp" => ($this->LastUpdatedTimestamp == null ? null : (int)$this->LastUpdatedTimestamp),
                 "created_timestamp" => ($this->CreatedTimestamp == null ? null : (int)$this->CreatedTimestamp)
@@ -240,6 +256,12 @@
             if(isset($data["reposts"]))
                 $PostObject->Reposts = ($data["reposts"] == null ? [] : $data["reposts"]);
 
+            if(isset($data["quotes"]))
+                $PostObject->Quotes = ($data["quotes"] == null ? [] : $data["quotes"]);
+
+            if(isset($data["replies"]))
+                $PostObject->Replies = ($data["replies"] == null ? [] : $data["replies"]);
+
             if(isset($data["media_content"]))
             {
                 $PostObject->MediaContent = [];
@@ -286,6 +308,8 @@
                 "entities" => ($this->Entities == null ? null : $this->Entities->toArray()),
                 "likes" => ($this->Likes == null ? [] : $this->Likes),
                 "reposts" => ($this->Reposts == null ? [] : $this->Reposts),
+                "quotes" => ($this->Quotes == null ? [] : $this->Quotes),
+                "replies" => ($this->Replies == null ? [] : $this->Replies),
                 "media_content" => $media_content_results,
                 "last_updated_timestamp" => ($this->LastUpdatedTimestamp == null ? null : (int)$this->LastUpdatedTimestamp),
                 "created_timestamp" => ($this->CreatedTimestamp == null ? null : (int)$this->CreatedTimestamp)
@@ -374,6 +398,12 @@
 
             if(isset($data["reposts"]))
                 $PostObject->Reposts = ($data["reposts"] == null ? [] : $data["reposts"]);
+
+            if(isset($data["quotes"]))
+                $PostObject->Quotes = ($data["quotes"] == null ? [] : $data["quotes"]);
+
+            if(isset($data["replies"]))
+                $PostObject->Replies = ($data["replies"] == null ? [] : $data["replies"]);
 
             if(isset($data["media_content"]))
             {

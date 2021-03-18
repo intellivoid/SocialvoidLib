@@ -99,6 +99,8 @@
                 "entities" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Entities->toArray())),
                 "likes" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
                 "reposts" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
+                "quotes" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
+                "replies" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
                 "media_content" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($MediaContentArray)),
                 "last_updated_timestamp" => $timestamp,
                 "created_timestamp" => $timestamp
@@ -163,6 +165,8 @@
                 "entities",
                 "likes",
                 "reposts",
+                "quotes",
+                "replies",
                 "media_content",
                 "last_updated_timestamp",
                 "created_timestamp"
@@ -184,6 +188,8 @@
                     $Row["entities"] = ($Row["entities"] == null ? null : ZiProto::decode($Row["entities"]));
                     $Row["likes"] = ($Row["likes"] == null ? null : ZiProto::decode($Row["likes"]));
                     $Row["reposts"] = ($Row["reposts"] == null ? null : ZiProto::decode($Row["reposts"]));
+                    $Row["quotes"] = ($Row["quotes"] == null ? null : ZiProto::decode($Row["quotes"]));
+                    $Row["replies"] = ($Row["replies"] == null ? null : ZiProto::decode($Row["replies"]));
                     $Row["media_content"] = ($Row["media_content"] == null ? null : ZiProto::decode($Row["media_content"]));
                     $Row["text"] = ($Row["text"] == null ? null : urldecode($Row["text"]));
                     $Row["source"] = ($Row["source"] == null ? null : urldecode($Row["source"]));
@@ -239,6 +245,8 @@
                 "entities" => ($post->Entities == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Entities->toArray()))),
                 "likes" => ($post->Likes == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Likes))),
                 "reposts" => ($post->Reposts == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Reposts))),
+                "quotes" => ($post->Quotes == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Quotes))),
+                "replies" => ($post->Replies == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Replies))),
                 "media_content" => ($MediaContent == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($MediaContent))),
                 "last_updated_timestamp" => $post->LastUpdatedTimestamp,
             ], "id", (int)$post->ID);
