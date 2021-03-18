@@ -10,9 +10,14 @@
 
     namespace SocialvoidLib\Service\Jobs\Timeline;
 
+    use SocialvoidLib\ServiceJobs\Jobs\TimelineJobs;
+
     /**
      * Class DistributePostJobResults
      * @package SocialvoidLib\Service\Jobs\Timeline
+     *
+     * @deprecated
+     * @see TimelineJobs
      */
     class DistributePostJobResults
     {

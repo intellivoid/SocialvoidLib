@@ -14,6 +14,7 @@
     namespace SocialvoidLib\Managers;
 
 
+    use Exception;
     use msqg\QueryBuilder;
     use SocialvoidLib\Abstracts\SearchMethods\TimelineSearchMethod;
     use SocialvoidLib\Abstracts\StatusStates\TimelineState;
@@ -21,9 +22,9 @@
     use SocialvoidLib\Exceptions\GenericInternal\BackgroundWorkerNotEnabledException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
+    use SocialvoidLib\Exceptions\GenericInternal\ServiceJobException;
     use SocialvoidLib\Exceptions\Internal\UserTimelineNotFoundException;
     use SocialvoidLib\Objects\Timeline;
-    use SocialvoidLib\Service\Jobs\Timeline\DistributePostJob;
     use SocialvoidLib\SocialvoidLib;
     use ZiProto\ZiProto;
 
@@ -185,54 +186,38 @@
          *
          * @param int $post_id
          * @param array $followers
-         * @param bool $service_jobs
+         * @param int $utilization
+         * @param bool $skip_errors
+         * @throws BackgroundWorkerNotEnabledException
          * @throws DatabaseException
          * @throws InvalidSearchMethodException
          * @throws UserTimelineNotFoundException
-         * @throws BackgroundWorkerNotEnabledException
+         * @throws ServiceJobException
          */
-        public function distributePost(int $post_id, array $followers, $service_jobs=True): void
+        public function distributePost(int $post_id, array $followers, int $utilization=100, bool $skip_errors=true): void
         {
             // If background worker is enabled, split the query into multiple workers to speed up the process
-            if(Utilities::getBoolDefinition("SOCIALVOID_LIB_BACKGROUND_WORKER_ENABLED") && $service_jobs == True)
+            if(Utilities::getBoolDefinition("SOCIALVOID_LIB_BACKGROUND_WORKER_ENABLED"))
             {
-                $context_id = hash("crc32b", time());
-
-                // Split the followers jobs
-                $follower_chunks = [];
-                if(count($followers) == 1)
-                {
-                    $follower_chunks[] = [$followers];
-                }
-                else
-                {
-                    $chunks_count = (int)round(count($followers) / Utilities::getIntDefinition("SOCIALVOID_LIB_BACKGROUND_WORKERS_AVAILABLE"));
-                    $follower_chunks = array_chunk($followers, $chunks_count);
-                }
-
-                foreach($follower_chunks as $follower_chunk)
-                {
-                    $job_object = new DistributePostJob();
-                    $job_object->PostID = $post_id;
-                    $job_object->Followers = $follower_chunk;
-                    $job_object->JobID = Utilities::generateJobID($job_object->toArray(), (int)time());
-
-                    // Push each job to the background
-                    $this->socialvoidLib->getBackgroundWorker()->getClient()->getGearmanClient()->addTaskBackground(
-                        "distribute_post", ZiProto::encode($job_object->toArray()), "distribute_post_" . $context_id
-                    );
-                }
-
-                $this->socialvoidLib->getBackgroundWorker()->getClient()->getGearmanClient()->runTasks();
-
+                $this->socialvoidLib->getServiceJobManager()->getTimelineJobs()->distributeTimelinePosts(
+                    $post_id, $followers, $utilization, $skip_errors
+                );
             }
             else
             {
-                foreach($followers as $user_id)
+                try
                 {
-                    $Timeline = $this->retrieveTimeline($user_id);
-                    $Timeline->addPost($post_id);
-                    $this->updateTimeline($Timeline);
+                    foreach($followers as $user_id)
+                    {
+                        $Timeline = $this->retrieveTimeline($user_id);
+                        $Timeline->addPost($post_id);
+                        $this->updateTimeline($Timeline);
+                    }
+                }
+                catch(Exception $e)
+                {
+                    if($skip_errors == false)
+                        throw $e;
                 }
             }
         }

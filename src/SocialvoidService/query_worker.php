@@ -20,8 +20,9 @@ use SocialvoidLib\Service\Jobs\UserManager;
     use VerboseAdventure\Abstracts\EventType;
     use VerboseAdventure\Classes\ErrorHandler;
     use VerboseAdventure\VerboseAdventure;
+use ZiProto\ZiProto;
 
-    // Import all required auto loaders
+// Import all required auto loaders
     /** @noinspection PhpIncludeInspection */
     require("ppm");
 
@@ -60,13 +61,13 @@ use SocialvoidLib\Service\Jobs\UserManager;
 
 
     // Start the worker instance
-    SocialvoidService::getLogHandler()->log(EventType::INFO, "Starting Service Worker", "Service Worker");
+    SocialvoidService::getLogHandler()->log(EventType::INFO, "Starting Query Worker", "Query Worker");
     SocialvoidService::$SocialvoidLib = new SocialvoidLib();
     SocialvoidService::$SocialvoidLib->connectDatabase();
 
     if(SocialvoidService::$SocialvoidLib->getDatabase()->connect_error)
     {
-        SocialvoidService::getLogHandler()->log(EventType::ERROR, "Failed to initialize SocialvoidLib, " . SocialvoidService::$SocialvoidLib->getDatabase()->connect_error, "Service Worker");
+        SocialvoidService::getLogHandler()->log(EventType::ERROR, "Failed to initialize SocialvoidLib, " . SocialvoidService::$SocialvoidLib->getDatabase()->connect_error, "Query Worker");
         exit(255);
     }
 
@@ -80,28 +81,23 @@ use SocialvoidLib\Service\Jobs\UserManager;
     }
     catch(Exception $e)
     {
-        SocialvoidService::getLogHandler()->logException($e, "Service Worker");
+        SocialvoidService::getLogHandler()->logException($e, "Query Worker");
         exit(255);
     }
 
     /** START Define the functions  */
 
-    // get_user
-    SocialvoidService::getBackgroundWorker()->getWorker()->getGearmanWorker()->addFunction("get_user", function(GearmanJob $job){
+    // Search Queries
+    SocialvoidService::getBackgroundWorker()->getWorker()->getGearmanWorker()->addFunction("query", function(GearmanJob $job){
         SocialvoidService::processWakeup();
-        return UserManager::getUser($job);
+        return ZiProto::encode(SocialvoidService::getSocialvoidLib()->getServiceJobManager()->getServiceJobHandler()->handle($job)->toArray());
     });
 
-    // distribute_post
-    SocialvoidService::getBackgroundWorker()->getWorker()->getGearmanWorker()->addFunction("distribute_post", function(GearmanJob $job){
-        SocialvoidService::processWakeup();
-        return Timeline::distributePost($job);
-    });
 
     /** END Define the functions  */
 
     // Start working
-    SocialvoidService::getLogHandler()->log(EventType::INFO, "Worker started successfully", "Service Worker");
+    SocialvoidService::getLogHandler()->log(EventType::INFO, "Worker started successfully", "Query Worker");
 
     // Set the timeout to 5 seconds
     SocialvoidService::getBackgroundWorker()->getWorker()->getGearmanWorker()->setTimeout(500);
@@ -122,7 +118,7 @@ use SocialvoidLib\Service\Jobs\UserManager;
 
             if (SocialvoidService::getBackgroundWorker()->getWorker()->getGearmanWorker()->returnCode() != GEARMAN_SUCCESS)
             {
-                SocialvoidService::getLogHandler()->log(EventType::WARNING, "Gearman returned error code " . SocialvoidService::getBackgroundWorker()->getWorker()->getGearmanWorker()->returnCode(), "Service Worker");
+                SocialvoidService::getLogHandler()->log(EventType::WARNING, "Gearman returned error code " . SocialvoidService::getBackgroundWorker()->getWorker()->getGearmanWorker()->returnCode(), "Query Worker");
                 break;
             }
         }

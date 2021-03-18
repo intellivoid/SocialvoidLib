@@ -27,6 +27,7 @@
     use SocialvoidLib\Exceptions\GenericInternal\BackgroundWorkerNotEnabledException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
+    use SocialvoidLib\Exceptions\GenericInternal\ServiceJobException;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidFirstNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidLastNameException;
@@ -287,81 +288,41 @@
         /**
          * Fetches a multiple user queries, this function performs faster with BackgroundWorker enabled
          *
-         * @param array $user_ids
-         * @return GetUserJobResults[]
+         * @param array $query
+         * @param bool $skip_errors
+         * @param int $utilization
+         * @return User[]
          * @throws BackgroundWorkerNotEnabledException
+         * @throws DatabaseException
+         * @throws InvalidSearchMethodException
+         * @throws PeerNotFoundException
+         * @throws ServiceJobException
          */
-        public function getMultipleUsers(array $user_ids): array
+        public function getMultipleUsers(array $query, bool $skip_errors=True, int $utilization=100): array
         {
-            // Generate the jobs
-            $jobs = [];
-            foreach($user_ids as $id)
-            {
-                $GetUserJob = new GetUserJob();
-                $GetUserJob->Value = $id;
-                $GetUserJob->SearchMethod = UserSearchMethod::ById;
-                $GetUserJob->JobID = Utilities::generateJobID($GetUserJob->toArray(), (int)time());
-
-                $jobs[] = $GetUserJob;
-            }
-
             if(Utilities::getBoolDefinition("SOCIALVOID_LIB_BACKGROUND_WORKER_ENABLED"))
             {
-                $results = [];
-                $context_id = hash("crc32b", time());
-
-                /** @noinspection PhpUnhandledExceptionInspection */
-                $this->socialvoidLib->getBackgroundWorker()->getClient()->getGearmanClient()->clearCallbacks();
-
-                /** @noinspection PhpUnhandledExceptionInspection */
-                $this->socialvoidLib->getBackgroundWorker()->getClient()->getGearmanClient()->setCompleteCallback(
-                    function(GearmanTask $task, $context) use (&$results, $context_id)
-                    {
-                        if($context == "user_lookup_" . $context_id)
-                        {
-                            if($task->data() == null)
-                                return;
-
-                            $results[] = GetUserJobResults::fromArray(ZiProto::decode($task->data()));
-                        }
-                    }
-                );
-
-                // If background worker is enabled, split the query into multiple workers to speed up the process
-                foreach($jobs as $job)
-                {
-                    $this->socialvoidLib->getBackgroundWorker()->getClient()->getGearmanClient()->addTask(
-                        "get_user", ZiProto::encode($job->toArray()), "user_lookup_" . $context_id
-                    );
-                }
-
-                // Run the massive fetch!
-                $this->socialvoidLib->getBackgroundWorker()->getClient()->getGearmanClient()->runTasks();
-
-                return $results;
+               return $this->socialvoidLib->getServiceJobManager()->getUserJobs()->resolveUsers(
+                   $query, $utilization, $skip_errors
+               );
             }
             else
             {
-                $results = [];
+                $return_results = [];
 
-                foreach($jobs as $job)
+                foreach($query as $value => $search_method)
                 {
-                    $JobResults = new GetUserJobResults();
-                    $JobResults->JobID = $job->JobID;
-
                     try
                     {
-                        $JobResults->User = $this->getUser($job->SearchMethod, $job->Value);
+                        $return_results[] = $this->getUser($search_method, $value);
                     }
                     catch(Exception $e)
                     {
-                        $JobResults->User = null;
+                        if($skip_errors == false) throw $e;
                     }
-
-                    $results[] = $JobResults;
                 }
 
-                return $results;
+                return $return_results;
             }
         }
     }

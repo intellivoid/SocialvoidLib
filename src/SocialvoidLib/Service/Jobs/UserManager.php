@@ -14,12 +14,16 @@ namespace SocialvoidLib\Service\Jobs;
     use GearmanJob;
     use SocialvoidLib\Service\Jobs\UserManager\GetUserJob;
     use SocialvoidLib\Service\Jobs\UserManager\GetUserJobResults;
+    use SocialvoidLib\ServiceJobs\Jobs\UserJobs;
     use SocialvoidService\SocialvoidService;
     use ZiProto\ZiProto;
 
     /**
      * Class ResolveUser
      * @package SocialvoidService\ServiceJobs
+     *
+     * @deprecated
+     * @see UserJobs
      */
     class UserManager
     {

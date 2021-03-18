@@ -12,10 +12,14 @@ namespace SocialvoidLib\Service\Jobs\UserManager;
 
 
     use SocialvoidLib\Objects\User;
+    use SocialvoidLib\ServiceJobs\Jobs\UserJobs;
 
     /**
      * Class GetUserJobResults
      * @package SocialvoidLib\Service\Jobs\UserManager
+     *
+     * @deprecated
+     * @see UserJobs
      */
     class GetUserJobResults
     {

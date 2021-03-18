@@ -15,12 +15,16 @@
     use GearmanJob;
     use SocialvoidLib\Service\Jobs\Timeline\DistributePostJob;
     use SocialvoidLib\Service\Jobs\Timeline\DistributePostJobResults;
+    use SocialvoidLib\ServiceJobs\Jobs\TimelineJobs;
     use SocialvoidService\SocialvoidService;
     use ZiProto\ZiProto;
 
     /**
      * Class Timeline
      * @package SocialvoidLib\Service\Jobs
+     *
+     * @deprecated
+     * @see TimelineJobs
      */
     class Timeline
     {

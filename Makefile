@@ -25,7 +25,8 @@ stop_service:
 	pkill -f 'main=net.intellivoid.socialvoid_service'
 
 stop_workers:
-	pkill -f 'worker-name=SocialvoidService'
+	pkill -f 'worker-name=SocialvoidQueryService'
+	pkill -f 'worker-name=SocialvoidUpdateService'
 
 stop_cache:
 	pkill -f 'worker-name=SocialvoidCache'

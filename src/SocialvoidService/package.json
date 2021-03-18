@@ -47,6 +47,10 @@
     "components": [
         {
             "required": true,
+            "file": "query_worker.php"
+        },
+        {
+            "required": true,
             "file": "cli.php"
         },
         {
@@ -55,7 +59,7 @@
         },
         {
             "required": true,
-            "file": "service_worker.php"
+            "file": "update_worker.php"
         }
     ],
     "files": [

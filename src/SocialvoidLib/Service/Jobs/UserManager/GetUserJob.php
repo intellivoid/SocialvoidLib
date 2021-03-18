@@ -15,10 +15,14 @@
 
     use SocialvoidLib\Abstracts\SearchMethods\UserSearchMethod;
     use SocialvoidLib\Classes\Utilities;
+    use SocialvoidLib\ServiceJobs\Jobs\UserJobs;
 
     /**
      * Class GetUserJob
      * @package SocialvoidLib\Service\Jobs\UserManager
+     *
+     * @deprecated
+     * @see UserJobs
      */
     class GetUserJob
     {

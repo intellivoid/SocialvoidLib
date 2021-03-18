@@ -107,11 +107,23 @@
         },
         {
             "required": true,
+            "file": "Abstracts/JobClass.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/JobPriority.php"
+        },
+        {
+            "required": true,
             "file": "Abstracts/Levels/PostPriorityLevel.php"
         },
         {
             "required": true,
             "file": "Abstracts/StandardErrorCodeType.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/Types/JobType.php"
         },
         {
             "required": true,
@@ -176,6 +188,26 @@
         {
             "required": true,
             "file": "InputTypes/SessionDevice.php"
+        },
+        {
+            "required": true,
+            "file": "ServiceJobs/Jobs/UserJobs.php"
+        },
+        {
+            "required": true,
+            "file": "ServiceJobs/Jobs/TimelineJobs.php"
+        },
+        {
+            "required": true,
+            "file": "ServiceJobs/ServiceJobResults.php"
+        },
+        {
+            "required": true,
+            "file": "ServiceJobs/ServiceJobQuery.php"
+        },
+        {
+            "required": true,
+            "file": "ServiceJobs/ServiceJobHandler.php"
         },
         {
             "required": true,
@@ -383,6 +415,10 @@
         },
         {
             "required": true,
+            "file": "Exceptions/GenericInternal/ServiceJobException.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/GenericInternal/ConfigurationError.php"
         },
         {
@@ -536,6 +572,10 @@
         {
             "required": true,
             "file": "Managers/PostsManager.php"
+        },
+        {
+            "required": true,
+            "file": "Managers/ServiceJobManager.php"
         },
         {
             "required": true,

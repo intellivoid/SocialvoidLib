@@ -64,11 +64,18 @@
             (int)SocialvoidService::getSocialvoidLib()->getEngineConfiguration()["GearmanPort"]
         );
 
-        // Start service workers
-        SocialvoidService::getLogHandler()->log(EventType::INFO, "Starting Service Workers", "Main");
+        // Start query workers
+        SocialvoidService::getLogHandler()->log(EventType::INFO, "Starting Service Query Workers", "Main");
         SocialvoidService::getBackgroundWorker()->getSupervisor()->restartWorkers(
-            $current_directory . DIRECTORY_SEPARATOR . "service_worker.php", "SocialvoidService",
-            (int)SocialvoidService::getSocialvoidLib()->getEngineConfiguration()["MaxWorkers"]
+            $current_directory . DIRECTORY_SEPARATOR . "query_worker.php", "SocialvoidQueryService",
+            (int)SocialvoidService::getSocialvoidLib()->getEngineConfiguration()["QueryWorkers"]
+        );
+
+        // Start update workers
+        SocialvoidService::getLogHandler()->log(EventType::INFO, "Starting Service Update Workers", "Main");
+        SocialvoidService::getBackgroundWorker()->getSupervisor()->restartWorkers(
+            $current_directory . DIRECTORY_SEPARATOR . "update_worker.php", "SocialvoidUpdateService",
+            (int)SocialvoidService::getSocialvoidLib()->getEngineConfiguration()["UpdateWorkers"]
         );
     }
     catch(Exception $e)

@@ -5,10 +5,11 @@
 
     $Socialvoid = new \SocialvoidLib\SocialvoidLib();
     $jobs = [
-        \SocialvoidLib\Service\Jobs\UserManager\GetUserJob::fromInput("username_safe", "nektas"),
-        \SocialvoidLib\Service\Jobs\UserManager\GetUserJob::fromInput("username_safe", "admin"),
-        \SocialvoidLib\Service\Jobs\UserManager\GetUserJob::fromInput("username_safe", "jaytoo"),
+        "netkas" => \SocialvoidLib\Abstracts\SearchMethods\UserSearchMethod::ByUsername,
+        "admin" => \SocialvoidLib\Abstracts\SearchMethods\UserSearchMethod::ByUsername,
+        "jaytoo" => \SocialvoidLib\Abstracts\SearchMethods\UserSearchMethod::ByUsername,
+        "jaytoo2" => \SocialvoidLib\Abstracts\SearchMethods\UserSearchMethod::ByUsername
     ];
-    $res = $Socialvoid->getUserManager()->getMultipleUsers($jobs);
+    $res = $Socialvoid->getUserManager()->getMultipleUsers($jobs, false);
     var_dump($jobs);
     var_dump($res);

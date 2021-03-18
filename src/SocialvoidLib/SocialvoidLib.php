@@ -31,6 +31,7 @@
     use SocialvoidLib\Managers\PostsManager;
     use SocialvoidLib\Managers\QuotesRecordManager;
     use SocialvoidLib\Managers\RepostsRecordManager;
+    use SocialvoidLib\Managers\ServiceJobManager;
     use SocialvoidLib\Managers\SessionManager;
     use SocialvoidLib\Managers\TimelineManager;
     use SocialvoidLib\Managers\UserManager;
@@ -140,6 +141,11 @@
         private CoaAuthenticationManager $CoaAuthenticationManager;
 
         /**
+         * @var ServiceJobManager
+         */
+        private ServiceJobManager $ServiceJobManager;
+
+        /**
          * SocialvoidLib constructor.
          * @throws ConfigurationError
          * @throws DependencyError
@@ -164,6 +170,10 @@
             $NetworkSchema->setDefinition("Name", "Socialvoid");
             $this->acm->defineSchema("Network", $NetworkSchema);
 
+            // TODO: Change this from 'Engine' to 'ServiceEngine'
+            // TODO: Add schema for Redis cache
+            // TODO: Add schema for Engine (Logic tweaks and rules)
+
             // Engine Schema Configuration
             $EngineSchema = new Schema();
             $EngineSchema->setDefinition("MaxPeerResolveCacheCount", 20);
@@ -171,8 +181,9 @@
             $EngineSchema->setDefinition("EnableWorkerCache", True);
             $EngineSchema->setDefinition("GearmanHost", "127.0.0.1");
             $EngineSchema->setDefinition("GearmanPort", 4730);
-            $EngineSchema->setDefinition("MaxWorkers", 30);
-            $EngineSchema->setDefinition("MaxHeavyWorkers", 20);
+            $EngineSchema->setDefinition("QueryWorkers", 30);
+            $EngineSchema->setDefinition("UpdateWorkers", 20);
+            $EngineSchema->setDefinition("HeavyWorkers", 5);
             $this->acm->defineSchema("Engine", $EngineSchema);
 
             // Data storage Schema Configuration
@@ -197,7 +208,9 @@
             self::defineLibConstant("SOCIALVOID_LIB_MAX_PEER_RESOLVE_CACHE_COUNT", $this->getEngineConfiguration()["MaxPeerResolveCacheCount"]);
             self::defineLibConstant("SOCIALVOID_LIB_CACHE_ENABLED", (bool)$this->getEngineConfiguration()["EnableWorkerCache"]);
             self::defineLibConstant("SOCIALVOID_LIB_BACKGROUND_WORKER_ENABLED", (bool)$this->getEngineConfiguration()["EnableBackgroundWorker"]);
-            self::defineLibConstant("SOCIALVOID_LIB_BACKGROUND_WORKERS_AVAILABLE", (int)$this->getEngineConfiguration()["MaxWorkers"]);
+            self::defineLibConstant("SOCIALVOID_LIB_BACKGROUND_QUERY_WORKERS", (int)$this->getEngineConfiguration()["QueryWorkers"]);
+            self::defineLibConstant("SOCIALVOID_LIB_BACKGROUND_UPDATE_WORKERS", (int)$this->getEngineConfiguration()["UpdateWorkers"]);
+            self::defineLibConstant("SOCIALVOID_LIB_BACKGROUND_HEAVY_WORKERS", (int)$this->getEngineConfiguration()["HeavyWorkers"]);
 
             // Initialize UDP
             try
@@ -227,6 +240,7 @@
             $this->TimelineManager = new TimelineManager($this);
             $this->CoaAuthenticationManager = new CoaAuthenticationManager($this);
             $this->BackgroundWorker = new BackgroundWorker();
+            $this->ServiceJobManager = new ServiceJobManager($this);
         }
 
         /**
@@ -438,5 +452,13 @@
         public function getCoaAuthenticationManager(): CoaAuthenticationManager
         {
             return $this->CoaAuthenticationManager;
+        }
+
+        /**
+         * @return ServiceJobManager
+         */
+        public function getServiceJobManager(): ServiceJobManager
+        {
+            return $this->ServiceJobManager;
         }
     }

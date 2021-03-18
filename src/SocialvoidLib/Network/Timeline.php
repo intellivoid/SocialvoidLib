@@ -73,7 +73,7 @@
 
             $FollowerData->FollowersIDs[] = $this->networkSession->getAuthenticatedUser()->ID;
             $this->networkSession->getSocialvoidLib()->getTimelineManager()->distributePost(
-                $PostObject->ID, $FollowerData->FollowersIDs
+                $PostObject->ID, $FollowerData->FollowersIDs, 100, true
             );
 
             return $PostObject;
