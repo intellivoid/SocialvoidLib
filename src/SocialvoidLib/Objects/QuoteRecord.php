@@ -34,6 +34,13 @@
         public $PostID;
 
         /**
+         * The original post ID that the PostID is quoting
+         *
+         * @var int
+         */
+        public $OriginalPostID;
+
+        /**
          * Indicates if the user currently quotes this post
          *
          * @var bool
@@ -65,6 +72,7 @@
                 "id" => $this->ID,
                 "user_id" => $this->UserID,
                 "post_id" => $this->PostID,
+                "original_post_id" => $this->OriginalPostID,
                 "quoted" => $this->Quoted,
                 "last_updated_timestamp" => $this->LastUpdatedTimestamp,
                 "created_timestamp" => $this->CreatedTimestamp,
@@ -90,6 +98,9 @@
 
             if(isset($data["post_id"]))
                 $QuoteRecordObject->PostID = (int)$data["post_id"];
+
+            if(isset($data["original_post_id"]))
+                $QuoteRecordObject->OriginalPostID = (int)$data["original_post_id"];
 
             if(isset($data["quoted"]))
                 $QuoteRecordObject->Quoted = (bool)$data["quoted"];
