@@ -98,7 +98,7 @@
         public function registerRecord(int $user_id, int $post_id, int $original_post_id,bool $quoted=True): void
         {
             $Query = QueryBuilder::insert_into("quotes", [
-                "id" => (double)((int)$user_id . (int)$post_id),
+                "id" => (double)((int)$post_id . (int)$original_post_id),
                 "user_id" => (int)$user_id,
                 "post_id" => (int)$post_id,
                 "original_post_id" => (int)$original_post_id,
@@ -119,14 +119,14 @@
         /**
          * Gets an existing record from the database
          *
-         * @param int $user_id
          * @param int $post_id
+         * @param int $original_post_id
          * @return QuoteRecord
          * @throws DatabaseException
          * @throws QuoteRecordNotFoundException
          * @noinspection DuplicatedCode
          */
-        public function getRecord(int $user_id, int $post_id): QuoteRecord
+        public function getRecord(int $post_id, int $original_post_id): QuoteRecord
         {
             $Query = QueryBuilder::select("quotes", [
                 "id",
@@ -136,7 +136,7 @@
                 "quoted",
                 "last_updated_timestamp",
                 "created_timestamp"
-            ], "id", (double)((int)$user_id . (int)$post_id), null, null, 1);
+            ], "id", (double)((int)$post_id . (int)$original_post_id), null, null, 1);
             $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
 
             if($QueryResults)
@@ -170,7 +170,7 @@
             $Query = QueryBuilder::update("quotes", [
                 "quoted" => (int)$QuoteRecord->Quoted,
                 "last_updated_timestamp" => (int)time()
-            ], "id", (double)((int)$QuoteRecord->UserID . (int)$QuoteRecord->PostID));
+            ], "id", (double)((int)$QuoteRecord->PostID . (int)$QuoteRecord->OriginalPostID));
             $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
 
             if($QueryResults == false)
