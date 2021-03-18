@@ -75,8 +75,8 @@ use ZiProto\ZiProto;
     {
         SocialvoidService::$BackgroundWorker = new BackgroundWorker();
         SocialvoidService::$BackgroundWorker->getWorker()->addServer(
-            SocialvoidService::getSocialvoidLib()->getEngineConfiguration()["GearmanHost"],
-            (int)SocialvoidService::getSocialvoidLib()->getEngineConfiguration()["GearmanPort"]
+            SocialvoidService::getSocialvoidLib()->getServiceEngineConfiguration()["GearmanHost"],
+            (int)SocialvoidService::getSocialvoidLib()->getServiceEngineConfiguration()["GearmanPort"]
         );
     }
     catch(Exception $e)

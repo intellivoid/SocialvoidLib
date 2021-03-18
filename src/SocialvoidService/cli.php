@@ -60,22 +60,22 @@
         SocialvoidService::$SocialvoidLib = new SocialvoidLib();
 
         SocialvoidService::getBackgroundWorker()->getClient()->addServer(
-            SocialvoidService::getSocialvoidLib()->getEngineConfiguration()["GearmanHost"],
-            (int)SocialvoidService::getSocialvoidLib()->getEngineConfiguration()["GearmanPort"]
+            SocialvoidService::getSocialvoidLib()->getServiceEngineConfiguration()["GearmanHost"],
+            (int)SocialvoidService::getSocialvoidLib()->getServiceEngineConfiguration()["GearmanPort"]
         );
 
         // Start query workers
         SocialvoidService::getLogHandler()->log(EventType::INFO, "Starting Service Query Workers", "Main");
         SocialvoidService::getBackgroundWorker()->getSupervisor()->restartWorkers(
             $current_directory . DIRECTORY_SEPARATOR . "query_worker.php", "SocialvoidQueryService",
-            (int)SocialvoidService::getSocialvoidLib()->getEngineConfiguration()["QueryWorkers"]
+            (int)SocialvoidService::getSocialvoidLib()->getServiceEngineConfiguration()["QueryWorkers"]
         );
 
         // Start update workers
         SocialvoidService::getLogHandler()->log(EventType::INFO, "Starting Service Update Workers", "Main");
         SocialvoidService::getBackgroundWorker()->getSupervisor()->restartWorkers(
             $current_directory . DIRECTORY_SEPARATOR . "update_worker.php", "SocialvoidUpdateService",
-            (int)SocialvoidService::getSocialvoidLib()->getEngineConfiguration()["UpdateWorkers"]
+            (int)SocialvoidService::getSocialvoidLib()->getServiceEngineConfiguration()["UpdateWorkers"]
         );
     }
     catch(Exception $e)

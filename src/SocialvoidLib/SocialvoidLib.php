@@ -96,7 +96,7 @@
         /**
          * @var mixed
          */
-        private $EngineConfiguration;
+        private $ServiceEngineConfiguration;
 
         /**
          * @var PostsManager
@@ -146,6 +146,11 @@
         private ServiceJobManager $ServiceJobManager;
 
         /**
+         * @var mixed
+         */
+        private $EngineConfiguration;
+
+        /**
          * SocialvoidLib constructor.
          * @throws ConfigurationError
          * @throws DependencyError
@@ -170,20 +175,21 @@
             $NetworkSchema->setDefinition("Name", "Socialvoid");
             $this->acm->defineSchema("Network", $NetworkSchema);
 
-            // TODO: Change this from 'Engine' to 'ServiceEngine'
             // TODO: Add schema for Redis cache
-            // TODO: Add schema for Engine (Logic tweaks and rules)
 
             // Engine Schema Configuration
+            $ServiceEngineSchema = new Schema();
+            $ServiceEngineSchema->setDefinition("MaxPeerResolveCacheCount", 20);
+            $ServiceEngineSchema->setDefinition("EnableBackgroundWorker", True);
+            $ServiceEngineSchema->setDefinition("GearmanHost", "127.0.0.1");
+            $ServiceEngineSchema->setDefinition("GearmanPort", 4730);
+            $ServiceEngineSchema->setDefinition("QueryWorkers", 30);
+            $ServiceEngineSchema->setDefinition("UpdateWorkers", 20);
+            $ServiceEngineSchema->setDefinition("HeavyWorkers", 5);
+            $this->acm->defineSchema("ServiceEngine", $ServiceEngineSchema);
+
             $EngineSchema = new Schema();
             $EngineSchema->setDefinition("MaxPeerResolveCacheCount", 20);
-            $EngineSchema->setDefinition("EnableBackgroundWorker", True);
-            $EngineSchema->setDefinition("EnableWorkerCache", True);
-            $EngineSchema->setDefinition("GearmanHost", "127.0.0.1");
-            $EngineSchema->setDefinition("GearmanPort", 4730);
-            $EngineSchema->setDefinition("QueryWorkers", 30);
-            $EngineSchema->setDefinition("UpdateWorkers", 20);
-            $EngineSchema->setDefinition("HeavyWorkers", 5);
             $this->acm->defineSchema("Engine", $EngineSchema);
 
             // Data storage Schema Configuration
@@ -197,6 +203,7 @@
                 $this->DatabaseConfiguration = $this->acm->getConfiguration("Database");
                 $this->NetworkConfiguration = $this->acm->getConfiguration("Network");
                 $this->DataStorageConfiguration = $this->acm->getConfiguration("DataStorage");
+                $this->ServiceEngineConfiguration = $this->acm->getConfiguration("ServiceEngine");
                 $this->EngineConfiguration = $this->acm->getConfiguration("Engine");
             }
             catch(Exception $e)
@@ -205,12 +212,12 @@
             }
 
             // Initialize constants
-            self::defineLibConstant("SOCIALVOID_LIB_MAX_PEER_RESOLVE_CACHE_COUNT", $this->getEngineConfiguration()["MaxPeerResolveCacheCount"]);
-            self::defineLibConstant("SOCIALVOID_LIB_CACHE_ENABLED", (bool)$this->getEngineConfiguration()["EnableWorkerCache"]);
-            self::defineLibConstant("SOCIALVOID_LIB_BACKGROUND_WORKER_ENABLED", (bool)$this->getEngineConfiguration()["EnableBackgroundWorker"]);
-            self::defineLibConstant("SOCIALVOID_LIB_BACKGROUND_QUERY_WORKERS", (int)$this->getEngineConfiguration()["QueryWorkers"]);
-            self::defineLibConstant("SOCIALVOID_LIB_BACKGROUND_UPDATE_WORKERS", (int)$this->getEngineConfiguration()["UpdateWorkers"]);
-            self::defineLibConstant("SOCIALVOID_LIB_BACKGROUND_HEAVY_WORKERS", (int)$this->getEngineConfiguration()["HeavyWorkers"]);
+            self::defineLibConstant("SOCIALVOID_LIB_MAX_PEER_RESOLVE_CACHE_COUNT", $this->getServiceEngineConfiguration()["MaxPeerResolveCacheCount"]);
+            self::defineLibConstant("SOCIALVOID_LIB_CACHE_ENABLED", (bool)$this->getServiceEngineConfiguration()["EnableWorkerCache"]);
+            self::defineLibConstant("SOCIALVOID_LIB_BACKGROUND_WORKER_ENABLED", (bool)$this->getServiceEngineConfiguration()["EnableBackgroundWorker"]);
+            self::defineLibConstant("SOCIALVOID_LIB_BACKGROUND_QUERY_WORKERS", (int)$this->getServiceEngineConfiguration()["QueryWorkers"]);
+            self::defineLibConstant("SOCIALVOID_LIB_BACKGROUND_UPDATE_WORKERS", (int)$this->getServiceEngineConfiguration()["UpdateWorkers"]);
+            self::defineLibConstant("SOCIALVOID_LIB_BACKGROUND_HEAVY_WORKERS", (int)$this->getServiceEngineConfiguration()["HeavyWorkers"]);
 
             // Initialize UDP
             try
@@ -377,9 +384,9 @@
         /**
          * @return mixed
          */
-        public function getEngineConfiguration()
+        public function getServiceEngineConfiguration()
         {
-            return $this->EngineConfiguration;
+            return $this->ServiceEngineConfiguration;
         }
 
         /**
@@ -398,14 +405,14 @@
          */
         public function getBackgroundWorker(): BackgroundWorker
         {
-            if((bool)$this->getEngineConfiguration()["EnableBackgroundWorker"] == false)
+            if((bool)$this->getServiceEngineConfiguration()["EnableBackgroundWorker"] == false)
                 throw new BackgroundWorkerNotEnabledException("BackgroundWorker is not enabled for this build");
 
             if($this->BackgroundWorkerInitialized == false)
             {
                 $this->BackgroundWorker->getClient()->addServer(
-                    $this->getEngineConfiguration()["GearmanHost"],
-                    (int)$this->getEngineConfiguration()["GearmanPort"]
+                    $this->getServiceEngineConfiguration()["GearmanHost"],
+                    (int)$this->getServiceEngineConfiguration()["GearmanPort"]
                 );
 
                 $this->BackgroundWorkerInitialized = true;
@@ -460,5 +467,13 @@
         public function getServiceJobManager(): ServiceJobManager
         {
             return $this->ServiceJobManager;
+        }
+
+        /**
+         * @return mixed
+         */
+        public function getEngineConfiguration()
+        {
+            return $this->EngineConfiguration;
         }
     }
