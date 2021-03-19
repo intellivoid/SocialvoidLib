@@ -21,9 +21,11 @@
     use BackgroundWorker\BackgroundWorker;
     use Exception;
     use mysqli;
+    use Redis;
     use SocialvoidLib\Exceptions\GenericInternal\BackgroundWorkerNotEnabledException;
     use SocialvoidLib\Exceptions\GenericInternal\ConfigurationError;
     use SocialvoidLib\Exceptions\GenericInternal\DependencyError;
+    use SocialvoidLib\Exceptions\GenericInternal\RedisCacheException;
     use SocialvoidLib\Managers\CoaAuthenticationManager;
     use SocialvoidLib\Managers\FollowerDataManager;
     use SocialvoidLib\Managers\FollowerStateManager;
@@ -146,9 +148,19 @@
         private ServiceJobManager $ServiceJobManager;
 
         /**
+         * @var Redis|null
+         */
+        private ?Redis $BasicRedis;
+
+        /**
          * @var mixed
          */
         private $EngineConfiguration;
+
+        /**
+         * @var mixed
+         */
+        private $RedisBasicCacheConfiguration;
 
         /**
          * SocialvoidLib constructor.
@@ -175,9 +187,7 @@
             $NetworkSchema->setDefinition("Name", "Socialvoid");
             $this->acm->defineSchema("Network", $NetworkSchema);
 
-            // TODO: Add schema for Redis cache
-
-            // Engine Schema Configuration
+            // Service Engine Schema Configuration
             $ServiceEngineSchema = new Schema();
             $ServiceEngineSchema->setDefinition("EnableBackgroundWorker", True);
             $ServiceEngineSchema->setDefinition("GearmanHost", "127.0.0.1");
@@ -187,9 +197,25 @@
             $ServiceEngineSchema->setDefinition("HeavyWorkers", 5);
             $this->acm->defineSchema("ServiceEngine", $ServiceEngineSchema);
 
+            // Engine Schema Configuration
             $EngineSchema = new Schema();
             $EngineSchema->setDefinition("MaxPeerResolveCacheCount", 20);
             $this->acm->defineSchema("Engine", $EngineSchema);
+
+            // Redis Basic Cache (Entity resolve cache)
+            $RedisBasicCacheSchema = new Schema();
+            $RedisBasicCacheSchema->setDefinition("Enabled", True);
+            $RedisBasicCacheSchema->setDefinition("UseAuthentication", True);
+            $RedisBasicCacheSchema->setDefinition("PeerCacheEnabled", True);
+            $RedisBasicCacheSchema->setDefinition("PeerCacheTTL", 500);
+            $RedisBasicCacheSchema->setDefinition("PeerCacheLimit", 1000);
+            $RedisBasicCacheSchema->setDefinition("PostCacheEnabled", True);
+            $RedisBasicCacheSchema->setDefinition("PostCacheTTL", 300);
+            $RedisBasicCacheSchema->setDefinition("PostCacheLimit", 1000);
+            $RedisBasicCacheSchema->setDefinition("RedisHost", "127.0.0.1");
+            $RedisBasicCacheSchema->setDefinition("RedisPort", 6379);
+            $RedisBasicCacheSchema->setDefinition("Password", "admin");
+            $this->acm->defineSchema("RedisBasicCache", $RedisBasicCacheSchema);
 
             // Data storage Schema Configuration
             $DataStorageSchema = new Schema();
@@ -204,6 +230,7 @@
                 $this->DataStorageConfiguration = $this->acm->getConfiguration("DataStorage");
                 $this->ServiceEngineConfiguration = $this->acm->getConfiguration("ServiceEngine");
                 $this->EngineConfiguration = $this->acm->getConfiguration("Engine");
+                $this->RedisBasicCacheConfiguration = $this->acm->getConfiguration("RedisBasicCache");
             }
             catch(Exception $e)
             {
@@ -211,12 +238,14 @@
             }
 
             // Initialize constants
-            self::defineLibConstant("SOCIALVOID_LIB_MAX_PEER_RESOLVE_CACHE_COUNT", $this->getServiceEngineConfiguration()["MaxPeerResolveCacheCount"]);
-            self::defineLibConstant("SOCIALVOID_LIB_CACHE_ENABLED", (bool)$this->getServiceEngineConfiguration()["EnableWorkerCache"]);
+            self::defineLibConstant("SOCIALVOID_LIB_MAX_PEER_RESOLVE_CACHE_COUNT", $this->getEngineConfiguration()["MaxPeerResolveCacheCount"]);
+
             self::defineLibConstant("SOCIALVOID_LIB_BACKGROUND_WORKER_ENABLED", (bool)$this->getServiceEngineConfiguration()["EnableBackgroundWorker"]);
             self::defineLibConstant("SOCIALVOID_LIB_BACKGROUND_QUERY_WORKERS", (int)$this->getServiceEngineConfiguration()["QueryWorkers"]);
             self::defineLibConstant("SOCIALVOID_LIB_BACKGROUND_UPDATE_WORKERS", (int)$this->getServiceEngineConfiguration()["UpdateWorkers"]);
             self::defineLibConstant("SOCIALVOID_LIB_BACKGROUND_HEAVY_WORKERS", (int)$this->getServiceEngineConfiguration()["HeavyWorkers"]);
+
+            self::defineLibConstant("SOCIALVOID_LIB_BASIC_CACHE_ENABLED", (bool)$this->getRedisBasicCacheConfiguration()["Enabled"]);
 
             // Initialize UDP
             try
@@ -234,6 +263,9 @@
             {
                 throw new DependencyError("There was an error while trying to initialize UDP", 0, $e);
             }
+
+            if($this->getServiceEngineConfiguration()["EnableBackgroundWorker"] && function_exists("gearman_version") == false)
+                throw new DependencyError("ServiceEngine has BackgroundWorker enabled but the gearman extension (php-gearman) is not installed.");
 
             $this->UserManager = new UserManager($this);
             $this->FollowerStateManager = new FollowerStateManager($this);
@@ -474,5 +506,68 @@
         public function getEngineConfiguration()
         {
             return $this->EngineConfiguration;
+        }
+
+        /**
+         * @return mixed
+         */
+        public function getRedisBasicCacheConfiguration()
+        {
+            return $this->RedisBasicCacheConfiguration;
+        }
+
+        /**
+         * Connects to the Basic Redis cache server
+         *
+         * @throws DependencyError
+         * @throws RedisCacheException
+         */
+        public function connectBasicRedis()
+        {
+            if($this->BasicRedis !== null && $this->BasicRedis->isConnected())
+                return;
+
+            if($this->getRedisBasicCacheConfiguration()["Enabled"] == false)
+                throw new RedisCacheException("RedisBasicCache is not enabled");
+
+            if(class_exists("Redis") == false)
+                throw new DependencyError("RedisBasicCache is enabled but the Redis Extension (php-redis) is not installed");
+
+            if($this->BasicRedis == null)
+                $this->BasicRedis = new Redis();
+
+            if($this->BasicRedis->isConnected() == false)
+            {
+                $this->BasicRedis->connect(
+                    $this->getRedisBasicCacheConfiguration()["RedisHost"],
+                    $this->getRedisBasicCacheConfiguration()["RedisPort"]
+                );
+
+                if($this->getRedisBasicCacheConfiguration()["UseAuthentication"])
+                {
+                    $this->BasicRedis->auth($this->getRedisBasicCacheConfiguration()["Password"]);
+                }
+            }
+        }
+
+        /**
+         * Disconnects from the basic redis cache server
+         */
+        public function disconnectBasicRedis()
+        {
+            if($this->BasicRedis !== null && $this->BasicRedis->isConnected())
+                $this->BasicRedis->close();
+        }
+
+        /**
+         * @return Redis
+         * @throws DependencyError
+         * @throws RedisCacheException
+         */
+        public function getBasicRedis(): Redis
+        {
+            $this->connectBasicRedis();
+
+            return $this->BasicRedis;
         }
     }

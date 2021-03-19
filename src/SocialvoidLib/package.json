@@ -407,6 +407,10 @@
         },
         {
             "required": true,
+            "file": "Exceptions/GenericInternal/RedisCacheException.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/GenericInternal/DatabaseException.php"
         },
         {
@@ -420,6 +424,10 @@
         {
             "required": true,
             "file": "Exceptions/GenericInternal/ConfigurationError.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/CacheEntry.php"
         },
         {
             "required": true,
@@ -492,6 +500,10 @@
         {
             "required": true,
             "file": "Objects/Post.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/CacheEntryPointer.php"
         },
         {
             "required": true,
