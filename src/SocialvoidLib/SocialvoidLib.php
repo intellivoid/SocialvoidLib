@@ -26,6 +26,7 @@
     use SocialvoidLib\Exceptions\GenericInternal\ConfigurationError;
     use SocialvoidLib\Exceptions\GenericInternal\DependencyError;
     use SocialvoidLib\Exceptions\GenericInternal\RedisCacheException;
+    use SocialvoidLib\Managers\BasicRedisCacheManager;
     use SocialvoidLib\Managers\CoaAuthenticationManager;
     use SocialvoidLib\Managers\FollowerDataManager;
     use SocialvoidLib\Managers\FollowerStateManager;
@@ -150,7 +151,7 @@
         /**
          * @var Redis|null
          */
-        private ?Redis $BasicRedis;
+        private $BasicRedis;
 
         /**
          * @var mixed
@@ -161,6 +162,11 @@
          * @var mixed
          */
         private $RedisBasicCacheConfiguration;
+
+        /**
+         * @var BasicRedisCacheManager
+         */
+        private BasicRedisCacheManager $BasicRedisCacheManager;
 
         /**
          * SocialvoidLib constructor.
@@ -267,6 +273,7 @@
             if($this->getServiceEngineConfiguration()["EnableBackgroundWorker"] && function_exists("gearman_version") == false)
                 throw new DependencyError("ServiceEngine has BackgroundWorker enabled but the gearman extension (php-gearman) is not installed.");
 
+            // TODO: Construct these methods magically to save resource usage
             $this->UserManager = new UserManager($this);
             $this->FollowerStateManager = new FollowerStateManager($this);
             $this->SessionManager = new SessionManager($this);
@@ -279,6 +286,7 @@
             $this->CoaAuthenticationManager = new CoaAuthenticationManager($this);
             $this->BackgroundWorker = new BackgroundWorker();
             $this->ServiceJobManager = new ServiceJobManager($this);
+            $this->BasicRedisCacheManager = new BasicRedisCacheManager($this);
         }
 
         /**
@@ -569,5 +577,13 @@
             $this->connectBasicRedis();
 
             return $this->BasicRedis;
+        }
+
+        /**
+         * @return BasicRedisCacheManager
+         */
+        public function getBasicRedisCacheManager(): BasicRedisCacheManager
+        {
+            return $this->BasicRedisCacheManager;
         }
     }

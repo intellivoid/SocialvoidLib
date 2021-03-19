@@ -34,20 +34,6 @@
         public $ObjectData;
 
         /**
-         * The Unix Timestamp for when this cache entry was created
-         *
-         * @var int
-         */
-        public $CreatedTimestamp;
-
-        /**
-         * The Unix Timestamp for when this cache entry was last updated
-         *
-         * @var int
-         */
-        public $LastUpdatedTimestamp;
-
-        /**
          * Returns an array representation of the object
          *
          * @return array
@@ -55,11 +41,10 @@
         public function toArray(): array
         {
             return [
+                0x000 => 0x002,
                 0x001 => $this->ID,
                 0x002 => $this->ObjectType,
-                0x003 => $this->ObjectData,
-                0x004 => $this->CreatedTimestamp,
-                0x005 => $this->LastUpdatedTimestamp
+                0x003 => $this->ObjectData
             ];
         }
 
@@ -81,12 +66,6 @@
 
             if(isset($data[0x003]))
                 $CacheEntryObject->ObjectData = $data[0x003];
-
-            if(isset($data[0x004]))
-                $CacheEntryObject->CreatedTimestamp = $data[0x004];
-
-            if(isset($data[0x005]))
-                $CacheEntryObject->LastUpdatedTimestamp = $data[0x005];
 
             return $CacheEntryObject;
         }

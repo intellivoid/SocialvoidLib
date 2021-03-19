@@ -131,6 +131,10 @@
         },
         {
             "required": true,
+            "file": "Abstracts/Types/CacheEntryObjectType.php"
+        },
+        {
+            "required": true,
             "file": "Abstracts/StatusStates/CoaAuthenticationStatus.php"
         },
         {
@@ -184,6 +188,10 @@
         {
             "required": true,
             "file": "InputTypes/SessionClient.php"
+        },
+        {
+            "required": true,
+            "file": "InputTypes/RegisterCacheInput.php"
         },
         {
             "required": true,
@@ -423,6 +431,14 @@
         },
         {
             "required": true,
+            "file": "Exceptions/GenericInternal/CacheMissedException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/GenericInternal/CacheException.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/GenericInternal/ConfigurationError.php"
         },
         {
@@ -564,6 +580,10 @@
         {
             "required": true,
             "file": "Managers/SessionManager.php"
+        },
+        {
+            "required": true,
+            "file": "Managers/BasicRedisCacheManager.php"
         },
         {
             "required": true,

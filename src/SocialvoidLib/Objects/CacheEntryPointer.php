@@ -13,11 +13,11 @@
     class CacheEntryPointer
     {
         /**
-         * The ID of the cache entry pointer
+         * The Pointer Identifier of the cache entry pointer
          *
          * @var string
          */
-        public $ID;
+        public $PointerIdentifier;
 
         /**
          * The ID of the cache entry that this pointer points to
@@ -34,7 +34,8 @@
         public function toArray(): array
         {
             return [
-                0x001 => $this->ID,
+                0x000 => 0x001,
+                0x001 => $this->PointerIdentifier,
                 0x002 => $this->CacheEntryID
             ];
         }
@@ -45,12 +46,12 @@
          * @param array $data
          * @return CacheEntryPointer
          */
-        public function fromArray(array $data): CacheEntryPointer
+        public static function fromArray(array $data): CacheEntryPointer
         {
             $CacheEntryPointerObject = new CacheEntryPointer();
 
             if(isset($data[0x001]))
-                $CacheEntryPointerObject->ID = $data[0x001];
+                $CacheEntryPointerObject->PointerIdentifier = $data[0x001];
 
             if(isset($data[0x002]))
                 $CacheEntryPointerObject->CacheEntryID = $data[0x002];

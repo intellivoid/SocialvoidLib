@@ -14,28 +14,31 @@
     namespace SocialvoidLib\Managers;
 
     use Exception;
-    use GearmanTask;
     use msqg\QueryBuilder;
     use SocialvoidLib\Abstracts\SearchMethods\UserSearchMethod;
     use SocialvoidLib\Abstracts\StatusStates\UserPrivacyState;
     use SocialvoidLib\Abstracts\StatusStates\UserStatus;
+    use SocialvoidLib\Abstracts\Types\CacheEntryObjectType;
     use SocialvoidLib\Abstracts\UserAuthenticationMethod;
     use SocialvoidLib\Classes\Converter;
     use SocialvoidLib\Classes\Standard\BaseIdentification;
     use SocialvoidLib\Classes\Utilities;
     use SocialvoidLib\Classes\Validate;
     use SocialvoidLib\Exceptions\GenericInternal\BackgroundWorkerNotEnabledException;
+    use SocialvoidLib\Exceptions\GenericInternal\CacheException;
+    use SocialvoidLib\Exceptions\GenericInternal\CacheMissedException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
+    use SocialvoidLib\Exceptions\GenericInternal\DependencyError;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
+    use SocialvoidLib\Exceptions\GenericInternal\RedisCacheException;
     use SocialvoidLib\Exceptions\GenericInternal\ServiceJobException;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidFirstNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidLastNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidUsernameException;
     use SocialvoidLib\Exceptions\Standard\Validation\UsernameAlreadyExistsException;
+    use SocialvoidLib\InputTypes\RegisterCacheInput;
     use SocialvoidLib\Objects\User;
-    use SocialvoidLib\Service\Jobs\UserManager\GetUserJob;
-    use SocialvoidLib\Service\Jobs\UserManager\GetUserJobResults;
     use SocialvoidLib\SocialvoidLib;
     use ZiProto\ZiProto;
 
@@ -74,6 +77,7 @@
          * @throws InvalidUsernameException
          * @throws PeerNotFoundException
          * @throws UsernameAlreadyExistsException
+         * @throws CacheException
          */
         public function registerUser(string $username, string $first_name, string $last_name=null): User
         {
@@ -125,7 +129,10 @@
 
             if($QueryResults)
             {
-                return $this->getUser(UserSearchMethod::ByPublicId, $public_id);
+                $ReturnResults = $this->getUser(UserSearchMethod::ByPublicId, $public_id);
+                $this->registerUserCacheEntry($ReturnResults);
+
+                return $ReturnResults;
             }
             else
             {
@@ -144,6 +151,7 @@
          * @throws DatabaseException
          * @throws InvalidSearchMethodException
          * @throws PeerNotFoundException
+         * @throws CacheException
          */
         public function getUser(string $search_method, $value): User
         {
@@ -168,6 +176,12 @@
                     throw new InvalidSearchMethodException(
                         "The search method '$search_method' is not applicable to getUser()",
                         $search_method, $value);
+            }
+
+            if($this->socialvoidLib->getRedisBasicCacheConfiguration()["Enabled"])
+            {
+                $CachedUser = $this->getUserCacheEntry($value);
+                if($CachedUser !== null) return $CachedUser;
             }
 
             $Query = QueryBuilder::select("users", [
@@ -210,7 +224,10 @@
                     $Row["profile"] = ZiProto::decode($Row["profile"]);
                     $Row["settings"] = ZiProto::decode($Row["settings"]);
 
-                    return(User::fromArray($Row));
+                    $ReturnResults = User::fromArray($Row);
+                    $this->registerUserCacheEntry($ReturnResults);
+
+                    return $ReturnResults;
                 }
             }
             else
@@ -228,6 +245,7 @@
          * @param User $user
          * @return User
          * @throws DatabaseException
+         * @throws CacheException
          */
         public function updateUser(User $user): User
         {
@@ -254,6 +272,7 @@
 
             if($QueryResults)
             {
+                $this->registerUserCacheEntry($user);
                 return $user;
             }
             else
@@ -293,6 +312,7 @@
          * @param int $utilization
          * @return User[]
          * @throws BackgroundWorkerNotEnabledException
+         * @throws CacheException
          * @throws DatabaseException
          * @throws InvalidSearchMethodException
          * @throws PeerNotFoundException
@@ -324,5 +344,64 @@
 
                 return $return_results;
             }
+        }
+
+        /**
+         * Registers a user cache entry
+         *
+         * @param User $user
+         * @throws CacheException
+         */
+        private function registerUserCacheEntry(User $user): void
+        {
+            if($this->socialvoidLib->getRedisBasicCacheConfiguration()["Enabled"])
+            {
+                $CacheEntryInput = new RegisterCacheInput();
+                $CacheEntryInput->ObjectType = CacheEntryObjectType::User;
+                $CacheEntryInput->ObjectData = $user->toArray();
+                $CacheEntryInput->Pointers = [$user->ID, $user->PublicID, $user->UsernameSafe];
+
+                try
+                {
+                    $this->socialvoidLib->getBasicRedisCacheManager()->registerCache(
+                        $CacheEntryInput,
+                        $this->socialvoidLib->getRedisBasicCacheConfiguration()["PeerCacheTTL"],
+                        $this->socialvoidLib->getRedisBasicCacheConfiguration()["PeerCacheLimit"]
+                    );
+                }
+                catch(Exception $e)
+                {
+                    throw new CacheException("There was an error while trying to register the peer cache entry", 0, $e);
+                }
+            }
+        }
+
+        /**
+         * Gets a user cache entry, returns null if it's a miss
+         *
+         * @param string $value
+         * @return User|null
+         * @throws CacheException
+         */
+        private function getUserCacheEntry(string $value): ?User
+        {
+            if($this->socialvoidLib->getRedisBasicCacheConfiguration()["Enabled"] == false)
+                throw new CacheException("BasicRedisCache is not enabled");
+
+            try
+            {
+                $CacheEntryResults = $this->socialvoidLib->getBasicRedisCacheManager()->getCacheEntry(
+                    CacheEntryObjectType::User, $value);
+            }
+            catch (CacheMissedException $e)
+            {
+                return null;
+            }
+            catch (DependencyError | RedisCacheException $e)
+            {
+                throw new CacheException("There was an issue while trying to request a user cache entry", 0, $e);
+            }
+
+            return User::fromArray($CacheEntryResults->ObjectData);
         }
     }

@@ -107,4 +107,15 @@ namespace SocialvoidLib\Classes;
 
             return null;
         }
+
+        /**
+         * Converts the text to lowercase and replaces spaces with underscores
+         *
+         * @param string $input
+         * @return string
+         */
+        public static function normalizeText(string $input): string
+        {
+            return str_ireplace(" ", "_", strtolower($input));
+        }
     }
