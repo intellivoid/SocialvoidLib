@@ -429,7 +429,7 @@
         }
 
         /**
-         * Returns background worker and initalizes it if it's not already initialized
+         * Returns background worker and initializes it if it's not already initialized
          *
          * @return BackgroundWorker
          * @throws BackgroundWorkerNotEnabledException
