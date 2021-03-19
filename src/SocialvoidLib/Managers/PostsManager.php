@@ -12,14 +12,18 @@
 
     namespace SocialvoidLib\Managers;
 
+    use Exception;
     use msqg\QueryBuilder;
     use SocialvoidLib\Abstracts\Levels\PostPriorityLevel;
     use SocialvoidLib\Abstracts\SearchMethods\PostSearchMethod;
     use SocialvoidLib\Classes\PostText\Extractor;
     use SocialvoidLib\Classes\PostText\TwitterMethod\Parser;
     use SocialvoidLib\Classes\Standard\BaseIdentification;
+    use SocialvoidLib\Classes\Utilities;
+    use SocialvoidLib\Exceptions\GenericInternal\BackgroundWorkerNotEnabledException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
+    use SocialvoidLib\Exceptions\GenericInternal\ServiceJobException;
     use SocialvoidLib\Exceptions\Standard\Network\PostNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPostTextException;
     use SocialvoidLib\Objects\Post;
@@ -262,6 +266,48 @@
                     "There was an error while trying to update the post",
                     $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
                 );
+            }
+        }
+
+        /**
+         * Fetches multiple posts from the Database, function is completed faster if
+         * BackgroundWorker is enabled
+         *
+         * @param array $query
+         * @param bool $skip_errors
+         * @param int $utilization
+         * @return Post[]
+         * @throws DatabaseException
+         * @throws InvalidSearchMethodException
+         * @throws PostNotFoundException
+         * @throws BackgroundWorkerNotEnabledException
+         * @throws ServiceJobException
+         */
+        public function getMultiplePosts(array $query, bool $skip_errors=True, int $utilization=100): array
+        {
+            if(Utilities::getBoolDefinition("SOCIALVOID_LIB_BACKGROUND_WORKER_ENABLED"))
+            {
+                return $this->socialvoidLib->getServiceJobManager()->getPostJobs()->resolvePosts(
+                    $query, $utilization, $skip_errors
+                );
+            }
+            else
+            {
+                $return_results = [];
+
+                foreach($query as $value => $search_method)
+                {
+                    try
+                    {
+                        $return_results[] = $this->getPost($search_method, $value);
+                    }
+                    catch(Exception $e)
+                    {
+                        if($skip_errors == false) throw $e;
+                    }
+                }
+
+                return $return_results;
             }
         }
     }

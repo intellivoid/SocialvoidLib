@@ -12,16 +12,22 @@
 
 
     use SocialvoidLib\Abstracts\Levels\PostPriorityLevel;
+    use SocialvoidLib\Abstracts\SearchMethods\PostSearchMethod;
+    use SocialvoidLib\Abstracts\SearchMethods\UserSearchMethod;
     use SocialvoidLib\Classes\Converter;
     use SocialvoidLib\Exceptions\GenericInternal\BackgroundWorkerNotEnabledException;
+    use SocialvoidLib\Exceptions\GenericInternal\CacheException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
+    use SocialvoidLib\Exceptions\GenericInternal\ServiceJobException;
     use SocialvoidLib\Exceptions\Internal\FollowerDataNotFound;
     use SocialvoidLib\Exceptions\Internal\UserTimelineNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\PostNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPostTextException;
     use SocialvoidLib\NetworkSession;
     use SocialvoidLib\Objects\Post;
+    use SocialvoidLib\Objects\Standard\TimelineRoster;
 
     /**
      * Class Timeline
@@ -77,5 +83,93 @@
             );
 
             return $PostObject;
+        }
+
+        /**
+         * Returns a timeline roster for basic information
+         *
+         * @return TimelineRoster
+         * @throws DatabaseException
+         * @throws InvalidSearchMethodException
+         * @throws UserTimelineNotFoundException
+         */
+        public function getTimelineRoster(): TimelineRoster
+        {
+            // TODO: Optimize the query for this
+            $UserTimeline = $this->networkSession->getSocialvoidLib()->getTimelineManager()->retrieveTimeline(
+                $this->networkSession->getAuthenticatedUser()->ID
+            );
+
+            $TimelineRoster = new TimelineRoster();
+            $TimelineRoster->TimelineLastUpdated = $UserTimeline->LastUpdatedTimestamp;
+            $TimelineRoster->TimelinePostsCount = $UserTimeline->NewPosts;
+
+            return $TimelineRoster;
+        }
+
+        /**
+         * Retrieves the timeline data
+         *
+         * @param int $page_number
+         * @return array
+         * @throws BackgroundWorkerNotEnabledException
+         * @throws DatabaseException
+         * @throws InvalidSearchMethodException
+         * @throws PostNotFoundException
+         * @throws UserTimelineNotFoundException
+         * @throws CacheException
+         * @throws ServiceJobException
+         * @throws PeerNotFoundException
+         */
+        public function retrieveTimeline(int $page_number): array
+        {
+            if($page_number < 1) return [];
+
+            $UserTimeline = $this->networkSession->getSocialvoidLib()->getTimelineManager()->retrieveTimeline(
+                $this->networkSession->getAuthenticatedUser()->ID
+            );
+
+            // Anti-Dumbass check
+            if(count($UserTimeline->PostChunks) == 0) return [];
+            if($page_number > count($UserTimeline->PostChunks)) return [];
+
+            // Retrieve posts
+            $PostsIDs = array_fill_keys($UserTimeline->PostChunks[($page_number - 1)], PostSearchMethod::ById);
+            $ResolvedPosts = $this->networkSession->getSocialvoidLib()->getPostsManager()->getMultiplePosts(
+                $PostsIDs, true);
+
+            $SubPosts = [];
+            $UserIDs = [];
+            foreach($ResolvedPosts as $post)
+            {
+                $UserIDs[$post->PosterUserID] = PostSearchMethod::ById;
+
+                if($post->Repost !== null && $post->Repost->OriginalPostID)
+                    $SubPosts[$post->Repost->OriginalPostID] = PostSearchMethod::ById;
+                if($post->Repost !== null && $post->Repost->OriginalUserID)
+                    $UserIDs[$post->Repost->OriginalUserID] = UserSearchMethod::ById;
+
+                if($post->Quote !== null && $post->Quote->OriginalPostID)
+                    $SubPosts[$post->Quote->OriginalPostID] = PostSearchMethod::ById;
+                if($post->Quote !== null && $post->Quote->OriginalUserID)
+                    $UserIDs[$post->Quote->OriginalUserID] = UserSearchMethod::ById;
+
+                if($post->Reply !== null && $post->Reply->ReplyToPostID)
+                    $SubPosts[$post->Reply->ReplyToPostID] = PostSearchMethod::ById;
+                if($post->Reply !== null && $post->Reply->ReplyToUserID)
+                    $UserIDs[$post->Reply->ReplyToUserID] = UserSearchMethod::ById;
+            }
+
+            $ResolvedSubPosts = $this->networkSession->getSocialvoidLib()->getPostsManager()->getMultiplePosts(
+                $SubPosts, true);
+            $ResolvedUsers = $this->networkSession->getSocialvoidLib()->getUserManager()->getMultipleUsers(
+                $UserIDs, true
+            );
+
+            return [
+                "posts" => $ResolvedPosts,
+                "sub_posts" => $ResolvedSubPosts,
+                "users" => $ResolvedUsers
+            ];
         }
     }

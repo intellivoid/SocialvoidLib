@@ -3,6 +3,7 @@
 
     namespace SocialvoidLib\Managers;
 
+    use SocialvoidLib\ServiceJobs\Jobs\PostJobs;
     use SocialvoidLib\ServiceJobs\Jobs\TimelineJobs;
     use SocialvoidLib\ServiceJobs\Jobs\UserJobs;
     use SocialvoidLib\ServiceJobs\ServiceJobHandler;
@@ -35,6 +36,11 @@
         private TimelineJobs $TimelineJobs;
 
         /**
+         * @var PostJobs
+         */
+        private PostJobs $postJobs;
+
+        /**
          * ServiceJobManager constructor.
          * @param SocialvoidLib $socialvoidLib
          */
@@ -43,6 +49,7 @@
             $this->socialvoidLib = $socialvoidLib;
             $this->serviceJobHandler = new ServiceJobHandler($this->socialvoidLib);
             $this->userJobs = new UserJobs($this->socialvoidLib);
+            $this->postJobs = new PostJobs($this->socialvoidLib);
             $this->TimelineJobs = new TimelineJobs($this->socialvoidLib);
         }
 
@@ -76,5 +83,13 @@
         public function getTimelineJobs(): TimelineJobs
         {
             return $this->TimelineJobs;
+        }
+
+        /**
+         * @return PostJobs
+         */
+        public function getPostJobs(): PostJobs
+        {
+            return $this->postJobs;
         }
     }

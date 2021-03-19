@@ -127,6 +127,10 @@
         },
         {
             "required": true,
+            "file": "Abstracts/Types/Standard/PostType.php"
+        },
+        {
+            "required": true,
             "file": "Abstracts/Types/MediaType.php"
         },
         {
@@ -204,6 +208,10 @@
         {
             "required": true,
             "file": "ServiceJobs/Jobs/TimelineJobs.php"
+        },
+        {
+            "required": true,
+            "file": "ServiceJobs/Jobs/PostJobs.php"
         },
         {
             "required": true,
@@ -456,6 +464,14 @@
         {
             "required": true,
             "file": "Objects/Standard/Peer.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/Standard/Post.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/Standard/TimelineRoster.php"
         },
         {
             "required": true,

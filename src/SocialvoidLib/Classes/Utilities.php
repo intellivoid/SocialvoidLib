@@ -74,15 +74,7 @@ namespace SocialvoidLib\Classes;
          */
         public static function splitToChunks($input, $size): array
         {
-            $chunks = array();
-            $i = 0;
-
-            foreach ($input as $value)
-            {
-                $chunks[(int)($i++ / $size)][] = $value;
-            }
-
-            return $chunks;
+            return array_chunk($input, $size);
         }
 
         /**
@@ -130,11 +122,10 @@ namespace SocialvoidLib\Classes;
          *
          * @param $item
          * @param $chunks
-         * @param int $max_size
          * @param int $max_chunks
          * @return array
          */
-        public static function removeFromChunk($item, $chunks, int $max_size=175, int $max_chunks=5): array
+        public static function removeFromChunk($item, $chunks, int $max_chunks=5): array
         {
             $data = self::rebuildFromChunks($chunks);
             if(in_array($item, $data) == false)
@@ -183,6 +174,7 @@ namespace SocialvoidLib\Classes;
             switch($job_type)
             {
                 case JobType::ResolveUsers:
+                case JobType::ResolvePosts:
                     return JobClass::QueryClass;
 
                 case JobType::DistributeTimelinePost:

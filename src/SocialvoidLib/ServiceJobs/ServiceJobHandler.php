@@ -56,6 +56,9 @@
                 case JobType::ResolveUsers:
                     return $this->socialvoidLib->getServiceJobManager()->getUserJobs()->processResolveUsers($ServiceJobQuery);
 
+                case JobType::ResolvePosts:
+                    return $this->socialvoidLib->getServiceJobManager()->getPostJobs()->processResolvePosts($ServiceJobQuery);
+
                 case JobType::DistributeTimelinePost:
                     return $this->socialvoidLib->getServiceJobManager()->getTimelineJobs()->processDistributeTimelinePost($ServiceJobQuery);
 

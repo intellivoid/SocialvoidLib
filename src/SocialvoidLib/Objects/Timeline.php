@@ -79,7 +79,7 @@
          */
         public function addPost(int $post_id)
         {
-            $this->PostChunks = Utilities::addToChunk($post_id, $this->PostChunks, 3200, 80);
+            $this->PostChunks = Utilities::addToChunk($post_id, $this->PostChunks, 3200, 60);
             $this->NewPosts += 1;
         }
 
@@ -90,7 +90,15 @@
          */
         public function removePost(int $post_id)
         {
-            $this->PostChunks = Utilities::removeFromChunk($post_id, $this->PostChunks, 3200, 80);
+            $this->PostChunks = Utilities::removeFromChunk($post_id, $this->PostChunks, 60);
+        }
+
+        /**
+         * Rebuilds the timeline chunks
+         */
+        public function rebuildChunks()
+        {
+            $this->PostChunks = Utilities::splitToChunks(Utilities::rebuildFromChunks($this->PostChunks), 60);
         }
 
         /**
@@ -152,6 +160,7 @@
             if(isset($data["created_timestamp"]))
                 $TimelineObject->CreatedTimestamp = (int)$data["created_timestamp"];
 
+            $TimelineObject->rebuildChunks();
             return $TimelineObject;
         }
     }

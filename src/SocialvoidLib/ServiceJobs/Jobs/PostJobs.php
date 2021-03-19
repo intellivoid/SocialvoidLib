@@ -1,9 +1,8 @@
 <?php
 
-    /** @noinspection PhpUnused */
-
 
     namespace SocialvoidLib\ServiceJobs\Jobs;
+
 
     use Exception;
     use GearmanTask;
@@ -12,17 +11,17 @@
     use SocialvoidLib\Classes\Utilities;
     use SocialvoidLib\Exceptions\GenericInternal\BackgroundWorkerNotEnabledException;
     use SocialvoidLib\Exceptions\GenericInternal\ServiceJobException;
-    use SocialvoidLib\Objects\User;
+    use SocialvoidLib\Objects\Post;
     use SocialvoidLib\ServiceJobs\ServiceJobQuery;
     use SocialvoidLib\ServiceJobs\ServiceJobResults;
     use SocialvoidLib\SocialvoidLib;
     use ZiProto\ZiProto;
 
     /**
-     * Class ResolveUsers
+     * Class PostJobs
      * @package SocialvoidLib\ServiceJobs\Jobs
      */
-    class UserJobs
+    class PostJobs
     {
         /**
          * @var SocialvoidLib
@@ -30,7 +29,7 @@
         private SocialvoidLib $socialvoidLib;
 
         /**
-         * UserJobs constructor.
+         * PostJobs constructor.
          * @param SocialvoidLib $socialvoidLib
          */
         public function __construct(SocialvoidLib $socialvoidLib)
@@ -39,28 +38,25 @@
         }
 
         /**
-         * Constructs a job that resolves multiple users and returns their results
+         * Resolves an array of posts
          *
          * @param array $query
          * @param int $utilization
          * @param bool $skip_errors
-         * @return User[]
-         * @throws BackgroundWorkerNotEnabledException
+         * @return Post[]
          * @throws ServiceJobException
+         * @throws BackgroundWorkerNotEnabledException
+         * @noinspection DuplicatedCode
          */
-        public function resolveUsers(array $query, int $utilization=100, bool $skip_errors=False): array
+        public function resolvePosts(array $query, int $utilization=100, bool $skip_errors=False): array
         {
             $ServiceJobQueries = [];
 
-            // Split the query to multiple workers to complete the process faster, this is dependent upon the
-            // Utilization parameter
-            // 100% = all workers get the jobs
-            // 50% / (any) = 50% (any) workers get the jobs leaving the rest untouched.
             foreach(Utilities::splitJobWeight(
                 $query, Utilities::getIntDefinition("SOCIALVOID_LIB_BACKGROUND_QUERY_WORKERS"), true, $utilization) as $chunk)
             {
                 $ServiceJobQuery = new ServiceJobQuery();
-                $ServiceJobQuery->setJobType(JobType::ResolveUsers);
+                $ServiceJobQuery->setJobType(JobType::ResolvePosts);
                 $ServiceJobQuery->setJobPriority(JobPriority::High);
                 $ServiceJobQuery->setJobData([
                     0x000 => $skip_errors,
@@ -77,7 +73,7 @@
 
             /** @var ServiceJobResults $results */
             $results = [];
-            $context_id = JobType::ResolveUsers . "_" . (int)time();
+            $context_id = JobType::ResolvePosts . "_" . (int)time();
 
             // Handles the job callbacks
             /** @noinspection PhpUnhandledExceptionInspection */
@@ -99,7 +95,7 @@
             {
                 // TODO: Respect the priority rule
                 $this->socialvoidLib->getBackgroundWorker()->getClient()->getGearmanClient()->addTask(
-                    Utilities::determineJobClass(JobType::ResolveUsers),
+                    Utilities::determineJobClass(JobType::ResolvePosts),
                     ZiProto::encode($job->toArray()), $context_id
                 );
             }
@@ -122,7 +118,7 @@
                 if($result->getJobResults() !== null)
                 {
                     foreach($result->getJobResults() as $jobResult)
-                        $return_results[] = User::fromArray($jobResult);
+                        $return_results[] = Post::fromArray($jobResult);
                 }
             }
 
@@ -130,14 +126,14 @@
         }
 
         /**
-         * Processes the user resolve query
+         * Processes the post resolve query
          *
          * @param ServiceJobQuery $serviceJobQuery
          * @return ServiceJobResults
          */
-        public function processResolveUsers(ServiceJobQuery $serviceJobQuery): ServiceJobResults
+        public function processResolvePosts(ServiceJobQuery $serviceJobQuery): ServiceJobResults
         {
-            $UserResults = [];
+            $PostResults = [];
             $ServiceJobResults = ServiceJobResults::fromServiceJobQuery($serviceJobQuery);
             $ServiceJobResults->setSuccess(true);
 
@@ -145,7 +141,7 @@
             {
                 try
                 {
-                    $UserResults[] = $this->socialvoidLib->getUserManager()->getUser(
+                    $PostResults[] = $this->socialvoidLib->getPostsManager()->getPost(
                         $search_method, $query_value
                     )->toArray();
                 }
@@ -159,7 +155,7 @@
 
                     // Set the error anyways for troubleshooting purposes
                     $ServiceJobResults->setJobError(new ServiceJobException(
-                        "There was an error while trying to resolve the user '$query_value' by '$search_method'",
+                        "There was an error while trying to resolve the post '$query_value' by '$search_method'",
                         $serviceJobQuery, $e
                     ));
 
@@ -168,7 +164,9 @@
                 }
             }
 
-            $ServiceJobResults->setJobResults($UserResults);
+            $ServiceJobResults->setJobResults($PostResults);
+
+
             return $ServiceJobResults;
         }
     }

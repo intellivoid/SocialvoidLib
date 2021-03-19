@@ -427,7 +427,7 @@
          */
         public function getPostsManager(): PostsManager
         {
-            if($this->PostsManager)
+            if($this->PostsManager == null)
                 $this->PostsManager = new PostsManager($this);
             return $this->PostsManager;
         }

@@ -18,4 +18,9 @@
          * Distributes a post to multiple timelines
          */
         const DistributeTimelinePost = 0x002;
+
+        /**
+         * Resolves multiple posts
+         */
+        const ResolvePosts = 0x003;
     }
