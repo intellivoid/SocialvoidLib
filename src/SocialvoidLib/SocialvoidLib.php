@@ -77,24 +77,24 @@
         private $database;
 
         /**
-         * @var UserManager
+         * @var UserManager|null
          */
-        private UserManager $UserManager;
+        private $UserManager;
 
         /**
-         * @var FollowerStateManager
+         * @var FollowerStateManager|null
          */
-        private FollowerStateManager $FollowerStateManager;
+        private $FollowerStateManager;
 
         /**
-         * @var SessionManager
+         * @var SessionManager|null
          */
-        private SessionManager $SessionManager;
+        private $SessionManager;
 
         /**
-         * @var FollowerDataManager
+         * @var FollowerDataManager|null
          */
-        private FollowerDataManager $FollowerDataManager;
+        private $FollowerDataManager;
 
         /**
          * @var mixed
@@ -102,14 +102,14 @@
         private $ServiceEngineConfiguration;
 
         /**
-         * @var PostsManager
+         * @var PostsManager|null
          */
-        private PostsManager $PostsManager;
+        private $PostsManager;
 
         /**
-         * @var BackgroundWorker
+         * @var BackgroundWorker|null
          */
-        private BackgroundWorker $BackgroundWorker;
+        private $BackgroundWorker;
 
         /*
          * Indicates if background worker was initialized or not
@@ -119,34 +119,34 @@
         private bool $BackgroundWorkerInitialized = false;
 
         /**
-         * @var LikesRecordManager
+         * @var LikesRecordManager|null
          */
-        private LikesRecordManager $LikesRecordManager;
+        private $LikesRecordManager;
 
         /**
-         * @var RepostsRecordManager
+         * @var RepostsRecordManager|null
          */
-        private RepostsRecordManager $RepostsRecordManager;
+        private $RepostsRecordManager;
 
         /**
-         * @var TimelineManager
+         * @var TimelineManager|null
          */
-        private TimelineManager $TimelineManager;
+        private $TimelineManager;
 
         /**
-         * @var QuotesRecordManager
+         * @var QuotesRecordManager|null
          */
-        private QuotesRecordManager $QuotesRecordManager;
+        private $QuotesRecordManager;
 
         /**
-         * @var CoaAuthenticationManager
+         * @var CoaAuthenticationManager|null
          */
-        private CoaAuthenticationManager $CoaAuthenticationManager;
+        private $CoaAuthenticationManager;
 
         /**
-         * @var ServiceJobManager
+         * @var ServiceJobManager|null
          */
-        private ServiceJobManager $ServiceJobManager;
+        private $ServiceJobManager;
 
         /**
          * @var Redis|null
@@ -164,9 +164,9 @@
         private $RedisBasicCacheConfiguration;
 
         /**
-         * @var BasicRedisCacheManager
+         * @var BasicRedisCacheManager|null
          */
-        private BasicRedisCacheManager $BasicRedisCacheManager;
+        private $BasicRedisCacheManager;
 
         /**
          * SocialvoidLib constructor.
@@ -272,21 +272,6 @@
 
             if($this->getServiceEngineConfiguration()["EnableBackgroundWorker"] && function_exists("gearman_version") == false)
                 throw new DependencyError("ServiceEngine has BackgroundWorker enabled but the gearman extension (php-gearman) is not installed.");
-
-            // TODO: Construct these methods magically to save resource usage
-            $this->UserManager = new UserManager($this);
-            $this->FollowerStateManager = new FollowerStateManager($this);
-            $this->SessionManager = new SessionManager($this);
-            $this->FollowerDataManager = new FollowerDataManager($this);
-            $this->PostsManager = new PostsManager($this);
-            $this->LikesRecordManager = new LikesRecordManager($this);
-            $this->RepostsRecordManager = new RepostsRecordManager($this);
-            $this->QuotesRecordManager = new QuotesRecordManager($this);
-            $this->TimelineManager = new TimelineManager($this);
-            $this->CoaAuthenticationManager = new CoaAuthenticationManager($this);
-            $this->BackgroundWorker = new BackgroundWorker();
-            $this->ServiceJobManager = new ServiceJobManager($this);
-            $this->BasicRedisCacheManager = new BasicRedisCacheManager($this);
         }
 
         /**
@@ -393,6 +378,9 @@
          */
         public function getUserManager(): UserManager
         {
+            if($this->UserManager == null)
+                $this->UserManager = new UserManager($this);
+            
             return $this->UserManager;
         }
 
@@ -401,6 +389,8 @@
          */
         public function getFollowerStateManager(): FollowerStateManager
         {
+            if($this->FollowerStateManager == null)
+                $this->FollowerStateManager = new FollowerStateManager($this);
             return $this->FollowerStateManager;
         }
 
@@ -409,6 +399,8 @@
          */
         public function getSessionManager(): SessionManager
         {
+            if($this->SessionManager == null)
+                $this->SessionManager = new SessionManager($this);
             return $this->SessionManager;
         }
 
@@ -417,6 +409,8 @@
          */
         public function getFollowerDataManager(): FollowerDataManager
         {
+            if($this->FollowerDataManager == null)
+                $this->FollowerDataManager = new FollowerDataManager($this);
             return $this->FollowerDataManager;
         }
 
@@ -433,6 +427,8 @@
          */
         public function getPostsManager(): PostsManager
         {
+            if($this->PostsManager)
+                $this->PostsManager = new PostsManager($this);
             return $this->PostsManager;
         }
 
@@ -446,6 +442,9 @@
         {
             if((bool)$this->getServiceEngineConfiguration()["EnableBackgroundWorker"] == false)
                 throw new BackgroundWorkerNotEnabledException("BackgroundWorker is not enabled for this build");
+
+            if($this->BackgroundWorker == null)
+                $this->BackgroundWorker = new BackgroundWorker();
 
             if($this->BackgroundWorkerInitialized == false)
             {
@@ -465,6 +464,8 @@
          */
         public function getLikesRecordManager(): LikesRecordManager
         {
+            if($this->LikesRecordManager == null)
+                $this->LikesRecordManager = new LikesRecordManager($this);
             return $this->LikesRecordManager;
         }
 
@@ -473,6 +474,8 @@
          */
         public function getRepostsRecordManager(): RepostsRecordManager
         {
+            if($this->RepostsRecordManager == null)
+                $this->RepostsRecordManager = new RepostsRecordManager($this);
             return $this->RepostsRecordManager;
         }
 
@@ -481,6 +484,8 @@
          */
         public function getTimelineManager(): TimelineManager
         {
+            if($this->TimelineManager == null)
+                $this->TimelineManager = new TimelineManager($this);
             return $this->TimelineManager;
         }
 
@@ -489,6 +494,8 @@
          */
         public function getQuotesRecordManager(): QuotesRecordManager
         {
+            if($this->QuotesRecordManager == null)
+                $this->QuotesRecordManager = new QuotesRecordManager($this);
             return $this->QuotesRecordManager;
         }
 
@@ -497,6 +504,8 @@
          */
         public function getCoaAuthenticationManager(): CoaAuthenticationManager
         {
+            if($this->CoaAuthenticationManager == null)
+                $this->CoaAuthenticationManager = new CoaAuthenticationManager($this);
             return $this->CoaAuthenticationManager;
         }
 
@@ -505,6 +514,8 @@
          */
         public function getServiceJobManager(): ServiceJobManager
         {
+            if($this->ServiceJobManager == null)
+                $this->ServiceJobManager = new ServiceJobManager($this);
             return $this->ServiceJobManager;
         }
 
@@ -584,6 +595,9 @@
          */
         public function getBasicRedisCacheManager(): BasicRedisCacheManager
         {
+            if($this->BasicRedisCacheManager == null)
+                $this->BasicRedisCacheManager = new BasicRedisCacheManager($this);
+
             return $this->BasicRedisCacheManager;
         }
     }

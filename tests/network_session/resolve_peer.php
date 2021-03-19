@@ -27,3 +27,11 @@
 
     $User = $NetworkSession->getUsers()->resolvePeer(getInput("Peer: "));
     print(json_encode(\SocialvoidLib\Objects\Standard\Peer::fromUser($User)->toArray(), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+
+    function convert($size)
+    {
+        $unit=array('b','kb','mb','gb','tb','pb');
+        return @round($size/pow(1024,($i=floor(log($size,1024)))),2).' '.$unit[$i];
+    }
+
+    print(convert(memory_get_usage(false)) . PHP_EOL);
