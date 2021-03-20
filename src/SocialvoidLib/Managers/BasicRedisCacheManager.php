@@ -69,14 +69,24 @@
                 $CacheEntryPointer->PointerIdentifier = $pointer;
                 $CacheEntryPointer->CacheEntryID = $CacheKeyEntry;
 
+                $pointerData = ZiProto::encode($CacheEntryPointer->toArray());
+                if($this->socialvoidLib->getRedisBasicCacheConfiguration()["UseCompression"])
+                {
+                    $pointerData = gzcompress($pointerData, $this->socialvoidLib->getRedisBasicCacheConfiguration()["CompressionLevel"]);
+                }
+
                 $this->socialvoidLib->getBasicRedis()->set(
-                    Converter::normalizeText($CacheEntryObject->ObjectType . "_" . $pointer),
-                    ZiProto::encode($CacheEntryPointer->toArray()),
+                    Converter::normalizeText($CacheEntryObject->ObjectType . "_" . $pointer), $pointerData,
                     ['ex'=>$ttl]);
             }
 
-            $this->socialvoidLib->getBasicRedis()->set($CacheKeyEntry, ZiProto::encode($CacheEntryObject->toArray()),
-                ['ex'=>$ttl]);
+            $entryData = ZiProto::encode($CacheEntryObject->toArray());
+            if($this->socialvoidLib->getRedisBasicCacheConfiguration()["UseCompression"])
+            {
+                $entryData = gzcompress($entryData, $this->socialvoidLib->getRedisBasicCacheConfiguration()["CompressionLevel"]);
+            }
+
+            $this->socialvoidLib->getBasicRedis()->set($CacheKeyEntry, $entryData, ['ex'=>$ttl]);
         }
 
         /**
@@ -95,11 +105,17 @@
             if($CachePointerRequest == false)
                 throw new CacheMissedException("The requested cache request was a miss");
 
+            if($this->socialvoidLib->getRedisBasicCacheConfiguration()["UseCompression"])
+                $CachePointerRequest = gzuncompress($CachePointerRequest);
+
             $CacheEntryPointer = CacheEntryPointer::fromArray(ZiProto::decode($CachePointerRequest));
             $CacheEntryRequest = $this->socialvoidLib->getBasicRedis()->get($CacheEntryPointer->CacheEntryID);
 
             if($CacheEntryRequest == false)
                 throw new CacheMissedException("The requested cache request was a miss");
+
+            if($this->socialvoidLib->getRedisBasicCacheConfiguration()["UseCompression"])
+                $CacheEntryRequest = gzuncompress($CacheEntryRequest);
 
             return CacheEntry::fromArray(ZiProto::decode($CacheEntryRequest));
         }

@@ -212,6 +212,8 @@
             $RedisBasicCacheSchema = new Schema();
             $RedisBasicCacheSchema->setDefinition("Enabled", True);
             $RedisBasicCacheSchema->setDefinition("UseAuthentication", True);
+            $RedisBasicCacheSchema->setDefinition("UseCompression", True);
+            $RedisBasicCacheSchema->setDefinition("CompressionLevel", 9);
             $RedisBasicCacheSchema->setDefinition("PeerCacheEnabled", True);
             $RedisBasicCacheSchema->setDefinition("PeerCacheTTL", 500);
             $RedisBasicCacheSchema->setDefinition("PeerCacheLimit", 1000);
@@ -557,6 +559,20 @@
 
             if($this->BasicRedis->isConnected() == false)
             {
+                if($this->getRedisBasicCacheConfiguration()["UseCompression"])
+                {
+                    if (
+                        (int)$this->getRedisBasicCacheConfiguration()["CompressionLevel"] < -1 ||
+                        (int)$this->getRedisBasicCacheConfiguration()["CompressionLevel"] > 9
+                    )
+                        throw new RedisCacheException("Compression is enabled but the compression level must be a value between -1 & 9");
+
+                    if (function_exists("gzcompress") == false)
+                    {
+                        throw new DependencyError("RedisBasiCache uses compression but the compression extension (zlib & php-zip) is not installed");
+                    }
+                }
+
                 $this->BasicRedis->connect(
                     $this->getRedisBasicCacheConfiguration()["RedisHost"],
                     $this->getRedisBasicCacheConfiguration()["RedisPort"]
