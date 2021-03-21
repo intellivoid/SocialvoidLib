@@ -10,4 +10,6 @@
     abstract class CacheEntryObjectType
     {
         const User = "user";
+
+        const Post = "post";
     }

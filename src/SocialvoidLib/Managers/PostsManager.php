@@ -16,16 +16,22 @@
     use msqg\QueryBuilder;
     use SocialvoidLib\Abstracts\Levels\PostPriorityLevel;
     use SocialvoidLib\Abstracts\SearchMethods\PostSearchMethod;
+    use SocialvoidLib\Abstracts\Types\CacheEntryObjectType;
     use SocialvoidLib\Classes\PostText\Extractor;
     use SocialvoidLib\Classes\PostText\TwitterMethod\Parser;
     use SocialvoidLib\Classes\Standard\BaseIdentification;
     use SocialvoidLib\Classes\Utilities;
     use SocialvoidLib\Exceptions\GenericInternal\BackgroundWorkerNotEnabledException;
+    use SocialvoidLib\Exceptions\GenericInternal\CacheException;
+    use SocialvoidLib\Exceptions\GenericInternal\CacheMissedException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
+    use SocialvoidLib\Exceptions\GenericInternal\DependencyError;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
+    use SocialvoidLib\Exceptions\GenericInternal\RedisCacheException;
     use SocialvoidLib\Exceptions\GenericInternal\ServiceJobException;
     use SocialvoidLib\Exceptions\Standard\Network\PostNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPostTextException;
+    use SocialvoidLib\InputTypes\RegisterCacheInput;
     use SocialvoidLib\Objects\Post;
     use SocialvoidLib\SocialvoidLib;
     use ZiProto\ZiProto;
@@ -66,6 +72,7 @@
          * @throws InvalidSearchMethodException
          * @throws PostNotFoundException
          * @throws InvalidPostTextException
+         * @throws CacheException
          */
         public function publishPost(int $user_id, string $source, string $text, int $session_id=null, array $media_content=[], $priority=PostPriorityLevel::None, $flags=[]): Post
         {
@@ -112,7 +119,9 @@
             $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
             if($QueryResults)
             {
-                return $this->getPost(PostSearchMethod::ByPublicId, $PublicID);
+                $returnResults = $this->getPost(PostSearchMethod::ByPublicId, $PublicID);
+                $this->registerPostCacheEntry($returnResults);
+                return $returnResults;
             }
             else
             {
@@ -128,6 +137,7 @@
          * @param string $search_method
          * @param string $value
          * @return Post
+         * @throws CacheException
          * @throws DatabaseException
          * @throws InvalidSearchMethodException
          * @throws PostNotFoundException
@@ -148,6 +158,12 @@
 
                 default:
                     throw new InvalidSearchMethodException("The given search method is invalid for getPost()", $search_method, $value);
+            }
+
+            if($this->socialvoidLib->getRedisBasicCacheConfiguration()["Enabled"])
+            {
+                $CachedPost = $this->getPostCacheEntry($value);
+                if($CachedPost !== null) return $CachedPost;
             }
 
             $Query = QueryBuilder::select("posts", [
@@ -198,7 +214,9 @@
                     $Row["text"] = ($Row["text"] == null ? null : urldecode($Row["text"]));
                     $Row["source"] = ($Row["source"] == null ? null : urldecode($Row["source"]));
 
-                    return(Post::fromAlternativeArray($Row));
+                    $returnResults = Post::fromAlternativeArray($Row);
+                    $this->registerPostCacheEntry($returnResults);
+                    return $returnResults;
                 }
             }
             else
@@ -216,6 +234,7 @@
          * @param Post $post
          * @return Post
          * @throws DatabaseException
+         * @throws CacheException
          */
         public function updatePost(Post $post): Post
         {
@@ -258,6 +277,7 @@
 
             if($QueryResults)
             {
+                $this->registerPostCacheEntry($post);
                 return $post;
             }
             else
@@ -309,5 +329,64 @@
 
                 return $return_results;
             }
+        }
+
+        /**
+         * Registers a user cache entry
+         *
+         * @param Post $post
+         * @throws CacheException
+         */
+        private function registerPostCacheEntry(Post $post): void
+        {
+            if($this->socialvoidLib->getRedisBasicCacheConfiguration()["Enabled"])
+            {
+                $CacheEntryInput = new RegisterCacheInput();
+                $CacheEntryInput->ObjectType = CacheEntryObjectType::Post;
+                $CacheEntryInput->ObjectData = $post->toArray();
+                $CacheEntryInput->Pointers = [$post->ID, $post->PublicID];
+
+                try
+                {
+                    $this->socialvoidLib->getBasicRedisCacheManager()->registerCache(
+                        $CacheEntryInput,
+                        $this->socialvoidLib->getRedisBasicCacheConfiguration()["PostCacheTTL"],
+                        $this->socialvoidLib->getRedisBasicCacheConfiguration()["PostCacheLimit"]
+                    );
+                }
+                catch(Exception $e)
+                {
+                    throw new CacheException("There was an error while trying to register the post cache entry", 0, $e);
+                }
+            }
+        }
+
+        /**
+         * Gets a post cache entry, returns null if it's a miss
+         *
+         * @param string $value
+         * @return Post|null
+         * @throws CacheException
+         */
+        private function getPostCacheEntry(string $value): ?Post
+        {
+            if($this->socialvoidLib->getRedisBasicCacheConfiguration()["Enabled"] == false)
+                throw new CacheException("BasicRedisCache is not enabled");
+
+            try
+            {
+                $CacheEntryResults = $this->socialvoidLib->getBasicRedisCacheManager()->getCacheEntry(
+                    CacheEntryObjectType::Post, $value);
+            }
+            catch (CacheMissedException $e)
+            {
+                return null;
+            }
+            catch (DependencyError | RedisCacheException $e)
+            {
+                throw new CacheException("There was an issue while trying to request a post cache entry", 0, $e);
+            }
+
+            return Post::fromArray($CacheEntryResults->ObjectData);
         }
     }
