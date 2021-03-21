@@ -27,6 +27,7 @@
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPostTextException;
     use SocialvoidLib\NetworkSession;
     use SocialvoidLib\Objects\Post;
+    use SocialvoidLib\Objects\Standard\Peer;
     use SocialvoidLib\Objects\Standard\TimelineRoster;
 
     /**
@@ -56,13 +57,14 @@
          * @param array $media_content
          * @param array $flags
          * @return Post
+         * @throws BackgroundWorkerNotEnabledException
          * @throws DatabaseException
          * @throws FollowerDataNotFound
          * @throws InvalidPostTextException
          * @throws InvalidSearchMethodException
          * @throws PostNotFoundException
+         * @throws ServiceJobException
          * @throws UserTimelineNotFoundException
-         * @throws BackgroundWorkerNotEnabledException
          */
         public function postToTimeline(string $text, array $media_content=[], $flags=[]): Post
         {
@@ -108,10 +110,11 @@
         }
 
         /**
-         * Retrieves the timeline data
+         * Retrieves the timeline data and returns a standard post object that
+         * automaticaly resolves the first and second layer of recursive data
          *
          * @param int $page_number
-         * @return array
+         * @return \SocialvoidLib\Objects\Standard\Post[]
          * @throws BackgroundWorkerNotEnabledException
          * @throws DatabaseException
          * @throws InvalidSearchMethodException
@@ -142,34 +145,94 @@
             $UserIDs = [];
             foreach($ResolvedPosts as $post)
             {
-                $UserIDs[$post->PosterUserID] = PostSearchMethod::ById;
+                $UserIDs[(int)$post->PosterUserID] = PostSearchMethod::ById;
 
                 if($post->Repost !== null && $post->Repost->OriginalPostID)
-                    $SubPosts[$post->Repost->OriginalPostID] = PostSearchMethod::ById;
+                    $SubPosts[(int)$post->Repost->OriginalPostID] = PostSearchMethod::ById;
                 if($post->Repost !== null && $post->Repost->OriginalUserID)
-                    $UserIDs[$post->Repost->OriginalUserID] = UserSearchMethod::ById;
+                    $UserIDs[(int)$post->Repost->OriginalUserID] = UserSearchMethod::ById;
 
                 if($post->Quote !== null && $post->Quote->OriginalPostID)
-                    $SubPosts[$post->Quote->OriginalPostID] = PostSearchMethod::ById;
+                    $SubPosts[(int)$post->Quote->OriginalPostID] = PostSearchMethod::ById;
                 if($post->Quote !== null && $post->Quote->OriginalUserID)
-                    $UserIDs[$post->Quote->OriginalUserID] = UserSearchMethod::ById;
+                    $UserIDs[(int)$post->Quote->OriginalUserID] = UserSearchMethod::ById;
 
                 if($post->Reply !== null && $post->Reply->ReplyToPostID)
-                    $SubPosts[$post->Reply->ReplyToPostID] = PostSearchMethod::ById;
+                    $SubPosts[(int)$post->Reply->ReplyToPostID] = PostSearchMethod::ById;
                 if($post->Reply !== null && $post->Reply->ReplyToUserID)
-                    $UserIDs[$post->Reply->ReplyToUserID] = UserSearchMethod::ById;
+                    $UserIDs[(int)$post->Reply->ReplyToUserID] = UserSearchMethod::ById;
             }
 
+
             $ResolvedSubPosts = $this->networkSession->getSocialvoidLib()->getPostsManager()->getMultiplePosts(
-                $SubPosts, true);
+                $SubPosts, false);
             $ResolvedUsers = $this->networkSession->getSocialvoidLib()->getUserManager()->getMultipleUsers(
-                $UserIDs, true
+                $UserIDs, false
             );
 
-            return [
-                "posts" => $ResolvedPosts,
-                "sub_posts" => $ResolvedSubPosts,
-                "users" => $ResolvedUsers
-            ];
+            // Sort results
+            $SortedPostResolutions = [];
+            $SortedUserResolutions = [];
+
+            foreach($ResolvedPosts as $resolvedPost)
+                $SortedPostResolutions[$resolvedPost->ID] = $resolvedPost;
+            foreach($ResolvedSubPosts as $resolvedPost)
+                $SortedPostResolutions[$resolvedPost->ID] = $resolvedPost;
+            foreach($ResolvedUsers as $resolvedUser)
+                $SortedUserResolutions[$resolvedUser->ID] = $resolvedUser;
+
+            $ReturnResults = [];
+            foreach($ResolvedPosts as $resolvedPost)
+            {
+                $stdPost = \SocialvoidLib\Objects\Standard\Post::fromPost($resolvedPost);
+                $stdPost->Peer = Peer::fromUser($SortedUserResolutions[$resolvedPost->PosterUserID]);
+
+                // Resolve quoted post
+                if($resolvedPost->Quote !== null && $resolvedPost->Quote->OriginalPostID)
+                {
+                    $stdPost->QuotedPost = \SocialvoidLib\Objects\Standard\Post::fromPost(
+                        $SortedPostResolutions[$resolvedPost->Quote->OriginalPostID]
+                    );
+
+                    if($resolvedPost->Quote->OriginalUserID !== null)
+                    {
+                        $stdPost->QuotedPost->Peer = Peer::fromUser(
+                            $SortedUserResolutions[$resolvedPost->Quote->OriginalUserID]
+                        );
+                    }
+                }
+
+                if($resolvedPost->Repost !== null && $resolvedPost->Repost->OriginalPostID)
+                {
+                    $stdPost->RepostedPost = \SocialvoidLib\Objects\Standard\Post::fromPost(
+                        $SortedPostResolutions[$resolvedPost->Repost->OriginalPostID]
+                    );
+
+                    if($resolvedPost->Repost->OriginalUserID !== null)
+                    {
+                        $stdPost->RepostedPost->Peer = Peer::fromUser(
+                            $SortedUserResolutions[$resolvedPost->Repost->OriginalUserID]
+                        );
+                    }
+                }
+
+                if($resolvedPost->Reply !== null && $resolvedPost->Reply->ReplyToPostID)
+                {
+                    $stdPost->ReplyToPost = \SocialvoidLib\Objects\Standard\Post::fromPost(
+                        $SortedPostResolutions[$resolvedPost->Reply->ReplyToPostID]
+                    );
+
+                    if($resolvedPost->Reply->ReplyToUserID !== null)
+                    {
+                        $stdPost->ReplyToPost->Peer = Peer::fromUser(
+                            $SortedUserResolutions[$resolvedPost->Reply->ReplyToUserID]
+                        );
+                    }
+                }
+
+                $ReturnResults[] = $stdPost;
+            }
+
+            return $ReturnResults;
         }
     }

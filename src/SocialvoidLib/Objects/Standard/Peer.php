@@ -13,7 +13,7 @@
 
     namespace SocialvoidLib\Objects\Standard;
 
-    use SocialvoidLib\Objects\Standard\Peer\Profile;
+    use SocialvoidLib\Objects\Standard\Peer\Name;
     use SocialvoidLib\Objects\User;
 
     /**
@@ -44,11 +44,11 @@
         public $Network;
 
         /**
-         * The profile data of the peer
+         * The name of the peer
          *
-         * @var Profile
+         * @var Name
          */
-        public $Profile;
+        public $Name;
 
         /**
          * The Unix Timestamp for when this peer registered to the network
@@ -75,7 +75,7 @@
                 "id" => $this->ID,
                 "username" => $this->Username,
                 "network" => $this->Network,
-                "profile" => $this->Profile->toArray(),
+                "name" => $this->Name->toArray(),
                 "created_timestamp"=> $this->CreatedTimestamp,
                 "flags" => $this->Flags
             ];
@@ -94,7 +94,7 @@
             $PeerObject->Username = $user->Username;
             $PeerObject->ID = $user->PublicID;
             $PeerObject->Network = $user->Network;
-            $PeerObject->Profile = Profile::fromProfile($user->Profile);
+            $PeerObject->Name = Name::fromProfile($user->Profile);
             $PeerObject->CreatedTimestamp = $user->CreatedTimestamp;
             $PeerObject->Flags = $user->Flags;
 
@@ -120,8 +120,8 @@
             if(isset($data["network"]))
                 $PeerObject->Network = $data["network"];
 
-            if(isset($data["profile"]))
-                $PeerObject->Profile = Profile::fromArray($data["profile"]);
+            if(isset($data["name"]))
+                $PeerObject->Name = Name::fromArray($data["name"]);
 
             if(isset($data["created_timestamp"]))
                 $PeerObject->CreatedTimestamp = $data["created_timestamp"];

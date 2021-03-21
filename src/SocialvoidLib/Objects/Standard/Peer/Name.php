@@ -13,11 +13,13 @@
 
     namespace SocialvoidLib\Objects\Standard\Peer;
 
+    use SocialvoidLib\Objects\User\Profile;
+
     /**
-     * Class Profile
-     * @package SocialvoidLib\Objects\Standard\Profile
+     * Class Name
+     * @package SocialvoidLib\Objects\Standard\Name
      */
-    class Profile
+    class Name
     {
         /**
          * The first name of the user
@@ -34,61 +36,30 @@
         public $LastName;
 
         /**
-         * The biography of the user (Description)
-         *
-         * @var string|null
-         */
-        public $Biography;
-
-        /**
-         * The location of the user
-         *
-         * @var string|null
-         */
-        public $Location;
-
-        /**
-         * An array of associative links
-         *
-         * @var string[]
-         */
-        public $Urls;
-
-        /**
          * Returns an array representation of the object
          *
          * @return array
          */
         public function toArray(): array
         {
-            $Urls = $this->Urls;
-            if(count($this->Urls) == 0)
-                $Urls = null;
-
             return [
                 "first_name" => $this->FirstName,
                 "last_name" => $this->LastName,
-                "biography" => $this->Biography,
-                "location" => $this->Location,
-                "urls" => $Urls
             ];
         }
 
         /**
          * Constructs an object from an profile object (Lib)
          *
-         * @param \SocialvoidLib\Objects\User\Profile $profile
-         * @return Profile
+         * @param Profile $profile
+         * @return Name
          */
-        public static function fromProfile(\SocialvoidLib\Objects\User\Profile $profile): Profile
+        public static function fromProfile(Profile $profile): Name
         {
-            $ProfileObject = new Profile();
+            $ProfileObject = new Name();
 
             $ProfileObject->FirstName = $profile->FirstName;
             $ProfileObject->LastName = $profile->LastName;
-            $ProfileObject->Biography = $profile->Biography;
-            $ProfileObject->Location = $profile->Location;
-            $ProfileObject->Urls = $profile->getUrls();
 
             return $ProfileObject;
         }
@@ -97,27 +68,18 @@
          * Constructs an object from an array representation
          *
          * @param array $data
-         * @return Profile
+         * @return Name
          * @noinspection DuplicatedCode
          */
-        public static function fromArray(array $data): Profile
+        public static function fromArray(array $data): Name
         {
-            $ProfileObject = new Profile();
+            $ProfileObject = new Name();
 
             if(isset($data["first_name"]))
                 $ProfileObject->FirstName = $data["first_name"];
 
             if(isset($data["last_name"]))
                 $ProfileObject->LastName = $data["last_name"];
-
-            if(isset($data["biography"]))
-                $ProfileObject->Biography = $data["biography"];
-
-            if(isset($data["location"]))
-                $ProfileObject->Location = $data["location"];
-
-            if(isset($data["urls"]))
-                $ProfileObject->Urls = $data["urls"];
 
             return $ProfileObject;
         }

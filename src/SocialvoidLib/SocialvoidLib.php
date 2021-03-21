@@ -206,6 +206,8 @@
             // Engine Schema Configuration
             $EngineSchema = new Schema();
             $EngineSchema->setDefinition("MaxPeerResolveCacheCount", 20);
+            $EngineSchema->setDefinition("TimelineMaxSize", 3200);
+            $EngineSchema->setDefinition("TimelineChunkSize", 20);
             $this->acm->defineSchema("Engine", $EngineSchema);
 
             // Redis Basic Cache (Entity resolve cache)
@@ -247,6 +249,8 @@
 
             // Initialize constants
             self::defineLibConstant("SOCIALVOID_LIB_MAX_PEER_RESOLVE_CACHE_COUNT", $this->getEngineConfiguration()["MaxPeerResolveCacheCount"]);
+            self::defineLibConstant("SOCIALVOID_LIB_TIMELINE_MAX_SIZE", $this->getEngineConfiguration()["TimelineMaxSize"]);
+            self::defineLibConstant("SOCIALVOID_LIB_TIMELINE_CHUNK_SIZE", $this->getEngineConfiguration()["TimelineChunkSize"]);
 
             self::defineLibConstant("SOCIALVOID_LIB_BACKGROUND_WORKER_ENABLED", (bool)$this->getServiceEngineConfiguration()["EnableBackgroundWorker"]);
             self::defineLibConstant("SOCIALVOID_LIB_BACKGROUND_QUERY_WORKERS", (int)$this->getServiceEngineConfiguration()["QueryWorkers"]);

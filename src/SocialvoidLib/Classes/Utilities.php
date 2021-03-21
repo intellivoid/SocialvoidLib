@@ -13,7 +13,9 @@ namespace SocialvoidLib\Classes;
     use InvalidArgumentException;
     use SocialvoidLib\Abstracts\JobClass;
     use SocialvoidLib\Abstracts\Types\JobType;
+    use SocialvoidLib\Abstracts\Types\Standard\PostType;
     use SocialvoidLib\Classes\Security\Hashing;
+    use SocialvoidLib\Objects\Post;
 
     /**
      * Class Utilities
@@ -149,7 +151,7 @@ namespace SocialvoidLib\Classes;
         {
             // Return the same data if the amount of data cannot be split to more than one worker
             if(count($data) == 1)
-                return array_chunk($data, 1);
+                return array_chunk($data, 1, $preserve_keys);
 
             // Auto-correct the utilization value to prevent negative calculations (1-100)
             if($utilization > 100) $utilization = 100;
@@ -183,5 +185,50 @@ namespace SocialvoidLib\Classes;
                 default:
                     throw new InvalidArgumentException("The given job type does not belong to a worker class");
             }
+        }
+
+        /**
+         * Determines the post type which indicates how the post is supposed
+         * to be rendered for better fit the UI, this uses a standard logic
+         * that is expected for libraries to use.
+         *
+         * @param Post $post
+         * @return string
+         */
+        public static function determinePostType(Post $post): string
+        {
+            // A repost will not contain text or media, it's just a repost.
+            if($post->Repost !== null && $post->Repost->OriginalPostID !== null)
+                return PostType::Repost;
+
+            // A quoted post may contain media or text and media.
+            if($post->Quote !== null && $post->Quote->OriginalPostID !== null)
+            {
+                if($post->MediaContent !== null && count($post->MediaContent) > 0)
+                    return PostType::QuoteMediaPost;
+
+                return PostType::QuoteTextPost;
+            }
+
+            // A reply post may contain media or text and media
+            if($post->Reply !== null && $post->Reply->ReplyToPostID !== null)
+            {
+                if($post->MediaContent !== null && count($post->MediaContent) > 0)
+                    return PostType::ReplyMediaPost;
+
+                return PostType::ReplyTextPost;
+            }
+
+            // A simple post may contain media or text and media
+            if($post->MediaContent !== null && count($post->MediaContent) > 0)
+                return PostType::MediaPost;
+
+            // If all checks fail, it's safe to assume this is just a text post
+            if($post->Text !== null)
+                return PostType::TextPost;
+
+            // This post may be included in a new update and the library does not
+            // yet have the logic to identify the post
+            return PostType::Unknown;
         }
     }

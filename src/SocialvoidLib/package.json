@@ -459,7 +459,7 @@
         },
         {
             "required": true,
-            "file": "Objects/Standard/Peer/Profile.php"
+            "file": "Objects/Standard/Peer/Name.php"
         },
         {
             "required": true,

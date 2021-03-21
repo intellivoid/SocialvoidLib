@@ -10,6 +10,11 @@
     abstract class PostType
     {
         /**
+         * Undocumented post type
+         */
+        const Unknown = "UNKNOWN";
+
+        /**
          * Indicates that this is a ordinary text post
          */
         const TextPost = "TEXT_POST";

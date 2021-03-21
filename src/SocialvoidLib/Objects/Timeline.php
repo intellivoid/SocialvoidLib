@@ -79,7 +79,10 @@
          */
         public function addPost(int $post_id)
         {
-            $this->PostChunks = Utilities::addToChunk($post_id, $this->PostChunks, 3200, 60);
+            $this->PostChunks = Utilities::addToChunk($post_id, $this->PostChunks, 
+                Utilities::getIntDefinition("SOCIALVOID_LIB_TIMELINE_MAX_SIZE", 3200), 
+                Utilities::getIntDefinition("SOCIALVOID_LIB_TIMELINE_CHUNK_SIZE", 20)
+            );
             $this->NewPosts += 1;
         }
 
@@ -90,7 +93,8 @@
          */
         public function removePost(int $post_id)
         {
-            $this->PostChunks = Utilities::removeFromChunk($post_id, $this->PostChunks, 60);
+            $this->PostChunks = Utilities::removeFromChunk($post_id, $this->PostChunks,
+                Utilities::getIntDefinition("SOCIALVOID_LIB_TIMELINE_CHUNK_SIZE", 20));
         }
 
         /**
@@ -98,7 +102,7 @@
          */
         public function rebuildChunks()
         {
-            $this->PostChunks = Utilities::splitToChunks(Utilities::rebuildFromChunks($this->PostChunks), 60);
+            $this->PostChunks = Utilities::splitToChunks(Utilities::rebuildFromChunks($this->PostChunks), Utilities::getIntDefinition("SOCIALVOID_LIB_TIMELINE_CHUNK_SIZE", 20));
         }
 
         /**

@@ -14,7 +14,7 @@
     namespace SocialvoidLib\Objects\User;
 
     /**
-     * Class Profile
+     * Class Name
      * @package SocialvoidLib\Objects\User
      */
     class Profile

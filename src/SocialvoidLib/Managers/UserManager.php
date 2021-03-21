@@ -322,9 +322,9 @@
         {
             if(Utilities::getBoolDefinition("SOCIALVOID_LIB_BACKGROUND_WORKER_ENABLED"))
             {
-               return $this->socialvoidLib->getServiceJobManager()->getUserJobs()->resolveUsers(
-                   $query, $utilization, $skip_errors
-               );
+                return $this->socialvoidLib->getServiceJobManager()->getUserJobs()->resolveUsers(
+                    $query, $utilization, $skip_errors
+                );
             }
             else
             {
