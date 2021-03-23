@@ -6,13 +6,11 @@
     namespace SocialvoidLib\ServiceJobs\Jobs;
 
     use Exception;
-    use GearmanTask;
     use SocialvoidLib\Abstracts\JobPriority;
     use SocialvoidLib\Abstracts\Types\JobType;
     use SocialvoidLib\Classes\Utilities;
     use SocialvoidLib\Exceptions\GenericInternal\BackgroundWorkerNotEnabledException;
     use SocialvoidLib\Exceptions\GenericInternal\ServiceJobException;
-    use SocialvoidLib\Objects\User;
     use SocialvoidLib\ServiceJobs\ServiceJobQuery;
     use SocialvoidLib\ServiceJobs\ServiceJobResults;
     use SocialvoidLib\SocialvoidLib;
@@ -45,11 +43,9 @@
          * @param array $user_ids
          * @param int $utilization
          * @param bool $skip_errors
-         * @return User[]
          * @throws BackgroundWorkerNotEnabledException
-         * @throws ServiceJobException
          */
-        public function distributeTimelinePosts(int $post_id, array $user_ids, int $utilization=100, bool $skip_errors=False)
+        public function distributeTimelinePosts(int $post_id, array $user_ids, int $utilization=100, bool $skip_errors=False): void
         {
             $ServiceJobQueries = [];
 
@@ -72,9 +68,6 @@
             // Prepare the BackgroundWorker for the jobs
             /** @noinspection PhpUnhandledExceptionInspection */
             $this->socialvoidLib->getBackgroundWorker()->getClient()->getGearmanClient()->clearCallbacks();
-
-            /** @var ServiceJobResults $results */
-            $results = [];
             $context_id = JobType::DistributeTimelinePost . "_" . (int)time();
 
             // Add the tasks
@@ -117,10 +110,110 @@
 
                     // Set the error anyways for troubleshooting purposes
                     $ServiceJobResults->setJobError(new ServiceJobException(
-                        "There was an error while trying to resolve the distribute to the timeline '$user_id'",
+                        "There was an error while trying to resolve the distribution to the timeline '$user_id'",
                         $serviceJobQuery, $e
                     ));
                 }
+            }
+
+            if($ServiceJobResults->getJobError() !== null)
+                $ServiceJobResults->setSuccess(true);
+
+            return $ServiceJobResults;
+        }
+
+        /**
+         * Constructs a job that removes the requested Post IDs from the
+         *
+         * @param int $user_id
+         * @param array $post_ids
+         * @param bool $skip_errors
+         * @throws BackgroundWorkerNotEnabledException
+         */
+        public function removeTimelinePosts(int $user_id, array $post_ids, bool $skip_errors=False): void
+        {
+            $ServiceJobQuery = new ServiceJobQuery();
+            $ServiceJobQuery->setJobType(JobType::RemoveTimelinePosts);
+            $ServiceJobQuery->setJobPriority(JobPriority::Normal);
+            $ServiceJobQuery->setJobData([
+                0x000 => $skip_errors,
+                0x001 => $user_id,
+                0x002 => $post_ids
+            ]);
+            $ServiceJobQuery->generateJobID();
+            $ServiceJobQueries[] = $ServiceJobQuery;
+
+            // Prepare the BackgroundWorker for the jobs
+            /** @noinspection PhpUnhandledExceptionInspection */
+            $this->socialvoidLib->getBackgroundWorker()->getClient()->getGearmanClient()->clearCallbacks();
+            $context_id = JobType::DistributeTimelinePost . "_" . (int)time();
+
+            $this->socialvoidLib->getBackgroundWorker()->getClient()->getGearmanClient()->doBackground(
+                Utilities::determineJobClass(JobType::RemoveTimelinePosts),
+                ZiProto::encode($ServiceJobQuery->toArray()), $context_id
+            );
+        }
+
+        /**
+         * Processes the removal of multiple posts on Timeline
+         *
+         * @param ServiceJobQuery $serviceJobQuery
+         * @return ServiceJobResults
+         */
+        public function processRemoveTimelinePosts(ServiceJobQuery $serviceJobQuery): ServiceJobResults
+        {
+            $ServiceJobResults = ServiceJobResults::fromServiceJobQuery($serviceJobQuery);
+
+            try
+            {
+                $Timeline = $this->socialvoidLib->getTimelineManager()->retrieveTimeline(
+                    $serviceJobQuery->getJobData()[0x001]
+                );
+
+            }
+            catch(Exception $e)
+            {
+                // Throw an error if skipping errors it not an option
+                if($serviceJobQuery->getJobData()[0x000] == false)
+                {
+                    $ServiceJobResults->setSuccess(false);
+                }
+
+                // Set the error anyways for troubleshooting purposes
+                $ServiceJobResults->setJobError(new ServiceJobException(
+                    "There was an error while trying to retrieve the timeline '" . $serviceJobQuery->getJobData()[0x001] . "'",
+                    $serviceJobQuery, $e
+                ));
+
+                return $ServiceJobResults;
+            }
+
+
+            foreach($serviceJobQuery->getJobData()[0x002] as $post_id)
+            {
+                $Timeline->removePost($post_id);
+            }
+
+            try
+            {
+                $this->socialvoidLib->getTimelineManager()->updateTimeline($Timeline);
+
+            }
+            catch(Exception $e)
+            {
+                // Throw an error if skipping errors it not an option
+                if($serviceJobQuery->getJobData()[0x000] == false)
+                {
+                    $ServiceJobResults->setSuccess(false);
+                }
+
+                // Set the error anyways for troubleshooting purposes
+                $ServiceJobResults->setJobError(new ServiceJobException(
+                    "There was an error while trying to update the timeline '" . $serviceJobQuery->getJobData()[0x001] . "'",
+                    $serviceJobQuery, $e
+                ));
+
+                return $ServiceJobResults;
             }
 
             if($ServiceJobResults->getJobError() !== null)

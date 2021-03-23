@@ -15,6 +15,11 @@
         const Unknown = "UNKNOWN";
 
         /**
+         * Indicates that the post was deleted
+         */
+        const Deleted = "DELETED";
+
+        /**
          * Indicates that this is a ordinary text post
          */
         const TextPost = "TEXT_POST";

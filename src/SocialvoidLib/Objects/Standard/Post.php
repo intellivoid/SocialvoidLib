@@ -4,7 +4,9 @@
 
     namespace SocialvoidLib\Objects\Standard;
 
+    use SocialvoidLib\Abstracts\Flags\PostFlags;
     use SocialvoidLib\Abstracts\Types\Standard\PostType;
+    use SocialvoidLib\Classes\Converter;
     use SocialvoidLib\Classes\Utilities;
 
     /**
@@ -117,6 +119,21 @@
         public $Flags;
 
         /**
+         * Adds user flags to the post
+         *
+         * @param \SocialvoidLib\Objects\Post $post
+         * @param int $user_id
+         */
+        public function addUserFlags(\SocialvoidLib\Objects\Post $post, int $user_id)
+        {
+            if(in_array($user_id, $post->Likes))
+                $this->Flags[] = PostFlags::Liked;
+
+            if(in_array($user_id, $post->Reposts))
+                $this->Flags[] = PostFlags::Reposted;
+        }
+
+        /**
          * Returns an array representation o the object
          *
          * @return array
@@ -218,6 +235,20 @@
             $StandardPostObject->RepliesCount = count($post->Replies);
             $StandardPostObject->PostedTimestamp = $post->CreatedTimestamp;
             $StandardPostObject->Flags = $post->Flags;
+
+            // If the post has been deleted, remove the text, source, likes and reposts.
+            // But leave the rest to keep a consistent timeline, eg; when a user
+            // replies to a deleted post it should show as is but without the post contents
+            if(Converter::hasFlag($StandardPostObject->Flags, PostFlags::Deleted))
+            {
+                Converter::removeFlag($StandardPostObject->Flags, PostFlags::Deleted);
+
+                $StandardPostObject->PostType = PostType::Deleted;
+                $StandardPostObject->Text = null;
+                $StandardPostObject->Source = null;
+                $StandardPostObject->LikesCount = null;
+                $StandardPostObject->RepostsCount = null;
+            }
 
             return $StandardPostObject;
         }

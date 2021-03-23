@@ -11,6 +11,7 @@
     namespace SocialvoidLib\Network;
 
 
+    use SocialvoidLib\Abstracts\Flags\PostFlags;
     use SocialvoidLib\Abstracts\Levels\PostPriorityLevel;
     use SocialvoidLib\Abstracts\SearchMethods\PostSearchMethod;
     use SocialvoidLib\Abstracts\SearchMethods\UserSearchMethod;
@@ -58,12 +59,12 @@
          * @param array $flags
          * @return Post
          * @throws BackgroundWorkerNotEnabledException
+         * @throws CacheException
          * @throws DatabaseException
          * @throws FollowerDataNotFound
          * @throws InvalidPostTextException
          * @throws InvalidSearchMethodException
          * @throws PostNotFoundException
-         * @throws ServiceJobException
          * @throws UserTimelineNotFoundException
          */
         public function postToTimeline(string $text, array $media_content=[], $flags=[]): Post
@@ -111,20 +112,21 @@
 
         /**
          * Retrieves the timeline data and returns a standard post object that
-         * automaticaly resolves the first and second layer of recursive data
+         * automatically resolves the first and second layer of recursive data
          *
          * @param int $page_number
+         * @param bool $recursive
          * @return \SocialvoidLib\Objects\Standard\Post[]
          * @throws BackgroundWorkerNotEnabledException
+         * @throws CacheException
          * @throws DatabaseException
          * @throws InvalidSearchMethodException
-         * @throws PostNotFoundException
-         * @throws UserTimelineNotFoundException
-         * @throws CacheException
-         * @throws ServiceJobException
          * @throws PeerNotFoundException
+         * @throws PostNotFoundException
+         * @throws ServiceJobException
+         * @throws UserTimelineNotFoundException
          */
-        public function retrieveTimeline(int $page_number): array
+        public function retrieveTimeline(int $page_number, bool $recursive=True): array
         {
             if($page_number < 1) return [];
 
@@ -167,12 +169,12 @@
             $ResolvedSubPosts = $this->networkSession->getSocialvoidLib()->getPostsManager()->getMultiplePosts(
                 $SubPosts, false);
             $ResolvedUsers = $this->networkSession->getSocialvoidLib()->getUserManager()->getMultipleUsers(
-                $UserIDs, false
-            );
+                $UserIDs, false);
 
             // Sort results
             $SortedPostResolutions = [];
             $SortedUserResolutions = [];
+            $InvalidatedPostIDs = [];
 
             foreach($ResolvedPosts as $resolvedPost)
                 $SortedPostResolutions[$resolvedPost->ID] = $resolvedPost;
@@ -184,6 +186,12 @@
             $ReturnResults = [];
             foreach($ResolvedPosts as $resolvedPost)
             {
+                if(Converter::hasFlag($resolvedPost->Flags, PostFlags::Deleted))
+                {
+                    $InvalidatedPostIDs[] = $resolvedPost->ID;
+                    continue;
+                }
+
                 $stdPost = \SocialvoidLib\Objects\Standard\Post::fromPost($resolvedPost);
                 $stdPost->Peer = Peer::fromUser($SortedUserResolutions[$resolvedPost->PosterUserID]);
 
@@ -200,19 +208,29 @@
                             $SortedUserResolutions[$resolvedPost->Quote->OriginalUserID]
                         );
                     }
+
                 }
 
                 if($resolvedPost->Repost !== null && $resolvedPost->Repost->OriginalPostID)
                 {
-                    $stdPost->RepostedPost = \SocialvoidLib\Objects\Standard\Post::fromPost(
-                        $SortedPostResolutions[$resolvedPost->Repost->OriginalPostID]
-                    );
-
-                    if($resolvedPost->Repost->OriginalUserID !== null)
+                    if(Converter::hasFlag($SortedPostResolutions[$resolvedPost->Repost->OriginalPostID]->Flags, PostFlags::Deleted))
                     {
-                        $stdPost->RepostedPost->Peer = Peer::fromUser(
-                            $SortedUserResolutions[$resolvedPost->Repost->OriginalUserID]
+                        // This is an invalidated post since the original repost has been deleted
+                        $InvalidatedPostIDs[] = $resolvedPost->ID;
+                        $InvalidatedPostIDs[] = $resolvedPost->Repost->OriginalPostID; // To be on the safe side.
+                    }
+                    else
+                    {
+                        $stdPost->RepostedPost = \SocialvoidLib\Objects\Standard\Post::fromPost(
+                            $SortedPostResolutions[$resolvedPost->Repost->OriginalPostID]
                         );
+
+                        if($resolvedPost->Repost->OriginalUserID !== null)
+                        {
+                            $stdPost->RepostedPost->Peer = Peer::fromUser(
+                                $SortedUserResolutions[$resolvedPost->Repost->OriginalUserID]
+                            );
+                        }
                     }
                 }
 
@@ -231,6 +249,17 @@
                 }
 
                 $ReturnResults[] = $stdPost;
+            }
+
+            if(count($InvalidatedPostIDs) > 0)
+            {
+                // Update the timeline if there are invalidated posts to be removed
+                $this->networkSession->getSocialvoidLib()->getTimelineManager()->removePosts(
+                    $this->networkSession->getAuthenticatedUser()->ID, $InvalidatedPostIDs
+                );
+
+                // Re-run the function since the timeline may have changed since this update.
+                if($recursive) return $this->retrieveTimeline($page_number, $recursive);
             }
 
             return $ReturnResults;

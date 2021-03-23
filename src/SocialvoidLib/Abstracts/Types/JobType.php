@@ -23,4 +23,9 @@
          * Resolves multiple posts
          */
         const ResolvePosts = 0x003;
+
+        /**
+         * Removes multiple posts from a timeline
+         */
+        const RemoveTimelinePosts = 0x004;
     }

@@ -62,6 +62,9 @@
                 case JobType::DistributeTimelinePost:
                     return $this->socialvoidLib->getServiceJobManager()->getTimelineJobs()->processDistributeTimelinePost($ServiceJobQuery);
 
+                case JobType::RemoveTimelinePosts:
+                    return $this->socialvoidLib->getServiceJobManager()->getTimelineJobs()->processRemoveTimelinePosts($ServiceJobQuery);
+
                 default:
                     $ServiceJobResults = ServiceJobResults::fromServiceJobQuery($ServiceJobQuery);
                     $ServiceJobResults->setSuccess(false);

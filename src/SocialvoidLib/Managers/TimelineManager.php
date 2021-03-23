@@ -22,7 +22,6 @@
     use SocialvoidLib\Exceptions\GenericInternal\BackgroundWorkerNotEnabledException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
-    use SocialvoidLib\Exceptions\GenericInternal\ServiceJobException;
     use SocialvoidLib\Exceptions\Internal\UserTimelineNotFoundException;
     use SocialvoidLib\Objects\Timeline;
     use SocialvoidLib\SocialvoidLib;
@@ -192,7 +191,6 @@
          * @throws DatabaseException
          * @throws InvalidSearchMethodException
          * @throws UserTimelineNotFoundException
-         * @throws ServiceJobException
          */
         public function distributePost(int $post_id, array $followers, int $utilization=100, bool $skip_errors=true): void
         {
@@ -213,6 +211,47 @@
                         $Timeline->addPost($post_id);
                         $this->updateTimeline($Timeline);
                     }
+                }
+                catch(Exception $e)
+                {
+                    if($skip_errors == false)
+                        throw $e;
+                }
+            }
+        }
+
+        /**
+         * Removes multiple posts from a timeline and reconstructs the chunks
+         *
+         * @param int $user_id
+         * @param array $post_ids
+         * @param bool $skip_errors
+         * @throws BackgroundWorkerNotEnabledException
+         * @throws DatabaseException
+         * @throws InvalidSearchMethodException
+         * @throws UserTimelineNotFoundException
+         */
+        public function removePosts(int $user_id, array $post_ids, bool $skip_errors=true): void
+        {
+            if(Utilities::getBoolDefinition("SOCIALVOID_LIB_BACKGROUND_WORKER_ENABLED"))
+            {
+                $this->socialvoidLib->getServiceJobManager()->getTimelineJobs()->removeTimelinePosts(
+                    $user_id, $post_ids, $skip_errors
+                );
+            }
+            else
+            {
+                try
+                {
+                    $timeline = $this->retrieveTimeline($user_id);
+
+                    foreach($post_ids as $id)
+                    {
+                        $timeline->removePost($id);
+                    }
+
+                    $this->updateTimeline($timeline);
+
                 }
                 catch(Exception $e)
                 {

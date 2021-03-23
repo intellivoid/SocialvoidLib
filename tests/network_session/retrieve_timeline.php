@@ -32,4 +32,4 @@
     foreach($Timeline as $post)
         $json_output[] = $post->toArray();
 
-    file_put_contents("timeline.json", json_encode($json_output, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+    print(json_encode($json_output, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . PHP_EOL);

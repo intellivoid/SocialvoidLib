@@ -44,6 +44,13 @@
         public $Network;
 
         /**
+         * The full network address of the peer
+         *
+         * @var string
+         */
+        public $NetworkAddress;
+
+        /**
          * The name of the peer
          *
          * @var Name
@@ -75,6 +82,7 @@
                 "id" => $this->ID,
                 "username" => $this->Username,
                 "network" => $this->Network,
+                "network_address" => $this->NetworkAddress,
                 "name" => $this->Name->toArray(),
                 "created_timestamp"=> $this->CreatedTimestamp,
                 "flags" => $this->Flags
@@ -97,6 +105,7 @@
             $PeerObject->Name = Name::fromProfile($user->Profile);
             $PeerObject->CreatedTimestamp = $user->CreatedTimestamp;
             $PeerObject->Flags = $user->Flags;
+            $PeerObject->NetworkAddress = $user->Username . "@" . $user->Network;
 
             return $PeerObject;
         }
@@ -128,6 +137,8 @@
 
             if(isset($data["flags"]))
                 $PeerObject->Flags = $data["flags"];
+
+            $PeerObject->NetworkAddress = $PeerObject->Username . "@" . $PeerObject->Network;
 
             return $PeerObject;
         }

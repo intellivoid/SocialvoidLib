@@ -180,6 +180,7 @@ namespace SocialvoidLib\Classes;
                     return JobClass::QueryClass;
 
                 case JobType::DistributeTimelinePost:
+                case JobType::RemoveTimelinePosts:
                     return JobClass::UpdateClass;
 
                 default:
