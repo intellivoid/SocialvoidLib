@@ -3,12 +3,6 @@
     require("ppm");
     ppm_import("net.intellivoid.socialvoidlib");
 
-    set_error_handler(function($severity, $message, $file, $line) {
-        if (error_reporting() & $severity) {
-            throw new ErrorException($message, 0, $severity, $file, $line);
-        }
-    });
-
     function getInput(string $prompt): string
     {
         print($prompt);
