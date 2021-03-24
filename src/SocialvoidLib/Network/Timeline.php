@@ -264,4 +264,21 @@
 
             return $ReturnResults;
         }
+
+        /**
+         * Likes a post, if not already liked. Uses BackgroundWorker to push the
+         * job to the background.
+         *
+         * @param \SocialvoidLib\Objects\Standard\Post $post
+         */
+        public function likePost(\SocialvoidLib\Objects\Standard\Post $post): void
+        {
+            $PostObject = $this->networkSession->getSocialvoidLib()->getPostsManager()->getPost(
+                PostSearchMethod::ByPublicId, $post->ID
+            );
+
+            $this->networkSession->getSocialvoidLib()->getPostsManager()->likePost(
+                $this->networkSession->getAuthenticatedUser(), $PostObject
+            );
+        }
     }

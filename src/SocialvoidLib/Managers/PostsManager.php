@@ -14,9 +14,11 @@
 
     use Exception;
     use msqg\QueryBuilder;
+    use SocialvoidLib\Abstracts\Flags\PostFlags;
     use SocialvoidLib\Abstracts\Levels\PostPriorityLevel;
     use SocialvoidLib\Abstracts\SearchMethods\PostSearchMethod;
     use SocialvoidLib\Abstracts\Types\CacheEntryObjectType;
+    use SocialvoidLib\Classes\Converter;
     use SocialvoidLib\Classes\PostText\Extractor;
     use SocialvoidLib\Classes\PostText\TwitterMethod\Parser;
     use SocialvoidLib\Classes\Standard\BaseIdentification;
@@ -29,6 +31,7 @@
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
     use SocialvoidLib\Exceptions\GenericInternal\RedisCacheException;
     use SocialvoidLib\Exceptions\GenericInternal\ServiceJobException;
+    use SocialvoidLib\Exceptions\Standard\Network\PostDeletedException;
     use SocialvoidLib\Exceptions\Standard\Network\PostNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPostTextException;
     use SocialvoidLib\InputTypes\RegisterCacheInput;
@@ -290,6 +293,39 @@
         }
 
         /**
+         * @param int $user_id
+         * @param string $post_search_method
+         * @param string $post_search_value
+         * @param bool $skip_errors
+         * @throws CacheException
+         * @throws DatabaseException
+         * @throws InvalidSearchMethodException
+         * @throws PostDeletedException
+         * @throws PostNotFoundException
+         */
+        public function likePost(int $user_id, string $post_search_method, string $post_search_value, bool $skip_errors=True): void
+        {
+            try
+            {
+                $selected_post = $this->getPost($post_search_method, $post_search_value);
+
+                // Do not like the post if it's deleted
+                if(Converter::hasFlag($selected_post->Flags, PostFlags::Deleted))
+                {
+                    throw new PostDeletedException("The requested post was deleted");
+                }
+
+                $this->socialvoidLib->getLikesRecordManager()->likeRecord($user_id, $selected_post->ID);
+                $selected_post->Likes[] = $user_id;
+                $this->updatePost($selected_post);
+            }
+            catch(Exception $e)
+            {
+                if($skip_errors == false) throw $e;
+            }
+        }
+
+        /**
          * Fetches multiple posts from the Database, function is completed faster if
          * BackgroundWorker is enabled
          *
@@ -302,6 +338,7 @@
          * @throws PostNotFoundException
          * @throws BackgroundWorkerNotEnabledException
          * @throws ServiceJobException
+         * @throws CacheException
          */
         public function getMultiplePosts(array $query, bool $skip_errors=True, int $utilization=100): array
         {

@@ -16,6 +16,7 @@ namespace SocialvoidLib\Abstracts;
     use SocialvoidLib\Exceptions\Standard\Authentication\NoPasswordAuthenticationAvailableException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NoTwoFactorAuthenticationAvailableException;
+    use SocialvoidLib\Exceptions\Standard\Network\PostDeletedException;
     use SocialvoidLib\Exceptions\Standard\Network\PostNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidBiographyException;
@@ -158,4 +159,11 @@ namespace SocialvoidLib\Abstracts;
          * @see PostNotFoundException
          */
         const PostNotFoundException = 0x03101;
+
+        /**
+         * Raised when the client requested a post that isn't found
+         *
+         * @see PostDeletedException
+         */
+        const PostDeletedException = 0x03102;
     }
