@@ -57,7 +57,7 @@ namespace SocialvoidLib\Objects\Post;
                 $RepostObject->OriginalPostID = $data["original_post_id"];
 
             if(isset($data["original_user_id"]))
-                $RepostObject->OriginalPostID = $data["original_user_id"];
+                $RepostObject->OriginalUserID = $data["original_user_id"];
 
             return $RepostObject;
         }

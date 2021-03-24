@@ -229,10 +229,10 @@
             $StandardPostObject->PostType = Utilities::determinePostType($post);
             $StandardPostObject->Text = $post->Text;
             $StandardPostObject->Source = $post->Source;
-            $StandardPostObject->LikesCount = count($post->Likes);
-            $StandardPostObject->RepostsCount = count($post->Reposts);
-            $StandardPostObject->QuotesCount = count($post->Quotes);
-            $StandardPostObject->RepliesCount = count($post->Replies);
+            $StandardPostObject->LikesCount = ($post->Likes == null ? null : count($post->Likes));
+            $StandardPostObject->RepostsCount = ($post->Reposts == null ? null : count($post->Reposts));
+            $StandardPostObject->QuotesCount = ($post->Quotes == null ? null : count($post->Quotes));
+            $StandardPostObject->RepliesCount = ($post->Replies == null ? null : count($post->Replies));
             $StandardPostObject->PostedTimestamp = $post->CreatedTimestamp;
             $StandardPostObject->Flags = $post->Flags;
 

@@ -391,11 +391,19 @@
         },
         {
             "required": true,
+            "file": "Exceptions/Standard/Network/AlreadyRepostedException.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/Standard/Network/PeerNotFoundException.php"
         },
         {
             "required": true,
             "file": "Exceptions/Standard/Network/PostNotFoundException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Network/PostDeletedException.php"
         },
         {
             "required": true,

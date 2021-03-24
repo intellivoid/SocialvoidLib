@@ -23,7 +23,9 @@
     use SocialvoidLib\Exceptions\GenericInternal\ServiceJobException;
     use SocialvoidLib\Exceptions\Internal\FollowerDataNotFound;
     use SocialvoidLib\Exceptions\Internal\UserTimelineNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Network\AlreadyRepostedException;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Network\PostDeletedException;
     use SocialvoidLib\Exceptions\Standard\Network\PostNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPostTextException;
     use SocialvoidLib\NetworkSession;
@@ -87,6 +89,43 @@
 
             return $PostObject;
         }
+
+        /**
+         * Reposts and existing post to the timeline
+         *
+         * @param string $post_public_id
+         * @return Post
+         * @throws AlreadyRepostedException
+         * @throws BackgroundWorkerNotEnabledException
+         * @throws CacheException
+         * @throws DatabaseException
+         * @throws FollowerDataNotFound
+         * @throws InvalidSearchMethodException
+         * @throws PostDeletedException
+         * @throws PostNotFoundException
+         * @throws UserTimelineNotFoundException
+         */
+        public function repostToTimeline(string $post_public_id): Post
+        {
+            $PostObject = $this->networkSession->getSocialvoidLib()->getPostsManager()->repostPost(
+                $this->networkSession->getAuthenticatedUser()->ID,
+                PostSearchMethod::ByPublicId, $post_public_id,
+                $this->networkSession->getActiveSession()->ID, PostPriorityLevel::High
+            );
+
+            $FollowerData = $this->networkSession->getSocialvoidLib()->getFollowerDataManager()->resolveRecord(
+                $this->networkSession->getAuthenticatedUser()->ID
+            );
+
+            // TODO: The distribution method should check if the repost already exists in the timeline
+            $FollowerData->FollowersIDs[] = $this->networkSession->getAuthenticatedUser()->ID;
+            $this->networkSession->getSocialvoidLib()->getTimelineManager()->distributePost(
+                $PostObject->ID, $FollowerData->FollowersIDs, 100, true
+            );
+
+            return $PostObject;
+        }
+
 
         /**
          * Returns a timeline roster for basic information
@@ -211,7 +250,7 @@
 
                 }
 
-                if($resolvedPost->Repost !== null && $resolvedPost->Repost->OriginalPostID)
+                if($resolvedPost->Repost !== null && $resolvedPost->Repost->OriginalPostID !== null)
                 {
                     if(Converter::hasFlag($SortedPostResolutions[$resolvedPost->Repost->OriginalPostID]->Flags, PostFlags::Deleted))
                     {
@@ -221,6 +260,7 @@
                     }
                     else
                     {
+
                         $stdPost->RepostedPost = \SocialvoidLib\Objects\Standard\Post::fromPost(
                             $SortedPostResolutions[$resolvedPost->Repost->OriginalPostID]
                         );
@@ -266,8 +306,7 @@
         }
 
         /**
-         * Likes a post, if not already liked. Uses BackgroundWorker to push the
-         * job to the background.
+         * Likes a post, if not already liked
          *
          * @param \SocialvoidLib\Objects\Standard\Post $post
          */

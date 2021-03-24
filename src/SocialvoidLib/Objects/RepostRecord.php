@@ -29,9 +29,16 @@
         /**
          * The Post ID that this record is associated with
          *
-         * @var int
+         * @var int|null
          */
         public $PostID;
+
+        /**
+         * The original post ID that this repost is referring to
+         *
+         * @var int
+         */
+        public $OriginalPostID;
 
         /**
          * Indicates if the user currently reposted this post
@@ -65,6 +72,7 @@
                 "id" => $this->ID,
                 "user_id" => $this->UserID,
                 "post_id" => $this->PostID,
+                "original_post_id" => $this->OriginalPostID,
                 "reposted" => $this->Reposted,
                 "last_updated_timestamp" => $this->LastUpdatedTimestamp,
                 "created_timestamp" => $this->CreatedTimestamp,
@@ -90,6 +98,9 @@
 
             if(isset($data["post_id"]))
                 $RepostRecordObject->PostID = (int)$data["post_id"];
+
+            if(isset($data["original_post_id"]))
+                $RepostRecordObject->OriginalPostID = (int)$data["original_post_id"];
 
             if(isset($data["reposted"]))
                 $RepostRecordObject->Reposted = (bool)$data["reposted"];

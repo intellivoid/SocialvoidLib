@@ -172,9 +172,14 @@
          */
         public function toArray(): array
         {
-            $media_content_results = [];
-            foreach($this->MediaContent as $mediaContent)
-                $media_content_results[] = $mediaContent->toArray();
+            $media_content_results = null;
+
+            if($this->MediaContent !== null)
+            {
+                $media_content_results = [];
+                foreach($this->MediaContent as $mediaContent)
+                    $media_content_results[] = $mediaContent->toArray();
+            }
 
             return [
                 "id" => ($this->ID == null ? null : (int)$this->ID),
@@ -285,9 +290,14 @@
          */
         public function toArrayAlternative(): array
         {
-            $media_content_results = [];
-            foreach($this->MediaContent as $mediaContent)
-                $media_content_results[] = $mediaContent->toArray();
+            $media_content_results = null;
+
+            if($this->MediaContent !== null)
+            {
+                $media_content_results = [];
+                foreach($this->MediaContent as $mediaContent)
+                    $media_content_results[] = $mediaContent->toArray();
+            }
 
             return [
                 "id" => ($this->ID == null ? null : (int)$this->ID),

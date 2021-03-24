@@ -31,6 +31,8 @@
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
     use SocialvoidLib\Exceptions\GenericInternal\RedisCacheException;
     use SocialvoidLib\Exceptions\GenericInternal\ServiceJobException;
+    use SocialvoidLib\Exceptions\Internal\RepostRecordNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Network\AlreadyRepostedException;
     use SocialvoidLib\Exceptions\Standard\Network\PostDeletedException;
     use SocialvoidLib\Exceptions\Standard\Network\PostNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPostTextException;
@@ -109,6 +111,7 @@
                 "poster_user_id" => (int)$user_id,
                 "properties" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Properties->toArray())),
                 "flags" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($flags)),
+                "is_deleted" => (int)false,
                 "priority_level" => $this->socialvoidLib->getDatabase()->real_escape_string($priority),
                 "entities" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Entities->toArray())),
                 "likes" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
@@ -251,9 +254,8 @@
             }
 
             $post->LastUpdatedTimestamp = (int)time();
-
+            
             // TODO: Validate text
-
             // Probably the most CPU intensive update there is here.
             $Query = QueryBuilder::update("posts", [
                 "text" => ($post->Text == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($post->Text))),
@@ -266,14 +268,15 @@
                 "quote_original_user_id" => ($post->Quote == null || $post->Quote->OriginalUserID == null ? null : (int)$post->Quote->OriginalUserID),
                 "repost_original_post_id" => ($post->Repost == null || $post->Repost->OriginalPostID == null ? null : (int)$post->Repost->OriginalPostID),
                 "repost_original_user_id" => ($post->Repost == null || $post->Repost->OriginalUserID == null ? null : (int)$post->Repost->OriginalUserID),
-                "flags" => ($post->Flags == null ? [] : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Flags))),
+                "flags" => ($post->Flags == null ?  $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])) : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Flags))),
+                "is_deleted" => (Converter::hasFlag($post->Flags, PostFlags::Deleted) ? (int)true : (int)false),
                 "priority_level" => ($post->PriorityLevel == null ? $this->socialvoidLib->getDatabase()->real_escape_string(PostPriorityLevel::None) : $this->socialvoidLib->getDatabase()->real_escape_string($post->PriorityLevel)),
                 "entities" => ($post->Entities == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Entities->toArray()))),
-                "likes" => ($post->Likes == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Likes))),
-                "reposts" => ($post->Reposts == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Reposts))),
-                "quotes" => ($post->Quotes == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Quotes))),
-                "replies" => ($post->Replies == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Replies))),
-                "media_content" => ($MediaContent == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($MediaContent))),
+                "likes" => (is_null($post->Likes) ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Likes))),
+                "reposts" => (is_null($post->Reposts) ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Reposts))),
+                "quotes" => (is_null($post->Quotes) ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Quotes))),
+                "replies" => (is_null($post->Replies) ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Replies))),
+                "media_content" => (is_null($MediaContent) ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($MediaContent))),
                 "last_updated_timestamp" => $post->LastUpdatedTimestamp,
             ], "id", (int)$post->ID);
             $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
@@ -293,6 +296,8 @@
         }
 
         /**
+         * Likes an existing post
+         *
          * @param int $user_id
          * @param string $post_search_method
          * @param string $post_search_value
@@ -302,8 +307,9 @@
          * @throws InvalidSearchMethodException
          * @throws PostDeletedException
          * @throws PostNotFoundException
+         * @noinspection DuplicatedCode
          */
-        public function likePost(int $user_id, string $post_search_method, string $post_search_value, bool $skip_errors=True): void
+        public function likePost(int $user_id, string $post_search_method, string $post_search_value, bool $skip_errors=False): void
         {
             try
             {
@@ -315,6 +321,22 @@
                     throw new PostDeletedException("The requested post was deleted");
                 }
 
+                // Like the original post if the requested post is a repost
+                if($selected_post->Repost !== null && $selected_post->Repost->OriginalPostID !== null)
+                {
+                    $selected_post = $this->getPost(PostSearchMethod::ById, $selected_post->Repost->OriginalPostID);
+
+                    // Do not repost the post if it's deleted
+                    if(Converter::hasFlag($selected_post->Flags, PostFlags::Deleted))
+                    {
+                        throw new PostDeletedException("The requested post was deleted");
+                    }
+                }
+
+                // Do not continue if the user already likes this post
+                if(in_array($user_id, $selected_post->Likes))
+                    return;
+
                 $this->socialvoidLib->getLikesRecordManager()->likeRecord($user_id, $selected_post->ID);
                 $selected_post->Likes[] = $user_id;
                 $this->updatePost($selected_post);
@@ -323,6 +345,115 @@
             {
                 if($skip_errors == false) throw $e;
             }
+        }
+
+        /**
+         * Reposts an existing post
+         *
+         * @param int $user_id
+         * @param string $post_search_method
+         * @param string $post_search_value
+         * @param int|null $session_id
+         * @param string $priority
+         * @param array $flags
+         * @return Post
+         * @throws AlreadyRepostedException
+         * @throws CacheException
+         * @throws DatabaseException
+         * @throws InvalidSearchMethodException
+         * @throws PostDeletedException
+         * @throws PostNotFoundException
+         * @noinspection DuplicatedCode
+         */
+        public function repostPost(int $user_id, string $post_search_method, string $post_search_value, int $session_id=null, $priority=PostPriorityLevel::None, $flags=[]): Post
+        {
+            $selected_post = $this->getPost($post_search_method, $post_search_value);
+
+            // Do not repost the post if it's deleted
+            if(Converter::hasFlag($selected_post->Flags, PostFlags::Deleted))
+            {
+                throw new PostDeletedException("The requested post was deleted");
+            }
+
+            // Repost the original post if the requested post is a repost
+            if($selected_post->Repost !== null && $selected_post->Repost->OriginalPostID !== null)
+            {
+                $selected_post = $this->getPost(PostSearchMethod::ById, $selected_post->Repost->OriginalPostID);
+
+                // Do not repost the post if it's deleted
+                if(Converter::hasFlag($selected_post->Flags, PostFlags::Deleted))
+                {
+                    throw new PostDeletedException("The requested post was deleted");
+                }
+            }
+
+            // Check if the post has already been reposted
+            try
+            {
+                $repostRecordState = $this->socialvoidLib->getRepostsRecordManager()->getRecord($user_id, $selected_post->ID);
+
+                if($repostRecordState->PostID !== null)
+                {
+                    try
+                    {
+                        $originalRepostPost = $this->getPost(PostSearchMethod::ById, $repostRecordState->PostID);
+                        // TODO: Add more details to the AlreadyRepostedException exception.
+                        if(Converter::hasFlag($originalRepostPost->Flags, PostFlags::Deleted) == false)
+                            throw new AlreadyRepostedException("The requested repost has already been reposted");
+                    }
+                    catch(PostNotFoundException $e)
+                    {
+                        // The post wasn't found, so ignore it!
+                        unset($e);
+                    }
+                }
+            }
+            catch (RepostRecordNotFoundException $e)
+            {
+                // Ignore this!
+                unset($e);
+            }
+
+            $timestamp = (int)time();
+            $PublicID = BaseIdentification::PostID($user_id, $timestamp, $selected_post->Text);
+            $Properties = new Post\Properties();
+
+            $Repost = new Post\Repost();
+            $Repost->OriginalPostID = $selected_post->ID;
+            $Repost->OriginalUserID = $selected_post->PosterUserID;
+
+            $Query = QueryBuilder::insert_into("posts", [
+                "public_id" => $this->socialvoidLib->getDatabase()->real_escape_string($PublicID),
+                "session_id" => ($session_id == null ? null : (int)$session_id),
+                "poster_user_id" => (int)$user_id,
+                "properties" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Properties->toArray())),
+                "repost_original_post_id" => (int)$Repost->OriginalPostID,
+                "repost_original_user_id" => (int)$Repost->OriginalUserID,
+                "flags" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($flags)),
+                "is_deleted" => (int)false,
+                "priority_level" => $this->socialvoidLib->getDatabase()->real_escape_string($priority),
+                "last_updated_timestamp" => $timestamp,
+                "created_timestamp" => $timestamp
+            ]);
+            $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
+
+            if($QueryResults)
+            {
+                $returnResults = $this->getPost(PostSearchMethod::ByPublicId, $PublicID);
+                $this->registerPostCacheEntry($returnResults);
+            }
+            else
+            {
+                throw new DatabaseException("There was an error while trying to repost a post",
+                    $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
+                );
+            }
+
+            $this->socialvoidLib->getRepostsRecordManager()->repostRecord($user_id, $returnResults->ID, $selected_post->ID);
+            $selected_post->Reposts[] = $user_id;
+            $this->updatePost($selected_post);
+
+            return $returnResults;
         }
 
         /**

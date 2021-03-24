@@ -16,6 +16,7 @@ namespace SocialvoidLib\Abstracts;
     use SocialvoidLib\Exceptions\Standard\Authentication\NoPasswordAuthenticationAvailableException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NoTwoFactorAuthenticationAvailableException;
+    use SocialvoidLib\Exceptions\Standard\Network\AlreadyRepostedException;
     use SocialvoidLib\Exceptions\Standard\Network\PostDeletedException;
     use SocialvoidLib\Exceptions\Standard\Network\PostNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
@@ -166,4 +167,11 @@ namespace SocialvoidLib\Abstracts;
          * @see PostDeletedException
          */
         const PostDeletedException = 0x03102;
+
+        /**
+         * Raised when the client attempts to repost a post that has already been reposted
+         *
+         * @see AlreadyRepostedException
+         */
+        const AlreadyRepostedException = 0x03103;
     }
