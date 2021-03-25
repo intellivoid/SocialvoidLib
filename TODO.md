@@ -1,6 +1,7 @@
 # v1.0.0.0 TODO
 
  - Add the ability to unlike posts
+ - Add the ability to unrepost (basically locate the repost and delete it)
  - Add the ability to delete posts
  - Add the ability to quote posts
  - Add the ability to reply to posts
@@ -8,6 +9,7 @@
  - Add the ability to cache ID resolutions
  - Add the ability to reconstruct timelines
  - Add public user timelines
+ - Add user roles and network permissions instead of using network flags
  - Add post prioritization logic for post distribution and user posts 
  - Validate text ([src/SocialvoidLib/Managers/PostsManager.php](src/SocialvoidLib/Managers/PostsManager.php))
  - Add more details to the AlreadyRepostedException exception ([src/SocialvoidLib/Managers/PostsManager.php](src/SocialvoidLib/Managers/PostsManager.php))
