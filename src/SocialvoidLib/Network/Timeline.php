@@ -138,6 +138,7 @@
         public function getTimelineRoster(): TimelineRoster
         {
             // TODO: Optimize the query for this
+            // TODO: This isn't what a roster is!
             $UserTimeline = $this->networkSession->getSocialvoidLib()->getTimelineManager()->retrieveTimeline(
                 $this->networkSession->getAuthenticatedUser()->ID
             );
@@ -308,16 +309,21 @@
         /**
          * Likes a post, if not already liked
          *
-         * @param \SocialvoidLib\Objects\Standard\Post $post
+         * @param string $post_public_id
+         * @throws CacheException
+         * @throws DatabaseException
+         * @throws InvalidSearchMethodException
+         * @throws PostDeletedException
+         * @throws PostNotFoundException
          */
-        public function likePost(\SocialvoidLib\Objects\Standard\Post $post): void
+        public function likePost(string $post_public_id): void
         {
             $PostObject = $this->networkSession->getSocialvoidLib()->getPostsManager()->getPost(
-                PostSearchMethod::ByPublicId, $post->ID
+                PostSearchMethod::ByPublicId, $post_public_id
             );
 
             $this->networkSession->getSocialvoidLib()->getPostsManager()->likePost(
-                $this->networkSession->getAuthenticatedUser(), $PostObject
+                $this->networkSession->getAuthenticatedUser()->ID, PostSearchMethod::ByPublicId, $post_public_id
             );
         }
     }
