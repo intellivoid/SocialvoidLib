@@ -318,10 +318,6 @@
          */
         public function likePost(string $post_public_id): void
         {
-            $PostObject = $this->networkSession->getSocialvoidLib()->getPostsManager()->getPost(
-                PostSearchMethod::ByPublicId, $post_public_id
-            );
-
             $this->networkSession->getSocialvoidLib()->getPostsManager()->likePost(
                 $this->networkSession->getAuthenticatedUser()->ID, PostSearchMethod::ByPublicId, $post_public_id
             );
