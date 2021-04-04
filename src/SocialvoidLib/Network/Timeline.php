@@ -90,42 +90,6 @@
             return $PostObject;
         }
 
-        /**
-         * Reposts and existing post to the timeline
-         *
-         * @param string $post_public_id
-         * @return Post
-         * @throws AlreadyRepostedException
-         * @throws BackgroundWorkerNotEnabledException
-         * @throws CacheException
-         * @throws DatabaseException
-         * @throws FollowerDataNotFound
-         * @throws InvalidSearchMethodException
-         * @throws PostDeletedException
-         * @throws PostNotFoundException
-         * @throws UserTimelineNotFoundException
-         */
-        public function repostToTimeline(string $post_public_id): Post
-        {
-            $PostObject = $this->networkSession->getSocialvoidLib()->getPostsManager()->repostPost(
-                $this->networkSession->getAuthenticatedUser()->ID,
-                PostSearchMethod::ByPublicId, $post_public_id,
-                $this->networkSession->getActiveSession()->ID, PostPriorityLevel::High
-            );
-
-            $FollowerData = $this->networkSession->getSocialvoidLib()->getFollowerDataManager()->resolveRecord(
-                $this->networkSession->getAuthenticatedUser()->ID
-            );
-
-            // TODO: The distribution method should check if the repost already exists in the timeline
-            $FollowerData->FollowersIDs[] = $this->networkSession->getAuthenticatedUser()->ID;
-            $this->networkSession->getSocialvoidLib()->getTimelineManager()->distributePost(
-                $PostObject->ID, $FollowerData->FollowersIDs, 100, true
-            );
-
-            return $PostObject;
-        }
-
 
         /**
          * Returns a timeline roster for basic information
@@ -304,6 +268,42 @@
             }
 
             return $ReturnResults;
+        }
+
+        /**
+         * Reposts and existing post to the timeline
+         *
+         * @param string $post_public_id
+         * @return Post
+         * @throws AlreadyRepostedException
+         * @throws BackgroundWorkerNotEnabledException
+         * @throws CacheException
+         * @throws DatabaseException
+         * @throws FollowerDataNotFound
+         * @throws InvalidSearchMethodException
+         * @throws PostDeletedException
+         * @throws PostNotFoundException
+         * @throws UserTimelineNotFoundException
+         */
+        public function repostToTimeline(string $post_public_id): Post
+        {
+            $PostObject = $this->networkSession->getSocialvoidLib()->getPostsManager()->repostPost(
+                $this->networkSession->getAuthenticatedUser()->ID,
+                PostSearchMethod::ByPublicId, $post_public_id,
+                $this->networkSession->getActiveSession()->ID, PostPriorityLevel::High
+            );
+
+            $FollowerData = $this->networkSession->getSocialvoidLib()->getFollowerDataManager()->resolveRecord(
+                $this->networkSession->getAuthenticatedUser()->ID
+            );
+
+            // TODO: The distribution method should check if the repost already exists in the timeline
+            $FollowerData->FollowersIDs[] = $this->networkSession->getAuthenticatedUser()->ID;
+            $this->networkSession->getSocialvoidLib()->getTimelineManager()->distributePost(
+                $PostObject->ID, $FollowerData->FollowersIDs, 100, true
+            );
+
+            return $PostObject;
         }
 
         /**
