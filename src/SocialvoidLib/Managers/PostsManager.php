@@ -348,6 +348,57 @@
         }
 
         /**
+         * Unlikes an existing post
+         *
+         * @param int $user_id
+         * @param string $post_search_method
+         * @param string $post_search_value
+         * @param bool $skip_errors
+         * @throws CacheException
+         * @throws DatabaseException
+         * @throws InvalidSearchMethodException
+         * @throws PostDeletedException
+         * @throws PostNotFoundException
+         */
+        public function unlikePost(int $user_id, string $post_search_method, string $post_search_value, bool $skip_errors=False): void
+        {
+            try
+            {
+                $selected_post = $this->getPost($post_search_method, $post_search_value);
+
+                // Do not like the post if it's deleted
+                if(Converter::hasFlag($selected_post->Flags, PostFlags::Deleted))
+                {
+                    throw new PostDeletedException("The requested post was deleted");
+                }
+
+                // Like the original post if the requested post is a repost
+                if($selected_post->Repost !== null && $selected_post->Repost->OriginalPostID !== null)
+                {
+                    $selected_post = $this->getPost(PostSearchMethod::ById, $selected_post->Repost->OriginalPostID);
+
+                    // Do not repost the post if it's deleted
+                    if(Converter::hasFlag($selected_post->Flags, PostFlags::Deleted))
+                    {
+                        throw new PostDeletedException("The requested post was deleted");
+                    }
+                }
+
+                // Do not continue if the user never liked this post
+                if(in_array($user_id, $selected_post->Likes) == false)
+                    return;
+
+                $this->socialvoidLib->getLikesRecordManager()->unlikeRecord($user_id, $selected_post->ID);
+                Converter::removeFlag($selected_post->Likes, $user_id);
+                $this->updatePost($selected_post);
+            }
+            catch(Exception $e)
+            {
+                if($skip_errors == false) throw $e;
+            }
+        }
+
+        /**
          * Reposts an existing post
          *
          * @param int $user_id

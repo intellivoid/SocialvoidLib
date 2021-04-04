@@ -322,4 +322,21 @@
                 $this->networkSession->getAuthenticatedUser()->ID, PostSearchMethod::ByPublicId, $post_public_id
             );
         }
+
+        /**
+         * Likes a post, if not already liked
+         *
+         * @param string $post_public_id
+         * @throws CacheException
+         * @throws DatabaseException
+         * @throws InvalidSearchMethodException
+         * @throws PostDeletedException
+         * @throws PostNotFoundException
+         */
+        public function unlikePost(string $post_public_id): void
+        {
+            $this->networkSession->getSocialvoidLib()->getPostsManager()->unlikePost(
+                $this->networkSession->getAuthenticatedUser()->ID, PostSearchMethod::ByPublicId, $post_public_id
+            );
+        }
     }
