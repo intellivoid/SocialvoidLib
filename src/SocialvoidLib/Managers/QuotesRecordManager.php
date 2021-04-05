@@ -43,18 +43,19 @@
          * Creates a quote record if one doesn't already exist, or updates an existing one
          *
          * @param int $user_id
+         * @param int $original_post_id
          * @param int $post_id
          * @throws DatabaseException
          */
-        public function quoteRecord(int $user_id, int $post_id)
+        public function quoteRecord(int $user_id, int $post_id, int $original_post_id)
         {
             try
             {
-                $record = $this->getRecord($user_id, $post_id);
+                $record = $this->getRecord($post_id, $original_post_id);
             }
             catch(QuoteRecordNotFoundException $e)
             {
-                $this->registerRecord($user_id, $post_id, true);
+                $this->registerRecord($user_id, $post_id, $original_post_id, true);
                 return;
             }
 
@@ -70,15 +71,15 @@
          * @param int $post_id
          * @throws DatabaseException
          */
-        public function unquoteRecord(int $user_id, int $post_id)
+        public function unquoteRecord(int $user_id, int $post_id, int $original_post_id)
         {
             try
             {
-                $record = $this->getRecord($user_id, $post_id);
+                $record = $this->getRecord($post_id, $original_post_id);
             }
             catch(QuoteRecordNotFoundException $e)
             {
-                $this->registerRecord($user_id, $post_id, false);
+                $this->registerRecord($user_id, $post_id, $original_post_id, false);
                 return;
             }
 

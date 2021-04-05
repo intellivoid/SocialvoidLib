@@ -339,4 +339,43 @@
                 $this->networkSession->getAuthenticatedUser()->ID, PostSearchMethod::ByPublicId, $post_public_id
             );
         }
+
+        /**
+         * Distributes a new post to the timeline and it's users
+         *
+         * @param string $post_public_id
+         * @param string $text
+         * @param array $media_content
+         * @param array $flags
+         * @return Post
+         * @throws BackgroundWorkerNotEnabledException
+         * @throws CacheException
+         * @throws DatabaseException
+         * @throws FollowerDataNotFound
+         * @throws InvalidSearchMethodException
+         * @throws PostDeletedException
+         * @throws PostNotFoundException
+         * @throws UserTimelineNotFoundException
+         */
+        public function quotePost(string $post_public_id, string $text, array $media_content=[], $flags=[]): Post
+        {
+            $PostObject = $this->networkSession->getSocialvoidLib()->getPostsManager()->quotePost(
+                $this->networkSession->getAuthenticatedUser()->ID,
+                PostSearchMethod::ByPublicId, $post_public_id, $text,
+                Converter::getSource($this->networkSession->getActiveSession()),
+                $this->networkSession->getActiveSession()->ID, $media_content,
+                PostPriorityLevel::High, $flags
+            );
+
+            $FollowerData = $this->networkSession->getSocialvoidLib()->getFollowerDataManager()->resolveRecord(
+                $this->networkSession->getAuthenticatedUser()->ID
+            );
+
+            $FollowerData->FollowersIDs[] = $this->networkSession->getAuthenticatedUser()->ID;
+            $this->networkSession->getSocialvoidLib()->getTimelineManager()->distributePost(
+                $PostObject->ID, $FollowerData->FollowersIDs, 100, true
+            );
+
+            return $PostObject;
+        }
     }
