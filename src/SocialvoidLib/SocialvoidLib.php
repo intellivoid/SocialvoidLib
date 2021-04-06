@@ -33,6 +33,7 @@
     use SocialvoidLib\Managers\LikesRecordManager;
     use SocialvoidLib\Managers\PostsManager;
     use SocialvoidLib\Managers\QuotesRecordManager;
+    use SocialvoidLib\Managers\ReplyRecordManager;
     use SocialvoidLib\Managers\RepostsRecordManager;
     use SocialvoidLib\Managers\ServiceJobManager;
     use SocialvoidLib\Managers\SessionManager;
@@ -167,6 +168,11 @@
          * @var BasicRedisCacheManager|null
          */
         private $BasicRedisCacheManager;
+
+        /**
+         * @var ReplyRecordManager
+         */
+        private $ReplyRecordManager;
 
         /**
          * SocialvoidLib constructor.
@@ -503,6 +509,16 @@
             if($this->QuotesRecordManager == null)
                 $this->QuotesRecordManager = new QuotesRecordManager($this);
             return $this->QuotesRecordManager;
+        }
+
+        /**
+         * @return ReplyRecordManager
+         */
+        public function getReplyRecordManager(): ReplyRecordManager
+        {
+            if($this->ReplyRecordManager == null)
+                $this->ReplyRecordManager = new ReplyRecordManager($this);
+            return $this->ReplyRecordManager;
         }
 
         /**

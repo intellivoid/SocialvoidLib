@@ -78,6 +78,7 @@
          * @throws PostNotFoundException
          * @throws InvalidPostTextException
          * @throws CacheException
+         * @noinspection DuplicatedCode
          */
         public function publishPost(int $user_id, string $source, string $text, int $session_id=null, array $media_content=[], $priority=PostPriorityLevel::None, $flags=[]): Post
         {
@@ -359,6 +360,7 @@
          * @throws InvalidSearchMethodException
          * @throws PostDeletedException
          * @throws PostNotFoundException
+         * @noinspection DuplicatedCode
          */
         public function unlikePost(int $user_id, string $post_search_method, string $post_search_value, bool $skip_errors=False): void
         {
@@ -516,12 +518,13 @@
          * @param string $text
          * @param string $source
          * @param int|null $session_id
-         * @param array $media
+         * @param array $media_content
          * @param string $priority
          * @param array $flags
          * @return Post
          * @throws CacheException
          * @throws DatabaseException
+         * @throws InvalidPostTextException
          * @throws InvalidSearchMethodException
          * @throws PostDeletedException
          * @throws PostNotFoundException
@@ -550,8 +553,6 @@
             }
 
             $timestamp = (int)time();
-            $PublicID = BaseIdentification::PostID($user_id, $timestamp, $selected_post->Text);
-            $Properties = new Post\Properties();
 
             $Quote = new Post\Quote();
             $Quote->OriginalPostID = $selected_post->ID;
@@ -614,6 +615,115 @@
 
             $this->socialvoidLib->getQuotesRecordManager()->quoteRecord($user_id, $returnResults->ID, $selected_post->ID);
             $selected_post->Quotes[] = $returnResults->ID;
+            $this->updatePost($selected_post);
+
+            return $returnResults;
+        }
+
+        /**
+         * @param int $user_id
+         * @param string $post_search_method
+         * @param string $post_search_value
+         * @param string $text
+         * @param string $source
+         * @param int|null $session_id
+         * @param array $media_content
+         * @param string $priority
+         * @param array $flags
+         * @return Post
+         * @throws CacheException
+         * @throws DatabaseException
+         * @throws InvalidPostTextException
+         * @throws InvalidSearchMethodException
+         * @throws PostDeletedException
+         * @throws PostNotFoundException
+         * @noinspection DuplicatedCode
+         */
+        public function replyToPost(int $user_id, string $post_search_method, string $post_search_value, string $text, string $source, int $session_id=null, array $media_content=[], $priority=PostPriorityLevel::None, $flags=[]): Post
+        {
+            $selected_post = $this->getPost($post_search_method, $post_search_value);
+
+            // Do not repost the post if it's deleted
+            if(Converter::hasFlag($selected_post->Flags, PostFlags::Deleted))
+            {
+                throw new PostDeletedException("The requested post was deleted");
+            }
+
+            // Quote the original post if the requested post is a repost
+            if($selected_post->Repost !== null && $selected_post->Repost->OriginalPostID !== null)
+            {
+                $selected_post = $this->getPost(PostSearchMethod::ById, $selected_post->Repost->OriginalPostID);
+
+                // Do not repost the post if it's deleted
+                if(Converter::hasFlag($selected_post->Flags, PostFlags::Deleted))
+                {
+                    throw new PostDeletedException("The requested post was deleted");
+                }
+            }
+
+            $timestamp = (int)time();
+
+            $Reply = new Post\Reply();
+            $Reply->ReplyToPostID = $selected_post->ID;
+            $Reply->ReplyToUserID = $selected_post->PosterUserID;
+
+            $textPostParser = new Parser();
+            $textPostResults = $textPostParser->parseInput($text);
+            if($textPostResults->valid == false)
+                throw new InvalidPostTextException("The given post text is invalid", $text);
+
+            $PublicID = BaseIdentification::PostID($user_id, $timestamp, $text);
+            $Properties = new Post\Properties();
+
+            // Extract important information from this text
+            $Extractor = new Extractor($text);
+            $Entities = new Post\Entities();
+            $Entities->Hashtags = $Extractor->extractHashtags();
+            $Entities->UserMentions = $Extractor->extractMentionedUsernames();
+            $Entities->Urls = $Extractor->extractURLs();
+
+            $MediaContentArray = [];
+            /** @var Post\MediaContent $value */
+            foreach($media_content as $value)
+                $MediaContentArray[] = $value->toArray();
+
+            $Query = QueryBuilder::insert_into("posts", [
+                "public_id" => $this->socialvoidLib->getDatabase()->real_escape_string($PublicID),
+                "text" => $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($text)),
+                "source" => $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($source)),
+                "session_id" => ($session_id == null ? null : (int)$session_id),
+                "poster_user_id" => (int)$user_id,
+                "properties" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Properties->toArray())),
+                "reply_to_post_id" => (int)$Reply->ReplyToPostID,
+                "reply_to_user_id" => (int)$Reply->ReplyToUserID,
+                "flags" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($flags)),
+                "is_deleted" => (int)false,
+                "priority_level" => $this->socialvoidLib->getDatabase()->real_escape_string($priority),
+                "entities" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Entities->toArray())),
+                "likes" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
+                "reposts" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
+                "quotes" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
+                "replies" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
+                "media_content" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($MediaContentArray)),
+                "last_updated_timestamp" => $timestamp,
+                "created_timestamp" => $timestamp
+            ]);
+            $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
+
+            if($QueryResults)
+            {
+                $returnResults = $this->getPost(PostSearchMethod::ByPublicId, $PublicID);
+                $this->registerPostCacheEntry($returnResults);
+            }
+            else
+            {
+                throw new DatabaseException("There was an error while trying to repost a post",
+                    $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
+                );
+            }
+
+            $this->socialvoidLib->getReplyRecordManager()->replyRecord($user_id, $selected_post->ID, $returnResults->ID);
+            $selected_post->Replies[] = $returnResults->ID;
             $this->updatePost($selected_post);
 
             return $returnResults;
