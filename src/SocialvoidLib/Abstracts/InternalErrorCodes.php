@@ -20,6 +20,7 @@ namespace SocialvoidLib\Abstracts;
     use SocialvoidLib\Exceptions\Internal\NoTimeBasedSignatureAvailableException;
     use SocialvoidLib\Exceptions\Internal\QuoteRecordNotFoundException;
     use SocialvoidLib\Exceptions\Internal\RecoveryCodesAlreadyExistsException;
+    use SocialvoidLib\Exceptions\Internal\ReplyRecordNotFoundException;
     use SocialvoidLib\Exceptions\Internal\RepostRecordNotFoundException;
     use SocialvoidLib\Exceptions\Internal\TimeBasedPrivateSignatureAlreadyExistsException;
     use SocialvoidLib\Exceptions\Internal\UserTimelineNotFoundException;
@@ -96,4 +97,9 @@ namespace SocialvoidLib\Abstracts;
          * @see CoaAuthenticationRecordNotFoundException
          */
         const CoaAuthenticationRecordNotFoundException = 0x2012;
+
+        /**
+         * @see ReplyRecordNotFoundException
+         */
+        const ReplyRecordNotFoundException = 0x2013;
     }

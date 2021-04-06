@@ -15,7 +15,7 @@
 
     use msqg\QueryBuilder;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
-    use SocialvoidLib\Exceptions\Internal\QuoteRecordNotFoundException;
+    use SocialvoidLib\Exceptions\Internal\ReplyRecordNotFoundException;
     use SocialvoidLib\Objects\ReplyRecord;
     use SocialvoidLib\SocialvoidLib;
 
@@ -53,7 +53,7 @@
             {
                 $record = $this->getRecord($post_id, $reply_post_id);
             }
-            catch(QuoteRecordNotFoundException $e)
+            catch(ReplyRecordNotFoundException $e)
             {
                 $this->registerRecord($user_id, $post_id, $reply_post_id, true);
                 return;
@@ -78,7 +78,7 @@
             {
                 $record = $this->getRecord($post_id, $reply_post_id);
             }
-            catch(QuoteRecordNotFoundException $e)
+            catch(ReplyRecordNotFoundException $e)
             {
                 $this->registerRecord($user_id, $post_id, $reply_post_id, false);
                 return;
@@ -125,7 +125,7 @@
          * @param int $reply_post_id
          * @return ReplyRecord
          * @throws DatabaseException
-         * @throws QuoteRecordNotFoundException
+         * @throws ReplyRecordNotFoundException
          * @noinspection DuplicatedCode
          */
         public function getRecord(int $post_id, int $reply_post_id): ReplyRecord
@@ -147,7 +147,7 @@
 
                 if ($Row == False)
                 {
-                    throw new QuoteRecordNotFoundException();
+                    throw new ReplyRecordNotFoundException();
                 }
 
                 return(ReplyRecord::fromArray($Row));

@@ -375,6 +375,10 @@
         },
         {
             "required": true,
+            "file": "Exceptions/Internal/ReplyRecordNotFoundException.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/Internal/FollowerDataNotFound.php"
         },
         {
