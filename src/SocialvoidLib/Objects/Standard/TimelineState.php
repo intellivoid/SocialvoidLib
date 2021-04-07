@@ -6,10 +6,10 @@
     namespace SocialvoidLib\Objects\Standard;
 
     /**
-     * Class TimelineRoster
+     * Class TimelineState
      * @package SocialvoidLib\Objects\Standard
      */
-    class TimelineRoster
+    class TimelineState
     {
         /**
          * The current number of posts that has been on this users
@@ -44,11 +44,11 @@
          * Constructs object from an array representation
          * 
          * @param array $data
-         * @return TimelineRoster
+         * @return TimelineState
          */
-        public static function fromArray(array $data): TimelineRoster
+        public static function fromArray(array $data): TimelineState
         {
-            $RosterObject = new TimelineRoster();
+            $RosterObject = new TimelineState();
 
             if(isset($data["timeline_posts_count"]))
                 $RosterObject->TimelinePostsCount = $data["timeline_posts_count"];

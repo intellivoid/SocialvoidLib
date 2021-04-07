@@ -71,6 +71,62 @@
         }
 
         /**
+         * Gets the current timeline state
+         *
+         * @param string $search_method
+         * @param string $value
+         * @return \SocialvoidLib\Objects\Standard\TimelineState
+         * @throws DatabaseException
+         * @throws InvalidSearchMethodException
+         * @throws UserTimelineNotFoundException
+         */
+        public function getTimelineState(string $search_method, string $value): \SocialvoidLib\Objects\Standard\TimelineState
+        {
+            switch($search_method)
+            {
+                case TimelineSearchMethod::ByUserId:
+                case TimelineSearchMethod::ById:
+                    $search_method = $this->socialvoidLib->getDatabase()->real_escape_string($search_method);
+                    $value = (int)$value;
+                    break;
+
+                default:
+                    throw new InvalidSearchMethodException("The search method is not applicable to getTimelineState()", $search_method, $value);
+            }
+
+            $Query = QueryBuilder::select("user_timelines", [
+                "new_posts",
+                "last_updated_timestamp",
+            ], $search_method, $value);
+            $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
+
+            if($QueryResults)
+            {
+                $Row = $QueryResults->fetch_array(MYSQLI_ASSOC);
+
+                if ($Row == False)
+                {
+                    throw new UserTimelineNotFoundException();
+                }
+                else
+                {
+                    $TimelineState = new \SocialvoidLib\Objects\Standard\TimelineState();
+                    $TimelineState->TimelinePostsCount = (int)$Row["new_posts"];
+                    $TimelineState->TimelineLastUpdated = (int)$Row["last_updated_timestamp"];
+
+                    return $TimelineState;
+                }
+            }
+            else
+            {
+                throw new DatabaseException(
+                    "There was an error while trying retrieve the user timeline state from the network",
+                    $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
+                );
+            }
+        }
+
+        /**
          * Creates a new timeline for a user
          *
          * @param int $user_id

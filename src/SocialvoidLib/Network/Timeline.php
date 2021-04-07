@@ -14,6 +14,7 @@
     use SocialvoidLib\Abstracts\Flags\PostFlags;
     use SocialvoidLib\Abstracts\Levels\PostPriorityLevel;
     use SocialvoidLib\Abstracts\SearchMethods\PostSearchMethod;
+    use SocialvoidLib\Abstracts\SearchMethods\TimelineSearchMethod;
     use SocialvoidLib\Abstracts\SearchMethods\UserSearchMethod;
     use SocialvoidLib\Classes\Converter;
     use SocialvoidLib\Exceptions\GenericInternal\BackgroundWorkerNotEnabledException;
@@ -31,7 +32,7 @@
     use SocialvoidLib\NetworkSession;
     use SocialvoidLib\Objects\Post;
     use SocialvoidLib\Objects\Standard\Peer;
-    use SocialvoidLib\Objects\Standard\TimelineRoster;
+    use SocialvoidLib\Objects\Standard\TimelineState;
 
     /**
      * Class Timeline
@@ -94,24 +95,16 @@
         /**
          * Returns a timeline roster for basic information
          *
-         * @return TimelineRoster
+         * @return TimelineState
          * @throws DatabaseException
          * @throws InvalidSearchMethodException
          * @throws UserTimelineNotFoundException
          */
-        public function getTimelineRoster(): TimelineRoster
+        public function getTimelineState(): TimelineState
         {
-            // TODO: Optimize the query for this
-            // TODO: This isn't what a roster is!
-            $UserTimeline = $this->networkSession->getSocialvoidLib()->getTimelineManager()->retrieveTimeline(
-                $this->networkSession->getAuthenticatedUser()->ID
+            return $this->networkSession->getSocialvoidLib()->getTimelineManager()->getTimelineState(
+                TimelineSearchMethod::ByUserId, $this->networkSession->getAuthenticatedUser()->ID
             );
-
-            $TimelineRoster = new TimelineRoster();
-            $TimelineRoster->TimelineLastUpdated = $UserTimeline->LastUpdatedTimestamp;
-            $TimelineRoster->TimelinePostsCount = $UserTimeline->NewPosts;
-
-            return $TimelineRoster;
         }
 
         /**
