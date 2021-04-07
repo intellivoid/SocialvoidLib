@@ -8,10 +8,8 @@
      * must have a written permission from Intellivoid Technologies to do so.
      */
 
-namespace SocialvoidLib\Classes;
+    namespace SocialvoidLib\Classes;
 
-    use SocialvoidLib\InputTypes\SessionClient;
-    use SocialvoidLib\InputTypes\SessionDevice;
     use SocialvoidLib\Objects\ActiveSession;
 
     /**
