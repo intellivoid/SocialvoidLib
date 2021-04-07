@@ -559,11 +559,11 @@
         },
         {
             "required": true,
-            "file": "Objects/Standard/TimelineRoster.php"
+            "file": "Objects/Standard/Peer/Name.php"
         },
         {
             "required": true,
-            "file": "Objects/Standard/Peer/Name.php"
+            "file": "Objects/Standard/TimelineState.php"
         },
         {
             "required": true,
