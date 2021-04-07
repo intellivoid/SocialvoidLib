@@ -287,9 +287,11 @@
          */
         public function repostToTimeline(string $post_public_id): Post
         {
+            $selected_post = $this->networkSession->getSocialvoidLib()->getPostsManager()->getPost(
+                PostSearchMethod::ByPublicId, $post_public_id);
+
             $PostObject = $this->networkSession->getSocialvoidLib()->getPostsManager()->repostPost(
-                $this->networkSession->getAuthenticatedUser()->ID,
-                PostSearchMethod::ByPublicId, $post_public_id,
+                $this->networkSession->getAuthenticatedUser()->ID,  $selected_post,
                 $this->networkSession->getActiveSession()->ID, PostPriorityLevel::High
             );
 
@@ -318,8 +320,11 @@
          */
         public function likePost(string $post_public_id): void
         {
+            $selected_post = $this->networkSession->getSocialvoidLib()->getPostsManager()->getPost(
+                PostSearchMethod::ByPublicId, $post_public_id);
+
             $this->networkSession->getSocialvoidLib()->getPostsManager()->likePost(
-                $this->networkSession->getAuthenticatedUser()->ID, PostSearchMethod::ByPublicId, $post_public_id
+                $this->networkSession->getAuthenticatedUser()->ID, $selected_post
             );
         }
 
@@ -335,8 +340,11 @@
          */
         public function unlikePost(string $post_public_id): void
         {
+            $selected_post = $this->networkSession->getSocialvoidLib()->getPostsManager()->getPost(
+                PostSearchMethod::ByPublicId, $post_public_id);
+
             $this->networkSession->getSocialvoidLib()->getPostsManager()->unlikePost(
-                $this->networkSession->getAuthenticatedUser()->ID, PostSearchMethod::ByPublicId, $post_public_id
+                $this->networkSession->getAuthenticatedUser()->ID, $selected_post
             );
         }
 
@@ -360,9 +368,11 @@
          */
         public function quotePost(string $post_public_id, string $text, array $media_content=[], $flags=[]): Post
         {
+            $selected_post = $this->networkSession->getSocialvoidLib()->getPostsManager()->getPost(
+                PostSearchMethod::ByPublicId, $post_public_id);
+
             $PostObject = $this->networkSession->getSocialvoidLib()->getPostsManager()->quotePost(
-                $this->networkSession->getAuthenticatedUser()->ID,
-                PostSearchMethod::ByPublicId, $post_public_id, $text,
+                $this->networkSession->getAuthenticatedUser()->ID, $selected_post, $text,
                 Converter::getSource($this->networkSession->getActiveSession()),
                 $this->networkSession->getActiveSession()->ID, $media_content,
                 PostPriorityLevel::High, $flags
@@ -400,9 +410,11 @@
          */
         public function replyToPost(string $post_public_id, string $text, array $media_content=[], $flags=[]): Post
         {
+            $selected_post = $this->networkSession->getSocialvoidLib()->getPostsManager()->getPost(
+                PostSearchMethod::ByPublicId, $post_public_id);
+
             $PostObject = $this->networkSession->getSocialvoidLib()->getPostsManager()->replyToPost(
-                $this->networkSession->getAuthenticatedUser()->ID,
-                PostSearchMethod::ByPublicId, $post_public_id, $text,
+                $this->networkSession->getAuthenticatedUser()->ID, $selected_post, $text,
                 Converter::getSource($this->networkSession->getActiveSession()),
                 $this->networkSession->getActiveSession()->ID, $media_content,
                 PostPriorityLevel::High, $flags

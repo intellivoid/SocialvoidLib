@@ -300,8 +300,7 @@
          * Likes an existing post
          *
          * @param int $user_id
-         * @param string $post_search_method
-         * @param string $post_search_value
+         * @param Post $post
          * @param bool $skip_errors
          * @throws CacheException
          * @throws DatabaseException
@@ -310,37 +309,35 @@
          * @throws PostNotFoundException
          * @noinspection DuplicatedCode
          */
-        public function likePost(int $user_id, string $post_search_method, string $post_search_value, bool $skip_errors=False): void
+        public function likePost(int $user_id, Post $post, bool $skip_errors=False): void
         {
             try
             {
-                $selected_post = $this->getPost($post_search_method, $post_search_value);
-
                 // Do not like the post if it's deleted
-                if(Converter::hasFlag($selected_post->Flags, PostFlags::Deleted))
+                if(Converter::hasFlag($post->Flags, PostFlags::Deleted))
                 {
                     throw new PostDeletedException("The requested post was deleted");
                 }
 
                 // Like the original post if the requested post is a repost
-                if($selected_post->Repost !== null && $selected_post->Repost->OriginalPostID !== null)
+                if($post->Repost !== null && $post->Repost->OriginalPostID !== null)
                 {
-                    $selected_post = $this->getPost(PostSearchMethod::ById, $selected_post->Repost->OriginalPostID);
+                    $post = $this->getPost(PostSearchMethod::ById, $post->Repost->OriginalPostID);
 
                     // Do not repost the post if it's deleted
-                    if(Converter::hasFlag($selected_post->Flags, PostFlags::Deleted))
+                    if(Converter::hasFlag($post->Flags, PostFlags::Deleted))
                     {
                         throw new PostDeletedException("The requested post was deleted");
                     }
                 }
 
                 // Do not continue if the user already likes this post
-                if(in_array($user_id, $selected_post->Likes))
+                if(in_array($user_id, $post->Likes))
                     return;
 
-                $this->socialvoidLib->getLikesRecordManager()->likeRecord($user_id, $selected_post->ID);
-                $selected_post->Likes[] = $user_id;
-                $this->updatePost($selected_post);
+                $this->socialvoidLib->getLikesRecordManager()->likeRecord($user_id, $post->ID);
+                $post->Likes[] = $user_id;
+                $this->updatePost($post);
             }
             catch(Exception $e)
             {
@@ -352,8 +349,7 @@
          * Unlikes an existing post
          *
          * @param int $user_id
-         * @param string $post_search_method
-         * @param string $post_search_value
+         * @param Post $post
          * @param bool $skip_errors
          * @throws CacheException
          * @throws DatabaseException
@@ -362,37 +358,35 @@
          * @throws PostNotFoundException
          * @noinspection DuplicatedCode
          */
-        public function unlikePost(int $user_id, string $post_search_method, string $post_search_value, bool $skip_errors=False): void
+        public function unlikePost(int $user_id, Post $post, bool $skip_errors=False): void
         {
             try
             {
-                $selected_post = $this->getPost($post_search_method, $post_search_value);
-
                 // Do not like the post if it's deleted
-                if(Converter::hasFlag($selected_post->Flags, PostFlags::Deleted))
+                if(Converter::hasFlag($post->Flags, PostFlags::Deleted))
                 {
                     throw new PostDeletedException("The requested post was deleted");
                 }
 
                 // Like the original post if the requested post is a repost
-                if($selected_post->Repost !== null && $selected_post->Repost->OriginalPostID !== null)
+                if($post->Repost !== null && $post->Repost->OriginalPostID !== null)
                 {
-                    $selected_post = $this->getPost(PostSearchMethod::ById, $selected_post->Repost->OriginalPostID);
+                    $post = $this->getPost(PostSearchMethod::ById, $post->Repost->OriginalPostID);
 
                     // Do not repost the post if it's deleted
-                    if(Converter::hasFlag($selected_post->Flags, PostFlags::Deleted))
+                    if(Converter::hasFlag($post->Flags, PostFlags::Deleted))
                     {
                         throw new PostDeletedException("The requested post was deleted");
                     }
                 }
 
                 // Do not continue if the user never liked this post
-                if(in_array($user_id, $selected_post->Likes) == false)
+                if(in_array($user_id, $post->Likes) == false)
                     return;
 
-                $this->socialvoidLib->getLikesRecordManager()->unlikeRecord($user_id, $selected_post->ID);
-                Converter::removeFlag($selected_post->Likes, $user_id);
-                $this->updatePost($selected_post);
+                $this->socialvoidLib->getLikesRecordManager()->unlikeRecord($user_id, $post->ID);
+                Converter::removeFlag($post->Likes, $user_id);
+                $this->updatePost($post);
             }
             catch(Exception $e)
             {
@@ -404,8 +398,7 @@
          * Reposts an existing post
          *
          * @param int $user_id
-         * @param string $post_search_method
-         * @param string $post_search_value
+         * @param Post $post
          * @param int|null $session_id
          * @param string $priority
          * @param array $flags
@@ -418,23 +411,21 @@
          * @throws PostNotFoundException
          * @noinspection DuplicatedCode
          */
-        public function repostPost(int $user_id, string $post_search_method, string $post_search_value, int $session_id=null, $priority=PostPriorityLevel::None, $flags=[]): Post
+        public function repostPost(int $user_id, Post $post, int $session_id=null, $priority=PostPriorityLevel::None, $flags=[]): Post
         {
-            $selected_post = $this->getPost($post_search_method, $post_search_value);
-
             // Do not repost the post if it's deleted
-            if(Converter::hasFlag($selected_post->Flags, PostFlags::Deleted))
+            if(Converter::hasFlag($post->Flags, PostFlags::Deleted))
             {
                 throw new PostDeletedException("The requested post was deleted");
             }
 
             // Repost the original post if the requested post is a repost
-            if($selected_post->Repost !== null && $selected_post->Repost->OriginalPostID !== null)
+            if($post->Repost !== null && $post->Repost->OriginalPostID !== null)
             {
-                $selected_post = $this->getPost(PostSearchMethod::ById, $selected_post->Repost->OriginalPostID);
+                $post = $this->getPost(PostSearchMethod::ById, $post->Repost->OriginalPostID);
 
                 // Do not repost the post if it's deleted
-                if(Converter::hasFlag($selected_post->Flags, PostFlags::Deleted))
+                if(Converter::hasFlag($post->Flags, PostFlags::Deleted))
                 {
                     throw new PostDeletedException("The requested post was deleted");
                 }
@@ -443,7 +434,7 @@
             // Check if the post has already been reposted
             try
             {
-                $repostRecordState = $this->socialvoidLib->getRepostsRecordManager()->getRecord($user_id, $selected_post->ID);
+                $repostRecordState = $this->socialvoidLib->getRepostsRecordManager()->getRecord($user_id, $post->ID);
 
                 if($repostRecordState->PostID !== null)
                 {
@@ -468,12 +459,12 @@
             }
 
             $timestamp = (int)time();
-            $PublicID = BaseIdentification::PostID($user_id, $timestamp, $selected_post->Text);
+            $PublicID = BaseIdentification::PostID($user_id, $timestamp, $post->Text);
             $Properties = new Post\Properties();
 
             $Repost = new Post\Repost();
-            $Repost->OriginalPostID = $selected_post->ID;
-            $Repost->OriginalUserID = $selected_post->PosterUserID;
+            $Repost->OriginalPostID = $post->ID;
+            $Repost->OriginalUserID = $post->PosterUserID;
 
             $Query = QueryBuilder::insert_into("posts", [
                 "public_id" => $this->socialvoidLib->getDatabase()->real_escape_string($PublicID),
@@ -502,9 +493,9 @@
                 );
             }
 
-            $this->socialvoidLib->getRepostsRecordManager()->repostRecord($user_id, $returnResults->ID, $selected_post->ID);
-            $selected_post->Reposts[] = $user_id;
-            $this->updatePost($selected_post);
+            $this->socialvoidLib->getRepostsRecordManager()->repostRecord($user_id, $returnResults->ID, $post->ID);
+            $post->Reposts[] = $user_id;
+            $this->updatePost($post);
 
             return $returnResults;
         }
@@ -513,8 +504,7 @@
          * Reposts an existing post
          *
          * @param int $user_id
-         * @param string $post_search_method
-         * @param string $post_search_value
+         * @param Post $post
          * @param string $text
          * @param string $source
          * @param int|null $session_id
@@ -530,23 +520,21 @@
          * @throws PostNotFoundException
          * @noinspection DuplicatedCode
          */
-        public function quotePost(int $user_id, string $post_search_method, string $post_search_value, string $text, string $source, int $session_id=null, array $media_content=[], $priority=PostPriorityLevel::None, $flags=[]): Post
+        public function quotePost(int $user_id, Post $post, string $text, string $source, int $session_id=null, array $media_content=[], $priority=PostPriorityLevel::None, $flags=[]): Post
         {
-            $selected_post = $this->getPost($post_search_method, $post_search_value);
-
             // Do not repost the post if it's deleted
-            if(Converter::hasFlag($selected_post->Flags, PostFlags::Deleted))
+            if(Converter::hasFlag($post->Flags, PostFlags::Deleted))
             {
                 throw new PostDeletedException("The requested post was deleted");
             }
 
             // Quote the original post if the requested post is a repost
-            if($selected_post->Repost !== null && $selected_post->Repost->OriginalPostID !== null)
+            if($post->Repost !== null && $post->Repost->OriginalPostID !== null)
             {
-                $selected_post = $this->getPost(PostSearchMethod::ById, $selected_post->Repost->OriginalPostID);
+                $post = $this->getPost(PostSearchMethod::ById, $post->Repost->OriginalPostID);
 
                 // Do not repost the post if it's deleted
-                if(Converter::hasFlag($selected_post->Flags, PostFlags::Deleted))
+                if(Converter::hasFlag($post->Flags, PostFlags::Deleted))
                 {
                     throw new PostDeletedException("The requested post was deleted");
                 }
@@ -555,8 +543,8 @@
             $timestamp = (int)time();
 
             $Quote = new Post\Quote();
-            $Quote->OriginalPostID = $selected_post->ID;
-            $Quote->OriginalUserID = $selected_post->PosterUserID;
+            $Quote->OriginalPostID = $post->ID;
+            $Quote->OriginalUserID = $post->PosterUserID;
 
             $textPostParser = new Parser();
             $textPostResults = $textPostParser->parseInput($text);
@@ -613,17 +601,16 @@
                 );
             }
 
-            $this->socialvoidLib->getQuotesRecordManager()->quoteRecord($user_id, $returnResults->ID, $selected_post->ID);
-            $selected_post->Quotes[] = $returnResults->ID;
-            $this->updatePost($selected_post);
+            $this->socialvoidLib->getQuotesRecordManager()->quoteRecord($user_id, $returnResults->ID, $post->ID);
+            $post->Quotes[] = $returnResults->ID;
+            $this->updatePost($post);
 
             return $returnResults;
         }
 
         /**
          * @param int $user_id
-         * @param string $post_search_method
-         * @param string $post_search_value
+         * @param Post $post
          * @param string $text
          * @param string $source
          * @param int|null $session_id
@@ -639,23 +626,21 @@
          * @throws PostNotFoundException
          * @noinspection DuplicatedCode
          */
-        public function replyToPost(int $user_id, string $post_search_method, string $post_search_value, string $text, string $source, int $session_id=null, array $media_content=[], $priority=PostPriorityLevel::None, $flags=[]): Post
+        public function replyToPost(int $user_id, Post $post, string $text, string $source, int $session_id=null, array $media_content=[], $priority=PostPriorityLevel::None, $flags=[]): Post
         {
-            $selected_post = $this->getPost($post_search_method, $post_search_value);
-
             // Do not repost the post if it's deleted
-            if(Converter::hasFlag($selected_post->Flags, PostFlags::Deleted))
+            if(Converter::hasFlag($post->Flags, PostFlags::Deleted))
             {
                 throw new PostDeletedException("The requested post was deleted");
             }
 
             // Quote the original post if the requested post is a repost
-            if($selected_post->Repost !== null && $selected_post->Repost->OriginalPostID !== null)
+            if($post->Repost !== null && $post->Repost->OriginalPostID !== null)
             {
-                $selected_post = $this->getPost(PostSearchMethod::ById, $selected_post->Repost->OriginalPostID);
+                $post = $this->getPost(PostSearchMethod::ById, $post->Repost->OriginalPostID);
 
                 // Do not repost the post if it's deleted
-                if(Converter::hasFlag($selected_post->Flags, PostFlags::Deleted))
+                if(Converter::hasFlag($post->Flags, PostFlags::Deleted))
                 {
                     throw new PostDeletedException("The requested post was deleted");
                 }
@@ -664,8 +649,8 @@
             $timestamp = (int)time();
 
             $Reply = new Post\Reply();
-            $Reply->ReplyToPostID = $selected_post->ID;
-            $Reply->ReplyToUserID = $selected_post->PosterUserID;
+            $Reply->ReplyToPostID = $post->ID;
+            $Reply->ReplyToUserID = $post->PosterUserID;
 
             $textPostParser = new Parser();
             $textPostResults = $textPostParser->parseInput($text);
@@ -722,9 +707,9 @@
                 );
             }
 
-            $this->socialvoidLib->getReplyRecordManager()->replyRecord($user_id, $selected_post->ID, $returnResults->ID);
-            $selected_post->Replies[] = $returnResults->ID;
-            $this->updatePost($selected_post);
+            $this->socialvoidLib->getReplyRecordManager()->replyRecord($user_id, $post->ID, $returnResults->ID);
+            $post->Replies[] = $returnResults->ID;
+            $this->updatePost($post);
 
             return $returnResults;
         }
