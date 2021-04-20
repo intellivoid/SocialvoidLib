@@ -8,11 +8,13 @@
      * must have a written permission from Intellivoid Technologies to do so.
      */
 
-namespace SocialvoidLib\Abstracts;
+    namespace SocialvoidLib\Abstracts;
 
     use SocialvoidLib\Exceptions\Internal\AlreadyAuthenticatedToNetwork;
     use SocialvoidLib\Exceptions\Internal\AuthenticationFailureException;
+    use SocialvoidLib\Exceptions\Internal\CdnFileNotFoundException;
     use SocialvoidLib\Exceptions\Internal\CoaAuthenticationRecordNotFoundException;
+    use SocialvoidLib\Exceptions\Internal\FileTooLargeException;
     use SocialvoidLib\Exceptions\Internal\FollowerDataNotFound;
     use SocialvoidLib\Exceptions\Internal\FollowerStateNotFoundException;
     use SocialvoidLib\Exceptions\Internal\LikeRecordNotFoundException;
@@ -102,4 +104,14 @@ namespace SocialvoidLib\Abstracts;
          * @see ReplyRecordNotFoundException
          */
         const ReplyRecordNotFoundException = 0x2013;
+
+        /**
+         * @see FileTooLargeException
+         */
+        const FileTooLargeException = 0x2014;
+
+        /**
+         * @see CdnFileNotFoundException
+         */
+        const CdnFileNotFoundException = 0x2015;
     }

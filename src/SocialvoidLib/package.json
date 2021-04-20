@@ -43,6 +43,12 @@
                 "version": "latest",
                 "source": "default@github/intellivoid/BackgroundWorker",
                 "required": true
+            },
+            {
+                "package": "net.intellivoid.telegram_cdn",
+                "version": "latest",
+                "source": "default@github/intellivoid/Telegram-CDN",
+                "required": true
             }
         ],
         "configuration": {
@@ -375,7 +381,15 @@
         },
         {
             "required": true,
+            "file": "Exceptions/Internal/CdnFileNotFoundException.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/Internal/ReplyRecordNotFoundException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Internal/FileTooLargeException.php"
         },
         {
             "required": true,
@@ -575,6 +589,10 @@
         },
         {
             "required": true,
+            "file": "Objects/TelegramCdnUploadRecord.php"
+        },
+        {
+            "required": true,
             "file": "Objects/User/UserProperties.php"
         },
         {
@@ -604,6 +622,10 @@
         {
             "required": true,
             "file": "Objects/CoaAuthentication.php"
+        },
+        {
+            "required": true,
+            "file": "Managers/TelegramCdnManager.php"
         },
         {
             "required": true,

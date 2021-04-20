@@ -37,6 +37,7 @@
     use SocialvoidLib\Managers\RepostsRecordManager;
     use SocialvoidLib\Managers\ServiceJobManager;
     use SocialvoidLib\Managers\SessionManager;
+    use SocialvoidLib\Managers\TelegramCdnManager;
     use SocialvoidLib\Managers\TimelineManager;
     use SocialvoidLib\Managers\UserManager;
     use udp\udp;
@@ -173,6 +174,15 @@
          * @var ReplyRecordManager
          */
         private $ReplyRecordManager;
+        /**
+         * @var mixed
+         */
+        private $TelegramCdnConfiguration;
+
+        /**
+         * @var TelegramCdnManager
+         */
+        private $TelegramCdnManager;
 
         /**
          * SocialvoidLib constructor.
@@ -216,6 +226,13 @@
             $EngineSchema->setDefinition("TimelineChunkSize", 20);
             $this->acm->defineSchema("Engine", $EngineSchema);
 
+            // Telegram CDN Schema Configuration
+            $TelegramCdnSchema = new Schema();
+            $TelegramCdnSchema->setDefinition("Enabled", True);
+            $TelegramCdnSchema->setDefinition("BotToken", "<BOT TOKEN>");
+            $TelegramCdnSchema->setDefinition("Channels", []);
+            $this->acm->defineSchema("TelegramCDN", $TelegramCdnSchema);
+
             // Redis Basic Cache (Entity resolve cache)
             $RedisBasicCacheSchema = new Schema();
             $RedisBasicCacheSchema->setDefinition("Enabled", True);
@@ -247,6 +264,7 @@
                 $this->ServiceEngineConfiguration = $this->acm->getConfiguration("ServiceEngine");
                 $this->EngineConfiguration = $this->acm->getConfiguration("Engine");
                 $this->RedisBasicCacheConfiguration = $this->acm->getConfiguration("RedisBasicCache");
+                $this->TelegramCdnConfiguration = $this->acm->getConfiguration("TelegramCDN");
             }
             catch(Exception $e)
             {
@@ -635,5 +653,24 @@
                 $this->BasicRedisCacheManager = new BasicRedisCacheManager($this);
 
             return $this->BasicRedisCacheManager;
+        }
+
+        /**
+         * @return TelegramCdnManager
+         */
+        public function getTelegramCdnManager(): TelegramCdnManager
+        {
+            if($this->TelegramCdnManager == null)
+                $this->TelegramCdnManager = new TelegramCdnManager($this);
+
+            return $this->TelegramCdnManager;
+        }
+
+        /**
+         * @return mixed
+         */
+        public function getTelegramCdnConfiguration()
+        {
+            return $this->TelegramCdnConfiguration;
         }
     }

@@ -232,4 +232,15 @@ namespace SocialvoidLib\Classes;
             // yet have the logic to identify the post
             return PostType::Unknown;
         }
+
+        /**
+         * Generates a Telegram CDN ID for uploaded media
+         *
+         * @param string $file_contents
+         * @return string
+         */
+        public static function generateTelegramCdnId(string $file_contents): string
+        {
+            return Hashing::pepper($file_contents . time());
+        }
     }
