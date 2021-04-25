@@ -56,18 +56,19 @@
          * Uploads a file to the Telegram CDN
          *
          * @param string $file_path
+         * @param string|null $unique_identifier
          * @return string
          * @throws DatabaseException
          * @throws FileTooLargeException
          * @throws UploadError
          */
-        public function uploadContent(string $file_path): string
+        public function uploadContent(string $file_path, ?string $unique_identifier=null): string
         {
             $file_contents = file_get_contents($file_path);
             if(strlen($file_contents) > 15728640) // 15MB
                 throw new FileTooLargeException("The maximum upload size is 15MB");
 
-            $public_id = Utilities::generateTelegramCdnId($file_contents);
+            $public_id = Utilities::generateTelegramCdnId($file_contents . (string)$unique_identifier);
 
             // If the file has already been uploaded, return the existing cdn id.
             if($this->fileHashExists($file_path))
