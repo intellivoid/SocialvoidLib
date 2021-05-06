@@ -85,4 +85,9 @@
             
             return $media_content;
         }
+
+        public function downloadImage(string $public_id): MediaContent
+        {
+
+        }
     }
