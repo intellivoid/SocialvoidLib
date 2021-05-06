@@ -17,6 +17,7 @@
     use SocialvoidLib\Exceptions\Internal\FileTooLargeException;
     use SocialvoidLib\Exceptions\Internal\FollowerDataNotFound;
     use SocialvoidLib\Exceptions\Internal\FollowerStateNotFoundException;
+    use SocialvoidLib\Exceptions\Internal\InvalidImageTypeException;
     use SocialvoidLib\Exceptions\Internal\LikeRecordNotFoundException;
     use SocialvoidLib\Exceptions\Internal\NoRecoveryCodesAvailableException;
     use SocialvoidLib\Exceptions\Internal\NoTimeBasedSignatureAvailableException;
@@ -114,4 +115,9 @@
          * @see CdnFileNotFoundException
          */
         const CdnFileNotFoundException = 0x2015;
+
+        /**
+         * @see InvalidImageTypeException
+         */
+        const InvalidImageTypeException = 0x2016;
     }

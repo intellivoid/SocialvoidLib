@@ -16,6 +16,7 @@ namespace SocialvoidLib\Classes;
     use SocialvoidLib\Abstracts\Types\Standard\PostType;
     use SocialvoidLib\Classes\Security\Hashing;
     use SocialvoidLib\Objects\Post;
+    use SocialvoidLib\SocialvoidLib;
 
     /**
      * Class Utilities
@@ -23,6 +24,20 @@ namespace SocialvoidLib\Classes;
      */
     class Utilities
     {
+        /**
+         * Returns a definition, returns null if failed.
+         *
+         * @param string $name
+         * @return string|null
+         */
+        public static function getDefinition(string $name): ?string
+        {
+            if(defined($name))
+                return constant($name);
+
+            return null;
+        }
+
         /**
          * Determines the a boolean definition, returns the default value if all else fails
          *

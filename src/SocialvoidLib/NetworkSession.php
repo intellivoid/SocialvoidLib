@@ -23,6 +23,7 @@
     use SocialvoidLib\Exceptions\Standard\Authentication\SessionNoLongerAuthenticatedException;
     use SocialvoidLib\InputTypes\SessionClient;
     use SocialvoidLib\InputTypes\SessionDevice;
+    use SocialvoidLib\Network\Cloud;
     use SocialvoidLib\Network\Timeline;
     use SocialvoidLib\Network\Users;
     use SocialvoidLib\Objects\ActiveSession;
@@ -75,6 +76,11 @@
         private Timeline $timeline;
 
         /**
+         * @var Cloud
+         */
+        private Cloud $cloud;
+
+        /**
          * Network constructor.
          * @param SocialvoidLib $socialvoidLib
          */
@@ -82,6 +88,7 @@
         {
             $this->flags = [];
             $this->socialvoidLib = $socialvoidLib;
+            $this->cloud = new Cloud($this);
             $this->users = new Users($this);
             $this->timeline = new Timeline($this);
         }
@@ -100,7 +107,7 @@
          * @throws Exceptions\GenericInternal\InvalidSearchMethodException
          * @throws Exceptions\Standard\Authentication\SessionNotFoundException
          * @throws Exceptions\Standard\Network\PeerNotFoundException
-         * @throws SessionNoLongerAuthenticatedException
+         * @throws SessionNoLongerAuthenticatedException|Exceptions\GenericInternal\CacheException
          */
         public function authenticateUser(SessionClient $sessionClient, SessionDevice $sessionDevice,
                                          User $user, string $authentication_method_used, string $ip_address): ActiveSession
@@ -130,6 +137,7 @@
          * @throws Exceptions\Standard\Authentication\SessionNotFoundException
          * @throws Exceptions\Standard\Network\PeerNotFoundException
          * @throws SessionNoLongerAuthenticatedException
+         * @throws Exceptions\GenericInternal\CacheException
          */
         public function declareActiveSession(string $session_public_id, string $ip_address=null): void
         {
@@ -313,5 +321,13 @@
         public function getTimeline(): Timeline
         {
             return $this->timeline;
+        }
+
+        /**
+         * @return Cloud
+         */
+        public function getCloud(): Cloud
+        {
+            return $this->cloud;
         }
     }

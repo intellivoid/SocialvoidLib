@@ -283,6 +283,9 @@
 
             self::defineLibConstant("SOCIALVOID_LIB_BASIC_CACHE_ENABLED", (bool)$this->getRedisBasicCacheConfiguration()["Enabled"]);
 
+            self::defineLibConstant("SOCIALVOID_LIB_NETWORK_DOMAIN", $this->getNetworkConfiguration()["Domain"]);
+            self::defineLibConstant("SOCIALVOID_LIB_NETWORK_NAME", $this->getNetworkConfiguration()["Name"]);
+
             // Initialize UDP
             try
             {

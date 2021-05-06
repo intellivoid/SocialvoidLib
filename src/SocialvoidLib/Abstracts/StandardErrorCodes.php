@@ -10,13 +10,17 @@
 
 namespace SocialvoidLib\Abstracts;
 
+    use SocialvoidLib\Exceptions\Internal\InvalidImageTypeException;
     use SocialvoidLib\Exceptions\Standard\Authentication\AuthenticationNotApplicableException;
     use SocialvoidLib\Exceptions\Standard\Authentication\IncorrectPasswordException;
     use SocialvoidLib\Exceptions\Standard\Authentication\IncorrectTwoFactorAuthenticationCodeException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NoPasswordAuthenticationAvailableException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NoTwoFactorAuthenticationAvailableException;
+    use SocialvoidLib\Exceptions\Standard\Media\InvalidImageDimensionsException;
+    use SocialvoidLib\Exceptions\Standard\Media\InvalidImageException;
     use SocialvoidLib\Exceptions\Standard\Network\AlreadyRepostedException;
+    use SocialvoidLib\Exceptions\Standard\Network\FileUploadException;
     use SocialvoidLib\Exceptions\Standard\Network\PostDeletedException;
     use SocialvoidLib\Exceptions\Standard\Network\PostNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
@@ -145,6 +149,23 @@ namespace SocialvoidLib\Abstracts;
         const NotAuthenticatedException = 0x02207;
 
 
+        /** 23-Set error codes (Media) */
+
+        /**
+         * Raised when the given image type is not supported
+         *
+         * @see InvalidImageTypeException
+         */
+        const InvalidImageTypeException = 0x02300;
+
+        /**
+         * Raised when the given password is incorrect
+         *
+         * @see InvalidImageDimensionsException
+         */
+        const InvalidImageDimensionsException = 0x02301;
+
+
         /** 31-Set error codes (Network) */
 
         /**
@@ -174,4 +195,11 @@ namespace SocialvoidLib\Abstracts;
          * @see AlreadyRepostedException
          */
         const AlreadyRepostedException = 0x03103;
+
+        /**
+         * Raised when there was an error while trying to upload one or more files to the network
+         *
+         * @see FileUploadException
+         */
+        const FileUploadException = 0x03104;
     }
