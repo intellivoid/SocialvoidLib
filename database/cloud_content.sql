@@ -20,7 +20,7 @@ create table cloud_content
     properties BLOB null comment 'ZiProto encoded object of properties related to this record',
     last_accessed_timestamp INT(255) null comment 'The Unix Timestamp of when this content was last accessed',
     last_updated_timestamp INT(255) null comment 'The Unix Timestamp for when this record was last updated',
-    created_timestamp INT(255) null comment 'The Unix Timestmap for when this record was first created',
+    created_timestamp INT(255) null comment 'The Unix Timestamp for when this record was first created',
     constraint cloud_content_telegram_cdn_public_id_fk
         foreign key (cdn_public_id) references telegram_cdn (public_id),
     constraint cloud_content_users_public_id_fk
