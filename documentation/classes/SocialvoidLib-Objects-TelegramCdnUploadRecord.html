@@ -51,7 +51,8 @@
     
     <section class="phpdocumentor-sidebar__category">
         <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
-                                                <h4 class="phpdocumentor-sidebar__root-namespace"><a href="namespaces/socialvoidlib.html"><abbr title="\SocialvoidLib">SocialvoidLib</abbr></a></h4>
+                                <h3 class="phpdocumentor-sidebar__root-namespace"><a href="namespaces/default.html"><abbr title="\">Global</abbr></a></h3>
+                                        <h4 class="phpdocumentor-sidebar__root-namespace"><a href="namespaces/socialvoidlib.html"><abbr title="\SocialvoidLib">SocialvoidLib</abbr></a></h4>
                 <ul class="phpdocumentor-list">
                                             <li><a href="namespaces/socialvoidlib-abstracts.html"><abbr title="\SocialvoidLib\Abstracts">Abstracts</abbr></a></li>
                                             <li><a href="namespaces/socialvoidlib-classes.html"><abbr title="\SocialvoidLib\Classes">Classes</abbr></a></li>
@@ -145,14 +146,633 @@
 
 
 
+<h3 id="toc">
+    Table of Contents
+    <a href="#toc" class="headerlink"><i class="fas fa-link"></i></a>
+</h3>
+
+<dl class="phpdocumentor-table-of-contents">
+                <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidLib-Objects-TelegramCdnUploadRecord.html#property_AccessUrl">$AccessUrl</a>
+    <span>
+                &nbsp;: string|null            </span>
+</dt>
+<dd>The temporary access URL that is given by the CDN</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidLib-Objects-TelegramCdnUploadRecord.html#property_AccessUrlExpiryTimestamp">$AccessUrlExpiryTimestamp</a>
+    <span>
+                &nbsp;: int|null            </span>
+</dt>
+<dd>The Unix Timestamp for when the Access URL is supposed to expire</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidLib-Objects-TelegramCdnUploadRecord.html#property_CdnFileHash">$CdnFileHash</a>
+    <span>
+                &nbsp;: string            </span>
+</dt>
+<dd>The hash of the file stored on the CDN</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidLib-Objects-TelegramCdnUploadRecord.html#property_CdnFileSize">$CdnFileSize</a>
+    <span>
+                &nbsp;: int|null            </span>
+</dt>
+<dd>File size on the CDN</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidLib-Objects-TelegramCdnUploadRecord.html#property_CreatedTimestamp">$CreatedTimestamp</a>
+    <span>
+                &nbsp;: int|null            </span>
+</dt>
+<dd>The Unix Timestamp for when this record was created</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidLib-Objects-TelegramCdnUploadRecord.html#property_EncryptionKey">$EncryptionKey</a>
+    <span>
+                &nbsp;: string            </span>
+</dt>
+<dd>The encryption key used to encrypt the contents of the file</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidLib-Objects-TelegramCdnUploadRecord.html#property_FileID">$FileID</a>
+    <span>
+                &nbsp;: string            </span>
+</dt>
+<dd>Identifier for this file, which can be used to download or reuse the file</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidLib-Objects-TelegramCdnUploadRecord.html#property_FileUniqueID">$FileUniqueID</a>
+    <span>
+                &nbsp;: string            </span>
+</dt>
+<dd>Unique identifier for this file, which is supposed to be the same over time and for different bots. Can&#039;t be used to download or reuse the file.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidLib-Objects-TelegramCdnUploadRecord.html#property_ID">$ID</a>
+    <span>
+                &nbsp;: int            </span>
+</dt>
+<dd>The Unique Internal Database ID for this file</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidLib-Objects-TelegramCdnUploadRecord.html#property_MimeType">$MimeType</a>
+    <span>
+                &nbsp;: int            </span>
+</dt>
+<dd>MIME type of the file as defined by sender</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidLib-Objects-TelegramCdnUploadRecord.html#property_OriginalFileHash">$OriginalFileHash</a>
+    <span>
+                &nbsp;: string            </span>
+</dt>
+<dd>The original file hash</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidLib-Objects-TelegramCdnUploadRecord.html#property_OriginalFileSize">$OriginalFileSize</a>
+    <span>
+                &nbsp;: int|null            </span>
+</dt>
+<dd>The original file size</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidLib-Objects-TelegramCdnUploadRecord.html#property_PublicID">$PublicID</a>
+    <span>
+                &nbsp;: string            </span>
+</dt>
+<dd>The Public ID of the file</dd>
+
+                <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-Objects-TelegramCdnUploadRecord.html#method_fromArray">fromArray()</a>
+    <span>
+                        &nbsp;: <a href="classes/SocialvoidLib-Objects-TelegramCdnUploadRecord.html"><abbr title="\SocialvoidLib\Objects\TelegramCdnUploadRecord">TelegramCdnUploadRecord</abbr></a>    </span>
+</dt>
+<dd>Constructs the object from an array representation</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-Objects-TelegramCdnUploadRecord.html#method_toArray">toArray()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd>Returns an array representation of the object</dd>
+
+        </dl>
 
 
 
         
 
         
+    <section class="phpdocumentor-properties">
+        <h3 class="phpdocumentor-elements__header" id="properties">
+            Properties
+            <a href="classes/SocialvoidLib-Objects-TelegramCdnUploadRecord.html#properties" class="headerlink"><i class="fas fa-link"></i></a>
+        </h3>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_AccessUrl">
+        $AccessUrl
+        <a href="classes/SocialvoidLib-Objects-TelegramCdnUploadRecord.html#property_AccessUrl" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/TelegramCdnUploadRecord.php"><a href="files/src-socialvoidlib-objects-telegramcdnuploadrecord.html"><abbr title="src/SocialvoidLib/Objects/TelegramCdnUploadRecord.php">TelegramCdnUploadRecord.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">97</span>
+</aside>
 
-        
+        <p class="phpdocumentor-summary">The temporary access URL that is given by the CDN</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">string|null</span>
+    <span class="phpdocumentor-signature__name">$AccessUrl</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_AccessUrlExpiryTimestamp">
+        $AccessUrlExpiryTimestamp
+        <a href="classes/SocialvoidLib-Objects-TelegramCdnUploadRecord.html#property_AccessUrlExpiryTimestamp" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/TelegramCdnUploadRecord.php"><a href="files/src-socialvoidlib-objects-telegramcdnuploadrecord.html"><abbr title="src/SocialvoidLib/Objects/TelegramCdnUploadRecord.php">TelegramCdnUploadRecord.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">104</span>
+</aside>
+
+        <p class="phpdocumentor-summary">The Unix Timestamp for when the Access URL is supposed to expire</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">int|null</span>
+    <span class="phpdocumentor-signature__name">$AccessUrlExpiryTimestamp</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_CdnFileHash">
+        $CdnFileHash
+        <a href="classes/SocialvoidLib-Objects-TelegramCdnUploadRecord.html#property_CdnFileHash" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/TelegramCdnUploadRecord.php"><a href="files/src-socialvoidlib-objects-telegramcdnuploadrecord.html"><abbr title="src/SocialvoidLib/Objects/TelegramCdnUploadRecord.php">TelegramCdnUploadRecord.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">69</span>
+</aside>
+
+        <p class="phpdocumentor-summary">The hash of the file stored on the CDN</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">$CdnFileHash</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_CdnFileSize">
+        $CdnFileSize
+        <a href="classes/SocialvoidLib-Objects-TelegramCdnUploadRecord.html#property_CdnFileSize" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/TelegramCdnUploadRecord.php"><a href="files/src-socialvoidlib-objects-telegramcdnuploadrecord.html"><abbr title="src/SocialvoidLib/Objects/TelegramCdnUploadRecord.php">TelegramCdnUploadRecord.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">62</span>
+</aside>
+
+        <p class="phpdocumentor-summary">File size on the CDN</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">int|null</span>
+    <span class="phpdocumentor-signature__name">$CdnFileSize</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_CreatedTimestamp">
+        $CreatedTimestamp
+        <a href="classes/SocialvoidLib-Objects-TelegramCdnUploadRecord.html#property_CreatedTimestamp" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/TelegramCdnUploadRecord.php"><a href="files/src-socialvoidlib-objects-telegramcdnuploadrecord.html"><abbr title="src/SocialvoidLib/Objects/TelegramCdnUploadRecord.php">TelegramCdnUploadRecord.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">111</span>
+</aside>
+
+        <p class="phpdocumentor-summary">The Unix Timestamp for when this record was created</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">int|null</span>
+    <span class="phpdocumentor-signature__name">$CreatedTimestamp</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_EncryptionKey">
+        $EncryptionKey
+        <a href="classes/SocialvoidLib-Objects-TelegramCdnUploadRecord.html#property_EncryptionKey" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/TelegramCdnUploadRecord.php"><a href="files/src-socialvoidlib-objects-telegramcdnuploadrecord.html"><abbr title="src/SocialvoidLib/Objects/TelegramCdnUploadRecord.php">TelegramCdnUploadRecord.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">90</span>
+</aside>
+
+        <p class="phpdocumentor-summary">The encryption key used to encrypt the contents of the file</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">$EncryptionKey</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_FileID">
+        $FileID
+        <a href="classes/SocialvoidLib-Objects-TelegramCdnUploadRecord.html#property_FileID" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/TelegramCdnUploadRecord.php"><a href="files/src-socialvoidlib-objects-telegramcdnuploadrecord.html"><abbr title="src/SocialvoidLib/Objects/TelegramCdnUploadRecord.php">TelegramCdnUploadRecord.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">41</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Identifier for this file, which can be used to download or reuse the file</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">$FileID</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_FileUniqueID">
+        $FileUniqueID
+        <a href="classes/SocialvoidLib-Objects-TelegramCdnUploadRecord.html#property_FileUniqueID" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/TelegramCdnUploadRecord.php"><a href="files/src-socialvoidlib-objects-telegramcdnuploadrecord.html"><abbr title="src/SocialvoidLib/Objects/TelegramCdnUploadRecord.php">TelegramCdnUploadRecord.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">48</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Unique identifier for this file, which is supposed to be the same over time and for different bots. Can&#039;t be used to download or reuse the file.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">$FileUniqueID</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_ID">
+        $ID
+        <a href="classes/SocialvoidLib-Objects-TelegramCdnUploadRecord.html#property_ID" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/TelegramCdnUploadRecord.php"><a href="files/src-socialvoidlib-objects-telegramcdnuploadrecord.html"><abbr title="src/SocialvoidLib/Objects/TelegramCdnUploadRecord.php">TelegramCdnUploadRecord.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">27</span>
+</aside>
+
+        <p class="phpdocumentor-summary">The Unique Internal Database ID for this file</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">int</span>
+    <span class="phpdocumentor-signature__name">$ID</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_MimeType">
+        $MimeType
+        <a href="classes/SocialvoidLib-Objects-TelegramCdnUploadRecord.html#property_MimeType" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/TelegramCdnUploadRecord.php"><a href="files/src-socialvoidlib-objects-telegramcdnuploadrecord.html"><abbr title="src/SocialvoidLib/Objects/TelegramCdnUploadRecord.php">TelegramCdnUploadRecord.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">55</span>
+</aside>
+
+        <p class="phpdocumentor-summary">MIME type of the file as defined by sender</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">int</span>
+    <span class="phpdocumentor-signature__name">$MimeType</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_OriginalFileHash">
+        $OriginalFileHash
+        <a href="classes/SocialvoidLib-Objects-TelegramCdnUploadRecord.html#property_OriginalFileHash" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/TelegramCdnUploadRecord.php"><a href="files/src-socialvoidlib-objects-telegramcdnuploadrecord.html"><abbr title="src/SocialvoidLib/Objects/TelegramCdnUploadRecord.php">TelegramCdnUploadRecord.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">83</span>
+</aside>
+
+        <p class="phpdocumentor-summary">The original file hash</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">$OriginalFileHash</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_OriginalFileSize">
+        $OriginalFileSize
+        <a href="classes/SocialvoidLib-Objects-TelegramCdnUploadRecord.html#property_OriginalFileSize" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/TelegramCdnUploadRecord.php"><a href="files/src-socialvoidlib-objects-telegramcdnuploadrecord.html"><abbr title="src/SocialvoidLib/Objects/TelegramCdnUploadRecord.php">TelegramCdnUploadRecord.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">76</span>
+</aside>
+
+        <p class="phpdocumentor-summary">The original file size</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">int|null</span>
+    <span class="phpdocumentor-signature__name">$OriginalFileSize</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_PublicID">
+        $PublicID
+        <a href="classes/SocialvoidLib-Objects-TelegramCdnUploadRecord.html#property_PublicID" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/TelegramCdnUploadRecord.php"><a href="files/src-socialvoidlib-objects-telegramcdnuploadrecord.html"><abbr title="src/SocialvoidLib/Objects/TelegramCdnUploadRecord.php">TelegramCdnUploadRecord.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">34</span>
+</aside>
+
+        <p class="phpdocumentor-summary">The Public ID of the file</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">$PublicID</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+            </section>
+
+            <section class="phpdocumentor-methods">
+        <h3 class="phpdocumentor-elements__header" id="methods">
+            Methods
+            <a href="classes/SocialvoidLib-Objects-TelegramCdnUploadRecord.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
+        </h3>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_fromArray">
+        fromArray()
+        <a href="classes/SocialvoidLib-Objects-TelegramCdnUploadRecord.html#method_fromArray" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/TelegramCdnUploadRecord.php"><a href="files/src-socialvoidlib-objects-telegramcdnuploadrecord.html"><abbr title="src/SocialvoidLib/Objects/TelegramCdnUploadRecord.php">TelegramCdnUploadRecord.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">143</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Constructs the object from an array representation</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">fromArray</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$data</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/SocialvoidLib-Objects-TelegramCdnUploadRecord.html"><abbr title="\SocialvoidLib\Objects\TelegramCdnUploadRecord">TelegramCdnUploadRecord</abbr></a></span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$data</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type"><a href="classes/SocialvoidLib-Objects-TelegramCdnUploadRecord.html"><abbr title="\SocialvoidLib\Objects\TelegramCdnUploadRecord">TelegramCdnUploadRecord</abbr></a></span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_toArray">
+        toArray()
+        <a href="classes/SocialvoidLib-Objects-TelegramCdnUploadRecord.html#method_toArray" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/TelegramCdnUploadRecord.php"><a href="files/src-socialvoidlib-objects-telegramcdnuploadrecord.html"><abbr title="src/SocialvoidLib/Objects/TelegramCdnUploadRecord.php">TelegramCdnUploadRecord.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">118</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Returns an array representation of the object</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">toArray</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+            </section>
+
     </article>
                 <section data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
     <section class="phpdocumentor-search-results__dialog">

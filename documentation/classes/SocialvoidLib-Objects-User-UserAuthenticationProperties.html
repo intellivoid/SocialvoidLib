@@ -51,7 +51,8 @@
     
     <section class="phpdocumentor-sidebar__category">
         <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
-                                                <h4 class="phpdocumentor-sidebar__root-namespace"><a href="namespaces/socialvoidlib.html"><abbr title="\SocialvoidLib">SocialvoidLib</abbr></a></h4>
+                                <h3 class="phpdocumentor-sidebar__root-namespace"><a href="namespaces/default.html"><abbr title="\">Global</abbr></a></h3>
+                                        <h4 class="phpdocumentor-sidebar__root-namespace"><a href="namespaces/socialvoidlib.html"><abbr title="\SocialvoidLib">SocialvoidLib</abbr></a></h4>
                 <ul class="phpdocumentor-list">
                                             <li><a href="namespaces/socialvoidlib-abstracts.html"><abbr title="\SocialvoidLib\Abstracts">Abstracts</abbr></a></li>
                                             <li><a href="namespaces/socialvoidlib-classes.html"><abbr title="\SocialvoidLib\Classes">Classes</abbr></a></li>
@@ -147,14 +148,1352 @@
 
 
 
+<h3 id="toc">
+    Table of Contents
+    <a href="#toc" class="headerlink"><i class="fas fa-link"></i></a>
+</h3>
+
+<dl class="phpdocumentor-table-of-contents">
+                <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#property_CoaApplicationId">$CoaApplicationId</a>
+    <span>
+                &nbsp;: string|null            </span>
+</dt>
+<dd>The ID of the Application used to authenticate the user</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#property_CoaApplicationIdLastUpdatedTimestamp">$CoaApplicationIdLastUpdatedTimestamp</a>
+    <span>
+                &nbsp;: string            </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#property_Password">$Password</a>
+    <span>
+                &nbsp;: string|null            </span>
+</dt>
+<dd>The password storage string for validation</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#property_PasswordLastUpdated">$PasswordLastUpdated</a>
+    <span>
+                &nbsp;: int|null            </span>
+</dt>
+<dd>The Unix Timestamp for when the password was last updated</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#property_RecoveryCodes">$RecoveryCodes</a>
+    <span>
+                &nbsp;: array&lt;string|int, string&gt;|null            </span>
+</dt>
+<dd>An array of 12 recovery codes used as an alternative to
+two-factor authentication if the time based private
+signature is no longer possible</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#property_RecoveryCodesLastUpdated">$RecoveryCodesLastUpdated</a>
+    <span>
+                &nbsp;: int|null            </span>
+</dt>
+<dd>The Unix Timestamp for when the recovery codes set was last updated</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#property_TimeBasedPrivateSignature">$TimeBasedPrivateSignature</a>
+    <span>
+                &nbsp;: string|null            </span>
+</dt>
+<dd>The time based private signature used to provide Two-Factor
+Authentication to the user&#039;s account.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#property_TimeBasedPrivateSignatureLastUpdated">$TimeBasedPrivateSignatureLastUpdated</a>
+    <span>
+                &nbsp;: int|null            </span>
+</dt>
+<dd>The Unix Timestamp for when this time based private signature was last updated</dd>
+
+                <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#method_currentTimeBasedOneTimePassword">currentTimeBasedOneTimePassword()</a>
+    <span>
+                        &nbsp;: string    </span>
+</dt>
+<dd>Returns the current time based signature one-time password</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#method_disableCoaApplicationId">disableCoaApplicationId()</a>
+    <span>
+                        &nbsp;: void    </span>
+</dt>
+<dd>Disables the COA Application ID</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#method_disablePassword">disablePassword()</a>
+    <span>
+                        &nbsp;: void    </span>
+</dt>
+<dd>Disables the simple password</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#method_disableRecoveryCodes">disableRecoveryCodes()</a>
+    <span>
+                        &nbsp;: void    </span>
+</dt>
+<dd>Disables recovery codes</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#method_disableTimeBasedPrivateSignature">disableTimeBasedPrivateSignature()</a>
+    <span>
+                        &nbsp;: void    </span>
+</dt>
+<dd>Disables the time based private signature method</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#method_fromArray">fromArray()</a>
+    <span>
+                        &nbsp;: <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html"><abbr title="\SocialvoidLib\Objects\User\UserAuthenticationProperties">UserAuthenticationProperties</abbr></a>    </span>
+</dt>
+<dd>Constructs the object from an array representation</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#method_generateRecoveryCodes">generateRecoveryCodes()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd>Generates a new set of recovery codes, if a set already exists
+while &#039;override&#039; is set to False, an exception will be thrown</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#method_generateTimeBasedPrivateSignature">generateTimeBasedPrivateSignature()</a>
+    <span>
+                        &nbsp;: string    </span>
+</dt>
+<dd>Generates a new time based private signature, throws an exception
+if one already exists and override isn&#039;t set to True</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#method_passwordAuthentication">passwordAuthentication()</a>
+    <span>
+                        &nbsp;: bool    </span>
+</dt>
+<dd>Processes a password authentication method</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#method_removeRecoveryCode">removeRecoveryCode()</a>
+    <span>
+                        &nbsp;: void    </span>
+</dt>
+<dd>Removes an existing recovery code</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#method_setCoaApplicationId">setCoaApplicationId()</a>
+    <span>
+                        &nbsp;: void    </span>
+</dt>
+<dd>Sets the COA Application ID used to authenticate the user</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#method_setPassword">setPassword()</a>
+    <span>
+                        &nbsp;: void    </span>
+</dt>
+<dd>Sets the password property properly.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#method_toArray">toArray()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd>Returns an array representation of this object</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#method_twoFactorAuthentication">twoFactorAuthentication()</a>
+    <span>
+                        &nbsp;: bool    </span>
+</dt>
+<dd>Validates the two factor authentication code</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#method_validateRecoveryCode">validateRecoveryCode()</a>
+    <span>
+                        &nbsp;: bool    </span>
+</dt>
+<dd>Validates a recovery code</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#method_validateTimeBasedOneTimePassword">validateTimeBasedOneTimePassword()</a>
+    <span>
+                        &nbsp;: bool    </span>
+</dt>
+<dd>Validates the time based one time password input</dd>
+
+        </dl>
 
 
 
         
 
         
+    <section class="phpdocumentor-properties">
+        <h3 class="phpdocumentor-elements__header" id="properties">
+            Properties
+            <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#properties" class="headerlink"><i class="fas fa-link"></i></a>
+        </h3>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_CoaApplicationId">
+        $CoaApplicationId
+        <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#property_CoaApplicationId" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php"><a href="files/src-socialvoidlib-objects-user-userauthenticationproperties.html"><abbr title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php">UserAuthenticationProperties.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">92</span>
+</aside>
 
-        
+        <p class="phpdocumentor-summary">The ID of the Application used to authenticate the user</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">string|null</span>
+    <span class="phpdocumentor-signature__name">$CoaApplicationId</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_CoaApplicationIdLastUpdatedTimestamp">
+        $CoaApplicationIdLastUpdatedTimestamp
+        <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#property_CoaApplicationIdLastUpdatedTimestamp" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php"><a href="files/src-socialvoidlib-objects-user-userauthenticationproperties.html"><abbr title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php">UserAuthenticationProperties.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">97</span>
+</aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">$CoaApplicationIdLastUpdatedTimestamp</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_Password">
+        $Password
+        <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#property_Password" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php"><a href="files/src-socialvoidlib-objects-user-userauthenticationproperties.html"><abbr title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php">UserAuthenticationProperties.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">47</span>
+</aside>
+
+        <p class="phpdocumentor-summary">The password storage string for validation</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">string|null</span>
+    <span class="phpdocumentor-signature__name">$Password</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_PasswordLastUpdated">
+        $PasswordLastUpdated
+        <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#property_PasswordLastUpdated" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php"><a href="files/src-socialvoidlib-objects-user-userauthenticationproperties.html"><abbr title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php">UserAuthenticationProperties.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">54</span>
+</aside>
+
+        <p class="phpdocumentor-summary">The Unix Timestamp for when the password was last updated</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">int|null</span>
+    <span class="phpdocumentor-signature__name">$PasswordLastUpdated</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_RecoveryCodes">
+        $RecoveryCodes
+        <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#property_RecoveryCodes" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php"><a href="files/src-socialvoidlib-objects-user-userauthenticationproperties.html"><abbr title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php">UserAuthenticationProperties.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">78</span>
+</aside>
+
+        <p class="phpdocumentor-summary">An array of 12 recovery codes used as an alternative to
+two-factor authentication if the time based private
+signature is no longer possible</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">array&lt;string|int, string&gt;|null</span>
+    <span class="phpdocumentor-signature__name">$RecoveryCodes</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_RecoveryCodesLastUpdated">
+        $RecoveryCodesLastUpdated
+        <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#property_RecoveryCodesLastUpdated" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php"><a href="files/src-socialvoidlib-objects-user-userauthenticationproperties.html"><abbr title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php">UserAuthenticationProperties.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">85</span>
+</aside>
+
+        <p class="phpdocumentor-summary">The Unix Timestamp for when the recovery codes set was last updated</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">int|null</span>
+    <span class="phpdocumentor-signature__name">$RecoveryCodesLastUpdated</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_TimeBasedPrivateSignature">
+        $TimeBasedPrivateSignature
+        <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#property_TimeBasedPrivateSignature" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php"><a href="files/src-socialvoidlib-objects-user-userauthenticationproperties.html"><abbr title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php">UserAuthenticationProperties.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">62</span>
+</aside>
+
+        <p class="phpdocumentor-summary">The time based private signature used to provide Two-Factor
+Authentication to the user&#039;s account.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">string|null</span>
+    <span class="phpdocumentor-signature__name">$TimeBasedPrivateSignature</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_TimeBasedPrivateSignatureLastUpdated">
+        $TimeBasedPrivateSignatureLastUpdated
+        <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#property_TimeBasedPrivateSignatureLastUpdated" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php"><a href="files/src-socialvoidlib-objects-user-userauthenticationproperties.html"><abbr title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php">UserAuthenticationProperties.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">69</span>
+</aside>
+
+        <p class="phpdocumentor-summary">The Unix Timestamp for when this time based private signature was last updated</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">int|null</span>
+    <span class="phpdocumentor-signature__name">$TimeBasedPrivateSignatureLastUpdated</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+            </section>
+
+            <section class="phpdocumentor-methods">
+        <h3 class="phpdocumentor-elements__header" id="methods">
+            Methods
+            <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
+        </h3>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_currentTimeBasedOneTimePassword">
+        currentTimeBasedOneTimePassword()
+        <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#method_currentTimeBasedOneTimePassword" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php"><a href="files/src-socialvoidlib-objects-user-userauthenticationproperties.html"><abbr title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php">UserAuthenticationProperties.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">233</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Returns the current time based signature one-time password</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">currentTimeBasedOneTimePassword</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="classes/SocialvoidLib-Exceptions-Internal-NoTimeBasedSignatureAvailableException.html"><abbr title="\SocialvoidLib\Exceptions\Internal\NoTimeBasedSignatureAvailableException">NoTimeBasedSignatureAvailableException</abbr></a></span>
+                                                            
+                                                 <section class="phpdocumentor-description"></section>
+
+                                    </dd>
+                            <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><abbr title="\tsa\Exceptions\InvalidSecretException">InvalidSecretException</abbr></span>
+                                                            
+                                                 <section class="phpdocumentor-description"></section>
+
+                                    </dd>
+                        </dl>
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">string</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_disableCoaApplicationId">
+        disableCoaApplicationId()
+        <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#method_disableCoaApplicationId" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php"><a href="files/src-socialvoidlib-objects-user-userauthenticationproperties.html"><abbr title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php">UserAuthenticationProperties.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">313</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Disables the COA Application ID</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">disableCoaApplicationId</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">void</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_disablePassword">
+        disablePassword()
+        <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#method_disablePassword" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php"><a href="files/src-socialvoidlib-objects-user-userauthenticationproperties.html"><abbr title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php">UserAuthenticationProperties.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">293</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Disables the simple password</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">disablePassword</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">void</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_disableRecoveryCodes">
+        disableRecoveryCodes()
+        <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#method_disableRecoveryCodes" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php"><a href="files/src-socialvoidlib-objects-user-userauthenticationproperties.html"><abbr title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php">UserAuthenticationProperties.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">190</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Disables recovery codes</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">disableRecoveryCodes</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">void</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_disableTimeBasedPrivateSignature">
+        disableTimeBasedPrivateSignature()
+        <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#method_disableTimeBasedPrivateSignature" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php"><a href="files/src-socialvoidlib-objects-user-userauthenticationproperties.html"><abbr title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php">UserAuthenticationProperties.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">269</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Disables the time based private signature method</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">disableTimeBasedPrivateSignature</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">void</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_fromArray">
+        fromArray()
+        <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#method_fromArray" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php"><a href="files/src-socialvoidlib-objects-user-userauthenticationproperties.html"><abbr title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php">UserAuthenticationProperties.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">413</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Constructs the object from an array representation</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">fromArray</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$data</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html"><abbr title="\SocialvoidLib\Objects\User\UserAuthenticationProperties">UserAuthenticationProperties</abbr></a></span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$data</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type"><a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html"><abbr title="\SocialvoidLib\Objects\User\UserAuthenticationProperties">UserAuthenticationProperties</abbr></a></span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_generateRecoveryCodes">
+        generateRecoveryCodes()
+        <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#method_generateRecoveryCodes" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php"><a href="files/src-socialvoidlib-objects-user-userauthenticationproperties.html"><abbr title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php">UserAuthenticationProperties.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">111</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Generates a new set of recovery codes, if a set already exists
+while &#039;override&#039; is set to False, an exception will be thrown</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">generateRecoveryCodes</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$override</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">False</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+        <section class="phpdocumentor-description"><p>Returns the recovery codes once successful</p>
+</section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$override</span>
+                : <span class="phpdocumentor-signature__argument__return-type">bool</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">False</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><abbr title="\tsa\Exceptions\BadLengthException">BadLengthException</abbr></span>
+                                                            
+                                                 <section class="phpdocumentor-description"></section>
+
+                                    </dd>
+                            <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><abbr title="\tsa\Exceptions\SecuredRandomProcessorNotFoundException">SecuredRandomProcessorNotFoundException</abbr></span>
+                                                            
+                                                 <section class="phpdocumentor-description"></section>
+
+                                    </dd>
+                            <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="classes/SocialvoidLib-Exceptions-Internal-RecoveryCodesAlreadyExistsException.html"><abbr title="\SocialvoidLib\Exceptions\Internal\RecoveryCodesAlreadyExistsException">RecoveryCodesAlreadyExistsException</abbr></a></span>
+                                                            
+                                                 <section class="phpdocumentor-description"></section>
+
+                                    </dd>
+                        </dl>
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_generateTimeBasedPrivateSignature">
+        generateTimeBasedPrivateSignature()
+        <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#method_generateTimeBasedPrivateSignature" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php"><a href="files/src-socialvoidlib-objects-user-userauthenticationproperties.html"><abbr title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php">UserAuthenticationProperties.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">206</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Generates a new time based private signature, throws an exception
+if one already exists and override isn&#039;t set to True</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">generateTimeBasedPrivateSignature</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$override</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">False</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$override</span>
+                : <span class="phpdocumentor-signature__argument__return-type">bool</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">False</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><abbr title="\tsa\Exceptions\BadLengthException">BadLengthException</abbr></span>
+                                                            
+                                                 <section class="phpdocumentor-description"></section>
+
+                                    </dd>
+                            <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><abbr title="\tsa\Exceptions\SecuredRandomProcessorNotFoundException">SecuredRandomProcessorNotFoundException</abbr></span>
+                                                            
+                                                 <section class="phpdocumentor-description"></section>
+
+                                    </dd>
+                            <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="classes/SocialvoidLib-Exceptions-Internal-TimeBasedPrivateSignatureAlreadyExistsException.html"><abbr title="\SocialvoidLib\Exceptions\Internal\TimeBasedPrivateSignatureAlreadyExistsException">TimeBasedPrivateSignatureAlreadyExistsException</abbr></a></span>
+                                                            
+                                                 <section class="phpdocumentor-description"></section>
+
+                                    </dd>
+                        </dl>
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">string</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_passwordAuthentication">
+        passwordAuthentication()
+        <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#method_passwordAuthentication" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php"><a href="files/src-socialvoidlib-objects-user-userauthenticationproperties.html"><abbr title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php">UserAuthenticationProperties.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">374</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Processes a password authentication method</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">passwordAuthentication</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$password</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$password</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="classes/SocialvoidLib-Exceptions-Standard-Authentication-IncorrectPasswordException.html"><abbr title="\SocialvoidLib\Exceptions\Standard\Authentication\IncorrectPasswordException">IncorrectPasswordException</abbr></a></span>
+                                                            
+                                                 <section class="phpdocumentor-description"></section>
+
+                                    </dd>
+                            <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="classes/SocialvoidLib-Exceptions-Standard-Authentication-NoPasswordAuthenticationAvailableException.html"><abbr title="\SocialvoidLib\Exceptions\Standard\Authentication\NoPasswordAuthenticationAvailableException">NoPasswordAuthenticationAvailableException</abbr></a></span>
+                                                            
+                                                 <section class="phpdocumentor-description"></section>
+
+                                    </dd>
+                        </dl>
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">bool</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_removeRecoveryCode">
+        removeRecoveryCode()
+        <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#method_removeRecoveryCode" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php"><a href="files/src-socialvoidlib-objects-user-userauthenticationproperties.html"><abbr title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php">UserAuthenticationProperties.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">167</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Removes an existing recovery code</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">removeRecoveryCode</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$input</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$throw_exception</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">false</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$input</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$throw_exception</span>
+                : <span class="phpdocumentor-signature__argument__return-type">bool</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">false</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="classes/SocialvoidLib-Exceptions-Internal-NoRecoveryCodesAvailableException.html"><abbr title="\SocialvoidLib\Exceptions\Internal\NoRecoveryCodesAvailableException">NoRecoveryCodesAvailableException</abbr></a></span>
+                                                            
+                                                 <section class="phpdocumentor-description"></section>
+
+                                    </dd>
+                        </dl>
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">void</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_setCoaApplicationId">
+        setCoaApplicationId()
+        <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#method_setCoaApplicationId" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php"><a href="files/src-socialvoidlib-objects-user-userauthenticationproperties.html"><abbr title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php">UserAuthenticationProperties.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">304</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Sets the COA Application ID used to authenticate the user</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">setCoaApplicationId</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$application_id</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$application_id</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string|null</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">void</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_setPassword">
+        setPassword()
+        <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#method_setPassword" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php"><a href="files/src-socialvoidlib-objects-user-userauthenticationproperties.html"><abbr title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php">UserAuthenticationProperties.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">281</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Sets the password property properly.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">setPassword</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$password</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$password</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string|null</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="classes/SocialvoidLib-Exceptions-Standard-Validation-InvalidPasswordException.html"><abbr title="\SocialvoidLib\Exceptions\Standard\Validation\InvalidPasswordException">InvalidPasswordException</abbr></a></span>
+                                                            
+                                                 <section class="phpdocumentor-description"></section>
+
+                                    </dd>
+                        </dl>
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">void</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_toArray">
+        toArray()
+        <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#method_toArray" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php"><a href="files/src-socialvoidlib-objects-user-userauthenticationproperties.html"><abbr title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php">UserAuthenticationProperties.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">393</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Returns an array representation of this object</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">toArray</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_twoFactorAuthentication">
+        twoFactorAuthentication()
+        <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#method_twoFactorAuthentication" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php"><a href="files/src-socialvoidlib-objects-user-userauthenticationproperties.html"><abbr title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php">UserAuthenticationProperties.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">331</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Validates the two factor authentication code</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">twoFactorAuthentication</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$input</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$update</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">true</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$input</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$update</span>
+                : <span class="phpdocumentor-signature__argument__return-type">bool</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">true</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="classes/SocialvoidLib-Exceptions-Standard-Authentication-IncorrectTwoFactorAuthenticationCodeException.html"><abbr title="\SocialvoidLib\Exceptions\Standard\Authentication\IncorrectTwoFactorAuthenticationCodeException">IncorrectTwoFactorAuthenticationCodeException</abbr></a></span>
+                                                            
+                                                 <section class="phpdocumentor-description"></section>
+
+                                    </dd>
+                            <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="classes/SocialvoidLib-Exceptions-Internal-NoRecoveryCodesAvailableException.html"><abbr title="\SocialvoidLib\Exceptions\Internal\NoRecoveryCodesAvailableException">NoRecoveryCodesAvailableException</abbr></a></span>
+                                                            
+                                                 <section class="phpdocumentor-description"></section>
+
+                                    </dd>
+                            <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="classes/SocialvoidLib-Exceptions-Standard-Authentication-NoTwoFactorAuthenticationAvailableException.html"><abbr title="\SocialvoidLib\Exceptions\Standard\Authentication\NoTwoFactorAuthenticationAvailableException">NoTwoFactorAuthenticationAvailableException</abbr></a></span>
+                                                            
+                                                 <section class="phpdocumentor-description"></section>
+
+                                    </dd>
+                        </dl>
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">bool</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_validateRecoveryCode">
+        validateRecoveryCode()
+        <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#method_validateRecoveryCode" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php"><a href="files/src-socialvoidlib-objects-user-userauthenticationproperties.html"><abbr title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php">UserAuthenticationProperties.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">141</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Validates a recovery code</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">validateRecoveryCode</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$input</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$throw_exception</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">false</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$input</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$throw_exception</span>
+                : <span class="phpdocumentor-signature__argument__return-type">bool</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">false</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="classes/SocialvoidLib-Exceptions-Internal-NoRecoveryCodesAvailableException.html"><abbr title="\SocialvoidLib\Exceptions\Internal\NoRecoveryCodesAvailableException">NoRecoveryCodesAvailableException</abbr></a></span>
+                                                            
+                                                 <section class="phpdocumentor-description"></section>
+
+                                    </dd>
+                        </dl>
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">bool</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_validateTimeBasedOneTimePassword">
+        validateTimeBasedOneTimePassword()
+        <a href="classes/SocialvoidLib-Objects-User-UserAuthenticationProperties.html#method_validateTimeBasedOneTimePassword" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php"><a href="files/src-socialvoidlib-objects-user-userauthenticationproperties.html"><abbr title="src/SocialvoidLib/Objects/User/UserAuthenticationProperties.php">UserAuthenticationProperties.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">248</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Validates the time based one time password input</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">validateTimeBasedOneTimePassword</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$input</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$input</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="classes/SocialvoidLib-Exceptions-Internal-NoTimeBasedSignatureAvailableException.html"><abbr title="\SocialvoidLib\Exceptions\Internal\NoTimeBasedSignatureAvailableException">NoTimeBasedSignatureAvailableException</abbr></a></span>
+                                                            
+                                                 <section class="phpdocumentor-description"></section>
+
+                                    </dd>
+                        </dl>
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">bool</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+            </section>
+
     </article>
                 <section data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
     <section class="phpdocumentor-search-results__dialog">

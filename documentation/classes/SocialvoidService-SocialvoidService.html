@@ -51,7 +51,8 @@
     
     <section class="phpdocumentor-sidebar__category">
         <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
-                                                <h4 class="phpdocumentor-sidebar__root-namespace"><a href="namespaces/socialvoidlib.html"><abbr title="\SocialvoidLib">SocialvoidLib</abbr></a></h4>
+                                <h3 class="phpdocumentor-sidebar__root-namespace"><a href="namespaces/default.html"><abbr title="\">Global</abbr></a></h3>
+                                        <h4 class="phpdocumentor-sidebar__root-namespace"><a href="namespaces/socialvoidlib.html"><abbr title="\SocialvoidLib">SocialvoidLib</abbr></a></h4>
                 <ul class="phpdocumentor-list">
                                             <li><a href="namespaces/socialvoidlib-abstracts.html"><abbr title="\SocialvoidLib\Abstracts">Abstracts</abbr></a></li>
                                             <li><a href="namespaces/socialvoidlib-classes.html"><abbr title="\SocialvoidLib\Classes">Classes</abbr></a></li>
@@ -143,14 +144,662 @@
 
 
 
+<h3 id="toc">
+    Table of Contents
+    <a href="#toc" class="headerlink"><i class="fas fa-link"></i></a>
+</h3>
+
+<dl class="phpdocumentor-table-of-contents">
+                <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidService-SocialvoidService.html#property_BackgroundWorker">$BackgroundWorker</a>
+    <span>
+                &nbsp;: <abbr title="\BackgroundWorker\BackgroundWorker">BackgroundWorker</abbr>            </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidService-SocialvoidService.html#property_IsSleeping">$IsSleeping</a>
+    <span>
+                &nbsp;: bool            </span>
+</dt>
+<dd>Indicates if this worker is sleeping</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidService-SocialvoidService.html#property_LastWorkerActivity">$LastWorkerActivity</a>
+    <span>
+                &nbsp;: int            </span>
+</dt>
+<dd>The last Unix Timestamp when the worker was invoked</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidService-SocialvoidService.html#property_LogHandler">$LogHandler</a>
+    <span>
+                &nbsp;: <abbr title="\VerboseAdventure\VerboseAdventure">VerboseAdventure</abbr>            </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidService-SocialvoidService.html#property_SocialvoidLib">$SocialvoidLib</a>
+    <span>
+                &nbsp;: <a href="classes/SocialvoidLib-SocialvoidLib.html"><abbr title="\SocialvoidLib\SocialvoidLib">SocialvoidLib</abbr></a>            </span>
+</dt>
+<dd></dd>
+
+                <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidService-SocialvoidService.html#method_getBackgroundWorker">getBackgroundWorker()</a>
+    <span>
+                        &nbsp;: <abbr title="\BackgroundWorker\BackgroundWorker">BackgroundWorker</abbr>    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidService-SocialvoidService.html#method_getLastWorkerActivity">getLastWorkerActivity()</a>
+    <span>
+                        &nbsp;: int    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidService-SocialvoidService.html#method_getLogHandler">getLogHandler()</a>
+    <span>
+                        &nbsp;: <abbr title="\VerboseAdventure\VerboseAdventure">VerboseAdventure</abbr>    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidService-SocialvoidService.html#method_getSocialvoidLib">getSocialvoidLib()</a>
+    <span>
+                        &nbsp;: <a href="classes/SocialvoidLib-SocialvoidLib.html"><abbr title="\SocialvoidLib\SocialvoidLib">SocialvoidLib</abbr></a>    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidService-SocialvoidService.html#method_isSleeping">isSleeping()</a>
+    <span>
+                        &nbsp;: bool    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidService-SocialvoidService.html#method_processSleepCycle">processSleepCycle()</a>
+    <span>
+                        &nbsp;: mixed    </span>
+</dt>
+<dd>Determines if this current worker should save resources by going to sleep or wake up depending on the
+last activity cycle</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidService-SocialvoidService.html#method_processWakeup">processWakeup()</a>
+    <span>
+                        &nbsp;: mixed    </span>
+</dt>
+<dd>Wakes up the worker if it&#039;s sleeping</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidService-SocialvoidService.html#method_setIsSleeping">setIsSleeping()</a>
+    <span>
+                        &nbsp;: void    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidService-SocialvoidService.html#method_setLastWorkerActivity">setLastWorkerActivity()</a>
+    <span>
+                        &nbsp;: void    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidService-SocialvoidService.html#method_setLogHandler">setLogHandler()</a>
+    <span>
+                        &nbsp;: void    </span>
+</dt>
+<dd></dd>
+
+        </dl>
 
 
 
         
 
         
+    <section class="phpdocumentor-properties">
+        <h3 class="phpdocumentor-elements__header" id="properties">
+            Properties
+            <a href="classes/SocialvoidService-SocialvoidService.html#properties" class="headerlink"><i class="fas fa-link"></i></a>
+        </h3>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+            -static                                            "
+>
+    <h4 class="phpdocumentor-element__name" id="property_BackgroundWorker">
+        $BackgroundWorker
+        <a href="classes/SocialvoidService-SocialvoidService.html#property_BackgroundWorker" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidService/SocialvoidService.php"><a href="files/src-socialvoidservice-socialvoidservice.html"><abbr title="src/SocialvoidService/SocialvoidService.php">SocialvoidService.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">46</span>
+</aside>
 
-        
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type"><abbr title="\BackgroundWorker\BackgroundWorker">BackgroundWorker</abbr></span>
+    <span class="phpdocumentor-signature__name">$BackgroundWorker</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+            -static                                            "
+>
+    <h4 class="phpdocumentor-element__name" id="property_IsSleeping">
+        $IsSleeping
+        <a href="classes/SocialvoidService-SocialvoidService.html#property_IsSleeping" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidService/SocialvoidService.php"><a href="files/src-socialvoidservice-socialvoidservice.html"><abbr title="src/SocialvoidService/SocialvoidService.php">SocialvoidService.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">41</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Indicates if this worker is sleeping</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">bool</span>
+    <span class="phpdocumentor-signature__name">$IsSleeping</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+            -static                                            "
+>
+    <h4 class="phpdocumentor-element__name" id="property_LastWorkerActivity">
+        $LastWorkerActivity
+        <a href="classes/SocialvoidService-SocialvoidService.html#property_LastWorkerActivity" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidService/SocialvoidService.php"><a href="files/src-socialvoidservice-socialvoidservice.html"><abbr title="src/SocialvoidService/SocialvoidService.php">SocialvoidService.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">34</span>
+</aside>
+
+        <p class="phpdocumentor-summary">The last Unix Timestamp when the worker was invoked</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">int</span>
+    <span class="phpdocumentor-signature__name">$LastWorkerActivity</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+            -static                                            "
+>
+    <h4 class="phpdocumentor-element__name" id="property_LogHandler">
+        $LogHandler
+        <a href="classes/SocialvoidService-SocialvoidService.html#property_LogHandler" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidService/SocialvoidService.php"><a href="files/src-socialvoidservice-socialvoidservice.html"><abbr title="src/SocialvoidService/SocialvoidService.php">SocialvoidService.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">51</span>
+</aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type"><abbr title="\VerboseAdventure\VerboseAdventure">VerboseAdventure</abbr></span>
+    <span class="phpdocumentor-signature__name">$LogHandler</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+            -static                                            "
+>
+    <h4 class="phpdocumentor-element__name" id="property_SocialvoidLib">
+        $SocialvoidLib
+        <a href="classes/SocialvoidService-SocialvoidService.html#property_SocialvoidLib" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidService/SocialvoidService.php"><a href="files/src-socialvoidservice-socialvoidservice.html"><abbr title="src/SocialvoidService/SocialvoidService.php">SocialvoidService.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">27</span>
+</aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type"><a href="classes/SocialvoidLib-SocialvoidLib.html"><abbr title="\SocialvoidLib\SocialvoidLib">SocialvoidLib</abbr></a></span>
+    <span class="phpdocumentor-signature__name">$SocialvoidLib</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+            </section>
+
+            <section class="phpdocumentor-methods">
+        <h3 class="phpdocumentor-elements__header" id="methods">
+            Methods
+            <a href="classes/SocialvoidService-SocialvoidService.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
+        </h3>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getBackgroundWorker">
+        getBackgroundWorker()
+        <a href="classes/SocialvoidService-SocialvoidService.html#method_getBackgroundWorker" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidService/SocialvoidService.php"><a href="files/src-socialvoidservice-socialvoidservice.html"><abbr title="src/SocialvoidService/SocialvoidService.php">SocialvoidService.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">56</span>
+</aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">getBackgroundWorker</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\BackgroundWorker\BackgroundWorker">BackgroundWorker</abbr></span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type"><abbr title="\BackgroundWorker\BackgroundWorker">BackgroundWorker</abbr></span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getLastWorkerActivity">
+        getLastWorkerActivity()
+        <a href="classes/SocialvoidService-SocialvoidService.html#method_getLastWorkerActivity" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidService/SocialvoidService.php"><a href="files/src-socialvoidservice-socialvoidservice.html"><abbr title="src/SocialvoidService/SocialvoidService.php">SocialvoidService.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">80</span>
+</aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">getLastWorkerActivity</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">int</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getLogHandler">
+        getLogHandler()
+        <a href="classes/SocialvoidService-SocialvoidService.html#method_getLogHandler" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidService/SocialvoidService.php"><a href="files/src-socialvoidservice-socialvoidservice.html"><abbr title="src/SocialvoidService/SocialvoidService.php">SocialvoidService.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">64</span>
+</aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">getLogHandler</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\VerboseAdventure\VerboseAdventure">VerboseAdventure</abbr></span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type"><abbr title="\VerboseAdventure\VerboseAdventure">VerboseAdventure</abbr></span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getSocialvoidLib">
+        getSocialvoidLib()
+        <a href="classes/SocialvoidService-SocialvoidService.html#method_getSocialvoidLib" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidService/SocialvoidService.php"><a href="files/src-socialvoidservice-socialvoidservice.html"><abbr title="src/SocialvoidService/SocialvoidService.php">SocialvoidService.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">112</span>
+</aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">getSocialvoidLib</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/SocialvoidLib-SocialvoidLib.html"><abbr title="\SocialvoidLib\SocialvoidLib">SocialvoidLib</abbr></a></span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type"><a href="classes/SocialvoidLib-SocialvoidLib.html"><abbr title="\SocialvoidLib\SocialvoidLib">SocialvoidLib</abbr></a></span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_isSleeping">
+        isSleeping()
+        <a href="classes/SocialvoidService-SocialvoidService.html#method_isSleeping" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidService/SocialvoidService.php"><a href="files/src-socialvoidservice-socialvoidservice.html"><abbr title="src/SocialvoidService/SocialvoidService.php">SocialvoidService.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">96</span>
+</aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">isSleeping</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">bool</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_processSleepCycle">
+        processSleepCycle()
+        <a href="classes/SocialvoidService-SocialvoidService.html#method_processSleepCycle" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidService/SocialvoidService.php"><a href="files/src-socialvoidservice-socialvoidservice.html"><abbr title="src/SocialvoidService/SocialvoidService.php">SocialvoidService.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">130</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Determines if this current worker should save resources by going to sleep or wake up depending on the
+last activity cycle</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">processSleepCycle</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">mixed</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_processWakeup">
+        processWakeup()
+        <a href="classes/SocialvoidService-SocialvoidService.html#method_processWakeup" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidService/SocialvoidService.php"><a href="files/src-socialvoidservice-socialvoidservice.html"><abbr title="src/SocialvoidService/SocialvoidService.php">SocialvoidService.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">120</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Wakes up the worker if it&#039;s sleeping</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">processWakeup</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">mixed</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_setIsSleeping">
+        setIsSleeping()
+        <a href="classes/SocialvoidService-SocialvoidService.html#method_setIsSleeping" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidService/SocialvoidService.php"><a href="files/src-socialvoidservice-socialvoidservice.html"><abbr title="src/SocialvoidService/SocialvoidService.php">SocialvoidService.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">104</span>
+</aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">setIsSleeping</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$IsSleeping</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$IsSleeping</span>
+                : <span class="phpdocumentor-signature__argument__return-type">bool</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">void</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_setLastWorkerActivity">
+        setLastWorkerActivity()
+        <a href="classes/SocialvoidService-SocialvoidService.html#method_setLastWorkerActivity" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidService/SocialvoidService.php"><a href="files/src-socialvoidservice-socialvoidservice.html"><abbr title="src/SocialvoidService/SocialvoidService.php">SocialvoidService.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">88</span>
+</aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">setLastWorkerActivity</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$LastWorkerActivity</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$LastWorkerActivity</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">void</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_setLogHandler">
+        setLogHandler()
+        <a href="classes/SocialvoidService-SocialvoidService.html#method_setLogHandler" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidService/SocialvoidService.php"><a href="files/src-socialvoidservice-socialvoidservice.html"><abbr title="src/SocialvoidService/SocialvoidService.php">SocialvoidService.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">72</span>
+</aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">setLogHandler</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\VerboseAdventure\VerboseAdventure">VerboseAdventure</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$LogHandler</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$LogHandler</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\VerboseAdventure\VerboseAdventure">VerboseAdventure</abbr></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">void</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+            </section>
+
     </article>
                 <section data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
     <section class="phpdocumentor-search-results__dialog">

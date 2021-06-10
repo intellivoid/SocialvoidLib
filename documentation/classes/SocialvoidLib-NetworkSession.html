@@ -51,7 +51,8 @@
     
     <section class="phpdocumentor-sidebar__category">
         <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
-                                                <h4 class="phpdocumentor-sidebar__root-namespace"><a href="namespaces/socialvoidlib.html"><abbr title="\SocialvoidLib">SocialvoidLib</abbr></a></h4>
+                                <h3 class="phpdocumentor-sidebar__root-namespace"><a href="namespaces/default.html"><abbr title="\">Global</abbr></a></h3>
+                                        <h4 class="phpdocumentor-sidebar__root-namespace"><a href="namespaces/socialvoidlib.html"><abbr title="\SocialvoidLib">SocialvoidLib</abbr></a></h4>
                 <ul class="phpdocumentor-list">
                                             <li><a href="namespaces/socialvoidlib-abstracts.html"><abbr title="\SocialvoidLib\Abstracts">Abstracts</abbr></a></li>
                                             <li><a href="namespaces/socialvoidlib-classes.html"><abbr title="\SocialvoidLib\Classes">Classes</abbr></a></li>
@@ -149,7 +150,21 @@
 </h3>
 
 <dl class="phpdocumentor-table-of-contents">
-                <dt class="phpdocumentor-table-of-contents__entry -property -private">
+                <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidLib-NetworkSession.html#property_active_session">$active_session</a>
+    <span>
+                &nbsp;: <a href="classes/SocialvoidLib-Objects-ActiveSession.html"><abbr title="\SocialvoidLib\Objects\ActiveSession">ActiveSession</abbr></a>|null            </span>
+</dt>
+<dd>The current active session on the network</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidLib-NetworkSession.html#property_authenticated_user">$authenticated_user</a>
+    <span>
+                &nbsp;: <a href="classes/SocialvoidLib-Objects-User.html"><abbr title="\SocialvoidLib\Objects\User">User</abbr></a>|null            </span>
+</dt>
+<dd>The current user that&#039;s currently authenticated</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -private">
     <a href="classes/SocialvoidLib-NetworkSession.html#property_cloud">$cloud</a>
     <span>
                 &nbsp;: <a href="classes/SocialvoidLib-Network-Cloud.html"><abbr title="\SocialvoidLib\Network\Cloud">Cloud</abbr></a>            </span>
@@ -184,7 +199,119 @@
 </dt>
 <dd></dd>
 
-            </dl>
+                <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-NetworkSession.html#method___construct">__construct()</a>
+    <span>
+                        &nbsp;: mixed    </span>
+</dt>
+<dd>Network constructor.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-NetworkSession.html#method_authenticateUser">authenticateUser()</a>
+    <span>
+                        &nbsp;: <a href="classes/SocialvoidLib-Objects-ActiveSession.html"><abbr title="\SocialvoidLib\Objects\ActiveSession">ActiveSession</abbr></a>    </span>
+</dt>
+<dd>Authenticates the user into the network and establishes an active session</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-NetworkSession.html#method_declareActiveSession">declareActiveSession()</a>
+    <span>
+                        &nbsp;: void    </span>
+</dt>
+<dd>Declares the current active session on the network</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-NetworkSession.html#method_dumpNetworkSession">dumpNetworkSession()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd>Returns an array representation of the current network session</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-NetworkSession.html#method_getActiveSession">getActiveSession()</a>
+    <span>
+                        &nbsp;: <a href="classes/SocialvoidLib-Objects-ActiveSession.html"><abbr title="\SocialvoidLib\Objects\ActiveSession">ActiveSession</abbr></a>|null    </span>
+</dt>
+<dd>Returns the current active session</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-NetworkSession.html#method_getAuthenticatedUser">getAuthenticatedUser()</a>
+    <span>
+                        &nbsp;: <a href="classes/SocialvoidLib-Objects-User.html"><abbr title="\SocialvoidLib\Objects\User">User</abbr></a>|null    </span>
+</dt>
+<dd>Returns the current authenticated user on the network</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-NetworkSession.html#method_getCloud">getCloud()</a>
+    <span>
+                        &nbsp;: <a href="classes/SocialvoidLib-Network-Cloud.html"><abbr title="\SocialvoidLib\Network\Cloud">Cloud</abbr></a>    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-NetworkSession.html#method_getFlags">getFlags()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd>Returns the current flags on the network</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-NetworkSession.html#method_getSocialvoidLib">getSocialvoidLib()</a>
+    <span>
+                        &nbsp;: <a href="classes/SocialvoidLib-SocialvoidLib.html"><abbr title="\SocialvoidLib\SocialvoidLib">SocialvoidLib</abbr></a>    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-NetworkSession.html#method_getTimeline">getTimeline()</a>
+    <span>
+                        &nbsp;: <a href="classes/SocialvoidLib-Network-Timeline.html"><abbr title="\SocialvoidLib\Network\Timeline">Timeline</abbr></a>    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-NetworkSession.html#method_getUsers">getUsers()</a>
+    <span>
+                        &nbsp;: <a href="classes/SocialvoidLib-Network-Users.html"><abbr title="\SocialvoidLib\Network\Users">Users</abbr></a>    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-NetworkSession.html#method_isAuthenticated">isAuthenticated()</a>
+    <span>
+                        &nbsp;: bool    </span>
+</dt>
+<dd>Indicates if the user is currently authenticated</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-NetworkSession.html#method_loadFromSession">loadFromSession()</a>
+    <span>
+                        &nbsp;: <a href="classes/SocialvoidLib-NetworkSession.html"><abbr title="\SocialvoidLib\NetworkSession">NetworkSession</abbr></a>    </span>
+</dt>
+<dd>Constructs a network session from an array representation</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-NetworkSession.html#method_logout">logout()</a>
+    <span>
+                        &nbsp;: void    </span>
+</dt>
+<dd>Destroys the current session</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-NetworkSession.html#method_setAuthenticatedUser">setAuthenticatedUser()</a>
+    <span>
+                        &nbsp;: void    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-NetworkSession.html#method_updateActiveSession">updateActiveSession()</a>
+    <span>
+                        &nbsp;: void    </span>
+</dt>
+<dd>Updates the current active session</dd>
+
+        </dl>
 
 
 
@@ -196,6 +323,70 @@
             Properties
             <a href="classes/SocialvoidLib-NetworkSession.html#properties" class="headerlink"><i class="fas fa-link"></i></a>
         </h3>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_active_session">
+        $active_session
+        <a href="classes/SocialvoidLib-NetworkSession.html#property_active_session" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/NetworkSession.php"><a href="files/src-socialvoidlib-networksession.html"><abbr title="src/SocialvoidLib/NetworkSession.php">NetworkSession.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">54</span>
+</aside>
+
+        <p class="phpdocumentor-summary">The current active session on the network</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type"><a href="classes/SocialvoidLib-Objects-ActiveSession.html"><abbr title="\SocialvoidLib\Objects\ActiveSession">ActiveSession</abbr></a>|null</span>
+    <span class="phpdocumentor-signature__name">$active_session</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_authenticated_user">
+        $authenticated_user
+        <a href="classes/SocialvoidLib-NetworkSession.html#property_authenticated_user" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/NetworkSession.php"><a href="files/src-socialvoidlib-networksession.html"><abbr title="src/SocialvoidLib/NetworkSession.php">NetworkSession.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">61</span>
+</aside>
+
+        <p class="phpdocumentor-summary">The current user that&#039;s currently authenticated</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type"><a href="classes/SocialvoidLib-Objects-User.html"><abbr title="\SocialvoidLib\Objects\User">User</abbr></a>|null</span>
+    <span class="phpdocumentor-signature__name">$authenticated_user</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
                     <article
         class="
             phpdocumentor-element
@@ -354,7 +545,823 @@
 </article>
             </section>
 
-        
+            <section class="phpdocumentor-methods">
+        <h3 class="phpdocumentor-elements__header" id="methods">
+            Methods
+            <a href="classes/SocialvoidLib-NetworkSession.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
+        </h3>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method___construct">
+        __construct()
+        <a href="classes/SocialvoidLib-NetworkSession.html#method___construct" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/NetworkSession.php"><a href="files/src-socialvoidlib-networksession.html"><abbr title="src/SocialvoidLib/NetworkSession.php">NetworkSession.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">87</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Network constructor.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/SocialvoidLib-SocialvoidLib.html"><abbr title="\SocialvoidLib\SocialvoidLib">SocialvoidLib</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$socialvoidLib</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$socialvoidLib</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/SocialvoidLib-SocialvoidLib.html"><abbr title="\SocialvoidLib\SocialvoidLib">SocialvoidLib</abbr></a></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">mixed</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_authenticateUser">
+        authenticateUser()
+        <a href="classes/SocialvoidLib-NetworkSession.html#method_authenticateUser" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/NetworkSession.php"><a href="files/src-socialvoidlib-networksession.html"><abbr title="src/SocialvoidLib/NetworkSession.php">NetworkSession.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">112</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Authenticates the user into the network and establishes an active session</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">authenticateUser</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/SocialvoidLib-InputTypes-SessionClient.html"><abbr title="\SocialvoidLib\InputTypes\SessionClient">SessionClient</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$sessionClient</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/SocialvoidLib-InputTypes-SessionDevice.html"><abbr title="\SocialvoidLib\InputTypes\SessionDevice">SessionDevice</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$sessionDevice</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/SocialvoidLib-Objects-User.html"><abbr title="\SocialvoidLib\Objects\User">User</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$user</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$authentication_method_used</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$ip_address</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/SocialvoidLib-Objects-ActiveSession.html"><abbr title="\SocialvoidLib\Objects\ActiveSession">ActiveSession</abbr></a></span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$sessionClient</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/SocialvoidLib-InputTypes-SessionClient.html"><abbr title="\SocialvoidLib\InputTypes\SessionClient">SessionClient</abbr></a></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$sessionDevice</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/SocialvoidLib-InputTypes-SessionDevice.html"><abbr title="\SocialvoidLib\InputTypes\SessionDevice">SessionDevice</abbr></a></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$user</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/SocialvoidLib-Objects-User.html"><abbr title="\SocialvoidLib\Objects\User">User</abbr></a></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$authentication_method_used</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$ip_address</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="classes/SocialvoidLib-Exceptions-Internal-AlreadyAuthenticatedToNetwork.html"><abbr title="\SocialvoidLib\Exceptions\Internal\AlreadyAuthenticatedToNetwork">AlreadyAuthenticatedToNetwork</abbr></a></span>
+                                                            
+                                                 <section class="phpdocumentor-description"></section>
+
+                                    </dd>
+                            <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="classes/SocialvoidLib-Exceptions-GenericInternal-DatabaseException.html"><abbr title="\SocialvoidLib\Exceptions\GenericInternal\DatabaseException">DatabaseException</abbr></a></span>
+                                                            
+                                                 <section class="phpdocumentor-description"></section>
+
+                                    </dd>
+                            <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="classes/SocialvoidLib-Exceptions-GenericInternal-InvalidSearchMethodException.html"><abbr title="\SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException">InvalidSearchMethodException</abbr></a></span>
+                                                            
+                                                 <section class="phpdocumentor-description"></section>
+
+                                    </dd>
+                            <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="classes/SocialvoidLib-Exceptions-Standard-Authentication-SessionNotFoundException.html"><abbr title="\SocialvoidLib\Exceptions\Standard\Authentication\SessionNotFoundException">SessionNotFoundException</abbr></a></span>
+                                                            
+                                                 <section class="phpdocumentor-description"></section>
+
+                                    </dd>
+                            <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="classes/SocialvoidLib-Exceptions-Standard-Network-PeerNotFoundException.html"><abbr title="\SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException">PeerNotFoundException</abbr></a></span>
+                                                            
+                                                 <section class="phpdocumentor-description"></section>
+
+                                    </dd>
+                            <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="classes/SocialvoidLib-Exceptions-Standard-Authentication-SessionNoLongerAuthenticatedException.html"><abbr title="\SocialvoidLib\Exceptions\Standard\Authentication\SessionNoLongerAuthenticatedException">SessionNoLongerAuthenticatedException</abbr></a>|<a href="classes/SocialvoidLib-Exceptions-GenericInternal-CacheException.html"><abbr title="\SocialvoidLib\Exceptions\GenericInternal\CacheException">CacheException</abbr></a></span>
+                                                            
+                                                 <section class="phpdocumentor-description"></section>
+
+                                    </dd>
+                        </dl>
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type"><a href="classes/SocialvoidLib-Objects-ActiveSession.html"><abbr title="\SocialvoidLib\Objects\ActiveSession">ActiveSession</abbr></a></span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_declareActiveSession">
+        declareActiveSession()
+        <a href="classes/SocialvoidLib-NetworkSession.html#method_declareActiveSession" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/NetworkSession.php"><a href="files/src-socialvoidlib-networksession.html"><abbr title="src/SocialvoidLib/NetworkSession.php">NetworkSession.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">142</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Declares the current active session on the network</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">declareActiveSession</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$session_public_id</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$ip_address</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$session_public_id</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$ip_address</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string|null</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="classes/SocialvoidLib-Exceptions-Internal-AlreadyAuthenticatedToNetwork.html"><abbr title="\SocialvoidLib\Exceptions\Internal\AlreadyAuthenticatedToNetwork">AlreadyAuthenticatedToNetwork</abbr></a></span>
+                                                            
+                                                 <section class="phpdocumentor-description"></section>
+
+                                    </dd>
+                            <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="classes/SocialvoidLib-Exceptions-GenericInternal-DatabaseException.html"><abbr title="\SocialvoidLib\Exceptions\GenericInternal\DatabaseException">DatabaseException</abbr></a></span>
+                                                            
+                                                 <section class="phpdocumentor-description"></section>
+
+                                    </dd>
+                            <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="classes/SocialvoidLib-Exceptions-GenericInternal-InvalidSearchMethodException.html"><abbr title="\SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException">InvalidSearchMethodException</abbr></a></span>
+                                                            
+                                                 <section class="phpdocumentor-description"></section>
+
+                                    </dd>
+                            <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="classes/SocialvoidLib-Exceptions-Standard-Authentication-SessionNotFoundException.html"><abbr title="\SocialvoidLib\Exceptions\Standard\Authentication\SessionNotFoundException">SessionNotFoundException</abbr></a></span>
+                                                            
+                                                 <section class="phpdocumentor-description"></section>
+
+                                    </dd>
+                            <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="classes/SocialvoidLib-Exceptions-Standard-Network-PeerNotFoundException.html"><abbr title="\SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException">PeerNotFoundException</abbr></a></span>
+                                                            
+                                                 <section class="phpdocumentor-description"></section>
+
+                                    </dd>
+                            <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="classes/SocialvoidLib-Exceptions-Standard-Authentication-SessionNoLongerAuthenticatedException.html"><abbr title="\SocialvoidLib\Exceptions\Standard\Authentication\SessionNoLongerAuthenticatedException">SessionNoLongerAuthenticatedException</abbr></a></span>
+                                                            
+                                                 <section class="phpdocumentor-description"></section>
+
+                                    </dd>
+                            <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="classes/SocialvoidLib-Exceptions-GenericInternal-CacheException.html"><abbr title="\SocialvoidLib\Exceptions\GenericInternal\CacheException">CacheException</abbr></a></span>
+                                                            
+                                                 <section class="phpdocumentor-description"></section>
+
+                                    </dd>
+                        </dl>
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">void</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_dumpNetworkSession">
+        dumpNetworkSession()
+        <a href="classes/SocialvoidLib-NetworkSession.html#method_dumpNetworkSession" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/NetworkSession.php"><a href="files/src-socialvoidlib-networksession.html"><abbr title="src/SocialvoidLib/NetworkSession.php">NetworkSession.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">262</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Returns an array representation of the current network session</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">dumpNetworkSession</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getActiveSession">
+        getActiveSession()
+        <a href="classes/SocialvoidLib-NetworkSession.html#method_getActiveSession" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/NetworkSession.php"><a href="files/src-socialvoidlib-networksession.html"><abbr title="src/SocialvoidLib/NetworkSession.php">NetworkSession.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">230</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Returns the current active session</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">getActiveSession</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/SocialvoidLib-Objects-ActiveSession.html"><abbr title="\SocialvoidLib\Objects\ActiveSession">ActiveSession</abbr></a>|null</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type"><a href="classes/SocialvoidLib-Objects-ActiveSession.html"><abbr title="\SocialvoidLib\Objects\ActiveSession">ActiveSession</abbr></a>|null</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getAuthenticatedUser">
+        getAuthenticatedUser()
+        <a href="classes/SocialvoidLib-NetworkSession.html#method_getAuthenticatedUser" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/NetworkSession.php"><a href="files/src-socialvoidlib-networksession.html"><abbr title="src/SocialvoidLib/NetworkSession.php">NetworkSession.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">220</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Returns the current authenticated user on the network</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">getAuthenticatedUser</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/SocialvoidLib-Objects-User.html"><abbr title="\SocialvoidLib\Objects\User">User</abbr></a>|null</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type"><a href="classes/SocialvoidLib-Objects-User.html"><abbr title="\SocialvoidLib\Objects\User">User</abbr></a>|null</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getCloud">
+        getCloud()
+        <a href="classes/SocialvoidLib-NetworkSession.html#method_getCloud" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/NetworkSession.php"><a href="files/src-socialvoidlib-networksession.html"><abbr title="src/SocialvoidLib/NetworkSession.php">NetworkSession.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">329</span>
+</aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">getCloud</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/SocialvoidLib-Network-Cloud.html"><abbr title="\SocialvoidLib\Network\Cloud">Cloud</abbr></a></span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type"><a href="classes/SocialvoidLib-Network-Cloud.html"><abbr title="\SocialvoidLib\Network\Cloud">Cloud</abbr></a></span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getFlags">
+        getFlags()
+        <a href="classes/SocialvoidLib-NetworkSession.html#method_getFlags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/NetworkSession.php"><a href="files/src-socialvoidlib-networksession.html"><abbr title="src/SocialvoidLib/NetworkSession.php">NetworkSession.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">252</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Returns the current flags on the network</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">getFlags</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getSocialvoidLib">
+        getSocialvoidLib()
+        <a href="classes/SocialvoidLib-NetworkSession.html#method_getSocialvoidLib" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/NetworkSession.php"><a href="files/src-socialvoidlib-networksession.html"><abbr title="src/SocialvoidLib/NetworkSession.php">NetworkSession.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">297</span>
+</aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">getSocialvoidLib</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/SocialvoidLib-SocialvoidLib.html"><abbr title="\SocialvoidLib\SocialvoidLib">SocialvoidLib</abbr></a></span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type"><a href="classes/SocialvoidLib-SocialvoidLib.html"><abbr title="\SocialvoidLib\SocialvoidLib">SocialvoidLib</abbr></a></span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getTimeline">
+        getTimeline()
+        <a href="classes/SocialvoidLib-NetworkSession.html#method_getTimeline" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/NetworkSession.php"><a href="files/src-socialvoidlib-networksession.html"><abbr title="src/SocialvoidLib/NetworkSession.php">NetworkSession.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">321</span>
+</aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">getTimeline</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/SocialvoidLib-Network-Timeline.html"><abbr title="\SocialvoidLib\Network\Timeline">Timeline</abbr></a></span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type"><a href="classes/SocialvoidLib-Network-Timeline.html"><abbr title="\SocialvoidLib\Network\Timeline">Timeline</abbr></a></span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getUsers">
+        getUsers()
+        <a href="classes/SocialvoidLib-NetworkSession.html#method_getUsers" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/NetworkSession.php"><a href="files/src-socialvoidlib-networksession.html"><abbr title="src/SocialvoidLib/NetworkSession.php">NetworkSession.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">313</span>
+</aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">getUsers</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/SocialvoidLib-Network-Users.html"><abbr title="\SocialvoidLib\Network\Users">Users</abbr></a></span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type"><a href="classes/SocialvoidLib-Network-Users.html"><abbr title="\SocialvoidLib\Network\Users">Users</abbr></a></span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_isAuthenticated">
+        isAuthenticated()
+        <a href="classes/SocialvoidLib-NetworkSession.html#method_isAuthenticated" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/NetworkSession.php"><a href="files/src-socialvoidlib-networksession.html"><abbr title="src/SocialvoidLib/NetworkSession.php">NetworkSession.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">210</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Indicates if the user is currently authenticated</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">isAuthenticated</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">bool</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_loadFromSession">
+        loadFromSession()
+        <a href="classes/SocialvoidLib-NetworkSession.html#method_loadFromSession" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/NetworkSession.php"><a href="files/src-socialvoidlib-networksession.html"><abbr title="src/SocialvoidLib/NetworkSession.php">NetworkSession.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">278</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Constructs a network session from an array representation</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">loadFromSession</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$data</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/SocialvoidLib-SocialvoidLib.html"><abbr title="\SocialvoidLib\SocialvoidLib">SocialvoidLib</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$socialvoidLib</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/SocialvoidLib-NetworkSession.html"><abbr title="\SocialvoidLib\NetworkSession">NetworkSession</abbr></a></span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$data</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$socialvoidLib</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/SocialvoidLib-SocialvoidLib.html"><abbr title="\SocialvoidLib\SocialvoidLib">SocialvoidLib</abbr></a></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type"><a href="classes/SocialvoidLib-NetworkSession.html"><abbr title="\SocialvoidLib\NetworkSession">NetworkSession</abbr></a></span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_logout">
+        logout()
+        <a href="classes/SocialvoidLib-NetworkSession.html#method_logout" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/NetworkSession.php"><a href="files/src-socialvoidlib-networksession.html"><abbr title="src/SocialvoidLib/NetworkSession.php">NetworkSession.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">187</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Destroys the current session</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">logout</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="classes/SocialvoidLib-Exceptions-GenericInternal-DatabaseException.html"><abbr title="\SocialvoidLib\Exceptions\GenericInternal\DatabaseException">DatabaseException</abbr></a></span>
+                                                            
+                                                 <section class="phpdocumentor-description"></section>
+
+                                    </dd>
+                            <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="classes/SocialvoidLib-Exceptions-Standard-Authentication-NotAuthenticatedException.html"><abbr title="\SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException">NotAuthenticatedException</abbr></a></span>
+                                                            
+                                                 <section class="phpdocumentor-description"></section>
+
+                                    </dd>
+                        </dl>
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">void</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_setAuthenticatedUser">
+        setAuthenticatedUser()
+        <a href="classes/SocialvoidLib-NetworkSession.html#method_setAuthenticatedUser" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/NetworkSession.php"><a href="files/src-socialvoidlib-networksession.html"><abbr title="src/SocialvoidLib/NetworkSession.php">NetworkSession.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">305</span>
+</aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">setAuthenticatedUser</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/SocialvoidLib-Objects-User.html"><abbr title="\SocialvoidLib\Objects\User">User</abbr></a>|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$authenticated_user</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$authenticated_user</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/SocialvoidLib-Objects-User.html"><abbr title="\SocialvoidLib\Objects\User">User</abbr></a>|null</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">void</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_updateActiveSession">
+        updateActiveSession()
+        <a href="classes/SocialvoidLib-NetworkSession.html#method_updateActiveSession" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/NetworkSession.php"><a href="files/src-socialvoidlib-networksession.html"><abbr title="src/SocialvoidLib/NetworkSession.php">NetworkSession.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">240</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Updates the current active session</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">updateActiveSession</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="classes/SocialvoidLib-Exceptions-GenericInternal-DatabaseException.html"><abbr title="\SocialvoidLib\Exceptions\GenericInternal\DatabaseException">DatabaseException</abbr></a></span>
+                                                            
+                                                 <section class="phpdocumentor-description"></section>
+
+                                    </dd>
+                        </dl>
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">void</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+            </section>
+
     </article>
                 <section data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
     <section class="phpdocumentor-search-results__dialog">

@@ -51,7 +51,8 @@
     
     <section class="phpdocumentor-sidebar__category">
         <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
-                                                <h4 class="phpdocumentor-sidebar__root-namespace"><a href="namespaces/socialvoidlib.html"><abbr title="\SocialvoidLib">SocialvoidLib</abbr></a></h4>
+                                <h3 class="phpdocumentor-sidebar__root-namespace"><a href="namespaces/default.html"><abbr title="\">Global</abbr></a></h3>
+                                        <h4 class="phpdocumentor-sidebar__root-namespace"><a href="namespaces/socialvoidlib.html"><abbr title="\SocialvoidLib">SocialvoidLib</abbr></a></h4>
                 <ul class="phpdocumentor-list">
                                             <li><a href="namespaces/socialvoidlib-abstracts.html"><abbr title="\SocialvoidLib\Abstracts">Abstracts</abbr></a></li>
                                             <li><a href="namespaces/socialvoidlib-classes.html"><abbr title="\SocialvoidLib\Classes">Classes</abbr></a></li>
@@ -145,14 +146,1026 @@
 
 
 
+<h3 id="toc">
+    Table of Contents
+    <a href="#toc" class="headerlink"><i class="fas fa-link"></i></a>
+</h3>
+
+<dl class="phpdocumentor-table-of-contents">
+                <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidLib-Objects-Post.html#property_CreatedTimestamp">$CreatedTimestamp</a>
+    <span>
+                &nbsp;: int            </span>
+</dt>
+<dd>The Unix Timestamp of when this was posted</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidLib-Objects-Post.html#property_Entities">$Entities</a>
+    <span>
+                &nbsp;: <a href="classes/SocialvoidLib-Objects-Post-Entities.html"><abbr title="\SocialvoidLib\Objects\Post\Entities">Entities</abbr></a>            </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidLib-Objects-Post.html#property_Flags">$Flags</a>
+    <span>
+                &nbsp;: array&lt;string|int, mixed&gt;            </span>
+</dt>
+<dd>Flags associated with this post</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidLib-Objects-Post.html#property_ID">$ID</a>
+    <span>
+                &nbsp;: int            </span>
+</dt>
+<dd>The Unique Internal Database ID for this post</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidLib-Objects-Post.html#property_LastUpdatedTimestamp">$LastUpdatedTimestamp</a>
+    <span>
+                &nbsp;: int            </span>
+</dt>
+<dd>The Unix Timestamp for when this record was last updated</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidLib-Objects-Post.html#property_Likes">$Likes</a>
+    <span>
+                &nbsp;: array&lt;string|int, int&gt;            </span>
+</dt>
+<dd>Array of User IDs that liked this post</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidLib-Objects-Post.html#property_MediaContent">$MediaContent</a>
+    <span>
+                &nbsp;: array&lt;string|int, <a href="classes/SocialvoidLib-Objects-Post-MediaContent.html"><abbr title="\SocialvoidLib\Objects\Post\MediaContent">MediaContent</abbr></a>&gt;            </span>
+</dt>
+<dd>The media content associated with this post</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidLib-Objects-Post.html#property_PosterUserID">$PosterUserID</a>
+    <span>
+                &nbsp;: int            </span>
+</dt>
+<dd>The original author of this post</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidLib-Objects-Post.html#property_PriorityLevel">$PriorityLevel</a>
+    <span>
+                &nbsp;: string            </span>
+</dt>
+<dd>The level of this post&#039;s priority</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidLib-Objects-Post.html#property_Properties">$Properties</a>
+    <span>
+                &nbsp;: <a href="classes/SocialvoidLib-Objects-Post-Properties.html"><abbr title="\SocialvoidLib\Objects\Post\Properties">Properties</abbr></a>            </span>
+</dt>
+<dd>The properties associated with this post</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidLib-Objects-Post.html#property_PublicID">$PublicID</a>
+    <span>
+                &nbsp;: string            </span>
+</dt>
+<dd>The Public ID of this post</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidLib-Objects-Post.html#property_Quote">$Quote</a>
+    <span>
+                &nbsp;: <a href="classes/SocialvoidLib-Objects-Post-Quote.html"><abbr title="\SocialvoidLib\Objects\Post\Quote">Quote</abbr></a>|null            </span>
+</dt>
+<dd>Information about the quote this post is mentioning</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidLib-Objects-Post.html#property_Quotes">$Quotes</a>
+    <span>
+                &nbsp;: array&lt;string|int, int&gt;            </span>
+</dt>
+<dd>Array if Post IDs that quoted this post</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidLib-Objects-Post.html#property_Replies">$Replies</a>
+    <span>
+                &nbsp;: array&lt;string|int, int&gt;            </span>
+</dt>
+<dd>Array of Post IDs that replied to this post</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidLib-Objects-Post.html#property_Reply">$Reply</a>
+    <span>
+                &nbsp;: <a href="classes/SocialvoidLib-Objects-Post-Reply.html"><abbr title="\SocialvoidLib\Objects\Post\Reply">Reply</abbr></a>|null            </span>
+</dt>
+<dd>Information about this post&#039;s reply status</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidLib-Objects-Post.html#property_Repost">$Repost</a>
+    <span>
+                &nbsp;: <a href="classes/SocialvoidLib-Objects-Post-Repost.html"><abbr title="\SocialvoidLib\Objects\Post\Repost">Repost</abbr></a>|null            </span>
+</dt>
+<dd>Information about this post being a repost</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidLib-Objects-Post.html#property_Reposts">$Reposts</a>
+    <span>
+                &nbsp;: array&lt;string|int, int&gt;            </span>
+</dt>
+<dd>Array of user IDs that reposted this post</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidLib-Objects-Post.html#property_SessionID">$SessionID</a>
+    <span>
+                &nbsp;: int|null            </span>
+</dt>
+<dd>The session ID used to make this post</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidLib-Objects-Post.html#property_Source">$Source</a>
+    <span>
+                &nbsp;: string            </span>
+</dt>
+<dd>The device used to post this</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidLib-Objects-Post.html#property_Text">$Text</a>
+    <span>
+                &nbsp;: string|null            </span>
+</dt>
+<dd>The actual UTF-8 text of the status update</dd>
+
+                <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-Objects-Post.html#method_fromAlternativeArray">fromAlternativeArray()</a>
+    <span>
+                        &nbsp;: <a href="classes/SocialvoidLib-Objects-Post.html"><abbr title="\SocialvoidLib\Objects\Post">Post</abbr></a>    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-Objects-Post.html#method_fromArray">fromArray()</a>
+    <span>
+                        &nbsp;: <a href="classes/SocialvoidLib-Objects-Post.html"><abbr title="\SocialvoidLib\Objects\Post">Post</abbr></a>    </span>
+</dt>
+<dd>Constructs the object from an array representation</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-Objects-Post.html#method_toArray">toArray()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd>Returns an array representation of the object</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-Objects-Post.html#method_toArrayAlternative">toArrayAlternative()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd>Returns an alternative representation of an objects array</dd>
+
+        </dl>
 
 
 
         
 
         
+    <section class="phpdocumentor-properties">
+        <h3 class="phpdocumentor-elements__header" id="properties">
+            Properties
+            <a href="classes/SocialvoidLib-Objects-Post.html#properties" class="headerlink"><i class="fas fa-link"></i></a>
+        </h3>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_CreatedTimestamp">
+        $CreatedTimestamp
+        <a href="classes/SocialvoidLib-Objects-Post.html#property_CreatedTimestamp" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Post.php"><a href="files/src-socialvoidlib-objects-post.html"><abbr title="src/SocialvoidLib/Objects/Post.php">Post.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">166</span>
+</aside>
 
-        
+        <p class="phpdocumentor-summary">The Unix Timestamp of when this was posted</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">int</span>
+    <span class="phpdocumentor-signature__name">$CreatedTimestamp</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_Entities">
+        $Entities
+        <a href="classes/SocialvoidLib-Objects-Post.html#property_Entities" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Post.php"><a href="files/src-socialvoidlib-objects-post.html"><abbr title="src/SocialvoidLib/Objects/Post.php">Post.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">116</span>
+</aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type"><a href="classes/SocialvoidLib-Objects-Post-Entities.html"><abbr title="\SocialvoidLib\Objects\Post\Entities">Entities</abbr></a></span>
+    <span class="phpdocumentor-signature__name">$Entities</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_Flags">
+        $Flags
+        <a href="classes/SocialvoidLib-Objects-Post.html#property_Flags" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Post.php"><a href="files/src-socialvoidlib-objects-post.html"><abbr title="src/SocialvoidLib/Objects/Post.php">Post.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">104</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Flags associated with this post</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
+    <span class="phpdocumentor-signature__name">$Flags</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_ID">
+        $ID
+        <a href="classes/SocialvoidLib-Objects-Post.html#property_ID" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Post.php"><a href="files/src-socialvoidlib-objects-post.html"><abbr title="src/SocialvoidLib/Objects/Post.php">Post.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">34</span>
+</aside>
+
+        <p class="phpdocumentor-summary">The Unique Internal Database ID for this post</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">int</span>
+    <span class="phpdocumentor-signature__name">$ID</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_LastUpdatedTimestamp">
+        $LastUpdatedTimestamp
+        <a href="classes/SocialvoidLib-Objects-Post.html#property_LastUpdatedTimestamp" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Post.php"><a href="files/src-socialvoidlib-objects-post.html"><abbr title="src/SocialvoidLib/Objects/Post.php">Post.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">159</span>
+</aside>
+
+        <p class="phpdocumentor-summary">The Unix Timestamp for when this record was last updated</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">int</span>
+    <span class="phpdocumentor-signature__name">$LastUpdatedTimestamp</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_Likes">
+        $Likes
+        <a href="classes/SocialvoidLib-Objects-Post.html#property_Likes" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Post.php"><a href="files/src-socialvoidlib-objects-post.html"><abbr title="src/SocialvoidLib/Objects/Post.php">Post.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">123</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Array of User IDs that liked this post</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">array&lt;string|int, int&gt;</span>
+    <span class="phpdocumentor-signature__name">$Likes</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_MediaContent">
+        $MediaContent
+        <a href="classes/SocialvoidLib-Objects-Post.html#property_MediaContent" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Post.php"><a href="files/src-socialvoidlib-objects-post.html"><abbr title="src/SocialvoidLib/Objects/Post.php">Post.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">151</span>
+</aside>
+
+        <p class="phpdocumentor-summary">The media content associated with this post</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">array&lt;string|int, <a href="classes/SocialvoidLib-Objects-Post-MediaContent.html"><abbr title="\SocialvoidLib\Objects\Post\MediaContent">MediaContent</abbr></a>&gt;</span>
+    <span class="phpdocumentor-signature__name">$MediaContent</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_PosterUserID">
+        $PosterUserID
+        <a href="classes/SocialvoidLib-Objects-Post.html#property_PosterUserID" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Post.php"><a href="files/src-socialvoidlib-objects-post.html"><abbr title="src/SocialvoidLib/Objects/Post.php">Post.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">76</span>
+</aside>
+
+        <p class="phpdocumentor-summary">The original author of this post</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">int</span>
+    <span class="phpdocumentor-signature__name">$PosterUserID</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_PriorityLevel">
+        $PriorityLevel
+        <a href="classes/SocialvoidLib-Objects-Post.html#property_PriorityLevel" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Post.php"><a href="files/src-socialvoidlib-objects-post.html"><abbr title="src/SocialvoidLib/Objects/Post.php">Post.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">111</span>
+</aside>
+
+        <p class="phpdocumentor-summary">The level of this post&#039;s priority</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">$PriorityLevel</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_Properties">
+        $Properties
+        <a href="classes/SocialvoidLib-Objects-Post.html#property_Properties" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Post.php"><a href="files/src-socialvoidlib-objects-post.html"><abbr title="src/SocialvoidLib/Objects/Post.php">Post.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">62</span>
+</aside>
+
+        <p class="phpdocumentor-summary">The properties associated with this post</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type"><a href="classes/SocialvoidLib-Objects-Post-Properties.html"><abbr title="\SocialvoidLib\Objects\Post\Properties">Properties</abbr></a></span>
+    <span class="phpdocumentor-signature__name">$Properties</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_PublicID">
+        $PublicID
+        <a href="classes/SocialvoidLib-Objects-Post.html#property_PublicID" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Post.php"><a href="files/src-socialvoidlib-objects-post.html"><abbr title="src/SocialvoidLib/Objects/Post.php">Post.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">41</span>
+</aside>
+
+        <p class="phpdocumentor-summary">The Public ID of this post</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">$PublicID</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_Quote">
+        $Quote
+        <a href="classes/SocialvoidLib-Objects-Post.html#property_Quote" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Post.php"><a href="files/src-socialvoidlib-objects-post.html"><abbr title="src/SocialvoidLib/Objects/Post.php">Post.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">90</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Information about the quote this post is mentioning</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type"><a href="classes/SocialvoidLib-Objects-Post-Quote.html"><abbr title="\SocialvoidLib\Objects\Post\Quote">Quote</abbr></a>|null</span>
+    <span class="phpdocumentor-signature__name">$Quote</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_Quotes">
+        $Quotes
+        <a href="classes/SocialvoidLib-Objects-Post.html#property_Quotes" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Post.php"><a href="files/src-socialvoidlib-objects-post.html"><abbr title="src/SocialvoidLib/Objects/Post.php">Post.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">137</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Array if Post IDs that quoted this post</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">array&lt;string|int, int&gt;</span>
+    <span class="phpdocumentor-signature__name">$Quotes</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_Replies">
+        $Replies
+        <a href="classes/SocialvoidLib-Objects-Post.html#property_Replies" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Post.php"><a href="files/src-socialvoidlib-objects-post.html"><abbr title="src/SocialvoidLib/Objects/Post.php">Post.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">144</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Array of Post IDs that replied to this post</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">array&lt;string|int, int&gt;</span>
+    <span class="phpdocumentor-signature__name">$Replies</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_Reply">
+        $Reply
+        <a href="classes/SocialvoidLib-Objects-Post.html#property_Reply" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Post.php"><a href="files/src-socialvoidlib-objects-post.html"><abbr title="src/SocialvoidLib/Objects/Post.php">Post.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">83</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Information about this post&#039;s reply status</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type"><a href="classes/SocialvoidLib-Objects-Post-Reply.html"><abbr title="\SocialvoidLib\Objects\Post\Reply">Reply</abbr></a>|null</span>
+    <span class="phpdocumentor-signature__name">$Reply</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_Repost">
+        $Repost
+        <a href="classes/SocialvoidLib-Objects-Post.html#property_Repost" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Post.php"><a href="files/src-socialvoidlib-objects-post.html"><abbr title="src/SocialvoidLib/Objects/Post.php">Post.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">97</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Information about this post being a repost</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type"><a href="classes/SocialvoidLib-Objects-Post-Repost.html"><abbr title="\SocialvoidLib\Objects\Post\Repost">Repost</abbr></a>|null</span>
+    <span class="phpdocumentor-signature__name">$Repost</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_Reposts">
+        $Reposts
+        <a href="classes/SocialvoidLib-Objects-Post.html#property_Reposts" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Post.php"><a href="files/src-socialvoidlib-objects-post.html"><abbr title="src/SocialvoidLib/Objects/Post.php">Post.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">130</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Array of user IDs that reposted this post</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">array&lt;string|int, int&gt;</span>
+    <span class="phpdocumentor-signature__name">$Reposts</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_SessionID">
+        $SessionID
+        <a href="classes/SocialvoidLib-Objects-Post.html#property_SessionID" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Post.php"><a href="files/src-socialvoidlib-objects-post.html"><abbr title="src/SocialvoidLib/Objects/Post.php">Post.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">69</span>
+</aside>
+
+        <p class="phpdocumentor-summary">The session ID used to make this post</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">int|null</span>
+    <span class="phpdocumentor-signature__name">$SessionID</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_Source">
+        $Source
+        <a href="classes/SocialvoidLib-Objects-Post.html#property_Source" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Post.php"><a href="files/src-socialvoidlib-objects-post.html"><abbr title="src/SocialvoidLib/Objects/Post.php">Post.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">55</span>
+</aside>
+
+        <p class="phpdocumentor-summary">The device used to post this</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">$Source</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_Text">
+        $Text
+        <a href="classes/SocialvoidLib-Objects-Post.html#property_Text" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Post.php"><a href="files/src-socialvoidlib-objects-post.html"><abbr title="src/SocialvoidLib/Objects/Post.php">Post.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">48</span>
+</aside>
+
+        <p class="phpdocumentor-summary">The actual UTF-8 text of the status update</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">string|null</span>
+    <span class="phpdocumentor-signature__name">$Text</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+            </section>
+
+            <section class="phpdocumentor-methods">
+        <h3 class="phpdocumentor-elements__header" id="methods">
+            Methods
+            <a href="classes/SocialvoidLib-Objects-Post.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
+        </h3>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_fromAlternativeArray">
+        fromAlternativeArray()
+        <a href="classes/SocialvoidLib-Objects-Post.html#method_fromAlternativeArray" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Post.php"><a href="files/src-socialvoidlib-objects-post.html"><abbr title="src/SocialvoidLib/Objects/Post.php">Post.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">330</span>
+</aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">fromAlternativeArray</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$data</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/SocialvoidLib-Objects-Post.html"><abbr title="\SocialvoidLib\Objects\Post">Post</abbr></a></span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$data</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+            </dl>
+
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">noinspection</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>DuplicatedCode</p>
+</section>
+
+                                    </dd>
+                        </dl>
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type"><a href="classes/SocialvoidLib-Objects-Post.html"><abbr title="\SocialvoidLib\Objects\Post">Post</abbr></a></span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_fromArray">
+        fromArray()
+        <a href="classes/SocialvoidLib-Objects-Post.html#method_fromArray" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Post.php"><a href="files/src-socialvoidlib-objects-post.html"><abbr title="src/SocialvoidLib/Objects/Post.php">Post.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">215</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Constructs the object from an array representation</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">fromArray</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$data</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/SocialvoidLib-Objects-Post.html"><abbr title="\SocialvoidLib\Objects\Post">Post</abbr></a></span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$data</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">noinspection</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>DuplicatedCode</p>
+</section>
+
+                                    </dd>
+                        </dl>
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type"><a href="classes/SocialvoidLib-Objects-Post.html"><abbr title="\SocialvoidLib\Objects\Post">Post</abbr></a></span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_toArray">
+        toArray()
+        <a href="classes/SocialvoidLib-Objects-Post.html#method_toArray" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Post.php"><a href="files/src-socialvoidlib-objects-post.html"><abbr title="src/SocialvoidLib/Objects/Post.php">Post.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">173</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Returns an array representation of the object</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">toArray</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_toArrayAlternative">
+        toArrayAlternative()
+        <a href="classes/SocialvoidLib-Objects-Post.html#method_toArrayAlternative" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Post.php"><a href="files/src-socialvoidlib-objects-post.html"><abbr title="src/SocialvoidLib/Objects/Post.php">Post.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">291</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Returns an alternative representation of an objects array</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">toArrayAlternative</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+            </section>
+
     </article>
                 <section data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
     <section class="phpdocumentor-search-results__dialog">

@@ -6,24 +6,5 @@
     </paths>
     <version number="1.0">
         <folder>latest</folder>
-        <api format="php">
-            <source dsn=".">
-                <path>src</path>
-            </source>
-            <output>api</output>
-            <ignore hidden="true" symlinks="true">
-                <path>tests/**/*</path>
-            </ignore>
-            <extensions>
-                <extension>php</extension>
-            </extensions>
-            <visibility>private</visibility>
-            <default-package-name>SocialvoidLib</default-package-name>
-            <include-source>true</include-source>
-            <markers>
-                <marker>TODO</marker>
-                <marker>FIXME</marker>
-            </markers>
-        </api>
     </version>
 </phpdocumentor>

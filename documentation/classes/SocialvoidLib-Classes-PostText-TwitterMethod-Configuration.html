@@ -51,7 +51,8 @@
     
     <section class="phpdocumentor-sidebar__category">
         <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
-                                                <h4 class="phpdocumentor-sidebar__root-namespace"><a href="namespaces/socialvoidlib.html"><abbr title="\SocialvoidLib">SocialvoidLib</abbr></a></h4>
+                                <h3 class="phpdocumentor-sidebar__root-namespace"><a href="namespaces/default.html"><abbr title="\">Global</abbr></a></h3>
+                                        <h4 class="phpdocumentor-sidebar__root-namespace"><a href="namespaces/socialvoidlib.html"><abbr title="\SocialvoidLib">SocialvoidLib</abbr></a></h4>
                 <ul class="phpdocumentor-list">
                                             <li><a href="namespaces/socialvoidlib-abstracts.html"><abbr title="\SocialvoidLib\Abstracts">Abstracts</abbr></a></li>
                                             <li><a href="namespaces/socialvoidlib-classes.html"><abbr title="\SocialvoidLib\Classes">Classes</abbr></a></li>
@@ -263,7 +264,70 @@
 </dt>
 <dd>configuration from v3.json</dd>
 
-            </dl>
+                <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-Classes-PostText-TwitterMethod-Configuration.html#method___construct">__construct()</a>
+    <span>
+                        &nbsp;: mixed    </span>
+</dt>
+<dd>construct</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-Classes-PostText-TwitterMethod-Configuration.html#method___get">__get()</a>
+    <span>
+                        &nbsp;: mixed    </span>
+</dt>
+<dd>property accessor</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-Classes-PostText-TwitterMethod-Configuration.html#method_fromJson">fromJson()</a>
+    <span>
+                        &nbsp;: <a href="classes/SocialvoidLib-Classes-PostText-TwitterMethod-Configuration.html"><abbr title="\SocialvoidLib\Classes\PostText\TwitterMethod\Configuration">Configuration</abbr></a>    </span>
+</dt>
+<dd>Create configuration from json string</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-Classes-PostText-TwitterMethod-Configuration.html#method_getEmojiParsingEnabled">getEmojiParsingEnabled()</a>
+    <span>
+                        &nbsp;: bool    </span>
+</dt>
+<dd>Get whether emoji parsing is enabled.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-Classes-PostText-TwitterMethod-Configuration.html#method_getScaledMaxWeightedTweetLength">getScaledMaxWeightedTweetLength()</a>
+    <span>
+                        &nbsp;: int    </span>
+</dt>
+<dd>maxWeightedTweetLength * scale</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-Classes-PostText-TwitterMethod-Configuration.html#method_getScaledTransformedURLLength">getScaledTransformedURLLength()</a>
+    <span>
+                        &nbsp;: int    </span>
+</dt>
+<dd>transformedURLLength * scale</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-Classes-PostText-TwitterMethod-Configuration.html#method_toArray">toArray()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd>convert to array</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-Classes-PostText-TwitterMethod-Configuration.html#method_v1">v1()</a>
+    <span>
+                        &nbsp;: <a href="classes/SocialvoidLib-Classes-PostText-TwitterMethod-Configuration.html"><abbr title="\SocialvoidLib\Classes\PostText\TwitterMethod\Configuration">Configuration</abbr></a>    </span>
+</dt>
+<dd>Get twitter-text 1.x configuration</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-Classes-PostText-TwitterMethod-Configuration.html#method_v2">v2()</a>
+    <span>
+                        &nbsp;: <a href="classes/SocialvoidLib-Classes-PostText-TwitterMethod-Configuration.html"><abbr title="\SocialvoidLib\Classes\PostText\TwitterMethod\Configuration">Configuration</abbr></a>    </span>
+</dt>
+<dd>Get twitter-text 2.x configuration</dd>
+
+        </dl>
 
 
 
@@ -621,7 +685,354 @@
 </article>
             </section>
 
-        
+            <section class="phpdocumentor-methods">
+        <h3 class="phpdocumentor-elements__header" id="methods">
+            Methods
+            <a href="classes/SocialvoidLib-Classes-PostText-TwitterMethod-Configuration.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
+        </h3>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method___construct">
+        __construct()
+        <a href="classes/SocialvoidLib-Classes-PostText-TwitterMethod-Configuration.html#method___construct" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Classes/PostText/TwitterMethod/Configuration.php"><a href="files/src-socialvoidlib-classes-posttext-twittermethod-configuration.html"><abbr title="src/SocialvoidLib/Classes/PostText/TwitterMethod/Configuration.php">Configuration.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">132</span>
+</aside>
+
+        <p class="phpdocumentor-summary">construct</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$config</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$config</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;|null</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">mixed</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method___get">
+        __get()
+        <a href="classes/SocialvoidLib-Classes-PostText-TwitterMethod-Configuration.html#method___get" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Classes/PostText/TwitterMethod/Configuration.php"><a href="files/src-socialvoidlib-classes-posttext-twittermethod-configuration.html"><abbr title="src/SocialvoidLib/Classes/PostText/TwitterMethod/Configuration.php">Configuration.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">147</span>
+</aside>
+
+        <p class="phpdocumentor-summary">property accessor</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">__get</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$name</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">mixed</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_fromJson">
+        fromJson()
+        <a href="classes/SocialvoidLib-Classes-PostText-TwitterMethod-Configuration.html#method_fromJson" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Classes/PostText/TwitterMethod/Configuration.php"><a href="files/src-socialvoidlib-classes-posttext-twittermethod-configuration.html"><abbr title="src/SocialvoidLib/Classes/PostText/TwitterMethod/Configuration.php">Configuration.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">168</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Create configuration from json string</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">fromJson</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$json</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/SocialvoidLib-Classes-PostText-TwitterMethod-Configuration.html"><abbr title="\SocialvoidLib\Classes\PostText\TwitterMethod\Configuration">Configuration</abbr></a></span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$json</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>as configuration</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type"><a href="classes/SocialvoidLib-Classes-PostText-TwitterMethod-Configuration.html"><abbr title="\SocialvoidLib\Classes\PostText\TwitterMethod\Configuration">Configuration</abbr></a></span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getEmojiParsingEnabled">
+        getEmojiParsingEnabled()
+        <a href="classes/SocialvoidLib-Classes-PostText-TwitterMethod-Configuration.html#method_getEmojiParsingEnabled" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Classes/PostText/TwitterMethod/Configuration.php"><a href="files/src-socialvoidlib-classes-posttext-twittermethod-configuration.html"><abbr title="src/SocialvoidLib/Classes/PostText/TwitterMethod/Configuration.php">Configuration.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">218</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Get whether emoji parsing is enabled.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">getEmojiParsingEnabled</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">bool</span>
+            &mdash;
+            <section class="phpdocumentor-description"><p><code class="prettyprint">true</code> if emoji parsing is enabled, otherwise <code class="prettyprint">false</code>.</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getScaledMaxWeightedTweetLength">
+        getScaledMaxWeightedTweetLength()
+        <a href="classes/SocialvoidLib-Classes-PostText-TwitterMethod-Configuration.html#method_getScaledMaxWeightedTweetLength" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Classes/PostText/TwitterMethod/Configuration.php"><a href="files/src-socialvoidlib-classes-posttext-twittermethod-configuration.html"><abbr title="src/SocialvoidLib/Classes/PostText/TwitterMethod/Configuration.php">Configuration.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">198</span>
+</aside>
+
+        <p class="phpdocumentor-summary">maxWeightedTweetLength * scale</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">getScaledMaxWeightedTweetLength</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">int</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getScaledTransformedURLLength">
+        getScaledTransformedURLLength()
+        <a href="classes/SocialvoidLib-Classes-PostText-TwitterMethod-Configuration.html#method_getScaledTransformedURLLength" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Classes/PostText/TwitterMethod/Configuration.php"><a href="files/src-socialvoidlib-classes-posttext-twittermethod-configuration.html"><abbr title="src/SocialvoidLib/Classes/PostText/TwitterMethod/Configuration.php">Configuration.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">208</span>
+</aside>
+
+        <p class="phpdocumentor-summary">transformedURLLength * scale</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">getScaledTransformedURLLength</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">int</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_toArray">
+        toArray()
+        <a href="classes/SocialvoidLib-Classes-PostText-TwitterMethod-Configuration.html#method_toArray" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Classes/PostText/TwitterMethod/Configuration.php"><a href="files/src-socialvoidlib-classes-posttext-twittermethod-configuration.html"><abbr title="src/SocialvoidLib/Classes/PostText/TwitterMethod/Configuration.php">Configuration.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">157</span>
+</aside>
+
+        <p class="phpdocumentor-summary">convert to array</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">toArray</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_v1">
+        v1()
+        <a href="classes/SocialvoidLib-Classes-PostText-TwitterMethod-Configuration.html#method_v1" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Classes/PostText/TwitterMethod/Configuration.php"><a href="files/src-socialvoidlib-classes-posttext-twittermethod-configuration.html"><abbr title="src/SocialvoidLib/Classes/PostText/TwitterMethod/Configuration.php">Configuration.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">178</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Get twitter-text 1.x configuration</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">v1</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/SocialvoidLib-Classes-PostText-TwitterMethod-Configuration.html"><abbr title="\SocialvoidLib\Classes\PostText\TwitterMethod\Configuration">Configuration</abbr></a></span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type"><a href="classes/SocialvoidLib-Classes-PostText-TwitterMethod-Configuration.html"><abbr title="\SocialvoidLib\Classes\PostText\TwitterMethod\Configuration">Configuration</abbr></a></span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_v2">
+        v2()
+        <a href="classes/SocialvoidLib-Classes-PostText-TwitterMethod-Configuration.html#method_v2" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Classes/PostText/TwitterMethod/Configuration.php"><a href="files/src-socialvoidlib-classes-posttext-twittermethod-configuration.html"><abbr title="src/SocialvoidLib/Classes/PostText/TwitterMethod/Configuration.php">Configuration.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">188</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Get twitter-text 2.x configuration</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">v2</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/SocialvoidLib-Classes-PostText-TwitterMethod-Configuration.html"><abbr title="\SocialvoidLib\Classes\PostText\TwitterMethod\Configuration">Configuration</abbr></a></span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type"><a href="classes/SocialvoidLib-Classes-PostText-TwitterMethod-Configuration.html"><abbr title="\SocialvoidLib\Classes\PostText\TwitterMethod\Configuration">Configuration</abbr></a></span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+            </section>
+
     </article>
                 <section data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
     <section class="phpdocumentor-search-results__dialog">

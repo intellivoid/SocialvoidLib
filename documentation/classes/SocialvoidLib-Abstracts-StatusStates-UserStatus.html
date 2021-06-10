@@ -51,7 +51,8 @@
     
     <section class="phpdocumentor-sidebar__category">
         <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
-                                                <h4 class="phpdocumentor-sidebar__root-namespace"><a href="namespaces/socialvoidlib.html"><abbr title="\SocialvoidLib">SocialvoidLib</abbr></a></h4>
+                                <h3 class="phpdocumentor-sidebar__root-namespace"><a href="namespaces/default.html"><abbr title="\">Global</abbr></a></h3>
+                                        <h4 class="phpdocumentor-sidebar__root-namespace"><a href="namespaces/socialvoidlib.html"><abbr title="\SocialvoidLib">SocialvoidLib</abbr></a></h4>
                 <ul class="phpdocumentor-list">
                                             <li><a href="namespaces/socialvoidlib-abstracts.html"><abbr title="\SocialvoidLib\Abstracts">Abstracts</abbr></a></li>
                                             <li><a href="namespaces/socialvoidlib-classes.html"><abbr title="\SocialvoidLib\Classes">Classes</abbr></a></li>
@@ -148,10 +149,205 @@
 
 
 
+<h3 id="toc">
+    Table of Contents
+    <a href="#toc" class="headerlink"><i class="fas fa-link"></i></a>
+</h3>
+
+<dl class="phpdocumentor-table-of-contents">
+            <dt class="phpdocumentor-table-of-contents__entry -constant -public">
+    <a href="classes/SocialvoidLib-Abstracts-StatusStates-UserStatus.html#constant_Active">Active</a>
+    <span>
+        &nbsp;= &quot;ACTIVE&quot;                    </span>
+</dt>
+<dd>The user is currently active and can browse the network</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -constant -public">
+    <a href="classes/SocialvoidLib-Abstracts-StatusStates-UserStatus.html#constant_Banned">Banned</a>
+    <span>
+        &nbsp;= &quot;BANNED&quot;                    </span>
+</dt>
+<dd>The user is currently banned and cannot access the network</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -constant -public">
+    <a href="classes/SocialvoidLib-Abstracts-StatusStates-UserStatus.html#constant_Restricted">Restricted</a>
+    <span>
+        &nbsp;= &quot;RESTRICTED&quot;                    </span>
+</dt>
+<dd>The user can browse the network but cannot invoke any posts or
+activities against other users.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -constant -public">
+    <a href="classes/SocialvoidLib-Abstracts-StatusStates-UserStatus.html#constant_TemporarilyBanned">TemporarilyBanned</a>
+    <span>
+        &nbsp;= &quot;TEMPORARILY_BANNED&quot;                    </span>
+</dt>
+<dd>The user is banned for a x amount of time, the user&#039;s profile
+will not be shown as banned, this will be lifted once the user
+invokes the next request at the time the ban is lifted</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -constant -public">
+    <a href="classes/SocialvoidLib-Abstracts-StatusStates-UserStatus.html#constant_TemporarilyRestricted">TemporarilyRestricted</a>
+    <span>
+        &nbsp;= &quot;TEMPORARILY_RESTRICTED&quot;                    </span>
+</dt>
+<dd>The user can browse the network but cannot invoke any posts or
+activities against other users for an x amount o time, this will
+be lifted once the user invokes the next request at the time the
+restriction is lifted</dd>
+
+                </dl>
 
 
 
         
+    <section class="phpdocumentor-constants">
+        <h3 class="phpdocumentor-elements__header" id="constants">
+            Constants
+            <a href="classes/SocialvoidLib-Abstracts-StatusStates-UserStatus.html#constants" class="headerlink"><i class="fas fa-link"></i></a>
+        </h3>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_Active">
+        Active
+        <a href="classes/SocialvoidLib-Abstracts-StatusStates-UserStatus.html#constant_Active" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Abstracts/StatusStates/UserStatus.php"><a href="files/src-socialvoidlib-abstracts-statusstates-userstatus.html"><abbr title="src/SocialvoidLib/Abstracts/StatusStates/UserStatus.php">UserStatus.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">26</span>
+</aside>
+
+        <p class="phpdocumentor-summary">The user is currently active and can browse the network</p>
+
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+    <span class="phpdocumentor-signature__type">mixed</span>
+    <span class="phpdocumentor-signature__name">Active</span>
+    = <span class="phpdocumentor-signature__default-value">&quot;ACTIVE&quot;</span>
+</code>
+
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_Banned">
+        Banned
+        <a href="classes/SocialvoidLib-Abstracts-StatusStates-UserStatus.html#constant_Banned" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Abstracts/StatusStates/UserStatus.php"><a href="files/src-socialvoidlib-abstracts-statusstates-userstatus.html"><abbr title="src/SocialvoidLib/Abstracts/StatusStates/UserStatus.php">UserStatus.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">31</span>
+</aside>
+
+        <p class="phpdocumentor-summary">The user is currently banned and cannot access the network</p>
+
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+    <span class="phpdocumentor-signature__type">mixed</span>
+    <span class="phpdocumentor-signature__name">Banned</span>
+    = <span class="phpdocumentor-signature__default-value">&quot;BANNED&quot;</span>
+</code>
+
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_Restricted">
+        Restricted
+        <a href="classes/SocialvoidLib-Abstracts-StatusStates-UserStatus.html#constant_Restricted" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Abstracts/StatusStates/UserStatus.php"><a href="files/src-socialvoidlib-abstracts-statusstates-userstatus.html"><abbr title="src/SocialvoidLib/Abstracts/StatusStates/UserStatus.php">UserStatus.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">44</span>
+</aside>
+
+        <p class="phpdocumentor-summary">The user can browse the network but cannot invoke any posts or
+activities against other users.</p>
+
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+    <span class="phpdocumentor-signature__type">mixed</span>
+    <span class="phpdocumentor-signature__name">Restricted</span>
+    = <span class="phpdocumentor-signature__default-value">&quot;RESTRICTED&quot;</span>
+</code>
+
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_TemporarilyBanned">
+        TemporarilyBanned
+        <a href="classes/SocialvoidLib-Abstracts-StatusStates-UserStatus.html#constant_TemporarilyBanned" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Abstracts/StatusStates/UserStatus.php"><a href="files/src-socialvoidlib-abstracts-statusstates-userstatus.html"><abbr title="src/SocialvoidLib/Abstracts/StatusStates/UserStatus.php">UserStatus.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">38</span>
+</aside>
+
+        <p class="phpdocumentor-summary">The user is banned for a x amount of time, the user&#039;s profile
+will not be shown as banned, this will be lifted once the user
+invokes the next request at the time the ban is lifted</p>
+
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+    <span class="phpdocumentor-signature__type">mixed</span>
+    <span class="phpdocumentor-signature__name">TemporarilyBanned</span>
+    = <span class="phpdocumentor-signature__default-value">&quot;TEMPORARILY_BANNED&quot;</span>
+</code>
+
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_TemporarilyRestricted">
+        TemporarilyRestricted
+        <a href="classes/SocialvoidLib-Abstracts-StatusStates-UserStatus.html#constant_TemporarilyRestricted" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Abstracts/StatusStates/UserStatus.php"><a href="files/src-socialvoidlib-abstracts-statusstates-userstatus.html"><abbr title="src/SocialvoidLib/Abstracts/StatusStates/UserStatus.php">UserStatus.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">52</span>
+</aside>
+
+        <p class="phpdocumentor-summary">The user can browse the network but cannot invoke any posts or
+activities against other users for an x amount o time, this will
+be lifted once the user invokes the next request at the time the
+restriction is lifted</p>
+
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+    <span class="phpdocumentor-signature__type">mixed</span>
+    <span class="phpdocumentor-signature__name">TemporarilyRestricted</span>
+    = <span class="phpdocumentor-signature__default-value">&quot;TEMPORARILY_RESTRICTED&quot;</span>
+</code>
+
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+            </section>
 
         
 
