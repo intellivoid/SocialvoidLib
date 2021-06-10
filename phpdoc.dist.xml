@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdocumentor configVersion="3.0">
+    <paths>
+        <output>documentation</output>
+        <cache>.cache</cache>
+    </paths>
+    <version number="1.0">
+        <folder>latest</folder>
+    </version>
+</phpdocumentor>
