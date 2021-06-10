@@ -88,7 +88,7 @@
         {
             $this->flags = [];
             $this->socialvoidLib = $socialvoidLib;
-            $this->cloud = new Cloud($this);
+            //$this->cloud = new Cloud($this);
             $this->users = new Users($this);
             $this->timeline = new Timeline($this);
         }

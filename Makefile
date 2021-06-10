@@ -8,6 +8,8 @@ query_workers = SocialvoidQueryService
 update_workers = SocialvoidUpdateService
 main_worker = $(socivlvoidservice_src_dir)/worker.php
 runtime_version = 8.0
+docs_runtime_version = 7.4
+docs_phar_location = ~/phpdoc.phar
 
 clean:
 	rm -rf "$(build_dir)"
@@ -15,6 +17,7 @@ clean:
 update:
 	ppm --generate-package="$(socialvoidlib_src_dir)"
 	ppm --generate-package="$(socivlvoidservice_src_dir)"
+	php$(docs_runtime_version) $(docs_phar_location) -d . -t documentation
 
 build:
 	mkdir build
