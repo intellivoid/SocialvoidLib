@@ -128,7 +128,6 @@
         {
             // TODO: Update the timeline upon a follow event
             // Resolve the Peer ID
-            $peer_id = null;
             $cache_peer = $this->networkSession->getActiveSession()->getSessionCache()->getCachedPeer($peer);
 
             if($cache_peer == null)
@@ -187,6 +186,7 @@
          *
          * @param $peer
          * @return FollowerData
+         * @throws CacheException
          * @throws DatabaseException
          * @throws FollowerDataNotFound
          * @throws InvalidPeerInputException
@@ -196,7 +196,6 @@
         public function getFollowerData($peer): FollowerData
         {
             // Resolve the Peer ID
-            $peer_id = null;
             $cache_peer = $this->networkSession->getActiveSession()->getSessionCache()->getCachedPeer($peer);
 
             if($cache_peer == null)
@@ -218,6 +217,7 @@
          * @param int $offset
          * @param int $limit
          * @return array
+         * @throws CacheException
          * @throws DatabaseException
          * @throws FollowerDataNotFound
          * @throws InvalidPeerInputException
@@ -258,6 +258,7 @@
          *
          * @param $peer
          * @return array
+         * @throws CacheException
          * @throws DatabaseException
          * @throws FollowerDataNotFound
          * @throws InvalidPeerInputException
@@ -277,6 +278,7 @@
          * @param int $offset
          * @param int $limit
          * @return array
+         * @throws CacheException
          * @throws DatabaseException
          * @throws FollowerDataNotFound
          * @throws InvalidPeerInputException
@@ -317,6 +319,7 @@
          *
          * @param $peer
          * @return array
+         * @throws CacheException
          * @throws DatabaseException
          * @throws FollowerDataNotFound
          * @throws InvalidPeerInputException
