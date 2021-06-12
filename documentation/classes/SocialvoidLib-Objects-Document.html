@@ -121,7 +121,8 @@
             <div class="phpdocumentor-element__package">
             in package
             <ul class="phpdocumentor-breadcrumbs">
-                                    <li class="phpdocumentor-breadcrumb"><a href="packages/Default.html">Default</a></li>
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/SocialvoidLib.html">SocialvoidLib</a></li>
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/SocialvoidLib-Objects.html">Objects</a></li>
                             </ul>
         </div>
     
@@ -131,10 +132,12 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Document.php"><a href="files/src-socialvoidlib-objects-document.html"><abbr title="src/SocialvoidLib/Objects/Document.php">Document.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">7</span>
+    <span class="phpdocumentor-element-found-in__line">16</span>
 </aside>
 
-        
+            <p class="phpdocumentor-summary">Class Document</p>
+
+    <section class="phpdocumentor-description"></section>
 
 
 
@@ -150,11 +153,18 @@
 
 <dl class="phpdocumentor-table-of-contents">
                 <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/SocialvoidLib-Objects-Document.html#property_AccessRoles">$AccessRoles</a>
+    <span>
+                &nbsp;: <a href="classes/SocialvoidLib-Objects-AccessRoles.html"><abbr title="\SocialvoidLib\Objects\AccessRoles">AccessRoles</abbr></a>            </span>
+</dt>
+<dd>AccessRoles object that indicates what entity has access to the document</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
     <a href="classes/SocialvoidLib-Objects-Document.html#property_AccessType">$AccessType</a>
     <span>
-                &nbsp;: mixed            </span>
+                &nbsp;: string|<a href="classes/SocialvoidLib-Abstracts-Types-Security-DocumentAccessType.html"><abbr title="\SocialvoidLib\Abstracts\Types\Security\DocumentAccessType">DocumentAccessType</abbr></a>            </span>
 </dt>
-<dd></dd>
+<dd>Indicates the access type for this document</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
     <a href="classes/SocialvoidLib-Objects-Document.html#property_CdnPublicID">$CdnPublicID</a>
@@ -173,79 +183,79 @@
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
     <a href="classes/SocialvoidLib-Objects-Document.html#property_CreatedTimestamp">$CreatedTimestamp</a>
     <span>
-                &nbsp;: mixed            </span>
+                &nbsp;: int            </span>
 </dt>
-<dd></dd>
+<dd>The Unix Timestamp for when this record was created</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
     <a href="classes/SocialvoidLib-Objects-Document.html#property_FileExtension">$FileExtension</a>
     <span>
-                &nbsp;: mixed            </span>
+                &nbsp;: string            </span>
 </dt>
-<dd></dd>
+<dd>The file extension extracted from the file name</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
     <a href="classes/SocialvoidLib-Objects-Document.html#property_FileMime">$FileMime</a>
     <span>
-                &nbsp;: mixed            </span>
+                &nbsp;: string            </span>
 </dt>
-<dd></dd>
+<dd>The file mime (File type)</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
     <a href="classes/SocialvoidLib-Objects-Document.html#property_FileName">$FileName</a>
     <span>
-                &nbsp;: mixed            </span>
+                &nbsp;: string            </span>
 </dt>
-<dd></dd>
+<dd>The file name</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
     <a href="classes/SocialvoidLib-Objects-Document.html#property_FileSize">$FileSize</a>
     <span>
-                &nbsp;: mixed            </span>
+                &nbsp;: int            </span>
 </dt>
-<dd></dd>
+<dd>The size of the file in bytes</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
     <a href="classes/SocialvoidLib-Objects-Document.html#property_Flags">$Flags</a>
     <span>
-                &nbsp;: mixed            </span>
+                &nbsp;: array&lt;string|int, mixed&gt;            </span>
 </dt>
-<dd></dd>
+<dd>Array of flags for this document</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
     <a href="classes/SocialvoidLib-Objects-Document.html#property_ForwardUserID">$ForwardUserID</a>
     <span>
-                &nbsp;: mixed            </span>
+                &nbsp;: int|null            </span>
 </dt>
-<dd></dd>
+<dd>The User ID that forwarded (made a copy) of this document</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
     <a href="classes/SocialvoidLib-Objects-Document.html#property_LastAccessedTimestamp">$LastAccessedTimestamp</a>
     <span>
-                &nbsp;: mixed            </span>
+                &nbsp;: int            </span>
 </dt>
-<dd></dd>
+<dd>The Unix Timestamp for when this property was last accessed on the network</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
     <a href="classes/SocialvoidLib-Objects-Document.html#property_LastUpdatedTimestamp">$LastUpdatedTimestamp</a>
     <span>
-                &nbsp;: mixed            </span>
+                &nbsp;: int            </span>
 </dt>
-<dd></dd>
+<dd>The Unix Timestamp for when this record&#039;s properties (other than last accessed) was last updated</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
     <a href="classes/SocialvoidLib-Objects-Document.html#property_OwnerUserID">$OwnerUserID</a>
     <span>
-                &nbsp;: mixed            </span>
+                &nbsp;: int            </span>
 </dt>
-<dd></dd>
+<dd>The User ID that originally created this document</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
     <a href="classes/SocialvoidLib-Objects-Document.html#property_Properties">$Properties</a>
     <span>
-                &nbsp;: mixed            </span>
+                &nbsp;: <a href="classes/SocialvoidLib-Objects-Document-Properties.html"><abbr title="\SocialvoidLib\Objects\Document\Properties">Properties</abbr></a>            </span>
 </dt>
-<dd></dd>
+<dd>The properties object associated with this document</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
     <a href="classes/SocialvoidLib-Objects-Document.html#property_PublicID">$PublicID</a>
@@ -257,11 +267,32 @@
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
     <a href="classes/SocialvoidLib-Objects-Document.html#property_ThirdPartySource">$ThirdPartySource</a>
     <span>
-                &nbsp;: string            </span>
+                &nbsp;: <a href="classes/SocialvoidLib-Objects-Document-ThirdPartySource.html"><abbr title="\SocialvoidLib\Objects\Document\ThirdPartySource">ThirdPartySource</abbr></a>|null            </span>
 </dt>
-<dd>Tje</dd>
+<dd>The third-party source if applicable to the document&#039;s source</dd>
 
-            </dl>
+                <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-Objects-Document.html#method___construct">__construct()</a>
+    <span>
+                        &nbsp;: mixed    </span>
+</dt>
+<dd>Document constructor.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-Objects-Document.html#method_fromArray">fromArray()</a>
+    <span>
+                        &nbsp;: <a href="classes/SocialvoidLib-Objects-Document.html"><abbr title="\SocialvoidLib\Objects\Document">Document</abbr></a>    </span>
+</dt>
+<dd>Constructs the object from an array representation</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-Objects-Document.html#method_toArray">toArray()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd>Returns an array representation of the object</dd>
+
+        </dl>
 
 
 
@@ -280,6 +311,38 @@
             -public
                                                         "
 >
+    <h4 class="phpdocumentor-element__name" id="property_AccessRoles">
+        $AccessRoles
+        <a href="classes/SocialvoidLib-Objects-Document.html#property_AccessRoles" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Document.php"><a href="files/src-socialvoidlib-objects-document.html"><abbr title="src/SocialvoidLib/Objects/Document.php">Document.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">100</span>
+</aside>
+
+        <p class="phpdocumentor-summary">AccessRoles object that indicates what entity has access to the document</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type"><a href="classes/SocialvoidLib-Objects-AccessRoles.html"><abbr title="\SocialvoidLib\Objects\AccessRoles">AccessRoles</abbr></a></span>
+    <span class="phpdocumentor-signature__name">$AccessRoles</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
     <h4 class="phpdocumentor-element__name" id="property_AccessType">
         $AccessType
         <a href="classes/SocialvoidLib-Objects-Document.html#property_AccessType" class="headerlink"><i class="fas fa-link"></i></a>
@@ -289,17 +352,19 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Document.php"><a href="files/src-socialvoidlib-objects-document.html"><abbr title="src/SocialvoidLib/Objects/Document.php">Document.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">49</span>
+    <span class="phpdocumentor-element-found-in__line">93</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">Indicates the access type for this document</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-        <span class="phpdocumentor-signature__type">mixed</span>
+        <span class="phpdocumentor-signature__type">string|<a href="classes/SocialvoidLib-Abstracts-Types-Security-DocumentAccessType.html"><abbr title="\SocialvoidLib\Abstracts\Types\Security\DocumentAccessType">DocumentAccessType</abbr></a></span>
     <span class="phpdocumentor-signature__name">$AccessType</span>
     </code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
     
 
 </article>
@@ -319,7 +384,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Document.php"><a href="files/src-socialvoidlib-objects-document.html"><abbr title="src/SocialvoidLib/Objects/Document.php">Document.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">28</span>
+    <span class="phpdocumentor-element-found-in__line">37</span>
 </aside>
 
         <p class="phpdocumentor-summary">The</p>
@@ -351,7 +416,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Document.php"><a href="files/src-socialvoidlib-objects-document.html"><abbr title="src/SocialvoidLib/Objects/Document.php">Document.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">21</span>
+    <span class="phpdocumentor-element-found-in__line">30</span>
 </aside>
 
         <p class="phpdocumentor-summary">The source of the content</p>
@@ -383,17 +448,19 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Document.php"><a href="files/src-socialvoidlib-objects-document.html"><abbr title="src/SocialvoidLib/Objects/Document.php">Document.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">59</span>
+    <span class="phpdocumentor-element-found-in__line">135</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">The Unix Timestamp for when this record was created</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-        <span class="phpdocumentor-signature__type">mixed</span>
+        <span class="phpdocumentor-signature__type">int</span>
     <span class="phpdocumentor-signature__name">$CreatedTimestamp</span>
     </code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
     
 
 </article>
@@ -413,17 +480,19 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Document.php"><a href="files/src-socialvoidlib-objects-document.html"><abbr title="src/SocialvoidLib/Objects/Document.php">Document.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">43</span>
+    <span class="phpdocumentor-element-found-in__line">72</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">The file extension extracted from the file name</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-        <span class="phpdocumentor-signature__type">mixed</span>
+        <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">$FileExtension</span>
     </code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
     
 
 </article>
@@ -443,17 +512,19 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Document.php"><a href="files/src-socialvoidlib-objects-document.html"><abbr title="src/SocialvoidLib/Objects/Document.php">Document.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">37</span>
+    <span class="phpdocumentor-element-found-in__line">51</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">The file mime (File type)</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-        <span class="phpdocumentor-signature__type">mixed</span>
+        <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">$FileMime</span>
     </code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
     
 
 </article>
@@ -473,17 +544,19 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Document.php"><a href="files/src-socialvoidlib-objects-document.html"><abbr title="src/SocialvoidLib/Objects/Document.php">Document.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">41</span>
+    <span class="phpdocumentor-element-found-in__line">65</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">The file name</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-        <span class="phpdocumentor-signature__type">mixed</span>
+        <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">$FileName</span>
     </code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
     
 
 </article>
@@ -503,17 +576,19 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Document.php"><a href="files/src-socialvoidlib-objects-document.html"><abbr title="src/SocialvoidLib/Objects/Document.php">Document.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">39</span>
+    <span class="phpdocumentor-element-found-in__line">58</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">The size of the file in bytes</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-        <span class="phpdocumentor-signature__type">mixed</span>
+        <span class="phpdocumentor-signature__type">int</span>
     <span class="phpdocumentor-signature__name">$FileSize</span>
     </code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
     
 
 </article>
@@ -533,17 +608,19 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Document.php"><a href="files/src-socialvoidlib-objects-document.html"><abbr title="src/SocialvoidLib/Objects/Document.php">Document.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">51</span>
+    <span class="phpdocumentor-element-found-in__line">107</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">Array of flags for this document</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-        <span class="phpdocumentor-signature__type">mixed</span>
+        <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
     <span class="phpdocumentor-signature__name">$Flags</span>
     </code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
     
 
 </article>
@@ -563,17 +640,19 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Document.php"><a href="files/src-socialvoidlib-objects-document.html"><abbr title="src/SocialvoidLib/Objects/Document.php">Document.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">47</span>
+    <span class="phpdocumentor-element-found-in__line">86</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">The User ID that forwarded (made a copy) of this document</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-        <span class="phpdocumentor-signature__type">mixed</span>
+        <span class="phpdocumentor-signature__type">int|null</span>
     <span class="phpdocumentor-signature__name">$ForwardUserID</span>
     </code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
     
 
 </article>
@@ -593,17 +672,19 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Document.php"><a href="files/src-socialvoidlib-objects-document.html"><abbr title="src/SocialvoidLib/Objects/Document.php">Document.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">57</span>
+    <span class="phpdocumentor-element-found-in__line">128</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">The Unix Timestamp for when this property was last accessed on the network</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-        <span class="phpdocumentor-signature__type">mixed</span>
+        <span class="phpdocumentor-signature__type">int</span>
     <span class="phpdocumentor-signature__name">$LastAccessedTimestamp</span>
     </code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
     
 
 </article>
@@ -623,17 +704,19 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Document.php"><a href="files/src-socialvoidlib-objects-document.html"><abbr title="src/SocialvoidLib/Objects/Document.php">Document.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">55</span>
+    <span class="phpdocumentor-element-found-in__line">121</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">The Unix Timestamp for when this record&#039;s properties (other than last accessed) was last updated</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-        <span class="phpdocumentor-signature__type">mixed</span>
+        <span class="phpdocumentor-signature__type">int</span>
     <span class="phpdocumentor-signature__name">$LastUpdatedTimestamp</span>
     </code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
     
 
 </article>
@@ -653,17 +736,19 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Document.php"><a href="files/src-socialvoidlib-objects-document.html"><abbr title="src/SocialvoidLib/Objects/Document.php">Document.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">45</span>
+    <span class="phpdocumentor-element-found-in__line">79</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">The User ID that originally created this document</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-        <span class="phpdocumentor-signature__type">mixed</span>
+        <span class="phpdocumentor-signature__type">int</span>
     <span class="phpdocumentor-signature__name">$OwnerUserID</span>
     </code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
     
 
 </article>
@@ -683,17 +768,19 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Document.php"><a href="files/src-socialvoidlib-objects-document.html"><abbr title="src/SocialvoidLib/Objects/Document.php">Document.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">53</span>
+    <span class="phpdocumentor-element-found-in__line">114</span>
 </aside>
 
-    
+        <p class="phpdocumentor-summary">The properties object associated with this document</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-        <span class="phpdocumentor-signature__type">mixed</span>
+        <span class="phpdocumentor-signature__type"><a href="classes/SocialvoidLib-Objects-Document-Properties.html"><abbr title="\SocialvoidLib\Objects\Document\Properties">Properties</abbr></a></span>
     <span class="phpdocumentor-signature__name">$Properties</span>
     </code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
     
 
 </article>
@@ -713,7 +800,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Document.php"><a href="files/src-socialvoidlib-objects-document.html"><abbr title="src/SocialvoidLib/Objects/Document.php">Document.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">14</span>
+    <span class="phpdocumentor-element-found-in__line">23</span>
 </aside>
 
         <p class="phpdocumentor-summary">The Public ID of this record</p>
@@ -745,14 +832,14 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Document.php"><a href="files/src-socialvoidlib-objects-document.html"><abbr title="src/SocialvoidLib/Objects/Document.php">Document.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">35</span>
+    <span class="phpdocumentor-element-found-in__line">44</span>
 </aside>
 
-        <p class="phpdocumentor-summary">Tje</p>
+        <p class="phpdocumentor-summary">The third-party source if applicable to the document&#039;s source</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-        <span class="phpdocumentor-signature__type">string</span>
+        <span class="phpdocumentor-signature__type"><a href="classes/SocialvoidLib-Objects-Document-ThirdPartySource.html"><abbr title="\SocialvoidLib\Objects\Document\ThirdPartySource">ThirdPartySource</abbr></a>|null</span>
     <span class="phpdocumentor-signature__name">$ThirdPartySource</span>
     </code>
 
@@ -763,7 +850,126 @@
 </article>
             </section>
 
-        
+            <section class="phpdocumentor-methods">
+        <h3 class="phpdocumentor-elements__header" id="methods">
+            Methods
+            <a href="classes/SocialvoidLib-Objects-Document.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
+        </h3>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method___construct">
+        __construct()
+        <a href="classes/SocialvoidLib-Objects-Document.html#method___construct" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Document.php"><a href="files/src-socialvoidlib-objects-document.html"><abbr title="src/SocialvoidLib/Objects/Document.php">Document.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">140</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Document constructor.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">mixed</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_fromArray">
+        fromArray()
+        <a href="classes/SocialvoidLib-Objects-Document.html#method_fromArray" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Document.php"><a href="files/src-socialvoidlib-objects-document.html"><abbr title="src/SocialvoidLib/Objects/Document.php">Document.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">182</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Constructs the object from an array representation</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">fromArray</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$data</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/SocialvoidLib-Objects-Document.html"><abbr title="\SocialvoidLib\Objects\Document">Document</abbr></a></span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$data</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type"><a href="classes/SocialvoidLib-Objects-Document.html"><abbr title="\SocialvoidLib\Objects\Document">Document</abbr></a></span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_toArray">
+        toArray()
+        <a href="classes/SocialvoidLib-Objects-Document.html#method_toArray" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Document.php"><a href="files/src-socialvoidlib-objects-document.html"><abbr title="src/SocialvoidLib/Objects/Document.php">Document.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">153</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Returns an array representation of the object</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">toArray</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+            </section>
+
     </article>
                 <section data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
     <section class="phpdocumentor-search-results__dialog">

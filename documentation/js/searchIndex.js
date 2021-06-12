@@ -216,6 +216,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/SocialvoidLib-Abstracts-InternalErrorCodes.html#constant_InvalidImageTypeException"
         },                {
+            "fqsen": "\\SocialvoidLib\\Abstracts\\InternalErrorCodes\u003A\u003AEntityWithoutAccessException",
+            "name": "EntityWithoutAccessException",
+            "summary": "",
+            "url": "classes/SocialvoidLib-Abstracts-InternalErrorCodes.html#constant_EntityWithoutAccessException"
+        },                {
             "fqsen": "\\SocialvoidLib\\Abstracts\\JobClass",
             "name": "JobClass",
             "summary": "Class\u0020JobClass",
@@ -4186,15 +4191,45 @@ Search.appendIndex(
             "summary": "Class\u0020ThirdPartySource",
             "url": "classes/SocialvoidLib-Objects-Document-ThirdPartySource.html"
         },                {
+            "fqsen": "\\SocialvoidLib\\Objects\\Document\\ThirdPartySource\u003A\u003AtoArray\u0028\u0029",
+            "name": "toArray",
+            "summary": "Returns\u0020an\u0020array\u0020representation\u0020of\u0020the\u0020object",
+            "url": "classes/SocialvoidLib-Objects-Document-ThirdPartySource.html#method_toArray"
+        },                {
+            "fqsen": "\\SocialvoidLib\\Objects\\Document\\ThirdPartySource\u003A\u003AfromArray\u0028\u0029",
+            "name": "fromArray",
+            "summary": "Constructs\u0020object\u0020from\u0020an\u0020array\u0020representation",
+            "url": "classes/SocialvoidLib-Objects-Document-ThirdPartySource.html#method_fromArray"
+        },                {
             "fqsen": "\\SocialvoidLib\\Objects\\Document\\ThirdPartySource\u003A\u003A\u0024Name",
             "name": "Name",
             "summary": "The\u0020name\u0020of\u0020the\u0020third\u002Dparty\u0020source,\u0020eg\u003B\u0020\u0022Twitter\u0022.",
             "url": "classes/SocialvoidLib-Objects-Document-ThirdPartySource.html#property_Name"
         },                {
+            "fqsen": "\\SocialvoidLib\\Objects\\Document\\ThirdPartySource\u003A\u003A\u0024AccessUrl",
+            "name": "AccessUrl",
+            "summary": "The\u0020URL\u0020used\u0020to\u0020access\u0020the\u0020document\u0020in\u0020question",
+            "url": "classes/SocialvoidLib-Objects-Document-ThirdPartySource.html#property_AccessUrl"
+        },                {
             "fqsen": "\\SocialvoidLib\\Objects\\Document",
             "name": "Document",
-            "summary": "",
+            "summary": "Class\u0020Document",
             "url": "classes/SocialvoidLib-Objects-Document.html"
+        },                {
+            "fqsen": "\\SocialvoidLib\\Objects\\Document\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "Document\u0020constructor.",
+            "url": "classes/SocialvoidLib-Objects-Document.html#method___construct"
+        },                {
+            "fqsen": "\\SocialvoidLib\\Objects\\Document\u003A\u003AtoArray\u0028\u0029",
+            "name": "toArray",
+            "summary": "Returns\u0020an\u0020array\u0020representation\u0020of\u0020the\u0020object",
+            "url": "classes/SocialvoidLib-Objects-Document.html#method_toArray"
+        },                {
+            "fqsen": "\\SocialvoidLib\\Objects\\Document\u003A\u003AfromArray\u0028\u0029",
+            "name": "fromArray",
+            "summary": "Constructs\u0020the\u0020object\u0020from\u0020an\u0020array\u0020representation",
+            "url": "classes/SocialvoidLib-Objects-Document.html#method_fromArray"
         },                {
             "fqsen": "\\SocialvoidLib\\Objects\\Document\u003A\u003A\u0024PublicID",
             "name": "PublicID",
@@ -4213,67 +4248,72 @@ Search.appendIndex(
         },                {
             "fqsen": "\\SocialvoidLib\\Objects\\Document\u003A\u003A\u0024ThirdPartySource",
             "name": "ThirdPartySource",
-            "summary": "Tje",
+            "summary": "The\u0020third\u002Dparty\u0020source\u0020if\u0020applicable\u0020to\u0020the\u0020document\u0027s\u0020source",
             "url": "classes/SocialvoidLib-Objects-Document.html#property_ThirdPartySource"
         },                {
             "fqsen": "\\SocialvoidLib\\Objects\\Document\u003A\u003A\u0024FileMime",
             "name": "FileMime",
-            "summary": "",
+            "summary": "The\u0020file\u0020mime\u0020\u0028File\u0020type\u0029",
             "url": "classes/SocialvoidLib-Objects-Document.html#property_FileMime"
         },                {
             "fqsen": "\\SocialvoidLib\\Objects\\Document\u003A\u003A\u0024FileSize",
             "name": "FileSize",
-            "summary": "",
+            "summary": "The\u0020size\u0020of\u0020the\u0020file\u0020in\u0020bytes",
             "url": "classes/SocialvoidLib-Objects-Document.html#property_FileSize"
         },                {
             "fqsen": "\\SocialvoidLib\\Objects\\Document\u003A\u003A\u0024FileName",
             "name": "FileName",
-            "summary": "",
+            "summary": "The\u0020file\u0020name",
             "url": "classes/SocialvoidLib-Objects-Document.html#property_FileName"
         },                {
             "fqsen": "\\SocialvoidLib\\Objects\\Document\u003A\u003A\u0024FileExtension",
             "name": "FileExtension",
-            "summary": "",
+            "summary": "The\u0020file\u0020extension\u0020extracted\u0020from\u0020the\u0020file\u0020name",
             "url": "classes/SocialvoidLib-Objects-Document.html#property_FileExtension"
         },                {
             "fqsen": "\\SocialvoidLib\\Objects\\Document\u003A\u003A\u0024OwnerUserID",
             "name": "OwnerUserID",
-            "summary": "",
+            "summary": "The\u0020User\u0020ID\u0020that\u0020originally\u0020created\u0020this\u0020document",
             "url": "classes/SocialvoidLib-Objects-Document.html#property_OwnerUserID"
         },                {
             "fqsen": "\\SocialvoidLib\\Objects\\Document\u003A\u003A\u0024ForwardUserID",
             "name": "ForwardUserID",
-            "summary": "",
+            "summary": "The\u0020User\u0020ID\u0020that\u0020forwarded\u0020\u0028made\u0020a\u0020copy\u0029\u0020of\u0020this\u0020document",
             "url": "classes/SocialvoidLib-Objects-Document.html#property_ForwardUserID"
         },                {
             "fqsen": "\\SocialvoidLib\\Objects\\Document\u003A\u003A\u0024AccessType",
             "name": "AccessType",
-            "summary": "",
+            "summary": "Indicates\u0020the\u0020access\u0020type\u0020for\u0020this\u0020document",
             "url": "classes/SocialvoidLib-Objects-Document.html#property_AccessType"
+        },                {
+            "fqsen": "\\SocialvoidLib\\Objects\\Document\u003A\u003A\u0024AccessRoles",
+            "name": "AccessRoles",
+            "summary": "AccessRoles\u0020object\u0020that\u0020indicates\u0020what\u0020entity\u0020has\u0020access\u0020to\u0020the\u0020document",
+            "url": "classes/SocialvoidLib-Objects-Document.html#property_AccessRoles"
         },                {
             "fqsen": "\\SocialvoidLib\\Objects\\Document\u003A\u003A\u0024Flags",
             "name": "Flags",
-            "summary": "",
+            "summary": "Array\u0020of\u0020flags\u0020for\u0020this\u0020document",
             "url": "classes/SocialvoidLib-Objects-Document.html#property_Flags"
         },                {
             "fqsen": "\\SocialvoidLib\\Objects\\Document\u003A\u003A\u0024Properties",
             "name": "Properties",
-            "summary": "",
+            "summary": "The\u0020properties\u0020object\u0020associated\u0020with\u0020this\u0020document",
             "url": "classes/SocialvoidLib-Objects-Document.html#property_Properties"
         },                {
             "fqsen": "\\SocialvoidLib\\Objects\\Document\u003A\u003A\u0024LastUpdatedTimestamp",
             "name": "LastUpdatedTimestamp",
-            "summary": "",
+            "summary": "The\u0020Unix\u0020Timestamp\u0020for\u0020when\u0020this\u0020record\u0027s\u0020properties\u0020\u0028other\u0020than\u0020last\u0020accessed\u0029\u0020was\u0020last\u0020updated",
             "url": "classes/SocialvoidLib-Objects-Document.html#property_LastUpdatedTimestamp"
         },                {
             "fqsen": "\\SocialvoidLib\\Objects\\Document\u003A\u003A\u0024LastAccessedTimestamp",
             "name": "LastAccessedTimestamp",
-            "summary": "",
+            "summary": "The\u0020Unix\u0020Timestamp\u0020for\u0020when\u0020this\u0020property\u0020was\u0020last\u0020accessed\u0020on\u0020the\u0020network",
             "url": "classes/SocialvoidLib-Objects-Document.html#property_LastAccessedTimestamp"
         },                {
             "fqsen": "\\SocialvoidLib\\Objects\\Document\u003A\u003A\u0024CreatedTimestamp",
             "name": "CreatedTimestamp",
-            "summary": "",
+            "summary": "The\u0020Unix\u0020Timestamp\u0020for\u0020when\u0020this\u0020record\u0020was\u0020created",
             "url": "classes/SocialvoidLib-Objects-Document.html#property_CreatedTimestamp"
         },                {
             "fqsen": "\\SocialvoidLib\\Objects\\Follower",
@@ -6496,6 +6536,131 @@ Search.appendIndex(
             "summary": "",
             "url": "namespaces/default.html#function_convert"
         },                {
+            "fqsen": "\\SocialvoidLib\\Abstracts\\Types\\Security\\DocumentAccessType",
+            "name": "DocumentAccessType",
+            "summary": "Class\u0020DocumentAccessType",
+            "url": "classes/SocialvoidLib-Abstracts-Types-Security-DocumentAccessType.html"
+        },                {
+            "fqsen": "\\SocialvoidLib\\Abstracts\\Types\\Security\\DocumentAccessType\u003A\u003APublic",
+            "name": "Public",
+            "summary": "Indicates\u0020that\u0020the\u0020object\u0020is\u0020accessible\u0020to\u0020the\u0020public,\u0020even\u0020to\u0020users\u0020that\u0020aren\u0027t\u0020authenticated.",
+            "url": "classes/SocialvoidLib-Abstracts-Types-Security-DocumentAccessType.html#constant_Public"
+        },                {
+            "fqsen": "\\SocialvoidLib\\Abstracts\\Types\\Security\\DocumentAccessType\u003A\u003AProtected",
+            "name": "Protected",
+            "summary": "Indicates\u0020that\u0020the\u0020object\u0020is\u0020accessible\u0020but\u0020it\u0020depends\u0020on\u0020the\u0020current\u0020status\u0020of\u0020the\u0020user\u0020and\u0020post,\neg\u0020if\u0020the\u0020user\u0020is\u0020private\u0020then\u0020only\u0020users\u0020that\u0020are\u0020following\u0020the\u0020user\u0020can\u0020see\u0020the\u0020post.\u0020The\u0020access\nroles\u0020blob\u0020will\u0020contain\u0020more\u0020information\u0020about\u0020this",
+            "url": "classes/SocialvoidLib-Abstracts-Types-Security-DocumentAccessType.html#constant_Protected"
+        },                {
+            "fqsen": "\\SocialvoidLib\\Abstracts\\Types\\Security\\DocumentAccessType\u003A\u003APrivate",
+            "name": "Private",
+            "summary": "This\u0020object\u0020is\u0020only\u0020accessible\u0020to\u0020the\u0020parties\u0020specified\u0020in\u0020the\u0020access\u0020roles\u0020blob",
+            "url": "classes/SocialvoidLib-Abstracts-Types-Security-DocumentAccessType.html#constant_Private"
+        },                {
+            "fqsen": "\\SocialvoidLib\\Objects\\Document\\Properties",
+            "name": "Properties",
+            "summary": "Class\u0020Properties",
+            "url": "classes/SocialvoidLib-Objects-Document-Properties.html"
+        },                {
+            "fqsen": "\\SocialvoidLib\\Objects\\Document\\Properties\u003A\u003AtoArray\u0028\u0029",
+            "name": "toArray",
+            "summary": "Returns\u0020an\u0020array\u0020representation\u0020of\u0020the\u0020object",
+            "url": "classes/SocialvoidLib-Objects-Document-Properties.html#method_toArray"
+        },                {
+            "fqsen": "\\SocialvoidLib\\Objects\\Document\\Properties\u003A\u003AfromArray\u0028\u0029",
+            "name": "fromArray",
+            "summary": "Constructs\u0020object\u0020from\u0020an\u0020array\u0020representation",
+            "url": "classes/SocialvoidLib-Objects-Document-Properties.html#method_fromArray"
+        },                {
+            "fqsen": "\\SocialvoidLib\\Abstracts\\Types\\Security\\AccessRole",
+            "name": "AccessRole",
+            "summary": "Class\u0020AccessRole",
+            "url": "classes/SocialvoidLib-Abstracts-Types-Security-AccessRole.html"
+        },                {
+            "fqsen": "\\SocialvoidLib\\Abstracts\\Types\\Security\\AccessRole\u003A\u003AFullPrivileges",
+            "name": "FullPrivileges",
+            "summary": "",
+            "url": "classes/SocialvoidLib-Abstracts-Types-Security-AccessRole.html#constant_FullPrivileges"
+        },                {
+            "fqsen": "\\SocialvoidLib\\Abstracts\\Types\\Security\\AccessRoleEntityType",
+            "name": "AccessRoleEntityType",
+            "summary": "Class\u0020AccessRoleEntityType",
+            "url": "classes/SocialvoidLib-Abstracts-Types-Security-AccessRoleEntityType.html"
+        },                {
+            "fqsen": "\\SocialvoidLib\\Abstracts\\Types\\Security\\AccessRoleEntityType\u003A\u003APeer",
+            "name": "Peer",
+            "summary": "",
+            "url": "classes/SocialvoidLib-Abstracts-Types-Security-AccessRoleEntityType.html#constant_Peer"
+        },                {
+            "fqsen": "\\SocialvoidLib\\Exceptions\\Internal\\EntityWithoutAccessException",
+            "name": "EntityWithoutAccessException",
+            "summary": "Class\u0020EntityWithoutAccessException",
+            "url": "classes/SocialvoidLib-Exceptions-Internal-EntityWithoutAccessException.html"
+        },                {
+            "fqsen": "\\SocialvoidLib\\Exceptions\\Internal\\EntityWithoutAccessException\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "EntityWithoutAccessException\u0020constructor.",
+            "url": "classes/SocialvoidLib-Exceptions-Internal-EntityWithoutAccessException.html#method___construct"
+        },                {
+            "fqsen": "\\SocialvoidLib\\Exceptions\\Internal\\EntityWithoutAccessException\u003A\u003A\u0024previous",
+            "name": "previous",
+            "summary": "",
+            "url": "classes/SocialvoidLib-Exceptions-Internal-EntityWithoutAccessException.html#property_previous"
+        },                {
+            "fqsen": "\\SocialvoidLib\\Exceptions\\Internal\\EntityWithoutAccessException\u003A\u003A\u0024entity_type",
+            "name": "entity_type",
+            "summary": "",
+            "url": "classes/SocialvoidLib-Exceptions-Internal-EntityWithoutAccessException.html#property_entity_type"
+        },                {
+            "fqsen": "\\SocialvoidLib\\Exceptions\\Internal\\EntityWithoutAccessException\u003A\u003A\u0024entity_identifier",
+            "name": "entity_identifier",
+            "summary": "",
+            "url": "classes/SocialvoidLib-Exceptions-Internal-EntityWithoutAccessException.html#property_entity_identifier"
+        },                {
+            "fqsen": "\\SocialvoidLib\\Exceptions\\Internal\\EntityWithoutAccessException\u003A\u003A\u0024data",
+            "name": "data",
+            "summary": "",
+            "url": "classes/SocialvoidLib-Exceptions-Internal-EntityWithoutAccessException.html#property_data"
+        },                {
+            "fqsen": "\\SocialvoidLib\\Objects\\AccessRoles",
+            "name": "AccessRoles",
+            "summary": "Class\u0020AccessRoles",
+            "url": "classes/SocialvoidLib-Objects-AccessRoles.html"
+        },                {
+            "fqsen": "\\SocialvoidLib\\Objects\\AccessRoles\u003A\u003AaddAccess\u0028\u0029",
+            "name": "addAccess",
+            "summary": "Adds\u0020a\u0020new\u0020access\u0020role",
+            "url": "classes/SocialvoidLib-Objects-AccessRoles.html#method_addAccess"
+        },                {
+            "fqsen": "\\SocialvoidLib\\Objects\\AccessRoles\u003A\u003ArevokeAccess\u0028\u0029",
+            "name": "revokeAccess",
+            "summary": "Revokes\u0020an\u0020access\u0020role",
+            "url": "classes/SocialvoidLib-Objects-AccessRoles.html#method_revokeAccess"
+        },                {
+            "fqsen": "\\SocialvoidLib\\Objects\\AccessRoles\u003A\u003AhasAccess\u0028\u0029",
+            "name": "hasAccess",
+            "summary": "Determines\u0020if\u0020the\u0020access\u0020role\u0020exists",
+            "url": "classes/SocialvoidLib-Objects-AccessRoles.html#method_hasAccess"
+        },                {
+            "fqsen": "\\SocialvoidLib\\Objects\\AccessRoles\u003A\u003AgetAccessType\u0028\u0029",
+            "name": "getAccessType",
+            "summary": "Determines\u0020if\u0020the\u0020access\u0020role\u0020exists",
+            "url": "classes/SocialvoidLib-Objects-AccessRoles.html#method_getAccessType"
+        },                {
+            "fqsen": "\\SocialvoidLib\\Objects\\AccessRoles\u003A\u003AtoArray\u0028\u0029",
+            "name": "toArray",
+            "summary": "Returns\u0020an\u0020array\u0020representation\u0020of\u0020the\u0020object\u0020structure",
+            "url": "classes/SocialvoidLib-Objects-AccessRoles.html#method_toArray"
+        },                {
+            "fqsen": "\\SocialvoidLib\\Objects\\AccessRoles\u003A\u003AfromArray\u0028\u0029",
+            "name": "fromArray",
+            "summary": "Constructs\u0020the\u0020object\u0020from\u0020an\u0020array\u0020representation",
+            "url": "classes/SocialvoidLib-Objects-AccessRoles.html#method_fromArray"
+        },                {
+            "fqsen": "\\SocialvoidLib\\Objects\\AccessRoles\u003A\u003A\u0024Data",
+            "name": "Data",
+            "summary": "The\u0020Access\u0020Roles\u0020data\u0020managed\u0020by\u0020the\u0020object",
+            "url": "classes/SocialvoidLib-Objects-AccessRoles.html#property_Data"
+        },                {
             "fqsen": "\\",
             "name": "\\",
             "summary": "",
@@ -6530,6 +6695,11 @@ Search.appendIndex(
             "name": "Types",
             "summary": "",
             "url": "namespaces/socialvoidlib-abstracts-types.html"
+        },                {
+            "fqsen": "\\SocialvoidLib\\Abstracts\\Types\\Security",
+            "name": "Security",
+            "summary": "",
+            "url": "namespaces/socialvoidlib-abstracts-types-security.html"
         },                {
             "fqsen": "\\SocialvoidLib\\Abstracts\\Types\\Standard",
             "name": "Standard",
@@ -6621,6 +6791,11 @@ Search.appendIndex(
             "summary": "",
             "url": "namespaces/socialvoidlib.html"
         },                {
+            "fqsen": "\\SocialvoidLib\\Objects",
+            "name": "Objects",
+            "summary": "",
+            "url": "namespaces/socialvoidlib-objects.html"
+        },                {
             "fqsen": "\\SocialvoidLib\\Objects\\ActiveSession\\SessionCache",
             "name": "SessionCache",
             "summary": "",
@@ -6630,11 +6805,6 @@ Search.appendIndex(
             "name": "ActiveSession",
             "summary": "",
             "url": "namespaces/socialvoidlib-objects-activesession.html"
-        },                {
-            "fqsen": "\\SocialvoidLib\\Objects",
-            "name": "Objects",
-            "summary": "",
-            "url": "namespaces/socialvoidlib-objects.html"
         },                {
             "fqsen": "\\SocialvoidLib\\Objects\\Document",
             "name": "Document",

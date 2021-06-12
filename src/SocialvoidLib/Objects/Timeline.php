@@ -79,8 +79,8 @@
          */
         public function addPost(int $post_id)
         {
-            $this->PostChunks = Utilities::addToChunk($post_id, $this->PostChunks, 
-                Utilities::getIntDefinition("SOCIALVOID_LIB_TIMELINE_MAX_SIZE", 3200), 
+            $this->PostChunks = Utilities::addToChunk($post_id, $this->PostChunks,
+                Utilities::getIntDefinition("SOCIALVOID_LIB_TIMELINE_MAX_SIZE", 3200),
                 Utilities::getIntDefinition("SOCIALVOID_LIB_TIMELINE_CHUNK_SIZE", 20)
             );
             $this->NewPosts += 1;

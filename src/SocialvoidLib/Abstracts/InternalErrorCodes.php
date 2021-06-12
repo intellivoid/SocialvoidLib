@@ -14,6 +14,7 @@
     use SocialvoidLib\Exceptions\Internal\AuthenticationFailureException;
     use SocialvoidLib\Exceptions\Internal\CdnFileNotFoundException;
     use SocialvoidLib\Exceptions\Internal\CoaAuthenticationRecordNotFoundException;
+    use SocialvoidLib\Exceptions\Internal\EntityWithoutAccessException;
     use SocialvoidLib\Exceptions\Internal\FileTooLargeException;
     use SocialvoidLib\Exceptions\Internal\FollowerDataNotFound;
     use SocialvoidLib\Exceptions\Internal\FollowerStateNotFoundException;
@@ -120,4 +121,9 @@
          * @see InvalidImageTypeException
          */
         const InvalidImageTypeException = 0x2016;
+
+        /**
+         * @see EntityWithoutAccessException
+         */
+        const EntityWithoutAccessException = 0x2017;
     }

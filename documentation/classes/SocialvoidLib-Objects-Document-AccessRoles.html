@@ -116,7 +116,7 @@
 
     <article class="phpdocumentor-element -class">
         <h2 class="phpdocumentor-content__title">
-    ThirdPartySource
+    AccessRoles
 
     
             <div class="phpdocumentor-element__package">
@@ -132,12 +132,12 @@
     </h2>
 
         <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Document/ThirdPartySource.php"><a href="files/src-socialvoidlib-objects-document-thirdpartysource.html"><abbr title="src/SocialvoidLib/Objects/Document/ThirdPartySource.php">ThirdPartySource.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Document/AccessRoles.php"><a href="files/src-socialvoidlib-objects-document-accessroles.html"><abbr title="src/SocialvoidLib/Objects/Document/AccessRoles.php">AccessRoles.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">12</span>
+    <span class="phpdocumentor-element-found-in__line">13</span>
 </aside>
 
-            <p class="phpdocumentor-summary">Class ThirdPartySource</p>
+            <p class="phpdocumentor-summary">Class AccessRoles</p>
 
     <section class="phpdocumentor-description"></section>
 
@@ -155,32 +155,32 @@
 
 <dl class="phpdocumentor-table-of-contents">
                 <dt class="phpdocumentor-table-of-contents__entry -property -public">
-    <a href="classes/SocialvoidLib-Objects-Document-ThirdPartySource.html#property_AccessUrl">$AccessUrl</a>
+    <a href="classes/SocialvoidLib-Objects-Document-AccessRoles.html#property_Data">$Data</a>
     <span>
-                &nbsp;: string            </span>
+                &nbsp;: mixed            </span>
 </dt>
-<dd>The URL used to access the document in question</dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -property -public">
-    <a href="classes/SocialvoidLib-Objects-Document-ThirdPartySource.html#property_Name">$Name</a>
-    <span>
-                &nbsp;: string            </span>
-</dt>
-<dd>The name of the third-party source, eg; &quot;Twitter&quot;.</dd>
+<dd>The Access Roles data managed by the object</dd>
 
                 <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/SocialvoidLib-Objects-Document-ThirdPartySource.html#method_fromArray">fromArray()</a>
+    <a href="classes/SocialvoidLib-Objects-Document-AccessRoles.html#method_addAccess">addAccess()</a>
     <span>
-                        &nbsp;: <a href="classes/SocialvoidLib-Objects-Document-ThirdPartySource.html"><abbr title="\SocialvoidLib\Objects\Document\ThirdPartySource">ThirdPartySource</abbr></a>    </span>
+                        &nbsp;: void    </span>
 </dt>
-<dd>Constructs object from an array representation</dd>
+<dd>Adds a new access role</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/SocialvoidLib-Objects-Document-ThirdPartySource.html#method_toArray">toArray()</a>
+    <a href="classes/SocialvoidLib-Objects-Document-AccessRoles.html#method_getAccessType">getAccessType()</a>
     <span>
-                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+                        &nbsp;: string    </span>
 </dt>
-<dd>Returns an array representation of the object</dd>
+<dd>Determines if the access role exists</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/SocialvoidLib-Objects-Document-AccessRoles.html#method_hasAccess">hasAccess()</a>
+    <span>
+                        &nbsp;: bool    </span>
+</dt>
+<dd>Determines if the access role exists</dd>
 
         </dl>
 
@@ -192,7 +192,7 @@
     <section class="phpdocumentor-properties">
         <h3 class="phpdocumentor-elements__header" id="properties">
             Properties
-            <a href="classes/SocialvoidLib-Objects-Document-ThirdPartySource.html#properties" class="headerlink"><i class="fas fa-link"></i></a>
+            <a href="classes/SocialvoidLib-Objects-Document-AccessRoles.html#properties" class="headerlink"><i class="fas fa-link"></i></a>
         </h3>
                     <article
         class="
@@ -201,60 +201,27 @@
             -public
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="property_AccessUrl">
-        $AccessUrl
-        <a href="classes/SocialvoidLib-Objects-Document-ThirdPartySource.html#property_AccessUrl" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="property_Data">
+        $Data
+        <a href="classes/SocialvoidLib-Objects-Document-AccessRoles.html#property_Data" class="headerlink"><i class="fas fa-link"></i></a>
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Document/ThirdPartySource.php"><a href="files/src-socialvoidlib-objects-document-thirdpartysource.html"><abbr title="src/SocialvoidLib/Objects/Document/ThirdPartySource.php">ThirdPartySource.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">27</span>
-</aside>
-
-        <p class="phpdocumentor-summary">The URL used to access the document in question</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-        <span class="phpdocumentor-signature__type">string</span>
-    <span class="phpdocumentor-signature__name">$AccessUrl</span>
-    </code>
-
-        <section class="phpdocumentor-description"></section>
-
-    
-
-</article>
-                    <article
-        class="
-            phpdocumentor-element
-            -property
-            -public
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="property_Name">
-        $Name
-        <a href="classes/SocialvoidLib-Objects-Document-ThirdPartySource.html#property_Name" class="headerlink"><i class="fas fa-link"></i></a>
-        <span class="phpdocumentor-element__modifiers">
-                                </span>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Document/ThirdPartySource.php"><a href="files/src-socialvoidlib-objects-document-thirdpartysource.html"><abbr title="src/SocialvoidLib/Objects/Document/ThirdPartySource.php">ThirdPartySource.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Document/AccessRoles.php"><a href="files/src-socialvoidlib-objects-document-accessroles.html"><abbr title="src/SocialvoidLib/Objects/Document/AccessRoles.php">AccessRoles.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">20</span>
 </aside>
 
-        <p class="phpdocumentor-summary">The name of the third-party source, eg; &quot;Twitter&quot;.</p>
+        <p class="phpdocumentor-summary">The Access Roles data managed by the object</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-        <span class="phpdocumentor-signature__type">string</span>
-    <span class="phpdocumentor-signature__name">$Name</span>
+        <span class="phpdocumentor-signature__type">mixed</span>
+    <span class="phpdocumentor-signature__name">$Data</span>
     </code>
 
-        <section class="phpdocumentor-description"><p>So the display would be: &quot;Content provided by Twitter&quot;</p>
-</section>
+        <section class="phpdocumentor-description"></section>
 
     
 
@@ -264,37 +231,106 @@
             <section class="phpdocumentor-methods">
         <h3 class="phpdocumentor-elements__header" id="methods">
             Methods
-            <a href="classes/SocialvoidLib-Objects-Document-ThirdPartySource.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
+            <a href="classes/SocialvoidLib-Objects-Document-AccessRoles.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
         </h3>
                     <article
         class="phpdocumentor-element
             -method
             -public
-                                    -static                    "
+                                                        "
 >
-    <h4 class="phpdocumentor-element__name" id="method_fromArray">
-        fromArray()
-        <a href="classes/SocialvoidLib-Objects-Document-ThirdPartySource.html#method_fromArray" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method_addAccess">
+        addAccess()
+        <a href="classes/SocialvoidLib-Objects-Document-AccessRoles.html#method_addAccess" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Document/ThirdPartySource.php"><a href="files/src-socialvoidlib-objects-document-thirdpartysource.html"><abbr title="src/SocialvoidLib/Objects/Document/ThirdPartySource.php">ThirdPartySource.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Document/AccessRoles.php"><a href="files/src-socialvoidlib-objects-document-accessroles.html"><abbr title="src/SocialvoidLib/Objects/Document/AccessRoles.php">AccessRoles.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">50</span>
+    <span class="phpdocumentor-element-found-in__line">29</span>
 </aside>
 
-        <p class="phpdocumentor-summary">Constructs object from an array representation</p>
+        <p class="phpdocumentor-summary">Adds a new access role</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">fromArray</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$data</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/SocialvoidLib-Objects-Document-ThirdPartySource.html"><abbr title="\SocialvoidLib\Objects\Document\ThirdPartySource">ThirdPartySource</abbr></a></span></code>
+                <span class="phpdocumentor-signature__name">addAccess</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$entity_type</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">int|string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$entity_identifier</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string|<a href="classes/SocialvoidLib-Abstracts-Types-Security-AccessRole.html"><abbr title="\SocialvoidLib\Abstracts\Types\Security\AccessRole">AccessRole</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$access_role</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
         <section class="phpdocumentor-description"></section>
 
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$data</span>
-                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                <span class="phpdocumentor-signature__argument__name">$entity_type</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$entity_identifier</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int|string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$access_role</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string|<a href="classes/SocialvoidLib-Abstracts-Types-Security-AccessRole.html"><abbr title="\SocialvoidLib\Abstracts\Types\Security\AccessRole">AccessRole</abbr></a></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">void</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getAccessType">
+        getAccessType()
+        <a href="classes/SocialvoidLib-Objects-Document-AccessRoles.html#method_getAccessType" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Document/AccessRoles.php"><a href="files/src-socialvoidlib-objects-document-accessroles.html"><abbr title="src/SocialvoidLib/Objects/Document/AccessRoles.php">AccessRoles.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">54</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Determines if the access role exists</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">getAccessType</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$entity_type</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href=""><abbr title=""></abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$entity_identifier</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$entity_type</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$entity_identifier</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href=""><abbr title=""></abbr></a></span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"></section>
@@ -309,18 +345,18 @@
     </h5>
     <dl class="phpdocumentor-tag-list">
                                     <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">noinspection</span>
+                    <span class="phpdocumentor-tag__name">throws</span>
                 </dt>
                 <dd class="phpdocumentor-tag-list__definition">
-                                                                                
-                                                 <section class="phpdocumentor-description"><p>PhpPureAttributeCanBeAddedInspection</p>
-</section>
+                                                                <span class="phpdocumentor-tag-link"><a href="classes/SocialvoidLib-Exceptions-Internal-EntityWithoutAccessException.html"><abbr title="\SocialvoidLib\Exceptions\Internal\EntityWithoutAccessException">EntityWithoutAccessException</abbr></a></span>
+                                                            
+                                                 <section class="phpdocumentor-description"></section>
 
                                     </dd>
                         </dl>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><a href="classes/SocialvoidLib-Objects-Document-ThirdPartySource.html"><abbr title="\SocialvoidLib\Objects\Document\ThirdPartySource">ThirdPartySource</abbr></a></span>
+    <span class="phpdocumentor-signature__response_type">string</span>
             &mdash;
             <section class="phpdocumentor-description"></section>
 
@@ -332,44 +368,48 @@
             -public
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="method_toArray">
-        toArray()
-        <a href="classes/SocialvoidLib-Objects-Document-ThirdPartySource.html#method_toArray" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method_hasAccess">
+        hasAccess()
+        <a href="classes/SocialvoidLib-Objects-Document-AccessRoles.html#method_hasAccess" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Document/ThirdPartySource.php"><a href="files/src-socialvoidlib-objects-document-thirdpartysource.html"><abbr title="src/SocialvoidLib/Objects/Document/ThirdPartySource.php">ThirdPartySource.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Document/AccessRoles.php"><a href="files/src-socialvoidlib-objects-document-accessroles.html"><abbr title="src/SocialvoidLib/Objects/Document/AccessRoles.php">AccessRoles.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">35</span>
+    <span class="phpdocumentor-element-found-in__line">41</span>
 </aside>
 
-        <p class="phpdocumentor-summary">Returns an array representation of the object</p>
+        <p class="phpdocumentor-summary">Determines if the access role exists</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">toArray</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+                <span class="phpdocumentor-signature__name">hasAccess</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$entity_type</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href=""><abbr title=""></abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$entity_identifier</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
         <section class="phpdocumentor-description"></section>
 
-    
-    
-    <h5 class="phpdocumentor-tag-list__heading" id="tags">
-        Tags
-        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
-    </h5>
-    <dl class="phpdocumentor-tag-list">
-                                    <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">noinspection</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                                
-                                                 <section class="phpdocumentor-description"><p>PhpArrayShapeAttributeCanBeAddedInspection</p>
-</section>
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$entity_type</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
 
-                                    </dd>
-                        </dl>
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$entity_identifier</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href=""><abbr title=""></abbr></a></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+    <span class="phpdocumentor-signature__response_type">bool</span>
             &mdash;
             <section class="phpdocumentor-description"></section>
 
@@ -391,7 +431,7 @@
 </section>
             </div>
         </div>
-        <a href="classes/SocialvoidLib-Objects-Document-ThirdPartySource.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
+        <a href="classes/SocialvoidLib-Objects-Document-AccessRoles.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
 
     </main>
 

@@ -25,5 +25,5 @@
         json_decode(file_get_contents($NetworkSessionPath), true), $Socialvoid); // Load network session
 
 
-    $Post = $NetworkSession->getTimeline()->postToTimeline("Amazing!");
+    $Post = $NetworkSession->getTimeline()->postToTimeline("Amazing! @ElonMoosk @BillCocks #yolo #fml xddddddddd");
     print(json_encode($Post->toArray(), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));

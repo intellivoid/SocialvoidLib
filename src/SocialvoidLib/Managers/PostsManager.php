@@ -89,7 +89,7 @@
             if($textPostResults->valid == false)
                 throw new InvalidPostTextException("The given post text is invalid", $text);
 
-            $PublicID = BaseIdentification::PostID($user_id, $timestamp, $text);
+            $PublicID = BaseIdentification::postId($user_id, $timestamp, $text);
             $Properties = new Post\Properties();
 
             // Extract important information from this text
@@ -459,7 +459,7 @@
             }
 
             $timestamp = (int)time();
-            $PublicID = BaseIdentification::PostID($user_id, $timestamp, $post->Text);
+            $PublicID = BaseIdentification::postId($user_id, $timestamp, $post->Text);
             $Properties = new Post\Properties();
 
             $Repost = new Post\Repost();
@@ -551,7 +551,7 @@
             if($textPostResults->valid == false)
                 throw new InvalidPostTextException("The given post text is invalid", $text);
 
-            $PublicID = BaseIdentification::PostID($user_id, $timestamp, $text);
+            $PublicID = BaseIdentification::postId($user_id, $timestamp, $text);
             $Properties = new Post\Properties();
 
             // Extract important information from this text
@@ -657,7 +657,7 @@
             if($textPostResults->valid == false)
                 throw new InvalidPostTextException("The given post text is invalid", $text);
 
-            $PublicID = BaseIdentification::PostID($user_id, $timestamp, $text);
+            $PublicID = BaseIdentification::postId($user_id, $timestamp, $text);
             $Properties = new Post\Properties();
 
             // Extract important information from this text

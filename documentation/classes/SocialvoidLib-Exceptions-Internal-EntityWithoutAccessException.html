@@ -110,21 +110,24 @@
             <div class="phpdocumentor-column -eight phpdocumentor-content">
                     <ul class="phpdocumentor-breadcrumbs">
             <li class="phpdocumentor-breadcrumb"><a href="namespaces/socialvoidlib.html">SocialvoidLib</a></li>
-            <li class="phpdocumentor-breadcrumb"><a href="namespaces/socialvoidlib-objects.html">Objects</a></li>
-            <li class="phpdocumentor-breadcrumb"><a href="namespaces/socialvoidlib-objects-document.html">Document</a></li>
+            <li class="phpdocumentor-breadcrumb"><a href="namespaces/socialvoidlib-exceptions.html">Exceptions</a></li>
+            <li class="phpdocumentor-breadcrumb"><a href="namespaces/socialvoidlib-exceptions-internal.html">Internal</a></li>
     </ul>
 
     <article class="phpdocumentor-element -class">
         <h2 class="phpdocumentor-content__title">
-    ThirdPartySource
+    EntityWithoutAccessException
 
+        <span class="phpdocumentor-element__extends">
+        extends <abbr title="\Exception">Exception</abbr>
+    </span>
     
             <div class="phpdocumentor-element__package">
             in package
             <ul class="phpdocumentor-breadcrumbs">
                                     <li class="phpdocumentor-breadcrumb"><a href="packages/SocialvoidLib.html">SocialvoidLib</a></li>
-                                    <li class="phpdocumentor-breadcrumb"><a href="packages/SocialvoidLib-Objects.html">Objects</a></li>
-                                    <li class="phpdocumentor-breadcrumb"><a href="packages/SocialvoidLib-Objects-Document.html">Document</a></li>
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/SocialvoidLib-Exceptions.html">Exceptions</a></li>
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/SocialvoidLib-Exceptions-Internal.html">Internal</a></li>
                             </ul>
         </div>
     
@@ -132,12 +135,12 @@
     </h2>
 
         <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Document/ThirdPartySource.php"><a href="files/src-socialvoidlib-objects-document-thirdpartysource.html"><abbr title="src/SocialvoidLib/Objects/Document/ThirdPartySource.php">ThirdPartySource.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Exceptions/Internal/EntityWithoutAccessException.php"><a href="files/src-socialvoidlib-exceptions-internal-entitywithoutaccessexception.html"><abbr title="src/SocialvoidLib/Exceptions/Internal/EntityWithoutAccessException.php">EntityWithoutAccessException.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">12</span>
+    <span class="phpdocumentor-element-found-in__line">15</span>
 </aside>
 
-            <p class="phpdocumentor-summary">Class ThirdPartySource</p>
+            <p class="phpdocumentor-summary">Class EntityWithoutAccessException</p>
 
     <section class="phpdocumentor-description"></section>
 
@@ -154,33 +157,40 @@
 </h3>
 
 <dl class="phpdocumentor-table-of-contents">
-                <dt class="phpdocumentor-table-of-contents__entry -property -public">
-    <a href="classes/SocialvoidLib-Objects-Document-ThirdPartySource.html#property_AccessUrl">$AccessUrl</a>
+                <dt class="phpdocumentor-table-of-contents__entry -property -private">
+    <a href="classes/SocialvoidLib-Exceptions-Internal-EntityWithoutAccessException.html#property_data">$data</a>
     <span>
-                &nbsp;: string            </span>
+                &nbsp;: array&lt;string|int, mixed&gt;            </span>
 </dt>
-<dd>The URL used to access the document in question</dd>
+<dd></dd>
 
-            <dt class="phpdocumentor-table-of-contents__entry -property -public">
-    <a href="classes/SocialvoidLib-Objects-Document-ThirdPartySource.html#property_Name">$Name</a>
+            <dt class="phpdocumentor-table-of-contents__entry -property -private">
+    <a href="classes/SocialvoidLib-Exceptions-Internal-EntityWithoutAccessException.html#property_entity_identifier">$entity_identifier</a>
     <span>
                 &nbsp;: string            </span>
 </dt>
-<dd>The name of the third-party source, eg; &quot;Twitter&quot;.</dd>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -private">
+    <a href="classes/SocialvoidLib-Exceptions-Internal-EntityWithoutAccessException.html#property_entity_type">$entity_type</a>
+    <span>
+                &nbsp;: string            </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -private">
+    <a href="classes/SocialvoidLib-Exceptions-Internal-EntityWithoutAccessException.html#property_previous">$previous</a>
+    <span>
+                &nbsp;: <abbr title="\Throwable">Throwable</abbr>|null            </span>
+</dt>
+<dd></dd>
 
                 <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/SocialvoidLib-Objects-Document-ThirdPartySource.html#method_fromArray">fromArray()</a>
+    <a href="classes/SocialvoidLib-Exceptions-Internal-EntityWithoutAccessException.html#method___construct">__construct()</a>
     <span>
-                        &nbsp;: <a href="classes/SocialvoidLib-Objects-Document-ThirdPartySource.html"><abbr title="\SocialvoidLib\Objects\Document\ThirdPartySource">ThirdPartySource</abbr></a>    </span>
+                        &nbsp;: mixed    </span>
 </dt>
-<dd>Constructs object from an array representation</dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/SocialvoidLib-Objects-Document-ThirdPartySource.html#method_toArray">toArray()</a>
-    <span>
-                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
-</dt>
-<dd>Returns an array representation of the object</dd>
+<dd>EntityWithoutAccessException constructor.</dd>
 
         </dl>
 
@@ -192,33 +202,32 @@
     <section class="phpdocumentor-properties">
         <h3 class="phpdocumentor-elements__header" id="properties">
             Properties
-            <a href="classes/SocialvoidLib-Objects-Document-ThirdPartySource.html#properties" class="headerlink"><i class="fas fa-link"></i></a>
+            <a href="classes/SocialvoidLib-Exceptions-Internal-EntityWithoutAccessException.html#properties" class="headerlink"><i class="fas fa-link"></i></a>
         </h3>
                     <article
         class="
             phpdocumentor-element
             -property
-            -public
+            -private
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="property_AccessUrl">
-        $AccessUrl
-        <a href="classes/SocialvoidLib-Objects-Document-ThirdPartySource.html#property_AccessUrl" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="property_data">
+        $data
+        <a href="classes/SocialvoidLib-Exceptions-Internal-EntityWithoutAccessException.html#property_data" class="headerlink"><i class="fas fa-link"></i></a>
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Document/ThirdPartySource.php"><a href="files/src-socialvoidlib-objects-document-thirdpartysource.html"><abbr title="src/SocialvoidLib/Objects/Document/ThirdPartySource.php">ThirdPartySource.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Exceptions/Internal/EntityWithoutAccessException.php"><a href="files/src-socialvoidlib-exceptions-internal-entitywithoutaccessexception.html"><abbr title="src/SocialvoidLib/Exceptions/Internal/EntityWithoutAccessException.php">EntityWithoutAccessException.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">27</span>
+    <span class="phpdocumentor-element-found-in__line">35</span>
 </aside>
 
-        <p class="phpdocumentor-summary">The URL used to access the document in question</p>
-
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-        <span class="phpdocumentor-signature__type">string</span>
-    <span class="phpdocumentor-signature__name">$AccessUrl</span>
+    <span class="phpdocumentor-signature__visibility">private</span>
+        <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
+    <span class="phpdocumentor-signature__name">$data</span>
     </code>
 
         <section class="phpdocumentor-description"></section>
@@ -230,31 +239,91 @@
         class="
             phpdocumentor-element
             -property
-            -public
+            -private
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="property_Name">
-        $Name
-        <a href="classes/SocialvoidLib-Objects-Document-ThirdPartySource.html#property_Name" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="property_entity_identifier">
+        $entity_identifier
+        <a href="classes/SocialvoidLib-Exceptions-Internal-EntityWithoutAccessException.html#property_entity_identifier" class="headerlink"><i class="fas fa-link"></i></a>
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Document/ThirdPartySource.php"><a href="files/src-socialvoidlib-objects-document-thirdpartysource.html"><abbr title="src/SocialvoidLib/Objects/Document/ThirdPartySource.php">ThirdPartySource.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Exceptions/Internal/EntityWithoutAccessException.php"><a href="files/src-socialvoidlib-exceptions-internal-entitywithoutaccessexception.html"><abbr title="src/SocialvoidLib/Exceptions/Internal/EntityWithoutAccessException.php">EntityWithoutAccessException.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">30</span>
+</aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">$entity_identifier</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_entity_type">
+        $entity_type
+        <a href="classes/SocialvoidLib-Exceptions-Internal-EntityWithoutAccessException.html#property_entity_type" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Exceptions/Internal/EntityWithoutAccessException.php"><a href="files/src-socialvoidlib-exceptions-internal-entitywithoutaccessexception.html"><abbr title="src/SocialvoidLib/Exceptions/Internal/EntityWithoutAccessException.php">EntityWithoutAccessException.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">25</span>
+</aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">$entity_type</span>
+    </code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_previous">
+        $previous
+        <a href="classes/SocialvoidLib-Exceptions-Internal-EntityWithoutAccessException.html#property_previous" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Exceptions/Internal/EntityWithoutAccessException.php"><a href="files/src-socialvoidlib-exceptions-internal-entitywithoutaccessexception.html"><abbr title="src/SocialvoidLib/Exceptions/Internal/EntityWithoutAccessException.php">EntityWithoutAccessException.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">20</span>
 </aside>
 
-        <p class="phpdocumentor-summary">The name of the third-party source, eg; &quot;Twitter&quot;.</p>
-
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-        <span class="phpdocumentor-signature__type">string</span>
-    <span class="phpdocumentor-signature__name">$Name</span>
+    <span class="phpdocumentor-signature__visibility">private</span>
+        <span class="phpdocumentor-signature__type"><abbr title="\Throwable">Throwable</abbr>|null</span>
+    <span class="phpdocumentor-signature__name">$previous</span>
     </code>
 
-        <section class="phpdocumentor-description"><p>So the display would be: &quot;Content provided by Twitter&quot;</p>
-</section>
+        <section class="phpdocumentor-description"></section>
 
     
 
@@ -264,34 +333,50 @@
             <section class="phpdocumentor-methods">
         <h3 class="phpdocumentor-elements__header" id="methods">
             Methods
-            <a href="classes/SocialvoidLib-Objects-Document-ThirdPartySource.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
+            <a href="classes/SocialvoidLib-Exceptions-Internal-EntityWithoutAccessException.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
         </h3>
                     <article
         class="phpdocumentor-element
             -method
             -public
-                                    -static                    "
+                                                        "
 >
-    <h4 class="phpdocumentor-element__name" id="method_fromArray">
-        fromArray()
-        <a href="classes/SocialvoidLib-Objects-Document-ThirdPartySource.html#method_fromArray" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method___construct">
+        __construct()
+        <a href="classes/SocialvoidLib-Exceptions-Internal-EntityWithoutAccessException.html#method___construct" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Document/ThirdPartySource.php"><a href="files/src-socialvoidlib-objects-document-thirdpartysource.html"><abbr title="src/SocialvoidLib/Objects/Document/ThirdPartySource.php">ThirdPartySource.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Exceptions/Internal/EntityWithoutAccessException.php"><a href="files/src-socialvoidlib-exceptions-internal-entitywithoutaccessexception.html"><abbr title="src/SocialvoidLib/Exceptions/Internal/EntityWithoutAccessException.php">EntityWithoutAccessException.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">50</span>
+    <span class="phpdocumentor-element-found-in__line">45</span>
 </aside>
 
-        <p class="phpdocumentor-summary">Constructs object from an array representation</p>
+        <p class="phpdocumentor-summary">EntityWithoutAccessException constructor.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">fromArray</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$data</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/SocialvoidLib-Objects-Document-ThirdPartySource.html"><abbr title="\SocialvoidLib\Objects\Document\ThirdPartySource">ThirdPartySource</abbr></a></span></code>
+                <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$entity_type</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$entity_identifier</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$data</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$message</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&quot;&quot;</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Throwable">Throwable</abbr>|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$previous</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
         <section class="phpdocumentor-description"></section>
 
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$entity_type</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$entity_identifier</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$data</span>
                 : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
@@ -300,76 +385,28 @@
                     <section class="phpdocumentor-description"></section>
 
             </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$message</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">&quot;&quot;</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$previous</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Throwable">Throwable</abbr>|null</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
             </dl>
 
     
-    <h5 class="phpdocumentor-tag-list__heading" id="tags">
-        Tags
-        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
-    </h5>
-    <dl class="phpdocumentor-tag-list">
-                                    <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">noinspection</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                                
-                                                 <section class="phpdocumentor-description"><p>PhpPureAttributeCanBeAddedInspection</p>
-</section>
-
-                                    </dd>
-                        </dl>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><a href="classes/SocialvoidLib-Objects-Document-ThirdPartySource.html"><abbr title="\SocialvoidLib\Objects\Document\ThirdPartySource">ThirdPartySource</abbr></a></span>
-            &mdash;
-            <section class="phpdocumentor-description"></section>
-
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -public
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="method_toArray">
-        toArray()
-        <a href="classes/SocialvoidLib-Objects-Document-ThirdPartySource.html#method_toArray" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/SocialvoidLib/Objects/Document/ThirdPartySource.php"><a href="files/src-socialvoidlib-objects-document-thirdpartysource.html"><abbr title="src/SocialvoidLib/Objects/Document/ThirdPartySource.php">ThirdPartySource.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">35</span>
-</aside>
-
-        <p class="phpdocumentor-summary">Returns an array representation of the object</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">toArray</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
-
-        <section class="phpdocumentor-description"></section>
-
-    
-    
-    <h5 class="phpdocumentor-tag-list__heading" id="tags">
-        Tags
-        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
-    </h5>
-    <dl class="phpdocumentor-tag-list">
-                                    <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">noinspection</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                                
-                                                 <section class="phpdocumentor-description"><p>PhpArrayShapeAttributeCanBeAddedInspection</p>
-</section>
-
-                                    </dd>
-                        </dl>
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+    <span class="phpdocumentor-signature__response_type">mixed</span>
             &mdash;
             <section class="phpdocumentor-description"></section>
 
@@ -391,7 +428,7 @@
 </section>
             </div>
         </div>
-        <a href="classes/SocialvoidLib-Objects-Document-ThirdPartySource.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
+        <a href="classes/SocialvoidLib-Exceptions-Internal-EntityWithoutAccessException.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
 
     </main>
 

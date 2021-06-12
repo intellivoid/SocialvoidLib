@@ -8,9 +8,10 @@
      * must have a written permission from Intellivoid Technologies to do so.
      */
 
-namespace SocialvoidLib\Classes\Standard;
+    namespace SocialvoidLib\Classes\Standard;
 
     use SocialvoidLib\Classes\Security\Hashing;
+    use SocialvoidLib\InputTypes\DocumentInput;
     use SocialvoidLib\InputTypes\SessionClient;
     use SocialvoidLib\InputTypes\SessionDevice;
 
@@ -26,7 +27,7 @@ namespace SocialvoidLib\Classes\Standard;
          * @param int $unix_timestamp
          * @return string
          */
-        public static function UserPublicID(int $unix_timestamp): string
+        public static function userPublicId(int $unix_timestamp): string
         {
             $a = hash("sha256", $unix_timestamp) . Hashing::pepper($unix_timestamp);
             return hash("sha256", Hashing::pepper($a . $unix_timestamp));
@@ -40,7 +41,7 @@ namespace SocialvoidLib\Classes\Standard;
          * @param SessionDevice $session_device
          * @return string
          */
-        public static function SessionID(int $user_id, SessionClient $session_client, SessionDevice $session_device): string
+        public static function sessionId(int $user_id, SessionClient $session_client, SessionDevice $session_device): string
         {
             $client_hash = hash("sha256", json_encode($session_client->toArray()));
             $device_hash = hash("sha256", json_encode($session_device->toArray()));
@@ -58,9 +59,22 @@ namespace SocialvoidLib\Classes\Standard;
          * @param string $text
          * @return string
          */
-        public static function PostID(int $user_id, int $timestamp, string $text): string
+        public static function postId(int $user_id, int $timestamp, string $text): string
         {
             $user_hash = hash("sha256", $user_id . $timestamp);
             return hash("sha256", $user_id . Hashing::pepper($user_hash . $text));
+        }
+
+        /**
+         * Returns a random, unique Document Public ID
+         *
+         * @param DocumentInput $documentInput
+         * @return string
+         */
+        public static function documentId(DocumentInput $documentInput): string
+        {
+            return hash("sha256",
+                Hashing::pepper($documentInput->OwnerUserID . $documentInput->ContentSource, time()) .
+                $documentInput->OwnerUserID);
         }
     }

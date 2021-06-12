@@ -103,7 +103,7 @@
             $Settings = new User\UserSettings();
 
             $timestamp = (int)time();
-            $public_id = BaseIdentification::UserPublicID($timestamp);
+            $public_id = BaseIdentification::userPublicId($timestamp);
 
             $Query = QueryBuilder::insert_into("users", [
                 "public_id" => $this->socialvoidLib->getDatabase()->real_escape_string($public_id),

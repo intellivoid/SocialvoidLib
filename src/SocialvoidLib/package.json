@@ -169,6 +169,18 @@
         },
         {
             "required": true,
+            "file": "Abstracts/Types/Security/AccessRole.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/Types/Security/AccessRoleEntityType.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/Types/Security/DocumentAccessType.php"
+        },
+        {
+            "required": true,
             "file": "Abstracts/Types/Standard/PostType.php"
         },
         {
@@ -298,6 +310,10 @@
         {
             "required": true,
             "file": "Exceptions/Internal/CoaAuthenticationRecordNotFoundException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Internal/EntityWithoutAccessException.php"
         },
         {
             "required": true,
@@ -529,6 +545,10 @@
         },
         {
             "required": true,
+            "file": "Objects/AccessRoles.php"
+        },
+        {
+            "required": true,
             "file": "Objects/ActiveSession/SessionCache/PeerResolveCache.php"
         },
         {
@@ -554,6 +574,10 @@
         {
             "required": true,
             "file": "Objects/CoaAuthentication.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/Document/Properties.php"
         },
         {
             "required": true,
