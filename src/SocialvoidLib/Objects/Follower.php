@@ -53,7 +53,7 @@
         /**
          * The current state of the following status
          *
-         * @var FollowerState
+         * @var FollowerState|string
          */
         public $State;
 

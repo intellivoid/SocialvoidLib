@@ -14,10 +14,9 @@
     namespace SocialvoidLib\Network;
 
     use Exception;
-    use SocialvoidLib\Abstracts\SearchMethods\FollowerStateSearchMethod;
     use SocialvoidLib\Abstracts\SearchMethods\UserSearchMethod;
     use SocialvoidLib\Abstracts\StatusStates\FollowerState;
-    use SocialvoidLib\Classes\Standard\BaseIdentification;
+    use SocialvoidLib\Exceptions\GenericInternal\CacheException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
     use SocialvoidLib\Exceptions\Internal\FollowerDataNotFound;
@@ -58,7 +57,7 @@
          * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
          * @throws PeerNotFoundException
-         * @throws \SocialvoidLib\Exceptions\GenericInternal\CacheException
+         * @throws CacheException
          */
         public function resolvePeer($peer, bool $cache_session=True): User
         {
@@ -119,10 +118,11 @@
          * @param $peer
          * @return string
          * @throws DatabaseException
+         * @throws FollowerDataNotFound
          * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
          * @throws PeerNotFoundException
-         * @throws FollowerDataNotFound
+         * @throws CacheException
          */
         public function followPeer($peer): string
         {
