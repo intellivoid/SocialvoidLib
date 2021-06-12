@@ -16,6 +16,9 @@
      */
     abstract class FollowerDataSearchMethod
     {
+        /**
+         * @deprecated Use the "user_id" instead, IDs are no longer used in the table `follower_data`
+         */
         const ById = "id";
 
         const ByUserId = "user_id";

@@ -54,10 +54,11 @@
          * @param $peer
          * @param bool $cache_session
          * @return User
-         * @throws InvalidPeerInputException
          * @throws DatabaseException
+         * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
          * @throws PeerNotFoundException
+         * @throws \SocialvoidLib\Exceptions\GenericInternal\CacheException
          */
         public function resolvePeer($peer, bool $cache_session=True): User
         {

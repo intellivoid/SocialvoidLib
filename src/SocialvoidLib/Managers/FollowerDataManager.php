@@ -108,17 +108,18 @@
             switch($search_method)
             {
                 case FollowerDataSearchMethod::ByUserId:
-                case FollowerDataSearchMethod::ById:
                     $search_method = $this->socialvoidLib->getDatabase()->real_escape_string($search_method);
                     $value = (int)$value;
                     break;
+
+                case FollowerDataSearchMethod::ById:
+                    throw new InvalidSearchMethodException("The search method 'ById' is no longer supported for this method", $search_method, $value);
 
                 default:
                     throw new InvalidSearchMethodException("The search method is not applicable to getRecord() in FollowerDataManager", $search_method, $value);
             }
 
             $Query = QueryBuilder::select("follower_data", [
-                "id",
                 "user_id",
                 "followers",
                 "followers_ids",
@@ -169,7 +170,7 @@
                 "following" => (int)$followerData->Following,
                 "following_ids" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($followerData->FollowingIDs)),
                 "last_updated_timestamp" => $followerData->LastUpdatedTimestamp
-            ], "id", (int)$followerData->ID);
+            ], "user_id", (int)$followerData->UserID);
 
             $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
 

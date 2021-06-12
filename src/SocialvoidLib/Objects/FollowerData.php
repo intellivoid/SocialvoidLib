@@ -22,6 +22,7 @@
         /**
          * The Unique Internal Database ID
          *
+         * @deprecated No longer used, use `user_id` ($UserID) for a unique index and as a primary key
          * @var int
          */
         public $ID;
@@ -181,7 +182,7 @@
         public function toArray(): array
         {
             return [
-                "id" => $this->ID,
+                //"id" => $this->ID,
                 "user_id" => $this->UserID,
                 "followers" => $this->Followers,
                 "followers_ids" => $this->FollowersIDs,
@@ -202,11 +203,13 @@
         {
             $FollowerDataObject = new FollowerData();
 
-            if(isset($data["id"]))
-            {
-                if($data["id"] !== null)
-                    $FollowerDataObject->ID = (int)$data["id"];
-            }
+            /**
+             * if(isset($data["id"]))
+             * {
+             *    if($data["id"] !== null)
+             *        $FollowerDataObject->ID = (int)$data["id"];
+             * }
+             */
 
             if(isset($data["user_id"]))
             {

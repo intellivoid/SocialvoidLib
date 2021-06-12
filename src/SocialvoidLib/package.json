@@ -457,6 +457,10 @@
         },
         {
             "required": true,
+            "file": "InputTypes/DocumentInput.php"
+        },
+        {
+            "required": true,
             "file": "InputTypes/RegisterCacheInput.php"
         },
         {

@@ -1731,20 +1731,25 @@ Search.appendIndex(
             "summary": "Class\u0020BaseIdentification",
             "url": "classes/SocialvoidLib-Classes-Standard-BaseIdentification.html"
         },                {
-            "fqsen": "\\SocialvoidLib\\Classes\\Standard\\BaseIdentification\u003A\u003AUserPublicID\u0028\u0029",
-            "name": "UserPublicID",
+            "fqsen": "\\SocialvoidLib\\Classes\\Standard\\BaseIdentification\u003A\u003AuserPublicId\u0028\u0029",
+            "name": "userPublicId",
             "summary": "Generates\u0020a\u0020user\u0020Public\u0020ID\u0020using\u0020a\u0020pepper\u0020formula",
-            "url": "classes/SocialvoidLib-Classes-Standard-BaseIdentification.html#method_UserPublicID"
+            "url": "classes/SocialvoidLib-Classes-Standard-BaseIdentification.html#method_userPublicId"
         },                {
-            "fqsen": "\\SocialvoidLib\\Classes\\Standard\\BaseIdentification\u003A\u003ASessionID\u0028\u0029",
-            "name": "SessionID",
+            "fqsen": "\\SocialvoidLib\\Classes\\Standard\\BaseIdentification\u003A\u003AsessionId\u0028\u0029",
+            "name": "sessionId",
             "summary": "Constructs\u0020a\u0020random\u0020Session\u0020ID\u0020based\u0020off\u0020the\u0020given\u0020information",
-            "url": "classes/SocialvoidLib-Classes-Standard-BaseIdentification.html#method_SessionID"
+            "url": "classes/SocialvoidLib-Classes-Standard-BaseIdentification.html#method_sessionId"
         },                {
-            "fqsen": "\\SocialvoidLib\\Classes\\Standard\\BaseIdentification\u003A\u003APostID\u0028\u0029",
-            "name": "PostID",
+            "fqsen": "\\SocialvoidLib\\Classes\\Standard\\BaseIdentification\u003A\u003ApostId\u0028\u0029",
+            "name": "postId",
             "summary": "Returns\u0020a\u0020Post\u0020Base\u0020ID",
-            "url": "classes/SocialvoidLib-Classes-Standard-BaseIdentification.html#method_PostID"
+            "url": "classes/SocialvoidLib-Classes-Standard-BaseIdentification.html#method_postId"
+        },                {
+            "fqsen": "\\SocialvoidLib\\Classes\\Standard\\BaseIdentification\u003A\u003AdocumentId\u0028\u0029",
+            "name": "documentId",
+            "summary": "Returns\u0020a\u0020random,\u0020unique\u0020Document\u0020Public\u0020ID",
+            "url": "classes/SocialvoidLib-Classes-Standard-BaseIdentification.html#method_documentId"
         },                {
             "fqsen": "\\SocialvoidLib\\Classes\\Utilities",
             "name": "Utilities",
@@ -2935,6 +2940,11 @@ Search.appendIndex(
             "name": "__construct",
             "summary": "DocumentsManager\u0020constructor.",
             "url": "classes/SocialvoidLib-Managers-DocumentsManager.html#method___construct"
+        },                {
+            "fqsen": "\\SocialvoidLib\\Managers\\DocumentsManager\u003A\u003AcreateDocument\u0028\u0029",
+            "name": "createDocument",
+            "summary": "Creates\u0020a\u0020new\u0020document\u0020record\u0020in\u0020the\u0020database\u0020from\u0020the\u0020document\u0020input",
+            "url": "classes/SocialvoidLib-Managers-DocumentsManager.html#method_createDocument"
         },                {
             "fqsen": "\\SocialvoidLib\\Managers\\DocumentsManager\u003A\u003A\u0024socialvoidLib",
             "name": "socialvoidLib",
@@ -6660,6 +6670,46 @@ Search.appendIndex(
             "name": "Data",
             "summary": "The\u0020Access\u0020Roles\u0020data\u0020managed\u0020by\u0020the\u0020object",
             "url": "classes/SocialvoidLib-Objects-AccessRoles.html#property_Data"
+        },                {
+            "fqsen": "\\SocialvoidLib\\InputTypes\\DocumentInput",
+            "name": "DocumentInput",
+            "summary": "Class\u0020DocumentInput",
+            "url": "classes/SocialvoidLib-InputTypes-DocumentInput.html"
+        },                {
+            "fqsen": "\\SocialvoidLib\\InputTypes\\DocumentInput\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "DocumentInput\u0020constructor.",
+            "url": "classes/SocialvoidLib-InputTypes-DocumentInput.html#method___construct"
+        },                {
+            "fqsen": "\\SocialvoidLib\\InputTypes\\DocumentInput\u003A\u003A\u0024ContentSource",
+            "name": "ContentSource",
+            "summary": "Content\u0020source\u0020of\u0020where\u0020the\u0020document\u0020is\u0020coming\u0020from\u0020\u0028and\u0020or\u0020who\u0027s\u0020hosting\u0020it\u0029",
+            "url": "classes/SocialvoidLib-InputTypes-DocumentInput.html#property_ContentSource"
+        },                {
+            "fqsen": "\\SocialvoidLib\\InputTypes\\DocumentInput\u003A\u003A\u0024CdnPublicID",
+            "name": "CdnPublicID",
+            "summary": "The\u0020CDN\u0020public\u0020ID\u0020if\u0020the\u0020content\u0020source\u0020is\u0020from\u0020the\u0020network",
+            "url": "classes/SocialvoidLib-InputTypes-DocumentInput.html#property_CdnPublicID"
+        },                {
+            "fqsen": "\\SocialvoidLib\\InputTypes\\DocumentInput\u003A\u003A\u0024ThirdPartySource",
+            "name": "ThirdPartySource",
+            "summary": "The\u0020Third\u0020Party\u0020source\u0020if\u0020the\u0020content\u0020source\u0020is\u0020from\u0020a\u0020third\u0020party\u0020network\/service\u0020\u0028eg\u003B\u0020Twitter\u0029",
+            "url": "classes/SocialvoidLib-InputTypes-DocumentInput.html#property_ThirdPartySource"
+        },                {
+            "fqsen": "\\SocialvoidLib\\InputTypes\\DocumentInput\u003A\u003A\u0024OwnerUserID",
+            "name": "OwnerUserID",
+            "summary": "The\u0020User\u0020ID\u0020that\u0020owns\u0020this\u0020document\u0020and\u0020registered\u0020it\u0020originally\u0020into\u0020the\u0020database",
+            "url": "classes/SocialvoidLib-InputTypes-DocumentInput.html#property_OwnerUserID"
+        },                {
+            "fqsen": "\\SocialvoidLib\\InputTypes\\DocumentInput\u003A\u003A\u0024AccessType",
+            "name": "AccessType",
+            "summary": "The\u0020access\u0020type\u0020in\u0020relation\u0020to\u0020the\u0020access\u0020roles\u0020for\u0020this\u0020document",
+            "url": "classes/SocialvoidLib-InputTypes-DocumentInput.html#property_AccessType"
+        },                {
+            "fqsen": "\\SocialvoidLib\\InputTypes\\DocumentInput\u003A\u003A\u0024AccessRoles",
+            "name": "AccessRoles",
+            "summary": "The\u0020access\u0020roles\u0020for\u0020this\u0020document",
+            "url": "classes/SocialvoidLib-InputTypes-DocumentInput.html#property_AccessRoles"
         },                {
             "fqsen": "\\",
             "name": "\\",

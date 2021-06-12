@@ -119,7 +119,13 @@
                 <h3>Table of Contents</h3>
         <table class="phpdocumentor-table_of_contents">
                             <tr>
+                    <td class="phpdocumentor-cell"><a href="reports/deprecated.html#src/SocialvoidLib/Abstracts/SearchMethods/FollowerDataSearchMethod.php">src/SocialvoidLib/Abstracts/SearchMethods/FollowerDataSearchMethod.php</a></td>
+                </tr>
+                            <tr>
                     <td class="phpdocumentor-cell"><a href="reports/deprecated.html#src/SocialvoidLib/Classes/PostText/TwitterMethod/Validator.php">src/SocialvoidLib/Classes/PostText/TwitterMethod/Validator.php</a></td>
+                </tr>
+                            <tr>
+                    <td class="phpdocumentor-cell"><a href="reports/deprecated.html#src/SocialvoidLib/Objects/FollowerData.php">src/SocialvoidLib/Objects/FollowerData.php</a></td>
                 </tr>
                             <tr>
                     <td class="phpdocumentor-cell"><a href="reports/deprecated.html#src/SocialvoidLib/Service/Jobs/Timeline/DistributePostJob.php">src/SocialvoidLib/Service/Jobs/Timeline/DistributePostJob.php</a></td>
@@ -141,6 +147,20 @@
                 </tr>
                     </table>
         
+                    <a id="src/SocialvoidLib/Abstracts/SearchMethods/FollowerDataSearchMethod.php"></a>
+            <h3><abbr title="src/SocialvoidLib/Abstracts/SearchMethods/FollowerDataSearchMethod.php">FollowerDataSearchMethod.php</abbr></h3>
+            <table>
+                <tr>
+                    <th class="phpdocumentor-heading">Line</th>
+                    <th class="phpdocumentor-heading">Element</th>
+                    <th class="phpdocumentor-heading">Reason</th>
+                </tr>
+                                                            <tr>
+                            <td class="phpdocumentor-cell">22</td>
+                            <td class="phpdocumentor-cell"><a href="classes/SocialvoidLib-Abstracts-SearchMethods-FollowerDataSearchMethod.html#constant_ById"><abbr title="\SocialvoidLib\Abstracts\SearchMethods\FollowerDataSearchMethod::ById">FollowerDataSearchMethod::ById</abbr></a></td>
+                            <td class="phpdocumentor-cell">Use the &quot;user_id&quot; instead, IDs are no longer used in the table `follower_data`</td>
+                        </tr>
+                                                </table>
                     <a id="src/SocialvoidLib/Classes/PostText/TwitterMethod/Validator.php"></a>
             <h3><abbr title="src/SocialvoidLib/Classes/PostText/TwitterMethod/Validator.php">Validator.php</abbr></h3>
             <table>
@@ -158,6 +178,20 @@
                             <td class="phpdocumentor-cell">227</td>
                             <td class="phpdocumentor-cell"><a href="classes/SocialvoidLib-Classes-PostText-TwitterMethod-Validator.html#method_getTweetLength"><abbr title="\SocialvoidLib\Classes\PostText\TwitterMethod\Validator::getTweetLength()">Validator::getTweetLength()</abbr></a></td>
                             <td class="phpdocumentor-cell">instead use \Twitter\Text\Parser::parseTweet()</td>
+                        </tr>
+                                                </table>
+                    <a id="src/SocialvoidLib/Objects/FollowerData.php"></a>
+            <h3><abbr title="src/SocialvoidLib/Objects/FollowerData.php">FollowerData.php</abbr></h3>
+            <table>
+                <tr>
+                    <th class="phpdocumentor-heading">Line</th>
+                    <th class="phpdocumentor-heading">Element</th>
+                    <th class="phpdocumentor-heading">Reason</th>
+                </tr>
+                                                            <tr>
+                            <td class="phpdocumentor-cell">28</td>
+                            <td class="phpdocumentor-cell"><a href="classes/SocialvoidLib-Objects-FollowerData.html#property_ID"><abbr title="\SocialvoidLib\Objects\FollowerData::$ID">FollowerData::$ID</abbr></a></td>
+                            <td class="phpdocumentor-cell">No longer used, use `user_id` ($UserID) for a unique index and as a primary key</td>
                         </tr>
                                                 </table>
                     <a id="src/SocialvoidLib/Service/Jobs/Timeline/DistributePostJob.php"></a>
