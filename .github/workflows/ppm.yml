@@ -1,0 +1,21 @@
+name: PPM CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        repository: intellivoid/ppm
+        token: ${{ secrets.ACCESS_TOKEN }}
+    - name: Install php
+      run: sudo apt-get install php php-pear php-curl php-mbstring php-tokenizer php-fileinfo
