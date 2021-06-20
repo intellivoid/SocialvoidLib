@@ -26,5 +26,7 @@ jobs:
     - name: Configuring PPM
       run: sudo ppm --github-add-pat --alias="system" --token="${{ secrets.ACCESS_TOKEN }}"
     - uses: actions/checkout@master
+    - name: test
+      run: php --version
     - name: Compiling
       run: make build
