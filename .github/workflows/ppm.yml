@@ -17,7 +17,7 @@ jobs:
       run: sudo add-apt-repository ppa:ondrej/php
     - name: Install PHP 8.0
       run: sudo apt-get install php8.0 php8.0-curl php8.0-mbstring php8.0-tokenizer php8.0-fileinfo
-    - uses: actions/checkout@8.0
+    - uses: actions/checkout@v2
       with:
         repository: intellivoid/ppm
         token: ${{ secrets.ACCESS_TOKEN }}
