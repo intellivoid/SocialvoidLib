@@ -22,4 +22,4 @@ jobs:
     - name: Add repoistory
       run: sudo add-apt-repository ppa:ondrej/php
     - name: Install PHP 8.0
-      run: sudo apt-get install php8.0 php-pear8.0 php-curl8.0 php-mbstring8.0 php-tokenizer8.0 php-fileinfo8.0
+      run: sudo apt-get install php8.0 php8.0-pear php8.0-curl php8.0-mbstring php8.0-tokenizer php8.0-fileinfo
