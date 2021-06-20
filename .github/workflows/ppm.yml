@@ -29,5 +29,9 @@ jobs:
       run: mkdir build
     - name: Compile SocialvoidLib
       run: ppm --no-intro --verbose --compile="src/SocialvoidLib" --directory="build"
+    - name: Install SocialvoidLib
+      run: ppm --no-prompt --fix-conflict --verbose --install="build/net.intellivoid.socialvoidlib.ppm" --branch="production"
     - name: Compile SocialvoidService
       run: ppm --no-intro --verbose --compile="src/SocialvoidService" --directory="build"
+    - name: Install SocialvoidService
+      run: ppm --no-prompt --fix-conflict --verbose --install="build/net.intellivoid.socialvoid_service.ppm" --branch="production"
