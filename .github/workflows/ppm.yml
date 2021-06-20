@@ -16,10 +16,13 @@ jobs:
     - uses: actions/checkout@v2
       with:
         repository: intellivoid/ppm
+        branch: 8.0
         token: ${{ secrets.ACCESS_TOKEN }}
     - name: Install Software-Properties-Common
       run: sudo apt install software-properties-common
     - name: Add repoistory
       run: sudo add-apt-repository ppa:ondrej/php
     - name: Install PHP 8.0
-      run: sudo apt-get install php8.0 php8.0-pear php8.0-curl php8.0-mbstring php8.0-tokenizer php8.0-fileinfo
+      run: sudo apt-get install php8.0 php8.0-curl php8.0-mbstring php8.0-tokenizer php8.0-fileinfo
+    - name: Install PPM
+      run: ls -l
