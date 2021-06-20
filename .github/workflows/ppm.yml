@@ -11,22 +11,23 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Install Software-Properties-Common
-      run: sudo apt install software-properties-common
-    - name: Add repoistory
+    - name: Add repoistory for PHP 8.0
       run: sudo add-apt-repository ppa:ondrej/php
     - name: Install PHP 8.0
       run: sudo apt-get install php8.0 php8.0-curl php8.0-mbstring php8.0-tokenizer php8.0-fileinfo
     - uses: actions/checkout@v2
       with:
         repository: intellivoid/ppm
+        ref: 8.0
         token: ${{ secrets.ACCESS_TOKEN }}
     - name: Install PPM
       run: sudo ./install
     - name: Configuring PPM
       run: sudo ppm --github-add-pat --alias="system" --token="${{ secrets.ACCESS_TOKEN }}"
     - uses: actions/checkout@master
-    - name: test
-      run: php --version
-    - name: Compiling
-      run: make build
+    - name: Make build directory
+      run: mkdir build
+    - name: Compile SocialvoidLib
+      run: ppm --no-intro --verbose --compile="src/SocialvoidLib" --directory="build"
+    - name: Compile SocialvoidService
+      run: ppm --no-intro --verbose --compile="src/SocialvoidService" --directory="build"
