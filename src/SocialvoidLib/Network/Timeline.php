@@ -144,7 +144,7 @@
             $UserIDs = [];
             foreach($ResolvedPosts as $post)
             {
-                $UserIDs[$post->PosterUserID] = PostSearchMethod::ByPublicId;
+                $UserIDs[$post->PosterUserID] = UserSearchMethod::ById;
 
                 if($post->Repost !== null && $post->Repost->OriginalPostID)
                     $SubPosts[$post->Repost->OriginalPostID] = PostSearchMethod::ByPublicId;
