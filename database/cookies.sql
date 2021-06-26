@@ -31,3 +31,4 @@ create index cookies_name_index
 alter table cookies
     add primary key (id);
 
+

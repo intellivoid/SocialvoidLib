@@ -29,14 +29,14 @@
         /**
          * The Post ID that this record is associated with
          *
-         * @var int
+         * @var string
          */
         public $PostID;
 
         /**
          * The original post ID that the PostID is quoting
          *
-         * @var int
+         * @var string
          */
         public $OriginalPostID;
 
@@ -97,10 +97,10 @@
                 $QuoteRecordObject->UserID = (int)$data["user_id"];
 
             if(isset($data["post_id"]))
-                $QuoteRecordObject->PostID = (int)$data["post_id"];
+                $QuoteRecordObject->PostID = $data["post_id"];
 
             if(isset($data["original_post_id"]))
-                $QuoteRecordObject->OriginalPostID = (int)$data["original_post_id"];
+                $QuoteRecordObject->OriginalPostID = $data["original_post_id"];
 
             if(isset($data["quoted"]))
                 $QuoteRecordObject->Quoted = (bool)$data["quoted"];

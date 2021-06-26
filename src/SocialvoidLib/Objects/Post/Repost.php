@@ -8,7 +8,7 @@
      * must have a written permission from Intellivoid Technologies to do so.
      */
 
-namespace SocialvoidLib\Objects\Post;
+    namespace SocialvoidLib\Objects\Post;
 
     /**
      * Class Repost
@@ -19,14 +19,15 @@ namespace SocialvoidLib\Objects\Post;
         /**
          * The original post ID that is quoted in the post
          *
-         * @var int
+         * @var string|null
+         * @see https://github.com/intellivoid/SocialvoidLib/issues/1
          */
         public $OriginalPostID;
 
         /**
          * The original user ID of the quoted post
          *
-         * @var int
+         * @var int|null
          */
         public $OriginalUserID;
 

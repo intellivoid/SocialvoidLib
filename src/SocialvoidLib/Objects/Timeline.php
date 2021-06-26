@@ -75,9 +75,9 @@
         /**
          * Adds a post to the timeline
          *
-         * @param int $post_id
+         * @param string $post_id
          */
-        public function addPost(int $post_id)
+        public function addPost(string $post_id)
         {
             $this->PostChunks = Utilities::addToChunk($post_id, $this->PostChunks,
                 Utilities::getIntDefinition("SOCIALVOID_LIB_TIMELINE_MAX_SIZE", 3200),
@@ -89,9 +89,9 @@
         /**
          * Removes a post from the timeline and rebuilds the chunks
          *
-         * @param int $post_id
+         * @param string $post_id
          */
-        public function removePost(int $post_id)
+        public function removePost(string $post_id)
         {
             $this->PostChunks = Utilities::removeFromChunk($post_id, $this->PostChunks,
                 Utilities::getIntDefinition("SOCIALVOID_LIB_TIMELINE_CHUNK_SIZE", 20));
@@ -102,7 +102,10 @@
          */
         public function rebuildChunks()
         {
-            $this->PostChunks = Utilities::splitToChunks(Utilities::rebuildFromChunks($this->PostChunks), Utilities::getIntDefinition("SOCIALVOID_LIB_TIMELINE_CHUNK_SIZE", 20));
+            $this->PostChunks = Utilities::splitToChunks(
+                Utilities::rebuildFromChunks($this->PostChunks),
+                Utilities::getIntDefinition("SOCIALVOID_LIB_TIMELINE_CHUNK_SIZE", 20)
+            );
         }
 
         /**

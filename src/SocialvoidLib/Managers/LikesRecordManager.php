@@ -43,10 +43,10 @@
          * Creates a like record if one doesn't already exist, or updates an existing one
          *
          * @param int $user_id
-         * @param int $post_id
+         * @param string $post_id
          * @throws DatabaseException
          */
-        public function likeRecord(int $user_id, int $post_id)
+        public function likeRecord(int $user_id, string $post_id)
         {
             try
             {
@@ -58,7 +58,6 @@
                 return;
             }
 
-
             $record->Liked = true;
             $this->updateRecord($record);
         }
@@ -67,10 +66,10 @@
          * Creates a like record if one doesn't already exist, or updates an existing one
          *
          * @param int $user_id
-         * @param int $post_id
+         * @param string $post_id
          * @throws DatabaseException
          */
-        public function unlikeRecord(int $user_id, int $post_id)
+        public function unlikeRecord(int $user_id, string $post_id)
         {
             try
             {
@@ -90,19 +89,19 @@
          * Registers a new like record into the database
          *
          * @param int $user_id
-         * @param int $post_id
+         * @param string $post_id
          * @param bool $liked
          * @throws DatabaseException
          */
-        public function registerRecord(int $user_id, int $post_id, bool $liked=True): void
+        public function registerRecord(int $user_id, string $post_id, bool $liked=True): void
         {
             $Query = QueryBuilder::insert_into("likes", [
-                "id" => (double)((int)$user_id . (int)$post_id),
-                "user_id" => (int)$user_id,
-                "post_id" => (int)$post_id,
+                "id" => ($user_id . $post_id),
+                "user_id" => $user_id,
+                "post_id" => $post_id,
                 "liked" => (int)$liked,
-                "last_updated_timestamp" => (int)time(),
-                "created_timestamp" => (int)time()
+                "last_updated_timestamp" => time(),
+                "created_timestamp" => time()
             ]);
 
             $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
@@ -118,12 +117,12 @@
          * Gets an existing record from the database
          *
          * @param int $user_id
-         * @param int $post_id
+         * @param string $post_id
          * @return LikeRecord
          * @throws DatabaseException
          * @throws LikeRecordNotFoundException
          */
-        public function getRecord(int $user_id, int $post_id): LikeRecord
+        public function getRecord(int $user_id, string $post_id): LikeRecord
         {
             $Query = QueryBuilder::select("likes", [
                 "id",
@@ -132,7 +131,7 @@
                 "liked",
                 "last_updated_timestamp",
                 "created_timestamp"
-            ], "id", (double)((int)$user_id . (int)$post_id), null, null, 1);
+            ], "id", ($user_id . $post_id), null, null, 1);
             $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
 
             if($QueryResults)
@@ -165,8 +164,8 @@
         {
             $Query = QueryBuilder::update("likes", [
                 "liked" => (int)$likeRecord->Liked,
-                "last_updated_timestamp" => (int)time()
-            ], "id", (double)((int)$likeRecord->UserID . (int)$likeRecord->PostID));
+                "last_updated_timestamp" => time()
+            ], "id", ($likeRecord->UserID . $likeRecord->PostID));
             $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
 
             if($QueryResults == false)

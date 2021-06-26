@@ -9,23 +9,23 @@
 
 create table if not exists reposts
 (
-    id                     bigint unsigned not null comment 'The Unique Internal Database ID',
-    user_id                int             null comment 'The User ID that reposted this post',
-    post_id                int             null comment 'The Post ID associated with this repost',
-    original_post_id       int             null comment 'The original Post ID that this repost is referring to',
-    reposted               tinyint(1)      null comment 'Indicates the current repost status',
-    last_updated_timestamp int             null comment 'The Unix Timestamp for when this record was last updated',
-    created_timestamp      int             null comment 'The Unix Timestamp for when this record was created',
+    id                     varchar(286) not null comment 'The Unique Internal Database ID',
+    user_id                int          null comment 'The User ID that reposted this post',
+    post_id                varchar(64)  null comment 'The Post ID associated with this repost',
+    original_post_id       varchar(64)  null comment 'The original Post ID that this repost is referring to',
+    reposted               tinyint(1)   null comment 'Indicates the current repost status',
+    last_updated_timestamp int          null comment 'The Unix Timestamp for when this record was last updated',
+    created_timestamp      int          null comment 'The Unix Timestamp for when this record was created',
     constraint reposts_id_uindex
         unique (id),
     constraint reposts_user_id_original_post_id_uindex
         unique (user_id, original_post_id),
     constraint reposts_user_id_post_id_uindex
         unique (user_id, post_id),
-    constraint reposts_posts_id_fk
-        foreign key (post_id) references posts (id),
-    constraint reposts_posts_id_fk_2
-        foreign key (original_post_id) references posts (id),
+    constraint reposts_posts_public_id_fk
+        foreign key (post_id) references posts (public_id),
+    constraint reposts_posts_public_id_fk_2
+        foreign key (original_post_id) references posts (public_id),
     constraint reposts_users_id_fk
         foreign key (user_id) references users (id)
 )

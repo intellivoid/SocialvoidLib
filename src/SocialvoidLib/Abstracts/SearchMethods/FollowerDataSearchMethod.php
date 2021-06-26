@@ -18,6 +18,7 @@
     {
         /**
          * @deprecated Use the "user_id" instead, IDs are no longer used in the table `follower_data`
+         * @see FollowerDataSearchMethod::ByUserId
          */
         const ById = "id";
 

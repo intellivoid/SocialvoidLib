@@ -29,6 +29,8 @@
         /**
          * The Unique Internal Database ID for this post
          *
+         * @deprecated The use of incremental IDs is harmful for the future of the earth.
+         * @see https://github.com/intellivoid/SocialvoidLib/issues/1
          * @var int
          */
         public $ID;
@@ -182,7 +184,7 @@
             }
 
             return [
-                "id" => ($this->ID == null ? null : (int)$this->ID),
+                //"id" => ($this->ID == null ? null : (int)$this->ID), https://github.com/intellivoid/SocialvoidLib/issues/1
                 "public_id" => $this->PublicID,
                 "text" => $this->Text,
                 "source" => $this->Source,
@@ -216,8 +218,9 @@
         {
             $PostObject = new Post();
 
-            if(isset($data["id"]))
-                $PostObject->ID = ($data["id"] == null ? null : (int)$data["id"]);
+            // https://github.com/intellivoid/SocialvoidLib/issues/1
+            //if(isset($data["id"]))
+            //    $PostObject->ID = ($data["id"] == null ? null : (int)$data["id"]);
 
             if(isset($data["public_id"]))
                 $PostObject->PublicID = $data["public_id"];
@@ -300,7 +303,7 @@
             }
 
             return [
-                "id" => ($this->ID == null ? null : (int)$this->ID),
+                //"id" => ($this->ID == null ? null : (int)$this->ID),
                 "public_id" => $this->PublicID,
                 "text" => $this->Text,
                 "source" => $this->Source,
@@ -331,8 +334,8 @@
         {
             $PostObject = new Post();
 
-            if(isset($data["id"]))
-                $PostObject->ID = ($data["id"] == null ? null : (int)$data["id"]);
+            //if(isset($data["id"]))
+            //    $PostObject->ID = ($data["id"] == null ? null : (int)$data["id"]);
 
             if(isset($data["public_id"]))
                 $PostObject->PublicID = $data["public_id"];

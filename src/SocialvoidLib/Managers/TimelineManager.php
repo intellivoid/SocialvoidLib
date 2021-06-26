@@ -239,7 +239,7 @@
         /**
          * Distributes a post to the array of followers
          *
-         * @param int $post_id
+         * @param string $post_id
          * @param array $followers
          * @param int $utilization
          * @param bool $skip_errors
@@ -248,7 +248,7 @@
          * @throws InvalidSearchMethodException
          * @throws UserTimelineNotFoundException
          */
-        public function distributePost(int $post_id, array $followers, int $utilization=100, bool $skip_errors=true): void
+        public function distributePost(string $post_id, array $followers, int $utilization=100, bool $skip_errors=true): void
         {
             // If background worker is enabled, split the query into multiple workers to speed up the process
             if(Utilities::getBoolDefinition("SOCIALVOID_LIB_BACKGROUND_WORKER_ENABLED"))

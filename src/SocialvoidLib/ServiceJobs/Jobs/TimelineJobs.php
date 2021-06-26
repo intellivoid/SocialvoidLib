@@ -39,13 +39,13 @@
         /**
          * Constructs a job that resolves multiple users and returns their results
          *
-         * @param int $post_id
+         * @param string $post_id
          * @param array $user_ids
          * @param int $utilization
          * @param bool $skip_errors
          * @throws BackgroundWorkerNotEnabledException
          */
-        public function distributeTimelinePosts(int $post_id, array $user_ids, int $utilization=100, bool $skip_errors=False): void
+        public function distributeTimelinePosts(string $post_id, array $user_ids, int $utilization=100, bool $skip_errors=False): void
         {
             $ServiceJobQueries = [];
 

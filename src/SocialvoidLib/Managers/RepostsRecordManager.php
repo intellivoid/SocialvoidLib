@@ -44,11 +44,11 @@
          * Creates a repost record if one doesn't already exist, or updates an existing one
          *
          * @param int $user_id
-         * @param int $post_id
-         * @param int $original_post_id
+         * @param string $post_id
+         * @param string $original_post_id
          * @throws DatabaseException
          */
-        public function repostRecord(int $user_id, int $post_id, int $original_post_id)
+        public function repostRecord(int $user_id, string $post_id, string $original_post_id)
         {
             try
             {
@@ -69,10 +69,10 @@
          * Creates a repost record if one doesn't already exist, or updates an existing one
          *
          * @param int $user_id
-         * @param int $original_post_id
+         * @param string $original_post_id
          * @throws DatabaseException
          */
-        public function unrepostRecord(int $user_id, int $original_post_id)
+        public function unrepostRecord(int $user_id, string $original_post_id)
         {
             try
             {
@@ -93,21 +93,21 @@
          * Registers a new repost record into the database
          *
          * @param int $user_id
-         * @param int|null $post_id
-         * @param int $original_post_id
+         * @param string|null $post_id
+         * @param string $original_post_id
          * @param bool $reposted
          * @throws DatabaseException
          */
-        public function registerRecord(int $user_id, ?int $post_id, int $original_post_id, bool $reposted=True): void
+        public function registerRecord(int $user_id, ?string $post_id, string $original_post_id, bool $reposted=True): void
         {
             $Query = QueryBuilder::insert_into("reposts", [
-                "id" => (double)((int)$user_id . (int)$original_post_id),
-                "user_id" => (int)$user_id,
-                "post_id" => ($post_id == null ? null : (int)$post_id),
-                "original_post_id" => (int)$original_post_id,
+                "id" => ($user_id . $original_post_id),
+                "user_id" => $user_id,
+                "post_id" => ($post_id == null ? null : $post_id),
+                "original_post_id" => $original_post_id,
                 "reposted" => (int)$reposted,
-                "last_updated_timestamp" => (int)time(),
-                "created_timestamp" => (int)time()
+                "last_updated_timestamp" => time(),
+                "created_timestamp" => time()
             ]);
 
             $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
@@ -123,13 +123,13 @@
          * Gets an existing record from the database
          *
          * @param int $user_id
-         * @param int $original_post_id
+         * @param string $original_post_id
          * @return RepostRecord
          * @throws DatabaseException
          * @throws RepostRecordNotFoundException
          * @noinspection DuplicatedCode
          */
-        public function getRecord(int $user_id, int $original_post_id): RepostRecord
+        public function getRecord(int $user_id, string $original_post_id): RepostRecord
         {
             $Query = QueryBuilder::select("reposts", [
                 "id",
@@ -139,7 +139,7 @@
                 "reposted",
                 "last_updated_timestamp",
                 "created_timestamp"
-            ], "id", (double)((int)$user_id . (int)$original_post_id), null, null, 1);
+            ], "id", ($user_id . $original_post_id), null, null, 1);
             $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
 
             if($QueryResults)
@@ -172,8 +172,8 @@
         {
             $Query = QueryBuilder::update("reposts", [
                 "reposted" => (int)$repostRecord->Reposted,
-                "last_updated_timestamp" => (int)time()
-            ], "id", (double)((int)$repostRecord->UserID . (int)$repostRecord->OriginalPostID));
+                "last_updated_timestamp" => time()
+            ], "id", ($repostRecord->UserID . $repostRecord->OriginalPostID));
             $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
 
             if($QueryResults == false)

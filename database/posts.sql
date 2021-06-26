@@ -11,18 +11,17 @@
 
 create table if not exists posts
 (
-    id                      int auto_increment comment 'The Unique Internal Database ID for this record',
-    public_id               varchar(255)  null comment 'The Unique Public ID for this record',
+    public_id               varchar(64)   not null comment 'The Unique Public ID for this record',
     text                    varchar(1526) null comment 'The text content of the post, can be null',
     source                  varchar(256)  null comment 'The source device that was utilized to compose this post',
     properties              blob          null comment 'ZiProto encoded properties of this post',
     session_id              int           null comment 'The session ID used to create this post if any',
     poster_user_id          int           null comment 'The User ID that made this post',
-    reply_to_post_id        int           null comment 'The ID of the post if this post is a reply to another post',
+    reply_to_post_id        varchar(64)   null comment 'The ID of the post if this post is a reply to another post',
     reply_to_user_id        int           null comment 'The user ID of the original post that this post is replying to',
-    quote_original_post_id  int           null comment 'The original post ID if this post is a quote of another post',
+    quote_original_post_id  varchar(64)   null comment 'The original post ID if this post is a quote of another post',
     quote_original_user_id  int           null comment 'The original user of the post of this post is a quote of another post',
-    repost_original_post_id int           null comment 'The original post ID of the original post if this post is a repost',
+    repost_original_post_id varchar(64)   null comment 'The original post ID of the original post if this post is a repost',
     repost_original_user_id int           null comment 'The original user ID of the original post if this post is a repost',
     flags                   tinyblob      null comment 'Flags associated with this post',
     is_deleted              tinyint(1)    null comment 'Indicates if the post is currently deleted or not',
@@ -35,16 +34,14 @@ create table if not exists posts
     media_content           blob          null comment 'ZiProto encoded data of the media content associated with this post',
     last_updated_timestamp  int           null comment 'The Unix Timestamp for when this record was last updated',
     created_timestamp       int           null comment 'The Unix Timestamp for when this record was created',
-    constraint posts_id_uindex
-        unique (id),
     constraint posts_public_id_uindex
         unique (public_id),
-    constraint posts_posts_id_fk
-        foreign key (reply_to_post_id) references posts (id),
-    constraint posts_posts_id_fk_2
-        foreign key (quote_original_post_id) references posts (id),
-    constraint posts_posts_id_fk_3
-        foreign key (repost_original_post_id) references posts (id),
+    constraint posts_posts_public_id_fk
+        foreign key (repost_original_post_id) references posts (public_id),
+    constraint posts_posts_public_id_fk_2
+        foreign key (quote_original_post_id) references posts (public_id),
+    constraint posts_posts_public_id_fk_3
+        foreign key (reply_to_post_id) references posts (public_id),
     constraint posts_sessions_id_fk
         foreign key (session_id) references sessions (id),
     constraint posts_users_id_fk
@@ -95,5 +92,5 @@ create index posts_session_id_index
     on posts (session_id);
 
 alter table posts
-    add primary key (id);
+    add primary key (public_id);
 

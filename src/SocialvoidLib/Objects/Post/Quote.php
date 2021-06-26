@@ -22,14 +22,14 @@
         /**
          * The original post ID that is quoted in the post
          *
-         * @var int
+         * @var string|null
          */
         public $OriginalPostID;
 
         /**
          * The original user ID of the quoted post
          *
-         * @var int
+         * @var int|null
          */
         public $OriginalUserID;
 

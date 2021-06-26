@@ -29,14 +29,14 @@
         /**
          * The Target Post ID that this record is associated with
          *
-         * @var int
+         * @var string
          */
         public $PostID;
 
         /**
          * The post ID of the reply
          *
-         * @var int
+         * @var string
          */
         public $ReplyPostID;
 
@@ -97,10 +97,10 @@
                 $ReplyRecordObject->UserID = (int)$data["user_id"];
 
             if(isset($data["post_id"]))
-                $ReplyRecordObject->PostID = (int)$data["post_id"];
+                $ReplyRecordObject->PostID = $data["post_id"];
 
             if(isset($data["reply_post_id"]))
-                $ReplyRecordObject->ReplyPostID = (int)$data["reply_post_id"];
+                $ReplyRecordObject->ReplyPostID = $data["reply_post_id"];
 
             if(isset($data["replied"]))
                 $ReplyRecordObject->Replied = (bool)$data["replied"];

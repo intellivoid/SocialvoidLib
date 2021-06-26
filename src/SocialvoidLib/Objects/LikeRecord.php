@@ -15,7 +15,7 @@
         /**
          * The Unique Internal Database ID for this record
          *
-         * @var double|int
+         * @var string
          */
         public $ID;
 
@@ -29,7 +29,7 @@
         /**
          * The Post ID that this record is associated with
          *
-         * @var int
+         * @var string
          */
         public $PostID;
 
@@ -83,13 +83,13 @@
             $LikeRecordObject = new LikeRecord();
 
             if(isset($data["id"]))
-                $LikeRecordObject->ID = (double)$data["id"];
+                $LikeRecordObject->ID = $data["id"];
 
             if(isset($data["user_id"]))
                 $LikeRecordObject->UserID = (int)$data["user_id"];
 
             if(isset($data["post_id"]))
-                $LikeRecordObject->PostID = (int)$data["post_id"];
+                $LikeRecordObject->PostID = $data["post_id"];
 
             if(isset($data["liked"]))
                 $LikeRecordObject->Liked = (bool)$data["liked"];

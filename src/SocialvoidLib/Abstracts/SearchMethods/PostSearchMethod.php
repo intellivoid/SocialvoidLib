@@ -16,6 +16,11 @@
      */
     abstract class PostSearchMethod
     {
+        /**
+         * @see PostSearchMethod::ByPublicId
+         * @issue https://github.com/intellivoid/SocialvoidLib/issues/1
+         * @deprecated Incremental
+         */
         const ById = "id";
 
         const ByPublicId = "public_id";

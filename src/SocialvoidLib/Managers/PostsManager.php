@@ -80,9 +80,9 @@
          * @throws CacheException
          * @noinspection DuplicatedCode
          */
-        public function publishPost(int $user_id, string $source, string $text, int $session_id=null, array $media_content=[], $priority=PostPriorityLevel::None, $flags=[]): Post
+        public function publishPost(int $user_id, string $source, string $text, int $session_id=null, array $media_content=[], string $priority=PostPriorityLevel::None, array $flags=[]): Post
         {
-            $timestamp = (int)time();
+            $timestamp = time();
 
             $textPostParser = new Parser();
             $textPostResults = $textPostParser->parseInput($text);
@@ -108,8 +108,8 @@
                 "public_id" => $this->socialvoidLib->getDatabase()->real_escape_string($PublicID),
                 "text" => $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($text)),
                 "source" => $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($source)),
-                "session_id" => ($session_id == null ? null : (int)$session_id),
-                "poster_user_id" => (int)$user_id,
+                "session_id" => ($session_id == null ? null : $session_id),
+                "poster_user_id" => $user_id,
                 "properties" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Properties->toArray())),
                 "flags" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($flags)),
                 "is_deleted" => (int)false,
@@ -158,10 +158,9 @@
                     $value = $this->socialvoidLib->getDatabase()->real_escape_string($value);
                     break;
 
+                /** @noinspection PhpDeprecationInspection */
                 case PostSearchMethod::ById:
-                    $search_method = $this->socialvoidLib->getDatabase()->real_escape_string($search_method);
-                    $value = (int)$value;
-                    break;
+                    throw new InvalidSearchMethodException("The use of ById is no longer available, use ByPublicId instead (https://github.com/intellivoid/SocialvoidLib/issues/1)", $search_method, $value);
 
                 default:
                     throw new InvalidSearchMethodException("The given search method is invalid for getPost()", $search_method, $value);
@@ -174,7 +173,6 @@
             }
 
             $Query = QueryBuilder::select("posts", [
-                "id",
                 "public_id",
                 "text",
                 "source",
@@ -254,7 +252,7 @@
                     $MediaContent[] = $mediaContent->toArray();
             }
 
-            $post->LastUpdatedTimestamp = (int)time();
+            $post->LastUpdatedTimestamp = time();
             
             // TODO: Validate text
             // Probably the most CPU intensive update there is here.
@@ -262,7 +260,7 @@
                 "text" => ($post->Text == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($post->Text))),
                 "source" => ($post->Source == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($post->Source))),
                 "properties" => ($post->Properties == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Properties->toArray()))),
-                "poster_user_id" => ($post->PosterUserID == null ? null : (int)$post->PosterUserID),
+                "poster_user_id" => ($post->PosterUserID == null ? null : $post->PosterUserID),
                 "reply_to_post_id" => ($post->Reply == null || $post->Reply->ReplyToPostID == null ? null : (int)$post->Reply->ReplyToPostID),
                 "reply_to_user_id" => ($post->Reply == null || $post->Reply->ReplyToUserID == null ? null : (int)$post->Reply->ReplyToUserID),
                 "quote_original_post_id" => ($post->Quote == null || $post->Quote->OriginalPostID == null ? null : (int)$post->Quote->OriginalPostID),
@@ -279,7 +277,7 @@
                 "replies" => (is_null($post->Replies) ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Replies))),
                 "media_content" => (is_null($MediaContent) ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($MediaContent))),
                 "last_updated_timestamp" => $post->LastUpdatedTimestamp,
-            ], "id", (int)$post->ID);
+            ], "public_id", (int)$post->PublicID);
             $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
 
             if($QueryResults)
@@ -322,7 +320,7 @@
                 // Like the original post if the requested post is a repost
                 if($post->Repost !== null && $post->Repost->OriginalPostID !== null)
                 {
-                    $post = $this->getPost(PostSearchMethod::ById, $post->Repost->OriginalPostID);
+                    $post = $this->getPost(PostSearchMethod::ByPublicId, $post->Repost->OriginalPostID);
 
                     // Do not repost the post if it's deleted
                     if(Converter::hasFlag($post->Flags, PostFlags::Deleted))
@@ -335,7 +333,7 @@
                 if(in_array($user_id, $post->Likes))
                     return;
 
-                $this->socialvoidLib->getLikesRecordManager()->likeRecord($user_id, $post->ID);
+                $this->socialvoidLib->getLikesRecordManager()->likeRecord($user_id, $post->PublicID);
                 $post->Likes[] = $user_id;
                 $this->updatePost($post);
             }
@@ -371,7 +369,7 @@
                 // Like the original post if the requested post is a repost
                 if($post->Repost !== null && $post->Repost->OriginalPostID !== null)
                 {
-                    $post = $this->getPost(PostSearchMethod::ById, $post->Repost->OriginalPostID);
+                    $post = $this->getPost(PostSearchMethod::ByPublicId, $post->Repost->OriginalPostID);
 
                     // Do not repost the post if it's deleted
                     if(Converter::hasFlag($post->Flags, PostFlags::Deleted))
@@ -384,7 +382,7 @@
                 if(in_array($user_id, $post->Likes) == false)
                     return;
 
-                $this->socialvoidLib->getLikesRecordManager()->unlikeRecord($user_id, $post->ID);
+                $this->socialvoidLib->getLikesRecordManager()->unlikeRecord($user_id, $post->PublicID);
                 Converter::removeFlag($post->Likes, $user_id);
                 $this->updatePost($post);
             }
@@ -411,7 +409,7 @@
          * @throws PostNotFoundException
          * @noinspection DuplicatedCode
          */
-        public function repostPost(int $user_id, Post $post, int $session_id=null, $priority=PostPriorityLevel::None, $flags=[]): Post
+        public function repostPost(int $user_id, Post $post, int $session_id=null, string $priority=PostPriorityLevel::None, array $flags=[]): Post
         {
             // Do not repost the post if it's deleted
             if(Converter::hasFlag($post->Flags, PostFlags::Deleted))
@@ -422,7 +420,7 @@
             // Repost the original post if the requested post is a repost
             if($post->Repost !== null && $post->Repost->OriginalPostID !== null)
             {
-                $post = $this->getPost(PostSearchMethod::ById, $post->Repost->OriginalPostID);
+                $post = $this->getPost(PostSearchMethod::ByPublicId, $post->Repost->OriginalPostID);
 
                 // Do not repost the post if it's deleted
                 if(Converter::hasFlag($post->Flags, PostFlags::Deleted))
@@ -434,13 +432,13 @@
             // Check if the post has already been reposted
             try
             {
-                $repostRecordState = $this->socialvoidLib->getRepostsRecordManager()->getRecord($user_id, $post->ID);
+                $repostRecordState = $this->socialvoidLib->getRepostsRecordManager()->getRecord($user_id, $post->PublicID);
 
                 if($repostRecordState->PostID !== null)
                 {
                     try
                     {
-                        $originalRepostPost = $this->getPost(PostSearchMethod::ById, $repostRecordState->PostID);
+                        $originalRepostPost = $this->getPost(PostSearchMethod::ByPublicId, $repostRecordState->PostID);
                         // TODO: Add more details to the AlreadyRepostedException exception.
                         if(Converter::hasFlag($originalRepostPost->Flags, PostFlags::Deleted) == false)
                             throw new AlreadyRepostedException("The requested repost has already been reposted");
@@ -458,18 +456,18 @@
                 unset($e);
             }
 
-            $timestamp = (int)time();
+            $timestamp = time();
             $PublicID = BaseIdentification::postId($user_id, $timestamp, $post->Text);
             $Properties = new Post\Properties();
 
             $Repost = new Post\Repost();
-            $Repost->OriginalPostID = $post->ID;
+            $Repost->OriginalPostID = $post->PublicID;
             $Repost->OriginalUserID = $post->PosterUserID;
 
             $Query = QueryBuilder::insert_into("posts", [
                 "public_id" => $this->socialvoidLib->getDatabase()->real_escape_string($PublicID),
-                "session_id" => ($session_id == null ? null : (int)$session_id),
-                "poster_user_id" => (int)$user_id,
+                "session_id" => ($session_id == null ? null : $session_id),
+                "poster_user_id" => $user_id,
                 "properties" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Properties->toArray())),
                 "repost_original_post_id" => (int)$Repost->OriginalPostID,
                 "repost_original_user_id" => (int)$Repost->OriginalUserID,
@@ -493,7 +491,7 @@
                 );
             }
 
-            $this->socialvoidLib->getRepostsRecordManager()->repostRecord($user_id, $returnResults->ID, $post->ID);
+            $this->socialvoidLib->getRepostsRecordManager()->repostRecord($user_id, $returnResults->PublicID, $post->PublicID);
             $post->Reposts[] = $user_id;
             $this->updatePost($post);
 
@@ -520,7 +518,7 @@
          * @throws PostNotFoundException
          * @noinspection DuplicatedCode
          */
-        public function quotePost(int $user_id, Post $post, string $text, string $source, int $session_id=null, array $media_content=[], $priority=PostPriorityLevel::None, $flags=[]): Post
+        public function quotePost(int $user_id, Post $post, string $text, string $source, int $session_id=null, array $media_content=[], string $priority=PostPriorityLevel::None, array $flags=[]): Post
         {
             // Do not repost the post if it's deleted
             if(Converter::hasFlag($post->Flags, PostFlags::Deleted))
@@ -531,7 +529,7 @@
             // Quote the original post if the requested post is a repost
             if($post->Repost !== null && $post->Repost->OriginalPostID !== null)
             {
-                $post = $this->getPost(PostSearchMethod::ById, $post->Repost->OriginalPostID);
+                $post = $this->getPost(PostSearchMethod::ByPublicId, $post->Repost->OriginalPostID);
 
                 // Do not repost the post if it's deleted
                 if(Converter::hasFlag($post->Flags, PostFlags::Deleted))
@@ -540,10 +538,10 @@
                 }
             }
 
-            $timestamp = (int)time();
+            $timestamp = time();
 
             $Quote = new Post\Quote();
-            $Quote->OriginalPostID = $post->ID;
+            $Quote->OriginalPostID = $post->PublicID;
             $Quote->OriginalUserID = $post->PosterUserID;
 
             $textPostParser = new Parser();
@@ -570,8 +568,8 @@
                 "public_id" => $this->socialvoidLib->getDatabase()->real_escape_string($PublicID),
                 "text" => $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($text)),
                 "source" => $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($source)),
-                "session_id" => ($session_id == null ? null : (int)$session_id),
-                "poster_user_id" => (int)$user_id,
+                "session_id" => ($session_id == null ? null : $session_id),
+                "poster_user_id" => $user_id,
                 "properties" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Properties->toArray())),
                 "quote_original_post_id" => (int)$Quote->OriginalPostID,
                 "quote_original_user_id" => (int)$Quote->OriginalUserID,
@@ -601,8 +599,8 @@
                 );
             }
 
-            $this->socialvoidLib->getQuotesRecordManager()->quoteRecord($user_id, $returnResults->ID, $post->ID);
-            $post->Quotes[] = $returnResults->ID;
+            $this->socialvoidLib->getQuotesRecordManager()->quoteRecord($user_id, $returnResults->PublicID, $post->PublicID);
+            $post->Quotes[] = $returnResults->PublicID;
             $this->updatePost($post);
 
             return $returnResults;
@@ -626,7 +624,7 @@
          * @throws PostNotFoundException
          * @noinspection DuplicatedCode
          */
-        public function replyToPost(int $user_id, Post $post, string $text, string $source, int $session_id=null, array $media_content=[], $priority=PostPriorityLevel::None, $flags=[]): Post
+        public function replyToPost(int $user_id, Post $post, string $text, string $source, int $session_id=null, array $media_content=[], string $priority=PostPriorityLevel::None, array $flags=[]): Post
         {
             // Do not repost the post if it's deleted
             if(Converter::hasFlag($post->Flags, PostFlags::Deleted))
@@ -637,7 +635,7 @@
             // Quote the original post if the requested post is a repost
             if($post->Repost !== null && $post->Repost->OriginalPostID !== null)
             {
-                $post = $this->getPost(PostSearchMethod::ById, $post->Repost->OriginalPostID);
+                $post = $this->getPost(PostSearchMethod::ByPublicId, $post->Repost->OriginalPostID);
 
                 // Do not repost the post if it's deleted
                 if(Converter::hasFlag($post->Flags, PostFlags::Deleted))
@@ -646,10 +644,10 @@
                 }
             }
 
-            $timestamp = (int)time();
+            $timestamp = time();
 
             $Reply = new Post\Reply();
-            $Reply->ReplyToPostID = $post->ID;
+            $Reply->ReplyToPostID = $post->PublicID;
             $Reply->ReplyToUserID = $post->PosterUserID;
 
             $textPostParser = new Parser();
@@ -676,8 +674,8 @@
                 "public_id" => $this->socialvoidLib->getDatabase()->real_escape_string($PublicID),
                 "text" => $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($text)),
                 "source" => $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($source)),
-                "session_id" => ($session_id == null ? null : (int)$session_id),
-                "poster_user_id" => (int)$user_id,
+                "session_id" => ($session_id == null ? null : $session_id),
+                "poster_user_id" => $user_id,
                 "properties" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Properties->toArray())),
                 "reply_to_post_id" => (int)$Reply->ReplyToPostID,
                 "reply_to_user_id" => (int)$Reply->ReplyToUserID,
@@ -707,8 +705,8 @@
                 );
             }
 
-            $this->socialvoidLib->getReplyRecordManager()->replyRecord($user_id, $post->ID, $returnResults->ID);
-            $post->Replies[] = $returnResults->ID;
+            $this->socialvoidLib->getReplyRecordManager()->replyRecord($user_id, $post->PublicID, $returnResults->PublicID);
+            $post->Replies[] = $returnResults->PublicID;
             $this->updatePost($post);
 
             return $returnResults;
@@ -770,7 +768,7 @@
                 $CacheEntryInput = new RegisterCacheInput();
                 $CacheEntryInput->ObjectType = CacheEntryObjectType::Post;
                 $CacheEntryInput->ObjectData = $post->toArray();
-                $CacheEntryInput->Pointers = [$post->ID, $post->PublicID];
+                $CacheEntryInput->Pointers = [$post->PublicID];
 
                 try
                 {

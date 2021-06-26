@@ -70,7 +70,7 @@
          * @throws PostNotFoundException
          * @throws UserTimelineNotFoundException
          */
-        public function postToTimeline(string $text, array $media_content=[], $flags=[]): Post
+        public function postToTimeline(string $text, array $media_content=[], array $flags=[]): Post
         {
             $PostObject = $this->networkSession->getSocialvoidLib()->getPostsManager()->publishPost(
                 $this->networkSession->getAuthenticatedUser()->ID,
@@ -85,7 +85,7 @@
 
             $FollowerData->FollowersIDs[] = $this->networkSession->getAuthenticatedUser()->ID;
             $this->networkSession->getSocialvoidLib()->getTimelineManager()->distributePost(
-                $PostObject->ID, $FollowerData->FollowersIDs, 100, true
+                $PostObject->PublicID, $FollowerData->FollowersIDs, 100, true
             );
 
             return $PostObject;
@@ -136,7 +136,7 @@
             if($page_number > count($UserTimeline->PostChunks)) return [];
 
             // Retrieve posts
-            $PostsIDs = array_fill_keys($UserTimeline->PostChunks[($page_number - 1)], PostSearchMethod::ById);
+            $PostsIDs = array_fill_keys($UserTimeline->PostChunks[($page_number - 1)], PostSearchMethod::ByPublicId);
             $ResolvedPosts = $this->networkSession->getSocialvoidLib()->getPostsManager()->getMultiplePosts(
                 $PostsIDs, true);
 
@@ -144,20 +144,20 @@
             $UserIDs = [];
             foreach($ResolvedPosts as $post)
             {
-                $UserIDs[(int)$post->PosterUserID] = PostSearchMethod::ById;
+                $UserIDs[$post->PosterUserID] = PostSearchMethod::ByPublicId;
 
                 if($post->Repost !== null && $post->Repost->OriginalPostID)
-                    $SubPosts[(int)$post->Repost->OriginalPostID] = PostSearchMethod::ById;
+                    $SubPosts[$post->Repost->OriginalPostID] = PostSearchMethod::ByPublicId;
                 if($post->Repost !== null && $post->Repost->OriginalUserID)
-                    $UserIDs[(int)$post->Repost->OriginalUserID] = UserSearchMethod::ById;
+                    $UserIDs[$post->Repost->OriginalUserID] = UserSearchMethod::ById;
 
                 if($post->Quote !== null && $post->Quote->OriginalPostID)
-                    $SubPosts[(int)$post->Quote->OriginalPostID] = PostSearchMethod::ById;
+                    $SubPosts[$post->Quote->OriginalPostID] = PostSearchMethod::ByPublicId;
                 if($post->Quote !== null && $post->Quote->OriginalUserID)
-                    $UserIDs[(int)$post->Quote->OriginalUserID] = UserSearchMethod::ById;
+                    $UserIDs[$post->Quote->OriginalUserID] = UserSearchMethod::ById;
 
                 if($post->Reply !== null && $post->Reply->ReplyToPostID)
-                    $SubPosts[(int)$post->Reply->ReplyToPostID] = PostSearchMethod::ById;
+                    $SubPosts[$post->Reply->ReplyToPostID] = PostSearchMethod::ByPublicId;
                 if($post->Reply !== null && $post->Reply->ReplyToUserID)
                     $UserIDs[(int)$post->Reply->ReplyToUserID] = UserSearchMethod::ById;
             }
@@ -174,9 +174,9 @@
             $InvalidatedPostIDs = [];
 
             foreach($ResolvedPosts as $resolvedPost)
-                $SortedPostResolutions[$resolvedPost->ID] = $resolvedPost;
+                $SortedPostResolutions[$resolvedPost->PublicID] = $resolvedPost;
             foreach($ResolvedSubPosts as $resolvedPost)
-                $SortedPostResolutions[$resolvedPost->ID] = $resolvedPost;
+                $SortedPostResolutions[$resolvedPost->PublicID] = $resolvedPost;
             foreach($ResolvedUsers as $resolvedUser)
                 $SortedUserResolutions[$resolvedUser->ID] = $resolvedUser;
 
@@ -185,7 +185,7 @@
             {
                 if(Converter::hasFlag($resolvedPost->Flags, PostFlags::Deleted))
                 {
-                    $InvalidatedPostIDs[] = $resolvedPost->ID;
+                    $InvalidatedPostIDs[] = $resolvedPost->PublicID;
                     continue;
                 }
 
@@ -213,7 +213,7 @@
                     if(Converter::hasFlag($SortedPostResolutions[$resolvedPost->Repost->OriginalPostID]->Flags, PostFlags::Deleted))
                     {
                         // This is an invalidated post since the original repost has been deleted
-                        $InvalidatedPostIDs[] = $resolvedPost->ID;
+                        $InvalidatedPostIDs[] = $resolvedPost->PublicID;
                         $InvalidatedPostIDs[] = $resolvedPost->Repost->OriginalPostID; // To be on the safe side.
                     }
                     else
@@ -295,7 +295,7 @@
             // TODO: The distribution method should check if the repost already exists in the timeline
             $FollowerData->FollowersIDs[] = $this->networkSession->getAuthenticatedUser()->ID;
             $this->networkSession->getSocialvoidLib()->getTimelineManager()->distributePost(
-                $PostObject->ID, $FollowerData->FollowersIDs, 100, true
+                $PostObject->PublicID, $FollowerData->FollowersIDs, 100, true
             );
 
             return $PostObject;
@@ -359,7 +359,7 @@
          * @throws PostNotFoundException
          * @throws UserTimelineNotFoundException
          */
-        public function quotePost(string $post_public_id, string $text, array $media_content=[], $flags=[]): Post
+        public function quotePost(string $post_public_id, string $text, array $media_content=[], array $flags=[]): Post
         {
             $selected_post = $this->networkSession->getSocialvoidLib()->getPostsManager()->getPost(
                 PostSearchMethod::ByPublicId, $post_public_id);
@@ -377,7 +377,7 @@
 
             $FollowerData->FollowersIDs[] = $this->networkSession->getAuthenticatedUser()->ID;
             $this->networkSession->getSocialvoidLib()->getTimelineManager()->distributePost(
-                $PostObject->ID, $FollowerData->FollowersIDs, 100, true
+                $PostObject->PublicID, $FollowerData->FollowersIDs, 100, true
             );
 
             return $PostObject;
@@ -401,7 +401,7 @@
          * @throws PostNotFoundException
          * @throws UserTimelineNotFoundException
          */
-        public function replyToPost(string $post_public_id, string $text, array $media_content=[], $flags=[]): Post
+        public function replyToPost(string $post_public_id, string $text, array $media_content=[], array $flags=[]): Post
         {
             $selected_post = $this->networkSession->getSocialvoidLib()->getPostsManager()->getPost(
                 PostSearchMethod::ByPublicId, $post_public_id);
@@ -419,7 +419,7 @@
 
             $FollowerData->FollowersIDs[] = $this->networkSession->getAuthenticatedUser()->ID;
             $this->networkSession->getSocialvoidLib()->getTimelineManager()->distributePost(
-                $PostObject->ID, $FollowerData->FollowersIDs, 100, true
+                $PostObject->PublicID, $FollowerData->FollowersIDs, 100, true
             );
 
             return $PostObject;

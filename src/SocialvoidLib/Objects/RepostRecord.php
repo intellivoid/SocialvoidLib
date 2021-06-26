@@ -29,14 +29,14 @@
         /**
          * The Post ID that this record is associated with
          *
-         * @var int|null
+         * @var string|null
          */
         public $PostID;
 
         /**
          * The original post ID that this repost is referring to
          *
-         * @var int
+         * @var string
          */
         public $OriginalPostID;
 
@@ -97,10 +97,10 @@
                 $RepostRecordObject->UserID = (int)$data["user_id"];
 
             if(isset($data["post_id"]))
-                $RepostRecordObject->PostID = (int)$data["post_id"];
+                $RepostRecordObject->PostID = $data["post_id"];
 
             if(isset($data["original_post_id"]))
-                $RepostRecordObject->OriginalPostID = (int)$data["original_post_id"];
+                $RepostRecordObject->OriginalPostID = $data["original_post_id"];
 
             if(isset($data["reposted"]))
                 $RepostRecordObject->Reposted = (bool)$data["reposted"];

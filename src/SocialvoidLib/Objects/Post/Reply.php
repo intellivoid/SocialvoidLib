@@ -22,7 +22,7 @@
         /**
          * The post ID that this reply is targeted to
          *
-         * @var int|null
+         * @var string|null
          */
         public $ReplyToPostID;
 

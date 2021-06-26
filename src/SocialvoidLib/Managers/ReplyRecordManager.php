@@ -43,11 +43,11 @@
          * Creates a quote record if one doesn't already exist, or updates an existing one
          *
          * @param int $user_id
-         * @param int $reply_post_id
-         * @param int $post_id
+         * @param string $reply_post_id
+         * @param string $post_id
          * @throws DatabaseException
          */
-        public function replyRecord(int $user_id, int $post_id, int $reply_post_id)
+        public function replyRecord(int $user_id, string $post_id, string $reply_post_id)
         {
             try
             {
@@ -68,11 +68,11 @@
          * Creates a repost record if one doesn't already exist, or updates an existing one
          *
          * @param int $user_id
-         * @param int $post_id
-         * @param int $reply_post_id
+         * @param string $post_id
+         * @param string $reply_post_id
          * @throws DatabaseException
          */
-        public function unreplyRecord(int $user_id, int $post_id, int $reply_post_id)
+        public function unreplyRecord(int $user_id, string $post_id, string $reply_post_id)
         {
             try
             {
@@ -92,21 +92,21 @@
          * Registers a new quote record into the database
          *
          * @param int $user_id
-         * @param int $post_id
-         * @param int $reply_post_id
+         * @param string $post_id
+         * @param string $reply_post_id
          * @param bool $replied
          * @throws DatabaseException
          */
-        public function registerRecord(int $user_id, int $post_id, int $reply_post_id, bool $replied=True): void
+        public function registerRecord(int $user_id, string $post_id, string $reply_post_id, bool $replied=True): void
         {
             $Query = QueryBuilder::insert_into("replies", [
-                "id" => (double)((int)$post_id . (int)$reply_post_id),
-                "user_id" => (int)$user_id,
-                "post_id" => (int)$post_id,
-                "reply_post_id" => (int)$reply_post_id,
+                "id" => ($post_id . $reply_post_id),
+                "user_id" => $user_id,
+                "post_id" => $post_id,
+                "reply_post_id" => $reply_post_id,
                 "replied" => (int)$replied,
-                "last_updated_timestamp" => (int)time(),
-                "created_timestamp" => (int)time()
+                "last_updated_timestamp" => time(),
+                "created_timestamp" => time()
             ]);
 
             $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
@@ -121,14 +121,14 @@
         /**
          * Gets an existing record from the database
          *
-         * @param int $post_id
-         * @param int $reply_post_id
+         * @param string $post_id
+         * @param string $reply_post_id
          * @return ReplyRecord
          * @throws DatabaseException
          * @throws ReplyRecordNotFoundException
          * @noinspection DuplicatedCode
          */
-        public function getRecord(int $post_id, int $reply_post_id): ReplyRecord
+        public function getRecord(string $post_id, string $reply_post_id): ReplyRecord
         {
             $Query = QueryBuilder::select("replies", [
                 "id",
@@ -138,7 +138,7 @@
                 "replied",
                 "last_updated_timestamp",
                 "created_timestamp"
-            ], "id", (double)((int)$post_id . (int)$reply_post_id), null, null, 1);
+            ], "id", ($post_id . $reply_post_id), null, null, 1);
             $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
 
             if($QueryResults)
@@ -171,8 +171,8 @@
         {
             $Query = QueryBuilder::update("replies", [
                 "replied" => (int)$replyRecord->Replied,
-                "last_updated_timestamp" => (int)time()
-            ], "id", (double)((int)$replyRecord->PostID . (int)$replyRecord->ReplyPostID));
+                "last_updated_timestamp" => time()
+            ], "id", ($replyRecord->PostID . $replyRecord->ReplyPostID));
             $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
 
             if($QueryResults == false)
