@@ -261,11 +261,11 @@
                 "source" => ($post->Source == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($post->Source))),
                 "properties" => ($post->Properties == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Properties->toArray()))),
                 "poster_user_id" => ($post->PosterUserID == null ? null : $post->PosterUserID),
-                "reply_to_post_id" => ($post->Reply == null || $post->Reply->ReplyToPostID == null ? null : (int)$post->Reply->ReplyToPostID),
+                "reply_to_post_id" => ($post->Reply == null || $post->Reply->ReplyToPostID == null ? null : $post->Reply->ReplyToPostID),
                 "reply_to_user_id" => ($post->Reply == null || $post->Reply->ReplyToUserID == null ? null : (int)$post->Reply->ReplyToUserID),
-                "quote_original_post_id" => ($post->Quote == null || $post->Quote->OriginalPostID == null ? null : (int)$post->Quote->OriginalPostID),
+                "quote_original_post_id" => ($post->Quote == null || $post->Quote->OriginalPostID == null ? null : $post->Quote->OriginalPostID),
                 "quote_original_user_id" => ($post->Quote == null || $post->Quote->OriginalUserID == null ? null : (int)$post->Quote->OriginalUserID),
-                "repost_original_post_id" => ($post->Repost == null || $post->Repost->OriginalPostID == null ? null : (int)$post->Repost->OriginalPostID),
+                "repost_original_post_id" => ($post->Repost == null || $post->Repost->OriginalPostID == null ? null : $post->Repost->OriginalPostID),
                 "repost_original_user_id" => ($post->Repost == null || $post->Repost->OriginalUserID == null ? null : (int)$post->Repost->OriginalUserID),
                 "flags" => ($post->Flags == null ?  $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])) : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Flags))),
                 "is_deleted" => (Converter::hasFlag($post->Flags, PostFlags::Deleted) ? (int)true : (int)false),
@@ -277,7 +277,7 @@
                 "replies" => (is_null($post->Replies) ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Replies))),
                 "media_content" => (is_null($MediaContent) ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($MediaContent))),
                 "last_updated_timestamp" => $post->LastUpdatedTimestamp,
-            ], "public_id", (int)$post->PublicID);
+            ], "public_id", $post->PublicID);
             $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
 
             if($QueryResults)
@@ -571,7 +571,7 @@
                 "session_id" => ($session_id == null ? null : $session_id),
                 "poster_user_id" => $user_id,
                 "properties" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Properties->toArray())),
-                "quote_original_post_id" => (int)$Quote->OriginalPostID,
+                "quote_original_post_id" => $Quote->OriginalPostID,
                 "quote_original_user_id" => (int)$Quote->OriginalUserID,
                 "flags" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($flags)),
                 "is_deleted" => (int)false,
@@ -677,7 +677,7 @@
                 "session_id" => ($session_id == null ? null : $session_id),
                 "poster_user_id" => $user_id,
                 "properties" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Properties->toArray())),
-                "reply_to_post_id" => (int)$Reply->ReplyToPostID,
+                "reply_to_post_id" => $Reply->ReplyToPostID,
                 "reply_to_user_id" => (int)$Reply->ReplyToUserID,
                 "flags" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($flags)),
                 "is_deleted" => (int)false,
