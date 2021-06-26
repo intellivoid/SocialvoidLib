@@ -57,11 +57,11 @@
             $ReplyObject = new Reply();
 
             if(isset($data["reply_to_post_id"]))
-                $ReplyObject = $data["reply_to_post_id"];
+                $ReplyObject->ReplyToPostID = $data["reply_to_post_id"];
 
 
             if(isset($data["reply_to_user_id"]))
-                $ReplyObject = $data["reply_to_user_id"];
+                $ReplyObject->ReplyToUserID = $data["reply_to_user_id"];
 
             return $ReplyObject;
         }

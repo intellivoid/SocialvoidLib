@@ -359,7 +359,7 @@
             {
                 if($PostObject->Reply == null)
                     $PostObject->Reply = new Reply();
-                $PostObject->Reply->ReplyToPostID = (int)$data["reply_to_post_id"];
+                $PostObject->Reply->ReplyToPostID = $data["reply_to_post_id"];
             }
 
             if(isset($data["reply_to_user_id"]))
@@ -373,7 +373,7 @@
             {
                 if($PostObject->Quote == null)
                     $PostObject->Quote = new Quote();
-                $PostObject->Quote->OriginalPostID = (int)$data["quote_original_post_id"];
+                $PostObject->Quote->OriginalPostID = $data["quote_original_post_id"];
             }
 
             if(isset($data["quote_original_user_id"]))
@@ -387,7 +387,7 @@
             {
                 if($PostObject->Repost == null)
                     $PostObject->Repost = new Repost();
-                $PostObject->Repost->OriginalPostID = (int)$data["repost_original_post_id"];
+                $PostObject->Repost->OriginalPostID = $data["repost_original_post_id"];
             }
 
             if(isset($data["repost_original_user_id"]))
