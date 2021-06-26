@@ -391,7 +391,6 @@
          * @param array $media_content
          * @param array $flags
          * @return Post
-         * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
          * @throws DatabaseException
          * @throws FollowerDataNotFound
@@ -399,7 +398,6 @@
          * @throws InvalidSearchMethodException
          * @throws PostDeletedException
          * @throws PostNotFoundException
-         * @throws UserTimelineNotFoundException
          */
         public function replyToPost(string $post_public_id, string $text, array $media_content=[], array $flags=[]): Post
         {
@@ -418,9 +416,6 @@
             );
 
             $FollowerData->FollowersIDs[] = $this->networkSession->getAuthenticatedUser()->ID;
-            $this->networkSession->getSocialvoidLib()->getTimelineManager()->distributePost(
-                $PostObject->PublicID, $FollowerData->FollowersIDs, 100, true
-            );
 
             return $PostObject;
         }
