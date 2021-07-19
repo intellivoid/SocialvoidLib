@@ -217,6 +217,7 @@
             $ServiceEngineSchema->setDefinition("QueryWorkers", 30);
             $ServiceEngineSchema->setDefinition("UpdateWorkers", 20);
             $ServiceEngineSchema->setDefinition("HeavyWorkers", 5);
+            $ServiceEngineSchema->setDefinition("DisplayOutput", true);
             $this->acm->defineSchema("ServiceEngine", $ServiceEngineSchema);
 
             // Engine Schema Configuration

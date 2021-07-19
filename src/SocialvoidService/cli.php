@@ -66,14 +66,18 @@
 
         // Start query workers
         SocialvoidService::getLogHandler()->log(EventType::INFO, "Starting Service Query Workers", "Main");
-        SocialvoidService::getBackgroundWorker()->getSupervisor()->restartWorkers(
+        SocialvoidService::$BackgroundWorker->getSupervisor()->setDisplayOutput(
+            "SocialvoidQueryService", (bool)SocialvoidService::getSocialvoidLib()->getServiceEngineConfiguration()["DisplayOutput"]);
+        SocialvoidService::getBackgroundWorker()->getSupervisor()->startWorkers(
             $current_directory . DIRECTORY_SEPARATOR . "query_worker.php", "SocialvoidQueryService",
             (int)SocialvoidService::getSocialvoidLib()->getServiceEngineConfiguration()["QueryWorkers"]
         );
 
         // Start update workers
         SocialvoidService::getLogHandler()->log(EventType::INFO, "Starting Service Update Workers", "Main");
-        SocialvoidService::getBackgroundWorker()->getSupervisor()->restartWorkers(
+        SocialvoidService::$BackgroundWorker->getSupervisor()->setDisplayOutput(
+            "SocialvoidUpdateService", (bool)SocialvoidService::getSocialvoidLib()->getServiceEngineConfiguration()["DisplayOutput"]);
+        SocialvoidService::getBackgroundWorker()->getSupervisor()->startWorkers(
             $current_directory . DIRECTORY_SEPARATOR . "update_worker.php", "SocialvoidUpdateService",
             (int)SocialvoidService::getSocialvoidLib()->getServiceEngineConfiguration()["UpdateWorkers"]
         );
@@ -85,4 +89,9 @@
     }
 
     SocialvoidService::getLogHandler()->log(EventType::INFO, "Socialvoid Service started successfully", "Main");
-    exit(0);
+
+    while (true)
+    {
+        SocialvoidService::getBackgroundWorker()->getSupervisor()->monitor("SocialvoidQueryService");
+        SocialvoidService::getBackgroundWorker()->getSupervisor()->monitor("SocialvoidUpdateService");
+    }

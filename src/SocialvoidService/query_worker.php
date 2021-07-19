@@ -39,6 +39,7 @@ use ZiProto\ZiProto;
 
     $current_directory = getcwd();
     VerboseAdventure::setStdout(true); // Enable stdout
+    VerboseAdventure::setSimpleStdout(true); // Enable enable output
     ErrorHandler::registerHandlers(); // Register error handlers
 
     if(file_exists($current_directory . DIRECTORY_SEPARATOR . 'SocialvoidService.php'))
