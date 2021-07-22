@@ -13,29 +13,19 @@
 
     use BackgroundWorker\BackgroundWorker;
     use ppm\ppm;
-use SocialvoidLib\Service\Jobs\Timeline;
-use SocialvoidLib\Service\Jobs\UserManager;
     use SocialvoidLib\SocialvoidLib;
     use SocialvoidService\SocialvoidService;
     use VerboseAdventure\Abstracts\EventType;
     use VerboseAdventure\Classes\ErrorHandler;
     use VerboseAdventure\VerboseAdventure;
-use ZiProto\ZiProto;
+    use ZiProto\ZiProto;
 
-// Import all required auto loaders
+    // Import all required auto loaders
     /** @noinspection PhpIncludeInspection */
     require("ppm");
 
     /** @noinspection PhpUnhandledExceptionInspection */
-    ppm::import("net.intellivoid.acm");
-    /** @noinspection PhpUnhandledExceptionInspection */
-    ppm::import("net.intellivoid.background_worker");
-    /** @noinspection PhpUnhandledExceptionInspection */
-    ppm::import("net.intellivoid.socialvoidlib");
-    /** @noinspection PhpUnhandledExceptionInspection */
-    ppm::import("net.intellivoid.verbose_adventure");
-    /** @noinspection PhpUnhandledExceptionInspection */
-    ppm::import("net.intellivoid.ziproto");
+    ppm::import("net.intellivoid.socialvoid_service");
 
     $current_directory = getcwd();
     VerboseAdventure::setStdout(true); // Enable stdout
