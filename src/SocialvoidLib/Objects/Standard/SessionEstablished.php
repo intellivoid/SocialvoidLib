@@ -21,11 +21,11 @@
         public $ID;
 
         /**
-         * The Challenge Hash that the client must complete regularly
+         * The Challenge that the client must complete regularly
          *
          * @var string
          */
-        public $ChallengeHash;
+        public $Challenge;
 
         /**
          * Returns an array representation of the object
@@ -37,7 +37,7 @@
         {
             return [
                 "id" => $this->ID,
-                "challenge_hash" => $this->ChallengeHash
+                "challenge" => $this->Challenge
             ];
         }
 
@@ -46,6 +46,7 @@
          *
          * @param array $data
          * @return SessionEstablished
+         * @noinspection PhpPureAttributeCanBeAddedInspection
          */
         public static function fromArray(array $data): SessionEstablished
         {
@@ -54,8 +55,8 @@
             if(isset($data["id"]))
                 $sessionEstablishedObject->ID = $data["id"];
 
-            if(isset($data["challenge_hash"]))
-                $sessionEstablishedObject->ChallengeHash = $data["challenge_hash"];
+            if(isset($data["challenge"]))
+                $sessionEstablishedObject->Challenge = $data["challenge"];
 
             return $sessionEstablishedObject;
         }
@@ -65,12 +66,13 @@
          *
          * @param ActiveSession $activeSession
          * @return SessionEstablished
+         * @noinspection PhpPureAttributeCanBeAddedInspection
          */
         public static function fromActiveSession(ActiveSession $activeSession): SessionEstablished
         {
             $sessionEstablishedObject = new SessionEstablished();
 
-            $sessionEstablishedObject->ChallengeHash = $activeSession->Security->HashChallenge;
+            $sessionEstablishedObject->Challenge = $activeSession->Security->HashChallenge;
             $sessionEstablishedObject->ID = $activeSession->ID;
 
             return $sessionEstablishedObject;

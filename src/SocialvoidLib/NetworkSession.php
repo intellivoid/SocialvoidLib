@@ -15,8 +15,10 @@
 
     use Exception;
     use SocialvoidLib\Abstracts\Flags\NetworkFlags;
+    use SocialvoidLib\Abstracts\SearchMethods\ActiveSessionSearchMethod;
     use SocialvoidLib\Abstracts\SearchMethods\UserSearchMethod;
     use SocialvoidLib\Classes\Converter;
+    use SocialvoidLib\Classes\Validate;
     use SocialvoidLib\Exceptions\Internal\AlreadyAuthenticatedToNetwork;
     use SocialvoidLib\Exceptions\Standard\Authentication\AuthenticationFailureException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
@@ -26,6 +28,7 @@
     use SocialvoidLib\Network\Users;
     use SocialvoidLib\Objects\ActiveSession;
     use SocialvoidLib\Objects\Standard\SessionEstablished;
+    use SocialvoidLib\Objects\Standard\SessionIdentification;
     use SocialvoidLib\Objects\User;
 
     /**
@@ -94,45 +97,77 @@
 
         /**
          * Creates a new session
+         * @param SessionClient $sessionClient
+         * @param string $ip_address
+         * @return SessionEstablished
+         * @throws Exceptions\Standard\Validation\InvalidClientNameException
+         * @throws Exceptions\Standard\Validation\InvalidClientPrivateHashException
+         * @throws Exceptions\Standard\Validation\InvalidClientPublicHashException
+         * @throws Exceptions\Standard\Validation\InvalidPlatformException
+         * @throws Exceptions\Standard\Validation\InvalidVersionException
          * @throws InternalServerException
          */
         public function createSession(SessionClient $sessionClient, string $ip_address): SessionEstablished
         {
-            if($this->active_session !== null)
-                $this->active_session = null;
+            $sessionClient->validate();
 
             try
             {
-                $this->active_session = $this->socialvoidLib->getSessionManager()->createSession($sessionClient, $ip_address);
+                $session_established = $this->socialvoidLib->getSessionManager()->createSession($sessionClient, $ip_address);
             }
             catch(Exception $e)
             {
-                throw new InternalServerException("There was an unexpected error while trying to resolve the peer", $e);
+                throw new InternalServerException("There was an unexpected error while trying establish a session", $e);
             }
 
-            return SessionEstablished::fromActiveSession($this->active_session);
+
+            return $session_established;
         }
 
         /**
          * Authenticates the user to the network session, updates both the user and session
          *
+         * @param SessionIdentification $sessionIdentification
          * @param string $username
          * @param string $password
          * @param string|null $otp
          * @return bool
          * @throws AlreadyAuthenticatedToNetwork
          * @throws AuthenticationFailureException
+         * @throws Exceptions\GenericInternal\CacheException
+         * @throws Exceptions\GenericInternal\DatabaseException
+         * @throws Exceptions\GenericInternal\InvalidSearchMethodException
+         * @throws Exceptions\Internal\TwoFactorAuthenticationRequiredException
          * @throws Exceptions\Standard\Authentication\AuthenticationNotApplicableException
+         * @throws Exceptions\Standard\Authentication\BadSessionChallengeAnswerException
          * @throws Exceptions\Standard\Authentication\IncorrectPasswordException
          * @throws Exceptions\Standard\Authentication\IncorrectTwoFactorAuthenticationCodeException
          * @throws Exceptions\Standard\Authentication\NoPasswordAuthenticationAvailableException
          * @throws Exceptions\Standard\Authentication\PrivateAccessTokenRequiredException
+         * @throws Exceptions\Standard\Authentication\SessionNotFoundException
+         * @throws Exceptions\Standard\Validation\InvalidClientPublicHashException
          * @throws InternalServerException
          */
-        public function authenticateUser(string $username, string $password, ?string $otp=null): bool
+        public function authenticateUser(SessionIdentification $sessionIdentification, string $username, string $password, ?string $otp=null): bool
         {
             if($this->isAuthenticated())
                 throw new AlreadyAuthenticatedToNetwork("There is a user already authenticated to this network session", $this);
+
+            $sessionIdentification->validate();
+            try
+            {
+                $this->active_session = $this->socialvoidLib->getSessionManager()->getSession(ActiveSessionSearchMethod::ById, $sessionIdentification->SessionID);
+            }
+            catch (Exception $e)
+            {
+                if(Validate::isStandardError($e->getCode()))
+                    /** @noinspection PhpUnhandledExceptionInspection */
+                    throw $e;
+
+                throw new InternalServerException("There was an error while trying to access the session", $e);
+            }
+
+            $sessionIdentification->validateAnswer($this->active_session->Security->ClientPrivateHash, $this->active_session->Security->HashChallenge);
 
             try
             {
@@ -142,18 +177,12 @@
             {
                 throw new AuthenticationFailureException("There was an unexpected error while trying to authenticate the user", $e);
             }
-            catch(Exception $e)
-            {
-                throw new InternalServerException("There was an unexpected error while trying to resolve the peer", $e);
-            }
 
-            try {
+            try
+            {
                 $authenticating_peer->simpleAuthentication($password, $otp);
             }
-            catch (
-                Exceptions\Internal\AuthenticationFailureException |
-                Exceptions\Internal\TwoFactorAuthenticationRequiredException $e
-            )
+            catch (Exceptions\Internal\AuthenticationFailureException $e)
             {
                 throw new AuthenticationFailureException("There was an unexpected error while trying to authenticate the user", $e);
             }
@@ -164,6 +193,10 @@
             }
             catch(Exception $e)
             {
+                if(Validate::isStandardError($e->getCode()))
+                    /** @noinspection PhpUnhandledExceptionInspection */
+                    throw $e;
+
                 throw new InternalServerException("There was an error while trying to process your request", $e);
             }
 

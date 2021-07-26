@@ -4,6 +4,9 @@
     require("ppm");
 
     ppm_import("net.intellivoid.kimchi_rpc");
+    ppm_import("net.intellivoid.socialvoidlib");
+
+    $socialvoidlib = new \SocialvoidLib\SocialvoidLib();
 
     // Initialize the server as a handler
     $KimchiRPC = new \KimchiRPC\KimchiRPC("Socialvoid RPC");
@@ -11,7 +14,10 @@
 
     // Enable BackgroundWorker
     $KimchiRPC->enableBackgroundWorker();
-    $KimchiRPC->getBackgroundWorker()->getClient()->addServer();
+    $KimchiRPC->getBackgroundWorker()->getClient()->addServer(
+        $socialvoidlib->getRpcServerConfiguration()["GearmanHost"],
+        (int)$socialvoidlib->getRpcServerConfiguration()["GearmanPort"]
+    );
 
     // Handle the requests and emits a response.
     $KimchiRPC->handle();

@@ -26,6 +26,7 @@
     use SocialvoidLib\InputTypes\SessionClient;
     use SocialvoidLib\Objects\ActiveSession;
     use SocialvoidLib\Objects\ActiveSession\SessionData;
+    use SocialvoidLib\Objects\Standard\SessionEstablished;
     use SocialvoidLib\SocialvoidLib;
     use tsa\Classes\Crypto;
     use ZiProto\ZiProto;
@@ -55,11 +56,11 @@
          *
          * @param SessionClient $sessionClient
          * @param string $ip_address
-         * @return string
+         * @return SessionEstablished
          * @throws DatabaseException
          * @throws SecurityException
          */
-        public function createSession(SessionClient $sessionClient, string $ip_address): string
+        public function createSession(SessionClient $sessionClient, string $ip_address): SessionEstablished
         {
             $SessionData = new SessionData();
             $SessionSecurity = new ActiveSession\SessionSecurity();
@@ -76,12 +77,12 @@
             }
 
             $Timestamp = time();
-            $ExpiresTimestamp = $Timestamp + 86400;
-            $PublicID = BaseIdentification::sessionId($sessionClient, $SessionSecurity);
+            $ExpiresTimestamp = $Timestamp + 300; // 10 Minutes due to no authentication
+            $ID = BaseIdentification::sessionId($sessionClient, $SessionSecurity);
 
             /** @noinspection PhpBooleanCanBeSimplifiedInspection */
             $Query = QueryBuilder::insert_into("sessions", [
-                "id" => $this->socialvoidLib->getDatabase()->real_escape_string($PublicID),
+                "id" => $this->socialvoidLib->getDatabase()->real_escape_string($ID),
                 "flags" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
                 "authenticated" => $this->socialvoidLib->getDatabase()->real_escape_string((int)false),
                 "user_id" => null,
@@ -100,7 +101,11 @@
             $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
             if($QueryResults)
             {
-                return $PublicID;
+                $SessionEstablishedObject = new SessionEstablished();
+                $SessionEstablishedObject->ID = $ID;
+                $SessionEstablishedObject->Challenge = $SessionSecurity->HashChallenge;
+
+                return $SessionEstablishedObject;
             }
             else
             {

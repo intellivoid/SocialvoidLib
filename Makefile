@@ -24,9 +24,9 @@ update:
 
 build:
 	mkdir build
-	ppm --no-intro --cerror --lwarning --no-jit --fstring --return-types="net.intellivoid.palmtree" --compile="$(socialvoidlib_src_dir)" --directory="$(build_dir)"
-	ppm --no-intro --cerror --lwarning --no-jit --fstring --return-types="net.intellivoid.palmtree" --compile="$(socivlvoidservice_src_dir)" --directory="$(build_dir)"
-	ppm --no-intro --cerror --lwarning --no-jit --fstring --return-types="net.intellivoid.palmtree" --compile="$(socivlvoidrpc_src_dir)" --directory="$(build_dir)"
+	ppm --no-intro --cerror --lwarning --verbose --compile="$(socialvoidlib_src_dir)" --directory="$(build_dir)"
+	ppm --no-intro --cerror --lwarning --verbose --compile="$(socivlvoidservice_src_dir)" --directory="$(build_dir)"
+	ppm --no-intro --cerror --lwarning --verbose --compile="$(socivlvoidrpc_src_dir)" --directory="$(build_dir)"
 
 install:
 	ppm --no-prompt --fix-conflict --install="$(build_dir)/$(socialvoidlib_name).ppm" --branch="$(install_branch)"

@@ -8,11 +8,11 @@
      * must have a written permission from Intellivoid Technologies to do so.
      */
 
-namespace SocialvoidLib\Abstracts;
+    namespace SocialvoidLib\Abstracts;
 
-    use SocialvoidLib\Exceptions\Internal\InvalidImageTypeException;
     use SocialvoidLib\Exceptions\Standard\Authentication\AccountNotRegisteredException;
     use SocialvoidLib\Exceptions\Standard\Authentication\AuthenticationNotApplicableException;
+    use SocialvoidLib\Exceptions\Standard\Authentication\BadSessionChallengeAnswerException;
     use SocialvoidLib\Exceptions\Standard\Authentication\IncorrectPasswordException;
     use SocialvoidLib\Exceptions\Standard\Authentication\IncorrectTwoFactorAuthenticationCodeException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NoPasswordAuthenticationAvailableException;
@@ -20,7 +20,6 @@ namespace SocialvoidLib\Abstracts;
     use SocialvoidLib\Exceptions\Standard\Authentication\NoTwoFactorAuthenticationAvailableException;
     use SocialvoidLib\Exceptions\Standard\Authentication\PrivateAccessTokenRequiredException;
     use SocialvoidLib\Exceptions\Standard\Media\InvalidImageDimensionsException;
-    use SocialvoidLib\Exceptions\Standard\Media\InvalidImageException;
     use SocialvoidLib\Exceptions\Standard\Network\AlreadyRepostedException;
     use SocialvoidLib\Exceptions\Standard\Network\FileUploadException;
     use SocialvoidLib\Exceptions\Standard\Network\PostDeletedException;
@@ -28,12 +27,18 @@ namespace SocialvoidLib\Abstracts;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidBiographyException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidChallengeAnswerException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientNameException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPrivateHashException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPublicHashException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidFirstNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidLastNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPasswordException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPeerInputException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidPlatformException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPostTextException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidUsernameException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidVersionException;
     use SocialvoidLib\Exceptions\Standard\Validation\UsernameAlreadyExistsException;
 
     /**
@@ -91,6 +96,41 @@ namespace SocialvoidLib\Abstracts;
          * @see InvalidPostTextException
          */
         const InvalidPostTextException = 0x02107;
+
+        /**
+         * Raised when the client public hash is invalid
+         *
+         * @see InvalidClientPublicHashException
+         */
+        const InvalidClientPublicHashException = 0x02108;
+
+        /**
+         * Raised when the client private hash is invalid
+         *
+         * @see InvalidClientPrivateHashException
+         */
+        const InvalidClientPrivateHashException = 0x02109;
+
+        /**
+         * Raised when the given platform value is invalid
+         *
+         * @see InvalidPlatformException
+         */
+        const InvalidPlatformException = 0x02110;
+
+        /**
+         * Raised when the given version is invalid
+         *
+         * @see InvalidVersionException
+         */
+        const InvalidVersionException = 0x02111;
+
+        /**
+         * Raised when the given client name is invalid
+         *
+         * @see InvalidClientNameException
+         */
+        const InvalidClientNameException = 0x02112;
 
 
         /** 22-Set error codes (Authentication) */
@@ -171,6 +211,13 @@ namespace SocialvoidLib\Abstracts;
          * @see AccountNotRegisteredException
          */
         const AccountNotRegisteredException = 0x02210;
+
+        /**
+         * Raised when the client gives a bad session challenge answer
+         *
+         * @see BadSessionChallengeAnswerException
+         */
+        const BadSessionChallengeAnswerException = 0x02211;
 
 
         /** 23-Set error codes (Media) */

@@ -61,6 +61,10 @@
     "components": [
         {
             "required": true,
+            "file": "Abstracts/RegexPatterns.php"
+        },
+        {
+            "required": true,
             "file": "Abstracts/StatusStates/FollowerState.php"
         },
         {
@@ -481,6 +485,10 @@
         },
         {
             "required": true,
+            "file": "Exceptions/Standard/Validation/InvalidClientNameException.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/Standard/Validation/InvalidBiographyException.php"
         },
         {
@@ -497,7 +505,23 @@
         },
         {
             "required": true,
+            "file": "Exceptions/Standard/Validation/InvalidClientPublicHashException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Validation/InvalidClientPrivateHashException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Validation/InvalidVersionException.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/Standard/Validation/InvalidPasswordException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Validation/InvalidPlatformException.php"
         },
         {
             "required": true,
@@ -506,6 +530,10 @@
         {
             "required": true,
             "file": "Exceptions/Standard/Server/InternalServerException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Authentication/BadSessionChallengeAnswerException.php"
         },
         {
             "required": true,
@@ -658,6 +686,10 @@
         {
             "required": true,
             "file": "Objects/Standard/SessionEstablished.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/Standard/SessionIdentification.php"
         },
         {
             "required": true,

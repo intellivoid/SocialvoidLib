@@ -15,6 +15,14 @@
 
     namespace SocialvoidLib\InputTypes;
 
+    use SocialvoidLib\Abstracts\RegexPatterns;
+    use SocialvoidLib\Classes\Validate;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientNameException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPrivateHashException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPublicHashException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidPlatformException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidVersionException;
+
     /**
      * Class SessionClient
      * @package SocialvoidLib\InputTypes
@@ -100,5 +108,71 @@
                 $SessionClientObject->PrivateHash = $data["private_hash"];
 
             return $SessionClientObject;
+        }
+
+        /**
+         * Validates the object's properties and throws an exception if something is not correct
+         *
+         * @throws InvalidClientNameException
+         * @throws InvalidClientPrivateHashException
+         * @throws InvalidClientPublicHashException
+         * @throws InvalidPlatformException
+         * @throws InvalidVersionException
+         */
+        public function validate()
+        {
+            // Name validation
+            if(gettype($this->Name) !== "string")
+                throw new InvalidClientNameException("The client name must be a string");
+
+            if(strlen($this->Name) == 0 || strlen($this->Name) > 32)
+                throw new InvalidClientNameException("The client name cannot be empty or larger than 32 characters");
+
+            if (preg_match(RegexPatterns::SpecialCharacters, $this->Name))
+                throw new InvalidClientNameException("The client name contains invalid characters");
+
+
+            if(gettype($this->Version) !== "string")
+                throw new InvalidVersionException("The client version must be a string");
+
+            if(strlen($this->Version) == 0 || strlen($this->Version) > 32)
+                throw new InvalidVersionException("The version cannot be empty or larger than 32 characters");
+
+            if (Validate::versionNumber($this->Version) == false)
+                throw new InvalidClientNameException("The version is invalid");
+
+
+            if(gettype($this->Platform) !== "string")
+                throw new InvalidPlatformException("The platform name must be a string");
+
+            if(strlen($this->Platform) == 0 || strlen($this->Platform) > 32)
+                throw new InvalidPlatformException("The platform name cannot be empty or larger than 32 characters");
+
+            if (preg_match(RegexPatterns::SpecialCharacters, $this->Platform))
+                throw new InvalidPlatformException("The platform name contains invalid characters");
+
+
+            if(gettype($this->PublicHash) !== "string")
+                throw new InvalidClientPublicHashException("The client's public hash must be a string");
+
+            if(strlen($this->PublicHash) !== 64)
+                throw new InvalidClientPublicHashException("The client's public hash must be 64 characters in length");
+
+            if(preg_match(RegexPatterns::Alphanumeric, $this->PublicHash))
+                throw new InvalidClientPublicHashException("The client's public hash is not a valid hash");
+
+
+            if(gettype($this->PrivateHash) !== "string")
+                throw new InvalidClientPrivateHashException("The client's private hash must be a string");
+
+            if(strlen($this->PrivateHash) !== 64)
+                throw new InvalidClientPrivateHashException("The client's private hash must be 64 characters in length");
+
+            if(preg_match(RegexPatterns::Alphanumeric, $this->PrivateHash))
+                throw new InvalidClientPrivateHashException("The client's private hash is not a valid hash");
+
+            if($this->PublicHash == $this->PrivateHash)
+                throw new InvalidClientPrivateHashException("The client's private hash cannot be the same as the client's public hash");
+
         }
     }

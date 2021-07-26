@@ -98,8 +98,17 @@ namespace SocialvoidLib\Classes;
         public static function determineStandardErrorType(int $error_code): string
         {
             /**
+             * 40-Set error codes (Server)
+             * 16384 - *
+             */
+            if($error_code >= 16384)
+            {
+                return StandardErrorCodeType::ServerError;
+            }
+
+            /**
              * 31-Set error codes (Network)
-             * 12544 - *
+             * 12544 - 16383
              */
             if($error_code >= 12544)
             {
@@ -112,12 +121,12 @@ namespace SocialvoidLib\Classes;
              */
             if($error_code >= 8960)
             {
-                return StandardErrorCodeType::AuthenticationError;
+                return StandardErrorCodeType::MediaError;
             }
 
             /**
              * 22-Set Error codes (Authentication)
-             * 8704 - 8960
+             * 8704 - 8979
              */
             if($error_code >= 8704)
             {
@@ -151,5 +160,38 @@ namespace SocialvoidLib\Classes;
             }
 
             return true;
+        }
+
+        /**
+         * Validates the version number
+         *
+         * @param string $input
+         * @return bool
+         */
+        public static function versionNumber(string $input): bool
+        {
+            return true;
+
+            if($input == null)
+            {
+                return false;
+            }
+
+            if((bool)preg_match("/^([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$/", $input))
+            {
+                return true;
+            }
+
+            if((bool)preg_match("/^([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$/", $input))
+            {
+                return true;
+            }
+
+            if((bool)preg_match("/^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$/", $input))
+            {
+                return true;
+            }
+
+            return false;
         }
     }

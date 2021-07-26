@@ -9,7 +9,6 @@
     use RuntimeException;
     use SocialvoidLib\SocialvoidLib;
     use SocialvoidRPC\Methods\Session\CreateSession;
-    use SocialvoidService\SocialvoidService;
     use VerboseAdventure\Abstracts\EventType;
     use VerboseAdventure\VerboseAdventure;
 
@@ -122,8 +121,8 @@
          */
         public static function processWakeup()
         {
-            SocialvoidService::setLastWorkerActivity((int)time()); // Set the last activity timestamp
-            SocialvoidService::processSleepCycle(); // Wake worker if it's sleeping
+            SocialvoidRPC::setLastWorkerActivity((int)time()); // Set the last activity timestamp
+            SocialvoidRPC::processSleepCycle(); // Wake worker if it's sleeping
         }
 
         /**
