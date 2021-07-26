@@ -325,10 +325,6 @@
         },
         {
             "required": true,
-            "file": "InputTypes/SessionDevice.php"
-        },
-        {
-            "required": true,
             "file": "InputTypes/DocumentInput.php"
         },
         {
@@ -369,11 +365,19 @@
         },
         {
             "required": true,
+            "file": "Exceptions/GenericInternal/SecurityException.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/GenericInternal/ConfigurationError.php"
         },
         {
             "required": true,
             "file": "Exceptions/GenericInternal/BackgroundWorkerNotEnabledException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/GenericInternal/DeprecatedComponentException.php"
         },
         {
             "required": true,
@@ -398,6 +402,10 @@
         {
             "required": true,
             "file": "Exceptions/Internal/UserTimelineNotFoundException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Internal/TwoFactorAuthenticationRequiredException.php"
         },
         {
             "required": true,
@@ -497,6 +505,10 @@
         },
         {
             "required": true,
+            "file": "Exceptions/Standard/Server/InternalServerException.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/Standard/Authentication/IncorrectTwoFactorAuthenticationCodeException.php"
         },
         {
@@ -505,11 +517,19 @@
         },
         {
             "required": true,
+            "file": "Exceptions/Standard/Authentication/AuthenticationFailureException.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/Standard/Authentication/SessionNotFoundException.php"
         },
         {
             "required": true,
             "file": "Exceptions/Standard/Authentication/SessionNoLongerAuthenticatedException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Authentication/AccountNotRegisteredException.php"
         },
         {
             "required": true,
@@ -529,6 +549,10 @@
         },
         {
             "required": true,
+            "file": "Exceptions/Standard/Authentication/PrivateAccessTokenRequiredException.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/Standard/Media/InvalidImageTypeException.php"
         },
         {
@@ -545,15 +569,11 @@
         },
         {
             "required": true,
-            "file": "Objects/ActiveSession/SessionCache.php"
-        },
-        {
-            "required": true,
             "file": "Objects/ActiveSession/SessionData.php"
         },
         {
             "required": true,
-            "file": "Objects/ActiveSession/SessionCache/PeerResolveCache.php"
+            "file": "Objects/ActiveSession/SessionSecurity.php"
         },
         {
             "required": true,
@@ -634,6 +654,10 @@
         {
             "required": true,
             "file": "Objects/Standard/Post.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/Standard/SessionEstablished.php"
         },
         {
             "required": true,

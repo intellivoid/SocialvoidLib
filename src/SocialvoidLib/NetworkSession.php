@@ -13,20 +13,19 @@
 
     namespace SocialvoidLib;
 
+    use Exception;
     use SocialvoidLib\Abstracts\Flags\NetworkFlags;
-    use SocialvoidLib\Abstracts\Flags\UserFlags;
-    use SocialvoidLib\Abstracts\SearchMethods\ActiveSessionSearchMethod;
     use SocialvoidLib\Abstracts\SearchMethods\UserSearchMethod;
     use SocialvoidLib\Classes\Converter;
     use SocialvoidLib\Exceptions\Internal\AlreadyAuthenticatedToNetwork;
-    use SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException;
-    use SocialvoidLib\Exceptions\Standard\Authentication\SessionNoLongerAuthenticatedException;
+    use SocialvoidLib\Exceptions\Standard\Authentication\AuthenticationFailureException;
+    use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
     use SocialvoidLib\InputTypes\SessionClient;
-    use SocialvoidLib\InputTypes\SessionDevice;
     use SocialvoidLib\Network\Cloud;
     use SocialvoidLib\Network\Timeline;
     use SocialvoidLib\Network\Users;
     use SocialvoidLib\Objects\ActiveSession;
+    use SocialvoidLib\Objects\Standard\SessionEstablished;
     use SocialvoidLib\Objects\User;
 
     /**
@@ -78,7 +77,7 @@
         /**
          * @var Cloud
          */
-        private Cloud $cloud;
+        //private Cloud $cloud;
 
         /**
          * Network constructor.
@@ -94,112 +93,96 @@
         }
 
         /**
-         * Authenticates the user into the network and establishes an active session
-         *
-         * @param SessionClient $sessionClient
-         * @param SessionDevice $sessionDevice
-         * @param User $user
-         * @param string $authentication_method_used
-         * @param string $ip_address
-         * @return ActiveSession
-         * @throws AlreadyAuthenticatedToNetwork
-         * @throws Exceptions\GenericInternal\DatabaseException
-         * @throws Exceptions\GenericInternal\InvalidSearchMethodException
-         * @throws Exceptions\Standard\Authentication\SessionNotFoundException
-         * @throws Exceptions\Standard\Network\PeerNotFoundException
-         * @throws SessionNoLongerAuthenticatedException|Exceptions\GenericInternal\CacheException
+         * Creates a new session
+         * @throws InternalServerException
          */
-        public function authenticateUser(SessionClient $sessionClient, SessionDevice $sessionDevice,
-                                         User $user, string $authentication_method_used, string $ip_address): ActiveSession
+        public function createSession(SessionClient $sessionClient, string $ip_address): SessionEstablished
         {
-            if($this->isAuthenticated())
+            if($this->active_session !== null)
+                $this->active_session = null;
+
+            try
             {
-                throw new AlreadyAuthenticatedToNetwork("There is a user already authenticated to this network session", $this);
+                $this->active_session = $this->socialvoidLib->getSessionManager()->createSession($sessionClient, $ip_address);
+            }
+            catch(Exception $e)
+            {
+                throw new InternalServerException("There was an unexpected error while trying to resolve the peer", $e);
             }
 
-            $active_session_id = $this->socialvoidLib->getSessionManager()->createSession(
-                $sessionClient, $sessionDevice, $user,
-                $authentication_method_used, $ip_address
-            );
-            $this->declareActiveSession($active_session_id, $ip_address);
-            return $this->active_session;
+            return SessionEstablished::fromActiveSession($this->active_session);
         }
 
-
         /**
-         * Declares the current active session on the network
+         * Authenticates the user to the network session, updates both the user and session
          *
-         * @param string $session_public_id
-         * @param string|null $ip_address
+         * @param string $username
+         * @param string $password
+         * @param string|null $otp
+         * @return bool
          * @throws AlreadyAuthenticatedToNetwork
-         * @throws Exceptions\GenericInternal\DatabaseException
-         * @throws Exceptions\GenericInternal\InvalidSearchMethodException
-         * @throws Exceptions\Standard\Authentication\SessionNotFoundException
-         * @throws Exceptions\Standard\Network\PeerNotFoundException
-         * @throws SessionNoLongerAuthenticatedException
-         * @throws Exceptions\GenericInternal\CacheException
+         * @throws AuthenticationFailureException
+         * @throws Exceptions\Standard\Authentication\AuthenticationNotApplicableException
+         * @throws Exceptions\Standard\Authentication\IncorrectPasswordException
+         * @throws Exceptions\Standard\Authentication\IncorrectTwoFactorAuthenticationCodeException
+         * @throws Exceptions\Standard\Authentication\NoPasswordAuthenticationAvailableException
+         * @throws Exceptions\Standard\Authentication\PrivateAccessTokenRequiredException
+         * @throws InternalServerException
          */
-        public function declareActiveSession(string $session_public_id, string $ip_address=null): void
+        public function authenticateUser(string $username, string $password, ?string $otp=null): bool
         {
             if($this->isAuthenticated())
-            {
                 throw new AlreadyAuthenticatedToNetwork("There is a user already authenticated to this network session", $this);
-            }
 
-            $active_session = $this->socialvoidLib->getSessionManager()->getSession(
-                ActiveSessionSearchMethod::ByPublicId, $session_public_id
-            );
-
-            if($active_session->Authenticated == false)
+            try
             {
-                throw new SessionNoLongerAuthenticatedException("The requested session is no longer authenticated", $active_session);
+                $authenticating_peer = $this->socialvoidLib->getUserManager()->getUser(UserSearchMethod::ByUsername, $username);
             }
-
-            if($active_session->IpAddress !== $ip_address)
+            catch (Exceptions\Standard\Network\PeerNotFoundException $e)
             {
-                $active_session->IpAddress = $ip_address;
-                $active_session = $this->socialvoidLib->getSessionManager()->updateSession($active_session);
+                throw new AuthenticationFailureException("There was an unexpected error while trying to authenticate the user", $e);
+            }
+            catch(Exception $e)
+            {
+                throw new InternalServerException("There was an unexpected error while trying to resolve the peer", $e);
             }
 
-            $this->active_session = $active_session;
-            $this->authenticated_user = $this->socialvoidLib->getUserManager()->getUser(
-                UserSearchMethod::ById, $active_session->UserID
-            );
+            try {
+                $authenticating_peer->simpleAuthentication($password, $otp);
+            }
+            catch (
+                Exceptions\Internal\AuthenticationFailureException |
+                Exceptions\Internal\TwoFactorAuthenticationRequiredException $e
+            )
+            {
+                throw new AuthenticationFailureException("There was an unexpected error while trying to authenticate the user", $e);
+            }
+
+            try
+            {
+                $this->socialvoidLib->getUserManager()->updateUser($authenticating_peer);
+            }
+            catch(Exception $e)
+            {
+                throw new InternalServerException("There was an error while trying to process your request", $e);
+            }
+
+            $this->active_session->Authenticated = true;
+            $this->active_session->UserID = $authenticating_peer->ID;
+            $this->active_session->AuthenticationMethodUsed = $authenticating_peer->AuthenticationMethod;
+
+            try
+            {
+                $this->socialvoidLib->getSessionManager()->updateSession($this->active_session);
+            }
+            catch (Exceptions\GenericInternal\DatabaseException $e)
+            {
+                throw new InternalServerException("There was an error while trying to process your request", $e);
+            }
 
             Converter::addFlag($this->flags, NetworkFlags::Authenticated);
 
-            if(Converter::hasFlag($active_session->Flags, UserFlags::Administrator))
-            {
-                Converter::addFlag($this->flags, NetworkFlags::AdministratorAccess);
-            }
-            elseif(Converter::hasFlag($active_session->Flags, UserFlags::Moderator))
-            {
-                Converter::addFlag($this->flags, NetworkFlags::ModeratorAccess);
-            }
-        }
-
-        /**
-         * Destroys the current session
-         *
-         * @throws Exceptions\GenericInternal\DatabaseException
-         * @throws NotAuthenticatedException
-         */
-        public function logout(): void
-        {
-            if($this->isAuthenticated() == false)
-            {
-                throw new NotAuthenticatedException("You cannot logout when there are no active sessions");
-            }
-
-            $this->active_session->Authenticated = false;
-            $this->socialvoidLib->getSessionManager()->updateSession($this->active_session);
-            $this->active_session = null;
-            $this->authenticated_user = null;
-
-            // Remove authentication flags
-            Converter::removeFlag($this->flags, NetworkFlags::Authenticated);
-            Converter::removeFlag($this->flags, NetworkFlags::AdministratorAccess);
-            Converter::removeFlag($this->flags, NetworkFlags::ModeratorAccess);
+            return true;
         }
 
         /**
@@ -209,6 +192,9 @@
          */
         public function isAuthenticated(): bool
         {
+            if($this->active_session == null)
+                return false;
+
             return Converter::hasFlag($this->flags, NetworkFlags::Authenticated);
         }
 

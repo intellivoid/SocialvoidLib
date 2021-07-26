@@ -11,6 +11,8 @@
     /** @noinspection PhpMissingFieldTypeInspection */
     /** @noinspection PhpUnused */
 
+    // TODO: Check if the data in the object is valid or not
+
     namespace SocialvoidLib\InputTypes;
 
     /**
@@ -20,36 +22,54 @@
     class SessionClient
     {
         /**
+         * The client name
+         *
          * @var string|null
          */
         public $Name;
 
         /**
+         * The version of the client
+         *
          * @var string|null
          */
         public $Version;
 
         /**
-         * SessionClient constructor.
-         * @param string|null $name
-         * @param string|null $version
+         * The platform that the client is running on
+         *
+         * @var string|null
          */
-        public function __construct(string $name=null, string $version=null)
-        {
-            $this->Name = $name;
-            $this->Version = $version;
-        }
+        public $Platform;
+
+        /**
+         * The public hash of the client
+         *
+         * @var string
+         */
+        public $PublicHash;
+
+        /**
+         * The private hash of the client
+         *
+         * @var string
+         */
+        public $PrivateHash;
 
         /**
          * Returns an array representation of the object
          *
          * @return array
+         * @noinspection PhpArrayShapeAttributeCanBeAddedInspection
          */
         public function toArray(): array
         {
             return [
-                "client_name" => $this->Name,
-                "client_version" => $this->Version
+                "name" => $this->Name,
+                "version" => $this->Version,
+                "platform" => $this->Platform,
+                "public_hash" => $this->PublicHash,
+                "private_hash" => $this->PrivateHash
             ];
         }
 
@@ -58,16 +78,26 @@
          *
          * @param array $data
          * @return SessionClient
+         * @noinspection PhpPureAttributeCanBeAddedInspection
          */
         public static function fromArray(array $data): SessionClient
         {
             $SessionClientObject = new SessionClient();
 
-            if(isset($data["client_name"]))
-                $SessionClientObject->Name = $data["client_name"];
+            if(isset($data["name"]))
+                $SessionClientObject->Name = $data["name"];
 
-            if(isset($data["client_version"]))
-                $SessionClientObject->Version = $data["client_version"];
+            if(isset($data["version"]))
+                $SessionClientObject->Version = $data["version"];
+
+            if(isset($data["platform"]))
+                $SessionClientObject->Platform = $data["platform"];
+
+            if(isset($data["public_hash"]))
+                $SessionClientObject->PublicHash = $data["public_hash"];
+
+            if(isset($data["private_hash"]))
+                $SessionClientObject->PrivateHash = $data["private_hash"];
 
             return $SessionClientObject;
         }

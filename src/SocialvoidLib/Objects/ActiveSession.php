@@ -15,8 +15,8 @@
 
     use SocialvoidLib\Abstracts\Flags\ActiveSessionFlag;
     use SocialvoidLib\Abstracts\UserAuthenticationMethod;
-    use SocialvoidLib\Objects\ActiveSession\SessionCache;
     use SocialvoidLib\Objects\ActiveSession\SessionData;
+    use SocialvoidLib\Objects\ActiveSession\SessionSecurity;
 
     /**
      * Class ActiveSession
@@ -25,18 +25,11 @@
     class ActiveSession
     {
         /**
-         * The Unique Internal Database ID for this record
-         *
-         * @var int
-         */
-        public $ID;
-
-        /**
-         * The Unique Public ID for the current session
+         * The Unique ID for this record
          *
          * @var string
          */
-        public $PublicID;
+        public $ID;
 
         /**
          * The current flags set to this session
@@ -67,25 +60,11 @@
         public $AuthenticationMethodUsed;
 
         /**
-         * The device used by the client
-         *
-         * @var string|null
-         */
-        public $DeviceModel;
-
-        /**
          * The platform used by the client
          *
          * @var string|null
          */
         public $Platform;
-
-        /**
-         * The version of the system used
-         *
-         * @var string|null
-         */
-        public $SystemVersion;
 
         /**
          * The name of the client used
@@ -109,13 +88,6 @@
         public $IpAddress;
 
         /**
-         * The session cache data used by the server for optimized response times
-         *
-         * @var SessionCache
-         */
-        public $SessionCache;
-
-        /**
          * @return int
          */
         public function getID(): int
@@ -129,22 +101,6 @@
         public function setID(int $ID): void
         {
             $this->ID = $ID;
-        }
-
-        /**
-         * @return string
-         */
-        public function getPublicID(): string
-        {
-            return $this->PublicID;
-        }
-
-        /**
-         * @param string $PublicID
-         */
-        public function setPublicID(string $PublicID): void
-        {
-            $this->PublicID = $PublicID;
         }
 
         /**
@@ -214,22 +170,6 @@
         /**
          * @return string|null
          */
-        public function getDeviceModel(): ?string
-        {
-            return $this->DeviceModel;
-        }
-
-        /**
-         * @param string|null $DeviceModel
-         */
-        public function setDeviceModel(?string $DeviceModel): void
-        {
-            $this->DeviceModel = $DeviceModel;
-        }
-
-        /**
-         * @return string|null
-         */
         public function getPlatform(): ?string
         {
             return $this->Platform;
@@ -241,22 +181,6 @@
         public function setPlatform(?string $Platform): void
         {
             $this->Platform = $Platform;
-        }
-
-        /**
-         * @return string|null
-         */
-        public function getSystemVersion(): ?string
-        {
-            return $this->SystemVersion;
-        }
-
-        /**
-         * @param string|null $SystemVersion
-         */
-        public function setSystemVersion(?string $SystemVersion): void
-        {
-            $this->SystemVersion = $SystemVersion;
         }
 
         /**
@@ -308,27 +232,11 @@
         }
 
         /**
-         * @return SessionCache
-         */
-        public function getSessionCache(): SessionCache
-        {
-            return $this->SessionCache;
-        }
-
-        /**
-         * @param SessionCache $SessionCache
-         */
-        public function setSessionCache(SessionCache $SessionCache): void
-        {
-            $this->SessionCache = $SessionCache;
-        }
-
-        /**
          * @return SessionData
          */
         public function getSessionData(): SessionData
         {
-            return $this->SessionData;
+            return $this->Data;
         }
 
         /**
@@ -336,7 +244,7 @@
          */
         public function setSessionData(SessionData $SessionData): void
         {
-            $this->SessionData = $SessionData;
+            $this->Data = $SessionData;
         }
 
         /**
@@ -371,12 +279,52 @@
             $this->CreatedTimestamp = $CreatedTimestamp;
         }
 
+
+        /**
+         * @return SessionSecurity
+         */
+        public function getSecurity(): SessionSecurity
+        {
+            return $this->Security;
+        }
+
+        /**
+         * @param SessionSecurity $Security
+         */
+        public function setSecurity(SessionSecurity $Security): void
+        {
+            $this->Security = $Security;
+        }
+
+        /**
+         * @return int
+         */
+        public function getExpiresTimestamp(): int
+        {
+            return $this->ExpiresTimestamp;
+        }
+
+        /**
+         * @param int $ExpiresTimestamp
+         */
+        public function setExpiresTimestamp(int $ExpiresTimestamp): void
+        {
+            $this->ExpiresTimestamp = $ExpiresTimestamp;
+        }
+
         /**
          * The data associated with this session
          *
          * @var SessionData
          */
-        public $SessionData;
+        public $Data;
+
+        /**
+         * The security data associated with this session
+         *
+         * @var SessionSecurity
+         */
+        public $Security;
 
         /**
          * The Unix Timestamp for when this session was last active
@@ -393,38 +341,45 @@
         public $CreatedTimestamp;
 
         /**
+         * The Unix Timestamp for when this session expires
+         *
+         * @var int
+         */
+        public $ExpiresTimestamp;
+
+        /**
          * ActiveSession constructor.
+         * @noinspection PhpPureAttributeCanBeAddedInspection
          */
         public function __construct()
         {
-            $this->SessionCache = new SessionCache();
-            $this->SessionData = new SessionData();
+            $this->Data = new SessionData();
+            $this->Security = new SessionSecurity();
         }
 
         /**
          * Returns an array representation of the object
          *
          * @return array
+         * @noinspection PhpPureAttributeCanBeAddedInspection
          */
         public function toArray(): array
         {
             return [
                 "id" => $this->ID,
-                "public_id" => $this->PublicID,
                 "flags" => $this->Flags,
                 "authenticated" => $this->Authenticated,
                 "user_id" => $this->UserID,
                 "authentication_method_used" => $this->AuthenticationMethodUsed,
-                "device_model" => $this->DeviceModel,
                 "platform" => $this->Platform,
-                "system_version" => $this->SystemVersion,
                 "client_name" => $this->ClientName,
                 "client_version" => $this->ClientVersion,
                 "ip_address" => $this->IpAddress,
-                "session_cache" => $this->SessionCache->toArray(),
-                "session_data" => $this->SessionData->toArray(),
+                "data" => $this->Data->toArray(),
+                "security" => $this->Security->toArray(),
                 "last_active_timestamp" => $this->LastActiveTimestamp,
-                "created_timestamp" => $this->CreatedTimestamp
+                "created_timestamp" => $this->CreatedTimestamp,
+                "expires_timestamp" => $this->ExpiresTimestamp
             ];
         }
 
@@ -441,11 +396,8 @@
             if(isset($data["id"]))
             {
                 if($data["id"] !== null)
-                    $ActiveSessionObject->ID = (int)$data["id"];
+                    $ActiveSessionObject->ID = $data["id"];
             }
-
-            if(isset($data["public_id"]))
-                $ActiveSessionObject->PublicID = $data["public_id"];
 
             if(isset($data["flags"]))
                 $ActiveSessionObject->Flags = $data["flags"];
@@ -465,14 +417,8 @@
             if(isset($data["authentication_method_used"]))
                 $ActiveSessionObject->AuthenticationMethodUsed = $data["authentication_method_used"];
 
-            if(isset($data["device_model"]))
-                $ActiveSessionObject->DeviceModel = $data["device_model"];
-
             if(isset($data["platform"]))
                 $ActiveSessionObject->Platform = $data["platform"];
-
-            if(isset($data["system_version"]))
-                $ActiveSessionObject->SystemVersion = $data["system_version"];
 
             if(isset($data["client_name"]))
                 $ActiveSessionObject->ClientName = $data["client_name"];
@@ -483,11 +429,11 @@
             if(isset($data["ip_address"]))
                 $ActiveSessionObject->IpAddress = $data["ip_address"];
 
-            if(isset($data["session_cache"]))
-                $ActiveSessionObject->SessionCache = SessionCache::fromArray($data["session_cache"]);
+            if(isset($data["data"]))
+                $ActiveSessionObject->Data = SessionData::fromArray($data["data"]);
 
-            if(isset($data["session_data"]))
-                $ActiveSessionObject->SessionData = SessionData::fromArray($data["session_data"]);
+            if(isset($data["security"]))
+                $ActiveSessionObject->Security = SessionSecurity::fromArray($data["security"]);
 
             if(isset($data["last_active_timestamp"]))
             {
@@ -495,7 +441,7 @@
                 {
                     $ActiveSessionObject->LastActiveTimestamp = (int)$data["last_active_timestamp"];
 
-                    if(((int)time() - $ActiveSessionObject->LastActiveTimestamp) >= 1209600) // Two weeks
+                    if((time() - $ActiveSessionObject->LastActiveTimestamp) >= 1209600) // Two weeks
                     {
                         $ActiveSessionObject->Authenticated = false;
                     }
@@ -506,6 +452,12 @@
             {
                 if($data["created_timestamp"] !== null)
                     $ActiveSessionObject->CreatedTimestamp = (int)$data["created_timestamp"];
+            }
+
+            if(isset($data["expires_timestamp"]))
+            {
+                if($data["expires_timestamp"] !== null)
+                    $ActiveSessionObject->ExpiresTimestamp = (int)$data["expires_timestamp"];
             }
 
             return $ActiveSessionObject;

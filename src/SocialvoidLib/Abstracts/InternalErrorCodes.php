@@ -27,6 +27,7 @@
     use SocialvoidLib\Exceptions\Internal\ReplyRecordNotFoundException;
     use SocialvoidLib\Exceptions\Internal\RepostRecordNotFoundException;
     use SocialvoidLib\Exceptions\Internal\TimeBasedPrivateSignatureAlreadyExistsException;
+    use SocialvoidLib\Exceptions\Internal\TwoFactorAuthenticationRequiredException;
     use SocialvoidLib\Exceptions\Internal\UserTimelineNotFoundException;
 
     /**
@@ -126,4 +127,9 @@
          * @see EntityWithoutAccessException
          */
         const EntityWithoutAccessException = 0x2017;
+
+        /**
+         * @see TwoFactorAuthenticationRequiredException
+         */
+        const TwoFactorAuthenticationRequiredException = 0x2018;
     }

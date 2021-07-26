@@ -13,19 +13,21 @@
 
     namespace SocialvoidLib\Managers;
 
+    use Exception;
     use msqg\QueryBuilder;
     use SocialvoidLib\Abstracts\SearchMethods\ActiveSessionSearchMethod;
+    use SocialvoidLib\Abstracts\UserAuthenticationMethod;
     use SocialvoidLib\Classes\Standard\BaseIdentification;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
+    use SocialvoidLib\Exceptions\GenericInternal\DeprecatedComponentException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
+    use SocialvoidLib\Exceptions\GenericInternal\SecurityException;
     use SocialvoidLib\Exceptions\Standard\Authentication\SessionNotFoundException;
     use SocialvoidLib\InputTypes\SessionClient;
-    use SocialvoidLib\InputTypes\SessionDevice;
     use SocialvoidLib\Objects\ActiveSession;
-    use SocialvoidLib\Objects\ActiveSession\SessionCache;
     use SocialvoidLib\Objects\ActiveSession\SessionData;
-    use SocialvoidLib\Objects\User;
     use SocialvoidLib\SocialvoidLib;
+    use tsa\Classes\Crypto;
     use ZiProto\ZiProto;
 
     /**
@@ -52,38 +54,47 @@
          * Creates a new session clients
          *
          * @param SessionClient $sessionClient
-         * @param SessionDevice $sessionDevice
-         * @param User $user
-         * @param string $authentication_method_used
          * @param string $ip_address
          * @return string
          * @throws DatabaseException
+         * @throws SecurityException
          */
-        public function createSession(
-            SessionClient $sessionClient, SessionDevice $sessionDevice,
-            User $user, string $authentication_method_used, string $ip_address): string
+        public function createSession(SessionClient $sessionClient, string $ip_address): string
         {
-            $SessionCache = new SessionCache();
             $SessionData = new SessionData();
-            $Timestamp = (int)time();
-            $PublicID = BaseIdentification::sessionId($user->ID, $sessionClient, $sessionDevice);
+            $SessionSecurity = new ActiveSession\SessionSecurity();
+            $SessionSecurity->ClientPublicHash = $sessionClient->PublicHash;
+            $SessionSecurity->ClientPrivateHash = $sessionClient->PrivateHash;
 
+            try
+            {
+                $SessionSecurity->HashChallenge = Crypto::BuildSecretSignature(64);
+            }
+            catch(Exception $e)
+            {
+                throw new SecurityException("There was an exception while trying to build the secret signature", 0, $e);
+            }
+
+            $Timestamp = time();
+            $ExpiresTimestamp = $Timestamp + 86400;
+            $PublicID = BaseIdentification::sessionId($sessionClient, $SessionSecurity);
+
+            /** @noinspection PhpBooleanCanBeSimplifiedInspection */
             $Query = QueryBuilder::insert_into("sessions", [
-                "public_id" => $this->socialvoidLib->getDatabase()->real_escape_string($PublicID),
+                "id" => $this->socialvoidLib->getDatabase()->real_escape_string($PublicID),
                 "flags" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
-                "authenticated" => $this->socialvoidLib->getDatabase()->real_escape_string((int)true),
-                "user_id" => (int)$user->ID,
-                "authentication_method_used" => $authentication_method_used,
-                "device_model" => $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($sessionDevice->DeviceModel)),
-                "platform" => $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($sessionDevice->Platform)),
-                "system_version" => $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($sessionDevice->SystemVersion)),
+                "authenticated" => $this->socialvoidLib->getDatabase()->real_escape_string((int)false),
+                "user_id" => null,
+                "authentication_method_used" => UserAuthenticationMethod::None,
+                "platform" => $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($sessionClient->Platform)),
                 "client_name" => $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($sessionClient->Name)),
                 "client_version" => $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($sessionClient->Version)),
                 "ip_address" => $this->socialvoidLib->getDatabase()->real_escape_string($ip_address),
-                "session_cache" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($SessionCache->toArray())),
-                "session_data" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($SessionData->toArray())),
+                "data" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($SessionData->toArray())),
+                "security" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($SessionSecurity->toArray())),
                 "last_active_timestamp" => $Timestamp,
-                "created_timestamp" => $Timestamp
+                "created_timestamp" => $Timestamp,
+                "expires_timestamp" => $ExpiresTimestamp
             ]);
 
             $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
@@ -108,6 +119,7 @@
          * @throws DatabaseException
          * @throws InvalidSearchMethodException
          * @throws SessionNotFoundException
+         * @noinspection PhpDocMissingThrowsInspection
          */
         public function getSession(string $search_method, string $value): ActiveSession
         {
@@ -115,13 +127,13 @@
             {
                 case ActiveSessionSearchMethod::ById:
                     $search_method = $this->socialvoidLib->getDatabase()->real_escape_string($search_method);
-                    $value = (int)$value;
-                    break;
-
-                case ActiveSessionSearchMethod::ByPublicId:
-                    $search_method = $this->socialvoidLib->getDatabase()->real_escape_string($search_method);
                     $value = $this->socialvoidLib->getDatabase()->real_escape_string($value);
                     break;
+
+
+                case ActiveSessionSearchMethod::ByPublicId:
+                    /** @noinspection PhpUnhandledExceptionInspection */
+                    throw new DeprecatedComponentException("The search method  'ByPublicId' is deprecated, use 'ById' instead.");
 
                 default:
                     throw new InvalidSearchMethodException("The given search method is not applicable to getSession()", $search_method, $value);
@@ -129,21 +141,19 @@
 
             $Query = QueryBuilder::select("sessions", [
                 "id",
-                "public_id",
                 "flags",
                 "authenticated",
                 "user_id",
                 "authentication_method_used",
-                "device_model",
                 "platform",
-                "system_version",
                 "client_name",
                 "client_version",
                 "ip_address",
-                "session_cache",
-                "session_data",
+                "data",
+                "security",
                 "last_active_timestamp",
-                "created_timestamp"
+                "created_timestamp",
+                "expires_timestamp"
             ], $search_method, $value, null, null, 1);
             $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
 
@@ -158,8 +168,8 @@
                 else
                 {
                     $Row["flags"] = ZiProto::decode($Row["flags"]);
-                    $Row["session_cache"] = ZiProto::decode($Row["session_cache"]);
-                    $Row["session_data"] = ZiProto::decode($Row["session_data"]);
+                    $Row["data"] = ZiProto::decode($Row["data"]);
+                    $Row["security"] = ZiProto::decode($Row["security"]);
 
                     return(ActiveSession::fromArray($Row));
                 }
@@ -182,15 +192,14 @@
          */
         public function updateSession(ActiveSession $activeSession): ActiveSession
         {
-            $activeSession->LastActiveTimestamp = (int)time();
+            $activeSession->LastActiveTimestamp = time();
             $Query = QueryBuilder::update("sessions", [
                 "flags" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($activeSession->Flags)),
                 "authenticated" => (int)$activeSession->Authenticated,
                 "ip_address" => $this->socialvoidLib->getDatabase()->real_escape_string($activeSession->IpAddress),
-                "session_cache" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($activeSession->SessionCache->toArray())),
-                "session_data" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($activeSession->SessionData->toArray())),
-                "last_active_timestamp" => (int)$activeSession->LastActiveTimestamp
-            ], "id", (int)$activeSession->ID);
+                "data" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($activeSession->Data->toArray())),
+                "last_active_timestamp" => $activeSession->LastActiveTimestamp
+            ], "id", $activeSession->ID);
             $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
 
             if($QueryResults)

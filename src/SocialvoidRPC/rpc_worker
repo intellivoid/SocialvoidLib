@@ -1,0 +1,87 @@
+<?php
+    /*
+     * Copyright (c) 2017-2021. Intellivoid Technologies
+     *
+     * All rights reserved, SocialvoidLib was written by Zi Xing Narrakas <netkas@intellivoid.net> licensed by
+     * Intellivoid Technologies, no part of this source code is open source. SocialvoidLib is a closed-source
+     * solution for the Socialvoid Community Standard, if you wish to redistribute this source code you
+     * must have a written permission from Intellivoid Technologies to do so.
+     */
+
+    /** @noinspection PhpUndefinedClassInspection */
+    /** @noinspection DuplicatedCode */
+
+    use ppm\ppm;
+    use SocialvoidLib\SocialvoidLib;
+    use SocialvoidRPC\SocialvoidRPC;
+    use VerboseAdventure\Abstracts\EventType;
+    use VerboseAdventure\Classes\ErrorHandler;
+    use VerboseAdventure\VerboseAdventure;
+
+    // Self-import the required dependencies and components
+    /** @noinspection PhpIncludeInspection */
+    require("ppm");
+
+    /** @noinspection PhpUnhandledExceptionInspection */
+    ppm::import("net.intellivoid.socialvoid_rpc");
+
+    // Determine the current working directory
+    $current_directory = getcwd();
+
+    if(file_exists($current_directory . DIRECTORY_SEPARATOR . 'SocialvoidRPC.php'))
+    {
+        require_once($current_directory . DIRECTORY_SEPARATOR . 'SocialvoidRPC.php');
+    }
+    elseif(file_exists(__DIR__ . DIRECTORY_SEPARATOR . 'SocialvoidRPC.php'))
+    {
+        require_once(__DIR__ . DIRECTORY_SEPARATOR . 'SocialvoidRPC.php');
+    }
+    else
+    {
+        throw new RuntimeException("Cannot locate service class");
+    }
+
+    // Configure VerboseAdventure
+    SocialvoidRPC::setLogHandler(new VerboseAdventure("Socialvoid RPC"));
+    SocialvoidRPC::getLogHandler()::setStdout(true); // Enable stdout
+    SocialvoidRPC::getLogHandler()::setSimpleStdout(true); // Enable enable output
+    ErrorHandler::registerHandlers(); // Register error handlers
+
+    // Prepare the instance
+    SocialvoidRPC::setLastWorkerActivity((int)time());
+    SocialvoidRPC::setIsSleeping(false);
+    
+    // Start the worker instance
+    SocialvoidRPC::$SocialvoidLib = new SocialvoidLib();
+    
+    // Initialize the RPC worker
+    SocialvoidRPC::$RpcServer = new \KimchiRPC\KimchiRPC("Socialvoid RPC");
+    SocialvoidRPC::$RpcServer->setServerMode(\KimchiRPC\Abstracts\ServerMode::Worker);
+    SocialvoidRPC::$RpcServer->getBackgroundWorker()->getWorker()->addServer(
+        SocialvoidRPC::$SocialvoidLib->getRpcServerConfiguration()["GearmanHost"],
+        (int)SocialvoidRPC::$SocialvoidLib->getRpcServerConfiguration()["GearmanPort"],
+    );
+    /** @noinspection PhpUnhandledExceptionInspection */
+    SocialvoidRPC::registerMethods();
+
+    // Test the database connection
+    SocialvoidRPC::$SocialvoidLib->connectDatabase();
+    if(SocialvoidRPC::$SocialvoidLib->getDatabase()->connect_error)
+    {
+        SocialvoidRPC::getLogHandler()->log(EventType::ERROR, "Failed to initialize SocialvoidLib, " . SocialvoidRPC::$SocialvoidLib->getDatabase()->connect_error, "RPC Worker");
+        exit(255);
+    }
+
+    // Done!
+    SocialvoidRPC::getLogHandler()->log(EventType::INFO, "Successfully started.", "RPC Worker");
+
+    while(true)
+    {
+        // Finally, start working
+        SocialvoidRPC::$RpcServer->work(false);
+
+        if(SocialvoidRPC::$RpcServer->getBackgroundWorker()->getWorker()->getGearmanWorker()->returnCode() == GEARMAN_TIMEOUT)
+            SocialvoidRPC::processSleepCycle();
+    }
+
+

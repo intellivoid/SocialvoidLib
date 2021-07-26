@@ -18,5 +18,9 @@
     {
         const ById = "id";
 
+        /**
+         * @deprecated
+         * @see ActiveSessionSearchMethod::ById
+         */
         const ByPublicId = "public_id";
     }

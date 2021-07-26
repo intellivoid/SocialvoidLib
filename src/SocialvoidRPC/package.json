@@ -9,6 +9,12 @@
         "url": "https://github.com/intellivoid/socialvoidlib",
         "dependencies": [
             {
+                "package": "net.intellivoid.socialvoidlib",
+                "version": "latest",
+                "source": "default@github/intellivoid/SocialvoidLib",
+                "required": true
+            },
+            {
                 "package": "net.intellivoid.kimchi_rpc",
                 "version": "latest",
                 "source": "default@github/intellivoid/KimchiRPC",
@@ -18,7 +24,7 @@
         "configuration": {
             "autoload_method": "generated_spl",
             "main": {
-                "execution_point": "cli.php",
+                "execution_point": "main",
                 "create_symlink": false,
                 "name": null
             },
@@ -26,8 +32,19 @@
             "pre_installation": []
         }
     },
-    "components": [],
+    "components": [
+        {
+            "required": true,
+            "file": "Methods/Session/CreateSession.php"
+        },
+        {
+            "required": true,
+            "file": "SocialvoidRPC.php"
+        }
+    ],
     "files": [
-        "package.json"
+        "rpc_worker",
+        "package.json",
+        "main"
     ]
 }

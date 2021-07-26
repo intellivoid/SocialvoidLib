@@ -185,6 +185,11 @@
         private $TelegramCdnManager;
 
         /**
+         * @var mixed
+         */
+        private $RpcServerConfiguration;
+
+        /**
          * SocialvoidLib constructor.
          * @throws ConfigurationError
          * @throws DependencyError
@@ -208,6 +213,16 @@
             $NetworkSchema->setDefinition("Domain", "socialvoid.cc");
             $NetworkSchema->setDefinition("Name", "Socialvoid");
             $this->acm->defineSchema("Network", $NetworkSchema);
+
+            // RPC Schema Configuration
+            $RpcSchema = new Schema();
+            $RpcSchema->setDefinition("EnableBackgroundWorker", True);
+            $RpcSchema->setDefinition("Workers", 100);
+            $RpcSchema->setDefinition("GearmanHost", "127.0.0.1");
+            $RpcSchema->setDefinition("GearmanPort", 4730);
+            $RpcSchema->setDefinition("ServerName", "Socialvoid RPC");
+            $RpcSchema->setDefinition("MaxRequests", 20);
+            $this->acm->defineSchema("RpcServer", $RpcSchema);
 
             // Service Engine Schema Configuration
             $ServiceEngineSchema = new Schema();
@@ -266,6 +281,7 @@
                 $this->EngineConfiguration = $this->acm->getConfiguration("Engine");
                 $this->RedisBasicCacheConfiguration = $this->acm->getConfiguration("RedisBasicCache");
                 $this->TelegramCdnConfiguration = $this->acm->getConfiguration("TelegramCDN");
+                $this->RpcServerConfiguration = $this->acm->getConfiguration("RpcServer");
             }
             catch(Exception $e)
             {
@@ -676,5 +692,13 @@
         public function getTelegramCdnConfiguration()
         {
             return $this->TelegramCdnConfiguration;
+        }
+
+        /**
+         * @return mixed
+         */
+        public function getRpcServerConfiguration(): mixed
+        {
+            return $this->RpcServerConfiguration;
         }
     }

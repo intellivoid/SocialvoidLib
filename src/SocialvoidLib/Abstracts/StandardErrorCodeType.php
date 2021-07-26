@@ -47,9 +47,17 @@
 
         /**
          * 31-Set error codes (Network)
-         * 12544 - *
+         * 12544 - 16384
          *
          * AN error was made in relation to the network's response to the client's requests
          */
         const NetworkError = "NETWORK_ERROR";
+
+        /**
+         * 40-Set error codes (server)
+         * 16384 - *
+         *
+         * All error codes made in relation to the network's server
+         */
+        const ServerError = "SERVER_ERROR";
     }

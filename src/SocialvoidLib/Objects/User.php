@@ -20,7 +20,14 @@
     use SocialvoidLib\Abstracts\UserAuthenticationMethod;
     use SocialvoidLib\Classes\Validate;
     use SocialvoidLib\Exceptions\Internal\AuthenticationFailureException;
+    use SocialvoidLib\Exceptions\Internal\NoRecoveryCodesAvailableException;
+    use SocialvoidLib\Exceptions\Internal\TwoFactorAuthenticationRequiredException;
     use SocialvoidLib\Exceptions\Standard\Authentication\AuthenticationNotApplicableException;
+    use SocialvoidLib\Exceptions\Standard\Authentication\IncorrectPasswordException;
+    use SocialvoidLib\Exceptions\Standard\Authentication\IncorrectTwoFactorAuthenticationCodeException;
+    use SocialvoidLib\Exceptions\Standard\Authentication\NoPasswordAuthenticationAvailableException;
+    use SocialvoidLib\Exceptions\Standard\Authentication\NoTwoFactorAuthenticationAvailableException;
+    use SocialvoidLib\Exceptions\Standard\Authentication\PrivateAccessTokenRequiredException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidUsernameException;
     use SocialvoidLib\Objects\User\CoaUserEntity;
     use SocialvoidLib\Objects\User\Profile;
@@ -202,39 +209,53 @@
          * @param bool $update
          * @return bool
          * @throws AuthenticationFailureException
+         * @throws AuthenticationNotApplicableException
+         * @throws IncorrectPasswordException
+         * @throws IncorrectTwoFactorAuthenticationCodeException
+         * @throws NoPasswordAuthenticationAvailableException
+         * @throws PrivateAccessTokenRequiredException
+         * @throws TwoFactorAuthenticationRequiredException
          */
         public function simpleAuthentication(string $password, string $otp=null, bool $ignore_otp=false, bool $update=true): bool
         {
-            try
+            switch($this->AuthenticationMethod)
             {
-                switch($this->AuthenticationMethod)
-                {
-                    case UserAuthenticationMethod::Simple:
-                        $this->AuthenticationProperties->passwordAuthentication($password);
-                        break;
+                case UserAuthenticationMethod::Simple:
+                    $this->AuthenticationProperties->passwordAuthentication($password);
+                    break;
 
-                    case UserAuthenticationMethod::SimpleSecured:
-                        if($otp == null && $ignore_otp == false)
-                            throw new AuthenticationFailureException("Two factor authentication is required");
+                case UserAuthenticationMethod::SimpleSecured:
+                    if($otp == null && $ignore_otp == false)
+                        throw new TwoFactorAuthenticationRequiredException("Two factor authentication is required");
 
-                        $this->AuthenticationProperties->passwordAuthentication($password);
+                    $this->AuthenticationProperties->passwordAuthentication($password);
 
-                        if($otp !== null)
+                    if($otp !== null)
+                        try
+                        {
                             $this->AuthenticationProperties->twoFactorAuthentication($otp, $update);
+                        }
+                        catch (IncorrectTwoFactorAuthenticationCodeException | NoRecoveryCodesAvailableException $e)
+                        {
+                            throw new IncorrectTwoFactorAuthenticationCodeException("The provided two factor authentication is incorrect", $e);
+                        }
+                        catch(Exception $e)
+                        {
+                            throw new AuthenticationFailureException("There was an unexpected error while trying to process the authentication", $e);
+                        }
 
-                        break;
+                    break;
 
-                    case UserAuthenticationMethod::None:
-                        throw new AuthenticationNotApplicableException("The user has no authentication method available");
+                case UserAuthenticationMethod::None:
+                    throw new AuthenticationNotApplicableException("The user has no traditional authentication method available");
 
-                    case UserAuthenticationMethod::CrossOverAuthentication:
-                        throw new AuthenticationNotApplicableException("The user uses COA to authenticate");
 
-                }
-            }
-            catch(Exception $e)
-            {
-                throw new AuthenticationFailureException("The provided credentials are invalid or incorrect", $e);
+                case UserAuthenticationMethod::PrivateAccessToken:
+                    throw new PrivateAccessTokenRequiredException("The user uses a private access token to authenticate");
+
+                case UserAuthenticationMethod::CrossOverAuthentication:
+                    throw new AuthenticationNotApplicableException("The user uses COA to authenticate");
+
             }
 
             return true;

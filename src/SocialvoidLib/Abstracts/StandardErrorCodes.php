@@ -11,12 +11,14 @@
 namespace SocialvoidLib\Abstracts;
 
     use SocialvoidLib\Exceptions\Internal\InvalidImageTypeException;
+    use SocialvoidLib\Exceptions\Standard\Authentication\AccountNotRegisteredException;
     use SocialvoidLib\Exceptions\Standard\Authentication\AuthenticationNotApplicableException;
     use SocialvoidLib\Exceptions\Standard\Authentication\IncorrectPasswordException;
     use SocialvoidLib\Exceptions\Standard\Authentication\IncorrectTwoFactorAuthenticationCodeException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NoPasswordAuthenticationAvailableException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NoTwoFactorAuthenticationAvailableException;
+    use SocialvoidLib\Exceptions\Standard\Authentication\PrivateAccessTokenRequiredException;
     use SocialvoidLib\Exceptions\Standard\Media\InvalidImageDimensionsException;
     use SocialvoidLib\Exceptions\Standard\Media\InvalidImageException;
     use SocialvoidLib\Exceptions\Standard\Network\AlreadyRepostedException;
@@ -24,6 +26,7 @@ namespace SocialvoidLib\Abstracts;
     use SocialvoidLib\Exceptions\Standard\Network\PostDeletedException;
     use SocialvoidLib\Exceptions\Standard\Network\PostNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidBiographyException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidFirstNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidLastNameException;
@@ -148,6 +151,27 @@ namespace SocialvoidLib\Abstracts;
          */
         const NotAuthenticatedException = 0x02207;
 
+        /**
+         * This user uses a private access token to authenticate rather than a traditional method
+         *
+         * @see PrivateAccessTokenRequiredException
+         */
+        const PrivateAccessTokenRequiredException = 0x02208;
+
+        /**
+         * If an internal server error occurs while trying to process the authentication
+         *
+         * @see AuthenticationFailureException
+         */
+        const AuthenticationFailureException = 0x02209;
+
+        /**
+         * Raised when the requested peer is not registered in the network
+         *
+         * @see AccountNotRegisteredException
+         */
+        const AccountNotRegisteredException = 0x02210;
+
 
         /** 23-Set error codes (Media) */
 
@@ -202,4 +226,13 @@ namespace SocialvoidLib\Abstracts;
          * @see FileUploadException
          */
         const FileUploadException = 0x03104;
+
+        /** 40-Set error codes (Server) */
+
+        /**
+         * Raised when there was an unexpected server-side error.
+         *
+         * @see InternalServerException
+         */
+        const InternalServerError = 0x04000;
     }

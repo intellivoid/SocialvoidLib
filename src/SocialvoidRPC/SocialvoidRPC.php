@@ -4,12 +4,19 @@
 
     namespace SocialvoidRPC;
 
-    use BackgroundWorker\BackgroundWorker;
+    use KimchiRPC\Exceptions\MethodAlreadyRegistered;
+    use KimchiRPC\KimchiRPC;
+    use RuntimeException;
     use SocialvoidLib\SocialvoidLib;
+    use SocialvoidRPC\Methods\Session\CreateSession;
     use SocialvoidService\SocialvoidService;
     use VerboseAdventure\Abstracts\EventType;
     use VerboseAdventure\VerboseAdventure;
 
+    /**
+     * Class SocialvoidRPC
+     * @package SocialvoidRPC
+     */
     class SocialvoidRPC
     {
         /**
@@ -32,22 +39,14 @@
         public static $IsSleeping;
 
         /**
-         * @var BackgroundWorker
-         */
-        public static $BackgroundWorker;
-
-        /**
          * @var VerboseAdventure
          */
         public static $LogHandler;
 
         /**
-         * @return BackgroundWorker
+         * @var KimchiRPC
          */
-        public static function getBackgroundWorker(): BackgroundWorker
-        {
-            return self::$BackgroundWorker;
-        }
+        public static $RpcServer;
 
         /**
          * @return VerboseAdventure
@@ -95,6 +94,19 @@
         public static function setIsSleeping(bool $IsSleeping): void
         {
             self::$IsSleeping = $IsSleeping;
+        }
+
+        /**
+         * Registers the servers methods to the RPC server
+         *
+         * @throws MethodAlreadyRegistered
+         */
+        public static function registerMethods()
+        {
+            if(self::$RpcServer == null)
+                throw new RuntimeException("No RPC Server has been defined");
+
+            self::$RpcServer->registerMethod(new CreateSession());
         }
 
         /**

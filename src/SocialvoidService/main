@@ -61,7 +61,7 @@
         SocialvoidService::$BackgroundWorker->getSupervisor()->setDisplayOutput(
             "SocialvoidQueryService", (bool)SocialvoidService::getSocialvoidLib()->getServiceEngineConfiguration()["DisplayOutput"]);
         SocialvoidService::getBackgroundWorker()->getSupervisor()->startWorkers(
-            $current_directory . DIRECTORY_SEPARATOR . "query_worker.php", "SocialvoidQueryService",
+            $current_directory . DIRECTORY_SEPARATOR . "query_worker", "SocialvoidQueryService",
             (int)SocialvoidService::getSocialvoidLib()->getServiceEngineConfiguration()["QueryWorkers"]
         );
 
@@ -70,7 +70,7 @@
         SocialvoidService::$BackgroundWorker->getSupervisor()->setDisplayOutput(
             "SocialvoidUpdateService", (bool)SocialvoidService::getSocialvoidLib()->getServiceEngineConfiguration()["DisplayOutput"]);
         SocialvoidService::getBackgroundWorker()->getSupervisor()->startWorkers(
-            $current_directory . DIRECTORY_SEPARATOR . "update_worker.php", "SocialvoidUpdateService",
+            $current_directory . DIRECTORY_SEPARATOR . "update_worker", "SocialvoidUpdateService",
             (int)SocialvoidService::getSocialvoidLib()->getServiceEngineConfiguration()["UpdateWorkers"]
         );
     }

@@ -9,6 +9,12 @@
         "url": "https://github.com/intellivoid/socialvoidlib",
         "dependencies": [
             {
+                "package": "net.intellivoid.socialvoidlib",
+                "version": "latest",
+                "source": "default@github/intellivoid/SocialvoidLib",
+                "required": true
+            },
+            {
                 "package": "net.intellivoid.acm",
                 "version": "latest",
                 "source": "default@github/intellivoid/acm",
@@ -36,7 +42,7 @@
         "configuration": {
             "autoload_method": "generated_spl",
             "main": {
-                "execution_point": "cli.php",
+                "execution_point": "main",
                 "create_symlink": false,
                 "name": null
             },
@@ -47,22 +53,13 @@
     "components": [
         {
             "required": true,
-            "file": "query_worker.php"
-        },
-        {
-            "required": true,
             "file": "SocialvoidService.php"
-        },
-        {
-            "required": true,
-            "file": "update_worker.php"
-        },
-        {
-            "required": true,
-            "file": "cli.php"
         }
     ],
     "files": [
-        "package.json"
+        "update_worker",
+        "package.json",
+        "query_worker",
+        "main"
     ]
 }

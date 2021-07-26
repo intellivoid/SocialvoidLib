@@ -14,6 +14,7 @@
     use SocialvoidLib\InputTypes\DocumentInput;
     use SocialvoidLib\InputTypes\SessionClient;
     use SocialvoidLib\InputTypes\SessionDevice;
+    use SocialvoidLib\Objects\ActiveSession\SessionSecurity;
 
     /**
      * Class BaseIdentification
@@ -36,19 +37,17 @@
         /**
          * Constructs a random Session ID based off the given information
          *
-         * @param int $user_id
          * @param SessionClient $session_client
-         * @param SessionDevice $session_device
+         * @param SessionSecurity $session_security
          * @return string
          */
-        public static function sessionId(int $user_id, SessionClient $session_client, SessionDevice $session_device): string
+        public static function sessionId(SessionClient $session_client, SessionSecurity $session_security): string
         {
             $client_hash = hash("sha256", json_encode($session_client->toArray()));
-            $device_hash = hash("sha256", json_encode($session_device->toArray()));
-            $entity_pepper = Hashing::pepper($client_hash . $device_hash);
+            $security_hash = hash("sha256", json_encode($session_security->toArray()));
+            $entity_pepper = Hashing::pepper($client_hash . $security_hash);
 
-            $user_hash = hash("sha256", Hashing::pepper($user_id));
-            return hash("sha512", $client_hash . $device_hash . $user_hash . $entity_pepper);
+            return hash("sha512", $client_hash . $security_hash . $entity_pepper);
         }
 
         /**
