@@ -35,6 +35,14 @@
     "components": [
         {
             "required": true,
+            "file": "Methods/Session/AuthenticateUser.php"
+        },
+        {
+            "required": true,
+            "file": "Methods/Session/Logout.php"
+        },
+        {
+            "required": true,
             "file": "Methods/Session/CreateSession.php"
         },
         {

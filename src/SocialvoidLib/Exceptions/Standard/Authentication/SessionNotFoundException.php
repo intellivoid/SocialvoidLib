@@ -25,7 +25,7 @@ namespace SocialvoidLib\Exceptions\Standard\Authentication;
          * @param string $message
          * @param Throwable|null $previous
          */
-        public function __construct($message = "", Throwable $previous = null)
+        public function __construct($message = "The requested session was not found in the network", Throwable $previous = null)
         {
             parent::__construct($message, StandardErrorCodes::SessionNotFoundException, $previous);
         }

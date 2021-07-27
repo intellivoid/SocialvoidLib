@@ -77,7 +77,7 @@
             }
 
             $Timestamp = time();
-            $ExpiresTimestamp = $Timestamp + 300; // 10 Minutes due to no authentication
+            $ExpiresTimestamp = $Timestamp + 600; // 10 Minutes due to no authentication
             $ID = BaseIdentification::sessionId($sessionClient, $SessionSecurity);
 
             /** @noinspection PhpBooleanCanBeSimplifiedInspection */
@@ -198,9 +198,19 @@
         public function updateSession(ActiveSession $activeSession): ActiveSession
         {
             $activeSession->LastActiveTimestamp = time();
+            $activeSession->ExpiresTimestamp = time() + 600;
+
+            if($activeSession->Authenticated && $activeSession->UserID !== null)
+                $activeSession->ExpiresTimestamp = time() + 259200;
+
             $Query = QueryBuilder::update("sessions", [
                 "flags" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($activeSession->Flags)),
                 "authenticated" => (int)$activeSession->Authenticated,
+                "user_id" => ($activeSession->UserID == null ? null : (int)$activeSession->UserID),
+                "authentication_method_used" => ($activeSession->UserID == null ?
+                    $this->socialvoidLib->getDatabase()->real_escape_string(UserAuthenticationMethod::None) :
+                    $this->socialvoidLib->getDatabase()->real_escape_string($activeSession->AuthenticationMethodUsed)
+                ),
                 "ip_address" => $this->socialvoidLib->getDatabase()->real_escape_string($activeSession->IpAddress),
                 "data" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($activeSession->Data->toArray())),
                 "last_active_timestamp" => $activeSession->LastActiveTimestamp

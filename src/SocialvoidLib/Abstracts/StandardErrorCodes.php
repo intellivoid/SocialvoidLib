@@ -11,14 +11,17 @@
     namespace SocialvoidLib\Abstracts;
 
     use SocialvoidLib\Exceptions\Standard\Authentication\AccountNotRegisteredException;
+    use SocialvoidLib\Exceptions\Standard\Authentication\AlreadyAuthenticatedException;
     use SocialvoidLib\Exceptions\Standard\Authentication\AuthenticationNotApplicableException;
     use SocialvoidLib\Exceptions\Standard\Authentication\BadSessionChallengeAnswerException;
-    use SocialvoidLib\Exceptions\Standard\Authentication\IncorrectPasswordException;
+    use SocialvoidLib\Exceptions\Standard\Authentication\IncorrectLoginCredentialsException;
     use SocialvoidLib\Exceptions\Standard\Authentication\IncorrectTwoFactorAuthenticationCodeException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NoPasswordAuthenticationAvailableException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NoTwoFactorAuthenticationAvailableException;
     use SocialvoidLib\Exceptions\Standard\Authentication\PrivateAccessTokenRequiredException;
+    use SocialvoidLib\Exceptions\Standard\Authentication\SessionExpiredException;
+    use SocialvoidLib\Exceptions\Standard\Authentication\TwoFactorAuthenticationRequiredException;
     use SocialvoidLib\Exceptions\Standard\Media\InvalidImageDimensionsException;
     use SocialvoidLib\Exceptions\Standard\Network\AlreadyRepostedException;
     use SocialvoidLib\Exceptions\Standard\Network\FileUploadException;
@@ -27,7 +30,6 @@
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidBiographyException;
-    use SocialvoidLib\Exceptions\Standard\Validation\InvalidChallengeAnswerException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPrivateHashException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPublicHashException;
@@ -37,6 +39,7 @@
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPeerInputException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPlatformException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPostTextException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidSessionIdentificationException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidUsernameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidVersionException;
     use SocialvoidLib\Exceptions\Standard\Validation\UsernameAlreadyExistsException;
@@ -132,15 +135,22 @@
          */
         const InvalidClientNameException = 0x02112;
 
+        /**
+         * Raised when the given session identification object is invalid
+         *
+         * @see InvalidSessionIdentificationException
+         */
+        const InvalidSessionIdentificationException = 0x02113;
+
 
         /** 22-Set error codes (Authentication) */
 
         /**
-         * Raised when the given password is incorrect
+         * Raised when the given username or password is incorrect
          *
-         * @see IncorrectPasswordException
+         * @see IncorrectLoginCredentialsException
          */
-        const IncorrectPasswordException = 0x02200;
+        const IncorrectLoginCredentialsException = 0x02200;
 
         /**
          * Raised when the user has no password authentication method
@@ -218,6 +228,27 @@
          * @see BadSessionChallengeAnswerException
          */
         const BadSessionChallengeAnswerException = 0x02211;
+
+        /**
+         * Raised when the client fails to provide two-factor authentication when required
+         *
+         * @see TwoFactorAuthenticationRequiredException
+         */
+        const TwoFactorAuthenticationRequiredException = 0x02212;
+
+        /**
+         * Raised when the client is already authenticated to the session
+         *
+         * @see AlreadyAuthenticatedException
+         */
+        const AlreadyAuthenticatedException = 0x02213;
+
+        /**
+         * Raised when the session has expired
+         *
+         * @see SessionExpiredException
+         */
+        const SessionExpiredException = 0x02214;
 
 
         /** 23-Set error codes (Media) */

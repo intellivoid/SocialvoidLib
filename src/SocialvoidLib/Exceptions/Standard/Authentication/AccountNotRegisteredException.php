@@ -25,7 +25,7 @@
          * @param Throwable|null $previous
          * @noinspection PhpPureAttributeCanBeAddedInspection
          */
-        public function __construct($message = "", Throwable $previous = null)
+        public function __construct($message = "The account is not registered in the network", Throwable $previous = null)
         {
             parent::__construct($message, StandardErrorCodes::AccountNotRegisteredException, $previous);
             $this->message = $message;

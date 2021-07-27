@@ -1,4 +1,8 @@
 <?php
+
+    /** @noinspection PhpMissingFieldTypeInspection */
+    /** @noinspection PhpPropertyOnlyWrittenInspection */
+
     /*
      * Copyright (c) 2017-2021. Intellivoid Technologies
      *
@@ -8,7 +12,7 @@
      * must have a written permission from Intellivoid Technologies to do so.
      */
 
-namespace SocialvoidLib\Exceptions\Standard\Validation;
+    namespace SocialvoidLib\Exceptions\Standard\Validation;
 
     use Exception;
     use SocialvoidLib\Abstracts\StandardErrorCodes;
@@ -21,9 +25,9 @@ namespace SocialvoidLib\Exceptions\Standard\Validation;
     class InvalidUsernameException extends Exception
     {
         /**
-         * @var string
+         * @var string|null|mixed
          */
-        private string $username;
+        private $username;
 
         /**
          * @var Throwable|null
@@ -35,6 +39,7 @@ namespace SocialvoidLib\Exceptions\Standard\Validation;
          * @param string $message
          * @param string $username
          * @param Throwable|null $previous
+         * @noinspection PhpPureAttributeCanBeAddedInspection
          */
         public function __construct($message = "", $username="", Throwable $previous = null)
         {

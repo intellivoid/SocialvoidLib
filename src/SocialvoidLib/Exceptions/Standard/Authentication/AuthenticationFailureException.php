@@ -25,7 +25,7 @@
          * @param Throwable|null $previous
          * @noinspection PhpPureAttributeCanBeAddedInspection
          */
-        public function __construct($message = "", Throwable $previous = null)
+        public function __construct($message = "There was an unexpected error while trying to authenticate", Throwable $previous = null)
         {
             parent::__construct($message, StandardErrorCodes::AuthenticationFailureException, $previous);
             $this->message = $message;

@@ -9,10 +9,10 @@
     use Throwable;
 
     /**
-     * Class BadSessionChallengeAnswerException
+     * Class SessionExpiredException
      * @package SocialvoidLib\Exceptions\Standard\Authentication
      */
-    class BadSessionChallengeAnswerException extends Exception
+    class SessionExpiredException extends Exception
     {
         /**
          * @var Throwable|null
@@ -20,14 +20,14 @@
         private ?Throwable $previous;
 
         /**
-         * BadSessionChallengeAnswerException constructor.
+         * SessionExpiredException constructor.
          * @param string $message
          * @param Throwable|null $previous
          * @noinspection PhpPureAttributeCanBeAddedInspection
          */
-        public function __construct($message = "The session challenge answer is incorrect", Throwable $previous = null)
+        public function __construct($message = "", Throwable $previous = null)
         {
-            parent::__construct($message, StandardErrorCodes::BadSessionChallengeAnswerException, $previous);
+            parent::__construct($message, StandardErrorCodes::SessionExpiredException, $previous);
             $this->message = $message;
             $this->previous = $previous;
         }

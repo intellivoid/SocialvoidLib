@@ -48,14 +48,14 @@
         /**
          * The User ID that this session is for
          *
-         * @var int
+         * @var int|null
          */
         public $UserID;
 
         /**
          * The authentication method used to create this session
          *
-         * @var UserAuthenticationMethod
+         * @var UserAuthenticationMethod|string
          */
         public $AuthenticationMethodUsed;
 

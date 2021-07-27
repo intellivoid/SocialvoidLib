@@ -17,10 +17,15 @@
     use SocialvoidLib\Abstracts\Flags\NetworkFlags;
     use SocialvoidLib\Abstracts\SearchMethods\ActiveSessionSearchMethod;
     use SocialvoidLib\Abstracts\SearchMethods\UserSearchMethod;
+    use SocialvoidLib\Abstracts\UserAuthenticationMethod;
     use SocialvoidLib\Classes\Converter;
     use SocialvoidLib\Classes\Validate;
-    use SocialvoidLib\Exceptions\Internal\AlreadyAuthenticatedToNetwork;
+    use SocialvoidLib\Exceptions\Standard\Authentication\AlreadyAuthenticatedException;
     use SocialvoidLib\Exceptions\Standard\Authentication\AuthenticationFailureException;
+    use SocialvoidLib\Exceptions\Standard\Authentication\IncorrectLoginCredentialsException;
+    use SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException;
+    use SocialvoidLib\Exceptions\Standard\Authentication\SessionExpiredException;
+    use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
     use SocialvoidLib\InputTypes\SessionClient;
     use SocialvoidLib\Network\Cloud;
@@ -85,6 +90,7 @@
         /**
          * Network constructor.
          * @param SocialvoidLib $socialvoidLib
+         * @noinspection PhpPureAttributeCanBeAddedInspection
          */
         public function __construct(SocialvoidLib $socialvoidLib)
         {
@@ -125,6 +131,115 @@
         }
 
         /**
+         * Loads a session from a session identification
+         *
+         * @param SessionIdentification $sessionIdentification
+         * @throws Exceptions\GenericInternal\DatabaseException
+         * @throws Exceptions\GenericInternal\InvalidSearchMethodException
+         * @throws Exceptions\Standard\Authentication\BadSessionChallengeAnswerException
+         * @throws Exceptions\Standard\Authentication\SessionNotFoundException
+         * @throws Exceptions\Standard\Validation\InvalidClientPublicHashException
+         * @throws InternalServerException
+         * @throws SessionExpiredException
+         */
+        public function loadSession(SessionIdentification $sessionIdentification)
+        {
+            $sessionIdentification->validate();
+
+            // Reload the session if it's a mismatch (Saves resources)
+            if($this->active_session == null || $this->active_session->ID !== $sessionIdentification->SessionID)
+            {
+                try
+                {
+                    $this->active_session = $this->socialvoidLib->getSessionManager()->getSession(ActiveSessionSearchMethod::ById, $sessionIdentification->SessionID);
+                }
+                catch (Exception $e)
+                {
+                    if(Validate::isStandardError($e->getCode()))
+                        /** @noinspection PhpUnhandledExceptionInspection */
+                        throw $e;
+
+                    throw new InternalServerException("There was an error while trying to access the session", $e);
+                }
+            }
+
+            // Always validate the challenge answer!
+            $sessionIdentification->validateAnswer($this->active_session->Security->ClientPrivateHash, $this->active_session->Security->HashChallenge);
+
+            if(time() > $this->active_session->ExpiresTimestamp)
+                throw new SessionExpiredException("The session has expired");
+
+            // Update the session if it hasn't been updated in more than 3 minutes
+            if((time() - $this->active_session->LastActiveTimestamp) > 300)
+                $this->active_session = $this->socialvoidLib->getSessionManager()->updateSession($this->active_session);
+        }
+
+        /**
+         * Loads the authenticated peer into the network session
+         *
+         * @throws Exceptions\GenericInternal\CacheException
+         * @throws Exceptions\GenericInternal\DatabaseException
+         * @throws Exceptions\GenericInternal\InvalidSearchMethodException
+         * @throws NotAuthenticatedException
+         * @throws PeerNotFoundException
+         */
+        public function loadAuthenticatedPeer()
+        {
+            if($this->active_session == null)
+                throw new NotAuthenticatedException("You must be authenticated to preform this action");
+
+            if($this->authenticated_user !== null & $this->authenticated_user->ID !== $this->active_session->UserID)
+                return;
+
+            if($this->active_session->Authenticated && $this->active_session->UserID !== null)
+            {
+                $this->authenticated_user = $this->socialvoidLib->getUserManager()->getUser(UserSearchMethod::ById, $this->active_session->UserID);
+
+                Converter::addFlag($this->flags, NetworkFlags::Authenticated);
+            }
+
+            throw new NotAuthenticatedException("You must be authenticated to preform this action");
+        }
+
+        /**
+         * Logs the current user out of the session
+         *
+         * @param SessionIdentification $sessionIdentification
+         * @throws Exceptions\GenericInternal\DatabaseException
+         * @throws Exceptions\GenericInternal\InvalidSearchMethodException
+         * @throws Exceptions\Standard\Authentication\BadSessionChallengeAnswerException
+         * @throws Exceptions\Standard\Authentication\SessionNotFoundException
+         * @throws Exceptions\Standard\Validation\InvalidClientPublicHashException
+         * @throws InternalServerException
+         * @throws NotAuthenticatedException
+         * @throws SessionExpiredException
+         */
+        public function logout(SessionIdentification $sessionIdentification)
+        {
+            $this->loadSession($sessionIdentification);
+
+            if($this->active_session->Authenticated == false)
+                throw new NotAuthenticatedException("You must be authenticated to preform this action");
+
+            $this->active_session->Authenticated = false;
+            $this->active_session->UserID = null;
+            $this->active_session->AuthenticationMethodUsed = UserAuthenticationMethod::None;
+
+            $this->authenticated_user = null;
+
+            Converter::removeFlag($this->flags, NetworkFlags::Authenticated);
+
+            try
+            {
+                $this->socialvoidLib->getSessionManager()->updateSession($this->active_session);
+            }
+            catch (Exceptions\GenericInternal\DatabaseException $e)
+            {
+                throw new InternalServerException("There was an error while trying to process your request", $e);
+            }
+        }
+
+        /**
          * Authenticates the user to the network session, updates both the user and session
          *
          * @param SessionIdentification $sessionIdentification
@@ -132,50 +247,44 @@
          * @param string $password
          * @param string|null $otp
          * @return bool
-         * @throws AlreadyAuthenticatedToNetwork
+         * @throws AlreadyAuthenticatedException
          * @throws AuthenticationFailureException
          * @throws Exceptions\GenericInternal\CacheException
          * @throws Exceptions\GenericInternal\DatabaseException
          * @throws Exceptions\GenericInternal\InvalidSearchMethodException
-         * @throws Exceptions\Internal\TwoFactorAuthenticationRequiredException
          * @throws Exceptions\Standard\Authentication\AuthenticationNotApplicableException
          * @throws Exceptions\Standard\Authentication\BadSessionChallengeAnswerException
-         * @throws Exceptions\Standard\Authentication\IncorrectPasswordException
          * @throws Exceptions\Standard\Authentication\IncorrectTwoFactorAuthenticationCodeException
          * @throws Exceptions\Standard\Authentication\NoPasswordAuthenticationAvailableException
          * @throws Exceptions\Standard\Authentication\PrivateAccessTokenRequiredException
          * @throws Exceptions\Standard\Authentication\SessionNotFoundException
+         * @throws Exceptions\Standard\Authentication\TwoFactorAuthenticationRequiredException
          * @throws Exceptions\Standard\Validation\InvalidClientPublicHashException
+         * @throws IncorrectLoginCredentialsException
          * @throws InternalServerException
+         * @throws PeerNotFoundException
+         * @throws SessionExpiredException
          */
         public function authenticateUser(SessionIdentification $sessionIdentification, string $username, string $password, ?string $otp=null): bool
         {
-            if($this->isAuthenticated())
-                throw new AlreadyAuthenticatedToNetwork("There is a user already authenticated to this network session", $this);
+            $this->loadSession($sessionIdentification);
 
-            $sessionIdentification->validate();
-            try
-            {
-                $this->active_session = $this->socialvoidLib->getSessionManager()->getSession(ActiveSessionSearchMethod::ById, $sessionIdentification->SessionID);
-            }
-            catch (Exception $e)
-            {
-                if(Validate::isStandardError($e->getCode()))
-                    /** @noinspection PhpUnhandledExceptionInspection */
-                    throw $e;
+            if($this->active_session->Authenticated)
+                throw new AlreadyAuthenticatedException("You are already authenticated to the network");
 
-                throw new InternalServerException("There was an error while trying to access the session", $e);
-            }
+            if(Validate::username($username) == false)
+                throw new IncorrectLoginCredentialsException("The given password or username is incorrect");
 
-            $sessionIdentification->validateAnswer($this->active_session->Security->ClientPrivateHash, $this->active_session->Security->HashChallenge);
+            if(Validate::password($password) == false)
+                throw new IncorrectLoginCredentialsException("The given password or username is incorrect");
 
             try
             {
                 $authenticating_peer = $this->socialvoidLib->getUserManager()->getUser(UserSearchMethod::ByUsername, $username);
             }
-            catch (Exceptions\Standard\Network\PeerNotFoundException $e)
+            catch (PeerNotFoundException $e)
             {
-                throw new AuthenticationFailureException("There was an unexpected error while trying to authenticate the user", $e);
+                throw new IncorrectLoginCredentialsException("The given password or username is incorrect", $e);
             }
 
             try
@@ -184,7 +293,7 @@
             }
             catch (Exceptions\Internal\AuthenticationFailureException $e)
             {
-                throw new AuthenticationFailureException("There was an unexpected error while trying to authenticate the user", $e);
+                throw new AuthenticationFailureException("There was an unexpected error while trying to authenticate the user (-s2)", $e);
             }
 
             try

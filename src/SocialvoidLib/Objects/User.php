@@ -21,13 +21,12 @@
     use SocialvoidLib\Classes\Validate;
     use SocialvoidLib\Exceptions\Internal\AuthenticationFailureException;
     use SocialvoidLib\Exceptions\Internal\NoRecoveryCodesAvailableException;
-    use SocialvoidLib\Exceptions\Internal\TwoFactorAuthenticationRequiredException;
     use SocialvoidLib\Exceptions\Standard\Authentication\AuthenticationNotApplicableException;
-    use SocialvoidLib\Exceptions\Standard\Authentication\IncorrectPasswordException;
+    use SocialvoidLib\Exceptions\Standard\Authentication\IncorrectLoginCredentialsException;
     use SocialvoidLib\Exceptions\Standard\Authentication\IncorrectTwoFactorAuthenticationCodeException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NoPasswordAuthenticationAvailableException;
-    use SocialvoidLib\Exceptions\Standard\Authentication\NoTwoFactorAuthenticationAvailableException;
     use SocialvoidLib\Exceptions\Standard\Authentication\PrivateAccessTokenRequiredException;
+    use SocialvoidLib\Exceptions\Standard\Authentication\TwoFactorAuthenticationRequiredException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidUsernameException;
     use SocialvoidLib\Objects\User\CoaUserEntity;
     use SocialvoidLib\Objects\User\Profile;
@@ -110,7 +109,7 @@
          * The authentication method used to authenticate to this
          * account using the designated method that is supported
          *
-         * @var UserAuthenticationMethod
+         * @var UserAuthenticationMethod|string
          */
         public $AuthenticationMethod;
 
@@ -152,7 +151,7 @@
         /**
          * The current user privacy state of the account
          *
-         * @var UserPrivacyState
+         * @var UserPrivacyState|string
          */
         public $PrivacyState;
 
@@ -210,7 +209,7 @@
          * @return bool
          * @throws AuthenticationFailureException
          * @throws AuthenticationNotApplicableException
-         * @throws IncorrectPasswordException
+         * @throws IncorrectLoginCredentialsException
          * @throws IncorrectTwoFactorAuthenticationCodeException
          * @throws NoPasswordAuthenticationAvailableException
          * @throws PrivateAccessTokenRequiredException

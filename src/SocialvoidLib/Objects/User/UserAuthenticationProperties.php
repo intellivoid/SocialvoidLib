@@ -20,7 +20,7 @@
     use SocialvoidLib\Exceptions\Internal\NoTimeBasedSignatureAvailableException;
     use SocialvoidLib\Exceptions\Internal\RecoveryCodesAlreadyExistsException;
     use SocialvoidLib\Exceptions\Internal\TimeBasedPrivateSignatureAlreadyExistsException;
-    use SocialvoidLib\Exceptions\Standard\Authentication\IncorrectPasswordException;
+    use SocialvoidLib\Exceptions\Standard\Authentication\IncorrectLoginCredentialsException;
     use SocialvoidLib\Exceptions\Standard\Authentication\IncorrectTwoFactorAuthenticationCodeException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NoPasswordAuthenticationAvailableException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NoTwoFactorAuthenticationAvailableException;
@@ -368,7 +368,7 @@
          *
          * @param string $password
          * @return bool
-         * @throws IncorrectPasswordException
+         * @throws IncorrectLoginCredentialsException
          * @throws NoPasswordAuthenticationAvailableException
          */
         public function passwordAuthentication(string $password): bool
@@ -377,10 +377,10 @@
                 throw new NoPasswordAuthenticationAvailableException("No password authentication method has been configured");
 
             if(Validate::password($password) == false)
-                throw new IncorrectPasswordException("The given password is invalid");
+                throw new IncorrectLoginCredentialsException("The given password or username is incorrect");
 
             if(Hashing::password($password) !== $this->Password)
-                throw new IncorrectPasswordException("The given password is incorrect");
+                throw new IncorrectLoginCredentialsException("The given password or username is incorrect");
 
             return true;
         }

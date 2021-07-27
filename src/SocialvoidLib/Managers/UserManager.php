@@ -145,13 +145,13 @@
         /**
          * Returns an existing user from the database
          *
-         * @param string|UserSearchMethod $search_method
+         * @param string $search_method
          * @param string|int $value
          * @return User
+         * @throws CacheException
          * @throws DatabaseException
          * @throws InvalidSearchMethodException
          * @throws PeerNotFoundException
-         * @throws CacheException
          */
         public function getUser(string $search_method, $value): User
         {
@@ -213,7 +213,7 @@
 
                 if ($Row == False)
                 {
-                    throw new PeerNotFoundException();
+                    throw new PeerNotFoundException("The requested peer was not found in the network");
                 }
                 else
                 {

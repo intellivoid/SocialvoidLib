@@ -8,7 +8,6 @@
     use SocialvoidLib\Abstracts\RegexPatterns;
     use SocialvoidLib\Exceptions\Standard\Authentication\BadSessionChallengeAnswerException;
     use SocialvoidLib\Exceptions\Standard\Authentication\SessionNotFoundException;
-    use SocialvoidLib\Exceptions\Standard\Validation\InvalidChallengeAnswerException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPublicHashException;
     use tsa\Classes\Crypto;
     use tsa\Exceptions\InvalidSecretException;
@@ -53,13 +52,13 @@
         public function validateAnswer(string $client_private_hash, string $challenge, int $discrepancy=1, $currentTimeSlice=null): bool
         {
             if(gettype($client_private_hash) !== "string")
-                throw new BadSessionChallengeAnswerException("The client private hash is invalid");
+                throw new BadSessionChallengeAnswerException("The client private hash is invalid (-s1)");
             if(strlen($client_private_hash) !== 64)
-                throw new BadSessionChallengeAnswerException("The client private hash is invalid");
+                throw new BadSessionChallengeAnswerException("The client private hash is invalid (-s2)");
             if(preg_match(RegexPatterns::Alphanumeric, $client_private_hash))
-                throw new BadSessionChallengeAnswerException("The client private hash is invalid");
+                throw new BadSessionChallengeAnswerException("The client private hash is invalid (-s3)");
             if($this->ClientPublicHash == $client_private_hash)
-                throw new BadSessionChallengeAnswerException("The client private hash is invalid");
+                throw new BadSessionChallengeAnswerException("The client private hash is invalid (-s4)");
 
             if ($currentTimeSlice === null)
             {
@@ -112,11 +111,12 @@
                 throw new InvalidClientPublicHashException("The client's public hash is not a valid hash");
 
             if(gettype($this->ChallengeAnswer) !== "string")
-                throw new BadSessionChallengeAnswerException("The client private hash is invalid");
+                throw new BadSessionChallengeAnswerException("The client private hash is invalid (-s5)");
             if(strlen($this->ChallengeAnswer) !== 40)
-                throw new BadSessionChallengeAnswerException("The client private hash is invalid");
-            if(preg_match(RegexPatterns::Alphanumeric, $this->ChallengeAnswer))
-                throw new BadSessionChallengeAnswerException("The client private hash is invalid");
+                throw new BadSessionChallengeAnswerException("The client private hash is invalid (-s6)");
+            // TODO: Fix the bad regex
+            //if(preg_match(RegexPatterns::Alphanumeric, $this->ChallengeAnswer))
+                //throw new BadSessionChallengeAnswerException("The client private hash is invalid (-s7)");
 
             return true;
         }

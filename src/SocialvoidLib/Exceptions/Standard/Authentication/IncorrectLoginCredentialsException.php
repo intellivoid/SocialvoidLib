@@ -1,4 +1,7 @@
 <?php
+
+    /** @noinspection PhpPropertyOnlyWrittenInspection */
+
     /*
      * Copyright (c) 2017-2021. Intellivoid Technologies
      *
@@ -8,18 +11,17 @@
      * must have a written permission from Intellivoid Technologies to do so.
      */
 
-namespace SocialvoidLib\Exceptions\Standard\Authentication;
-
+    namespace SocialvoidLib\Exceptions\Standard\Authentication;
 
     use Exception;
     use SocialvoidLib\Abstracts\StandardErrorCodes;
     use Throwable;
 
     /**
-     * Class IncorrectPasswordException
+     * Class IncorrectLoginCredentialsException
      * @package SocialvoidLib\Exceptions\Standard\Authentication
      */
-    class IncorrectPasswordException extends Exception
+    class IncorrectLoginCredentialsException extends Exception
     {
         /**
          * @var Throwable|null
@@ -30,10 +32,11 @@ namespace SocialvoidLib\Exceptions\Standard\Authentication;
          * IncorrectPasswordException constructor.
          * @param string $message
          * @param Throwable|null $previous
+         * @noinspection PhpPureAttributeCanBeAddedInspection
          */
         public function __construct($message = "", Throwable $previous = null)
         {
-            parent::__construct($message, StandardErrorCodes::IncorrectPasswordException, $previous);
+            parent::__construct($message, StandardErrorCodes::IncorrectLoginCredentialsException, $previous);
             $this->message = $message;
             $this->previous = $previous;
         }

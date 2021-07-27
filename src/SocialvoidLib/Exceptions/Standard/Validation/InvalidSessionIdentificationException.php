@@ -2,17 +2,17 @@
 
     /** @noinspection PhpPropertyOnlyWrittenInspection */
 
-    namespace SocialvoidLib\Exceptions\Standard\Authentication;
+    namespace SocialvoidLib\Exceptions\Standard\Validation;
 
     use Exception;
     use SocialvoidLib\Abstracts\StandardErrorCodes;
     use Throwable;
 
     /**
-     * Class BadSessionChallengeAnswerException
-     * @package SocialvoidLib\Exceptions\Standard\Authentication
+     * Class InvalidSessionIdentificationException
+     * @package SocialvoidLib\Exceptions\Standard\Validation
      */
-    class BadSessionChallengeAnswerException extends Exception
+    class InvalidSessionIdentificationException extends Exception
     {
         /**
          * @var Throwable|null
@@ -20,14 +20,14 @@
         private ?Throwable $previous;
 
         /**
-         * BadSessionChallengeAnswerException constructor.
+         * InvalidSessionIdentificationException constructor.
          * @param string $message
          * @param Throwable|null $previous
          * @noinspection PhpPureAttributeCanBeAddedInspection
          */
-        public function __construct($message = "The session challenge answer is incorrect", Throwable $previous = null)
+        public function __construct($message = "", Throwable $previous = null)
         {
-            parent::__construct($message, StandardErrorCodes::BadSessionChallengeAnswerException, $previous);
+            parent::__construct($message, StandardErrorCodes::InvalidSessionIdentificationException, $previous);
             $this->message = $message;
             $this->previous = $previous;
         }

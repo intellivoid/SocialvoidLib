@@ -8,7 +8,6 @@
     use KimchiRPC\KimchiRPC;
     use RuntimeException;
     use SocialvoidLib\SocialvoidLib;
-    use SocialvoidRPC\Methods\Session\CreateSession;
     use VerboseAdventure\Abstracts\EventType;
     use VerboseAdventure\VerboseAdventure;
 
@@ -99,13 +98,17 @@
          * Registers the servers methods to the RPC server
          *
          * @throws MethodAlreadyRegistered
+         * @noinspection PhpFullyQualifiedNameUsageInspection
          */
         public static function registerMethods()
         {
             if(self::$RpcServer == null)
                 throw new RuntimeException("No RPC Server has been defined");
 
-            self::$RpcServer->registerMethod(new CreateSession());
+            // Session methods
+            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Session\CreateSession());
+            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Session\AuthenticateUser());
+            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Session\Logout());
         }
 
         /**

@@ -485,6 +485,10 @@
         },
         {
             "required": true,
+            "file": "Exceptions/Standard/Validation/InvalidSessionIdentificationException.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/Standard/Validation/InvalidClientNameException.php"
         },
         {
@@ -541,6 +545,14 @@
         },
         {
             "required": true,
+            "file": "Exceptions/Standard/Authentication/AlreadyAuthenticatedException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Authentication/TwoFactorAuthenticationRequiredException.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/Standard/Authentication/NotAuthenticatedException.php"
         },
         {
@@ -561,11 +573,11 @@
         },
         {
             "required": true,
-            "file": "Exceptions/Standard/Authentication/IncorrectPasswordException.php"
+            "file": "Exceptions/Standard/Authentication/NoTwoFactorAuthenticationAvailableException.php"
         },
         {
             "required": true,
-            "file": "Exceptions/Standard/Authentication/NoTwoFactorAuthenticationAvailableException.php"
+            "file": "Exceptions/Standard/Authentication/SessionExpiredException.php"
         },
         {
             "required": true,
@@ -574,6 +586,10 @@
         {
             "required": true,
             "file": "Exceptions/Standard/Authentication/NoPasswordAuthenticationAvailableException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Authentication/IncorrectLoginCredentialsException.php"
         },
         {
             "required": true,
