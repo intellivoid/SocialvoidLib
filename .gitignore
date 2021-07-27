@@ -2,3 +2,4 @@ build/
 *.social_session
 timeline.json
 .cache
+*.pyc
