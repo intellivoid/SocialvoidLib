@@ -43,6 +43,10 @@
         },
         {
             "required": true,
+            "file": "Methods/Session/GetSession.php"
+        },
+        {
+            "required": true,
             "file": "Methods/Session/CreateSession.php"
         },
         {

@@ -693,6 +693,10 @@
         },
         {
             "required": true,
+            "file": "Objects/Standard/Session.php"
+        },
+        {
+            "required": true,
             "file": "Objects/Standard/Peer.php"
         },
         {
