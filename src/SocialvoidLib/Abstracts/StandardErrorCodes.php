@@ -126,21 +126,21 @@
          *
          * @see InvalidVersionException
          */
-        const InvalidVersionException = 0x02111;
+        const InvalidVersionException = 0x0210b;
 
         /**
          * Raised when the given client name is invalid
          *
          * @see InvalidClientNameException
          */
-        const InvalidClientNameException = 0x02112;
+        const InvalidClientNameException = 0x0210c;
 
         /**
          * Raised when the given session identification object is invalid
          *
          * @see InvalidSessionIdentificationException
          */
-        const InvalidSessionIdentificationException = 0x02113;
+        const InvalidSessionIdentificationException = 0x0210d;
 
 
         /** 22-Set error codes (Authentication) */
