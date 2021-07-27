@@ -213,7 +213,8 @@
                 ),
                 "ip_address" => $this->socialvoidLib->getDatabase()->real_escape_string($activeSession->IpAddress),
                 "data" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($activeSession->Data->toArray())),
-                "last_active_timestamp" => $activeSession->LastActiveTimestamp
+                "last_active_timestamp" => $activeSession->LastActiveTimestamp,
+                "expires_timestamp" => $activeSession->ExpiresTimestamp
             ], "id", $activeSession->ID);
             $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
 
