@@ -20,11 +20,11 @@
     use SocialvoidLib\Abstracts\UserAuthenticationMethod;
     use SocialvoidLib\Classes\Validate;
     use SocialvoidLib\Exceptions\Internal\AuthenticationFailureException;
+    use SocialvoidLib\Exceptions\Internal\NoPasswordAuthenticationAvailableException;
     use SocialvoidLib\Exceptions\Internal\NoRecoveryCodesAvailableException;
     use SocialvoidLib\Exceptions\Standard\Authentication\AuthenticationNotApplicableException;
     use SocialvoidLib\Exceptions\Standard\Authentication\IncorrectLoginCredentialsException;
     use SocialvoidLib\Exceptions\Standard\Authentication\IncorrectTwoFactorAuthenticationCodeException;
-    use SocialvoidLib\Exceptions\Standard\Authentication\NoPasswordAuthenticationAvailableException;
     use SocialvoidLib\Exceptions\Standard\Authentication\PrivateAccessTokenRequiredException;
     use SocialvoidLib\Exceptions\Standard\Authentication\TwoFactorAuthenticationRequiredException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidUsernameException;
@@ -211,9 +211,9 @@
          * @throws AuthenticationNotApplicableException
          * @throws IncorrectLoginCredentialsException
          * @throws IncorrectTwoFactorAuthenticationCodeException
-         * @throws NoPasswordAuthenticationAvailableException
          * @throws PrivateAccessTokenRequiredException
          * @throws TwoFactorAuthenticationRequiredException
+         * @throws NoPasswordAuthenticationAvailableException
          */
         public function simpleAuthentication(string $password, string $otp=null, bool $ignore_otp=false, bool $update=true): bool
         {

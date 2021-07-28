@@ -16,9 +16,7 @@
     use SocialvoidLib\Exceptions\Standard\Authentication\BadSessionChallengeAnswerException;
     use SocialvoidLib\Exceptions\Standard\Authentication\IncorrectLoginCredentialsException;
     use SocialvoidLib\Exceptions\Standard\Authentication\IncorrectTwoFactorAuthenticationCodeException;
-    use SocialvoidLib\Exceptions\Standard\Authentication\NoPasswordAuthenticationAvailableException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException;
-    use SocialvoidLib\Exceptions\Standard\Authentication\NoTwoFactorAuthenticationAvailableException;
     use SocialvoidLib\Exceptions\Standard\Authentication\PrivateAccessTokenRequiredException;
     use SocialvoidLib\Exceptions\Standard\Authentication\SessionExpiredException;
     use SocialvoidLib\Exceptions\Standard\Authentication\TwoFactorAuthenticationRequiredException;
@@ -142,7 +140,6 @@
          */
         const InvalidSessionIdentificationException = 0x0210d;
 
-
         /** 22-Set error codes (Authentication) */
 
         /**
@@ -153,102 +150,73 @@
         const IncorrectLoginCredentialsException = 0x02200;
 
         /**
-         * Raised when the user has no password authentication method
-         *
-         * @see NoPasswordAuthenticationAvailableException
-         */
-        const NoPasswordAuthenticationAvailableException = 0x02201;
-
-        /**
          * Raised when the given two factor authentication code is invalid (Recovery code or OTP)
          *
          * @see IncorrectTwoFactorAuthenticationCodeException
          */
-        const IncorrectTwoFactorAuthenticationCodeException = 0x02202;
-
-        /**
-         * Raised when there is no two factor authentication code available for the user
-         *
-         * @see NoTwoFactorAuthenticationAvailableException
-         */
-        const NoTwoFactorAuthenticationAvailableException = 0x02203;
+        const IncorrectTwoFactorAuthenticationCodeException = 0x02201;
 
         /**
          * Raised when the simple authentication method is not applicable to this user
          *
          * @see AuthenticationNotApplicableException
          */
-        const AuthenticationNotApplicableException = 0x02204;
-
-        /**
-         * Raised when the requested session is no longer authenticated
-         *
-         * @see SessionNoLongerAuthenticatedException
-         */
-        const SessionNoLongerAuthenticatedException = 0x02205;
+        const AuthenticationNotApplicableException = 0x02202;
 
         /**
          * Raised when the request session entity was not found on the network
          *
          * @see SessionNotFoundException
          */
-        const SessionNotFoundException = 0x02206;
+        const SessionNotFoundException = 0x02203;
 
         /**
          * Raised when the user attempts to preform an action that requires authentication
          *
          * @see NotAuthenticatedException
          */
-        const NotAuthenticatedException = 0x02207;
+        const NotAuthenticatedException = 0x02204;
 
         /**
          * This user uses a private access token to authenticate rather than a traditional method
          *
          * @see PrivateAccessTokenRequiredException
          */
-        const PrivateAccessTokenRequiredException = 0x02208;
+        const PrivateAccessTokenRequiredException = 0x02205;
 
         /**
          * If an internal server error occurs while trying to process the authentication
          *
          * @see AuthenticationFailureException
          */
-        const AuthenticationFailureException = 0x02209;
-
-        /**
-         * Raised when the requested peer is not registered in the network
-         *
-         * @see AccountNotRegisteredException
-         */
-        const AccountNotRegisteredException = 0x02210;
-
+        const AuthenticationFailureException = 0x02206;
         /**
          * Raised when the client gives a bad session challenge answer
          *
          * @see BadSessionChallengeAnswerException
          */
-        const BadSessionChallengeAnswerException = 0x02211;
+        const BadSessionChallengeAnswerException = 0x02207;
 
         /**
          * Raised when the client fails to provide two-factor authentication when required
          *
          * @see TwoFactorAuthenticationRequiredException
          */
-        const TwoFactorAuthenticationRequiredException = 0x02212;
+        const TwoFactorAuthenticationRequiredException = 0x02208;
 
         /**
          * Raised when the client is already authenticated to the session
          *
          * @see AlreadyAuthenticatedException
          */
-        const AlreadyAuthenticatedException = 0x02213;
+        const AlreadyAuthenticatedException = 0x02209;
 
         /**
          * Raised when the session has expired
          *
          * @see SessionExpiredException
          */
-        const SessionExpiredException = 0x02214;
+        const SessionExpiredException = 0x0220a;
 
 
         /** 23-Set error codes (Media) */
@@ -285,7 +253,7 @@
         const PostNotFoundException = 0x03101;
 
         /**
-         * Raised when the client requested a post that isn't found
+         * Raised when the client requested a post that was deleted
          *
          * @see PostDeletedException
          */
@@ -303,7 +271,7 @@
          *
          * @see FileUploadException
          */
-        const FileUploadException = 0x03104;
+        const FileUploadErrorException = 0x03104;
 
         /** 40-Set error codes (Server) */
 

@@ -20,8 +20,10 @@
     use SocialvoidLib\Exceptions\Internal\FollowerStateNotFoundException;
     use SocialvoidLib\Exceptions\Internal\InvalidImageTypeException;
     use SocialvoidLib\Exceptions\Internal\LikeRecordNotFoundException;
+    use SocialvoidLib\Exceptions\Internal\NoPasswordAuthenticationAvailableException;
     use SocialvoidLib\Exceptions\Internal\NoRecoveryCodesAvailableException;
     use SocialvoidLib\Exceptions\Internal\NoTimeBasedSignatureAvailableException;
+    use SocialvoidLib\Exceptions\Internal\NoTwoFactorAuthenticationAvailableException;
     use SocialvoidLib\Exceptions\Internal\QuoteRecordNotFoundException;
     use SocialvoidLib\Exceptions\Internal\RecoveryCodesAlreadyExistsException;
     use SocialvoidLib\Exceptions\Internal\ReplyRecordNotFoundException;
@@ -129,7 +131,12 @@
         const EntityWithoutAccessException = 0x2017;
 
         /**
-         * @see TwoFactorAuthenticationRequiredException
+         * @see NoTwoFactorAuthenticationAvailableException
          */
-        const TwoFactorAuthenticationRequiredException = 0x2018;
+        const NoTwoFactorAuthenticationAvailableException = 0x2018;
+
+        /**
+         * @see NoPasswordAuthenticationAvailableException
+         */
+        const NoPasswordAuthenticationAvailableException = 0x2019;
     }

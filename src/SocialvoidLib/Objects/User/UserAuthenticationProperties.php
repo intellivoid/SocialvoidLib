@@ -16,14 +16,14 @@
     use Exception;
     use SocialvoidLib\Classes\Security\Hashing;
     use SocialvoidLib\Classes\Validate;
+    use SocialvoidLib\Exceptions\Internal\NoPasswordAuthenticationAvailableException;
     use SocialvoidLib\Exceptions\Internal\NoRecoveryCodesAvailableException;
     use SocialvoidLib\Exceptions\Internal\NoTimeBasedSignatureAvailableException;
+    use SocialvoidLib\Exceptions\Internal\NoTwoFactorAuthenticationAvailableException;
     use SocialvoidLib\Exceptions\Internal\RecoveryCodesAlreadyExistsException;
     use SocialvoidLib\Exceptions\Internal\TimeBasedPrivateSignatureAlreadyExistsException;
     use SocialvoidLib\Exceptions\Standard\Authentication\IncorrectLoginCredentialsException;
     use SocialvoidLib\Exceptions\Standard\Authentication\IncorrectTwoFactorAuthenticationCodeException;
-    use SocialvoidLib\Exceptions\Standard\Authentication\NoPasswordAuthenticationAvailableException;
-    use SocialvoidLib\Exceptions\Standard\Authentication\NoTwoFactorAuthenticationAvailableException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPasswordException;
     use tsa\Classes\Crypto;
     use tsa\Exceptions\BadLengthException;

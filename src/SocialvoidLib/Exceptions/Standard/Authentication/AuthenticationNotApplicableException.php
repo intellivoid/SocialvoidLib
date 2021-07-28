@@ -32,7 +32,6 @@
          * AuthenticationNotApplicableException constructor.
          * @param string $message
          * @param Throwable|null $previous
-         * @noinspection PhpPureAttributeCanBeAddedInspection
          */
         public function __construct($message = "This authentication method is not applicable to the entity", Throwable $previous = null)
         {

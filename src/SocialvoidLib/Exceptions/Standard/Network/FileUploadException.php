@@ -32,7 +32,7 @@
          */
         public function __construct($message = "", Throwable $previous = null)
         {
-            parent::__construct($message, StandardErrorCodes::FileUploadException, $previous);
+            parent::__construct($message, StandardErrorCodes::FileUploadErrorException, $previous);
             $this->message = $message;
             $this->previous = $previous;
         }
