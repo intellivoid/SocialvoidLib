@@ -34,7 +34,7 @@
          * @param Throwable|null $previous
          * @noinspection PhpPureAttributeCanBeAddedInspection
          */
-        public function __construct($message = "", Throwable $previous = null)
+        public function __construct($message = "The given login credentials are incorrect", Throwable $previous = null)
         {
             parent::__construct($message, StandardErrorCodes::IncorrectLoginCredentialsException, $previous);
             $this->message = $message;

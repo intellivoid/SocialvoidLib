@@ -25,7 +25,7 @@
          * @param Throwable|null $previous
          * @noinspection PhpPureAttributeCanBeAddedInspection
          */
-        public function __construct($message = "", Throwable $previous = null)
+        public function __construct($message = "Two Factor Authentication is required to authenticate", Throwable $previous = null)
         {
             parent::__construct($message, StandardErrorCodes::TwoFactorAuthenticationRequiredException, $previous);
             $this->message = $message;
