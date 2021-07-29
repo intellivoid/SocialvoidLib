@@ -14,7 +14,7 @@
      * Class PostFlags
      * @package SocialvoidLib\Abstracts\Flags
      */
-    class PostFlags
+    abstract class PostFlags
     {
         /**
          * Indicates if the post is currently liked by the user
