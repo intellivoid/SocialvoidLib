@@ -33,7 +33,7 @@
          * @param string $message
          * @param Throwable|null $previous
          */
-        public function __construct($message = "", Throwable $previous = null)
+        public function __construct($message = "The post was already reposted", Throwable $previous = null)
         {
             parent::__construct($message, StandardErrorCodes::AlreadyRepostedException, $previous);
             $this->message = $message;

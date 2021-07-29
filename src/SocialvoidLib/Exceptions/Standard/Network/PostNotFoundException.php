@@ -1,4 +1,7 @@
 <?php
+
+    /** @noinspection PhpPropertyOnlyWrittenInspection */
+
     /*
      * Copyright (c) 2017-2021. Intellivoid Technologies
      *
@@ -8,7 +11,7 @@
      * must have a written permission from Intellivoid Technologies to do so.
      */
 
-namespace SocialvoidLib\Exceptions\Standard\Network;
+    namespace SocialvoidLib\Exceptions\Standard\Network;
 
     use Exception;
     use SocialvoidLib\Abstracts\StandardErrorCodes;
@@ -30,7 +33,7 @@ namespace SocialvoidLib\Exceptions\Standard\Network;
          * @param string $message
          * @param Throwable|null $previous
          */
-        public function __construct($message = "", Throwable $previous = null)
+        public function __construct($message = "The requested post was not found", Throwable $previous = null)
         {
             parent::__construct($message, StandardErrorCodes::PostNotFoundException, $previous);
             $this->message = $message;

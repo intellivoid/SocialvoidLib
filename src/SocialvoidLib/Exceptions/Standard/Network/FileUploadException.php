@@ -30,7 +30,7 @@
          * @param string $message
          * @param Throwable|null $previous
          */
-        public function __construct($message = "", Throwable $previous = null)
+        public function __construct($message = "There was an unexpected issue while trying to handle your file upload", Throwable $previous = null)
         {
             parent::__construct($message, StandardErrorCodes::FileUploadErrorException, $previous);
             $this->message = $message;

@@ -1,4 +1,8 @@
 <?php
+
+    /** @noinspection PhpPropertyOnlyWrittenInspection */
+    /** @noinspection PhpMissingFieldTypeInspection */
+
     /*
      * Copyright (c) 2017-2021. Intellivoid Technologies
      *
@@ -10,7 +14,6 @@
 
     namespace SocialvoidLib\Exceptions\Standard\Network;
 
-
     use Exception;
     use SocialvoidLib\Abstracts\StandardErrorCodes;
 
@@ -21,12 +24,19 @@
     class PostDeletedException extends Exception
     {
         /**
+         * @var null
+         */
+        private $previous;
+
+        /**
          * PostDeletedException constructor.
          * @param string $message
          * @param null $previous
          */
-        public function __construct($message = "", $previous = null)
+        public function __construct($message = "The requested post was deleted", $previous = null)
         {
             parent::__construct($message, StandardErrorCodes::PostDeletedException, $previous);
+            $this->message = $message;
+            $this->previous = $previous;
         }
     }

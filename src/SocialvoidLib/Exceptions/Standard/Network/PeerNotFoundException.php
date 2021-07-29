@@ -43,7 +43,7 @@ namespace SocialvoidLib\Exceptions\Standard\Network;
          * @param string|null $search_value
          * @param Throwable|null $previous
          */
-        public function __construct($message = "", string $search_by=null, string $search_value=null, Throwable $previous = null)
+        public function __construct($message = "The requested peer was not found in the network", string $search_by=null, string $search_value=null, Throwable $previous = null)
         {
             parent::__construct($message, StandardErrorCodes::PeerNotFoundException, $previous);
             $this->message = $message;
