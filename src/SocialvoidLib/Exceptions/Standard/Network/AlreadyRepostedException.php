@@ -1,4 +1,7 @@
 <?php
+
+    /** @noinspection PhpPropertyOnlyWrittenInspection */
+
     /*
      * Copyright (c) 2017-2021. Intellivoid Technologies
      *
@@ -10,11 +13,30 @@
 
     namespace SocialvoidLib\Exceptions\Standard\Network;
 
+    use Exception;
+    use SocialvoidLib\Abstracts\StandardErrorCodes;
+    use Throwable;
+
     /**
      * Class AlreadyRepostedException
      * @package SocialvoidLib\Exceptions\Standard\Network
      */
-    class AlreadyRepostedException extends \Exception
+    class AlreadyRepostedException extends Exception
     {
+        /**
+         * @var Throwable|null
+         */
+        private ?Throwable $previous;
 
+        /**
+         * AlreadyRepostedException constructor.
+         * @param string $message
+         * @param Throwable|null $previous
+         */
+        public function __construct($message = "", Throwable $previous = null)
+        {
+            parent::__construct($message, StandardErrorCodes::AlreadyRepostedException, $previous);
+            $this->message = $message;
+            $this->previous = $previous;
+        }
     }
