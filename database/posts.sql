@@ -15,7 +15,7 @@ create table if not exists posts
     text                    varchar(1526) null comment 'The text content of the post, can be null',
     source                  varchar(256)  null comment 'The source device that was utilized to compose this post',
     properties              blob          null comment 'ZiProto encoded properties of this post',
-    session_id              int           null comment 'The session ID used to create this post if any',
+    session_id              varchar(255)  null comment 'The session ID used to create this post if any',
     poster_user_id          int           null comment 'The User ID that made this post',
     reply_to_post_id        varchar(64)   null comment 'The ID of the post if this post is a reply to another post',
     reply_to_user_id        int           null comment 'The user ID of the original post that this post is replying to',
