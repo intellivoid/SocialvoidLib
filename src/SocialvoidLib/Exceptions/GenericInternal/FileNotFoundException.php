@@ -11,13 +11,14 @@
     namespace SocialvoidLib\Exceptions\GenericInternal;
 
 
+    use Exception;
     use Throwable;
 
     /**
      * Class FileNotFoundException
      * @package SocialvoidLib\Exceptions\GenericInternal
      */
-    class FileNotFoundException extends \Exception
+    class FileNotFoundException extends Exception
     {
         /**
          * @var Throwable|null

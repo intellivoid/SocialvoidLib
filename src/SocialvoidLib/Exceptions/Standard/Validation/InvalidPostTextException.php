@@ -11,6 +11,7 @@
 namespace SocialvoidLib\Exceptions\Standard\Validation;
 
 
+    use Exception;
     use SocialvoidLib\Abstracts\StandardErrorCodes;
     use Throwable;
 
@@ -18,7 +19,7 @@ namespace SocialvoidLib\Exceptions\Standard\Validation;
      * Class InvalidPostTextException
      * @package SocialvoidLib\Exceptions\Standard\Validation
      */
-    class InvalidPostTextException extends \Exception
+    class InvalidPostTextException extends Exception
     {
         /**
          * @var string|null

@@ -12,6 +12,7 @@
     namespace SocialvoidLib\Exceptions\Internal;
 
 
+    use Exception;
     use SocialvoidLib\Abstracts\InternalErrorCodes;
     use Throwable;
 
@@ -19,7 +20,7 @@
      * Class UserTimelineNotFoundException
      * @package SocialvoidLib\Exceptions\Internal
      */
-    class UserTimelineNotFoundException extends \Exception
+    class UserTimelineNotFoundException extends Exception
     {
         /**
          * @var Throwable|null

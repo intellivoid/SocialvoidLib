@@ -3,6 +3,7 @@
 
     namespace SocialvoidRPC\Methods\Session;
 
+    use Exception;
     use KimchiRPC\Exceptions\Server\MissingParameterException;
     use KimchiRPC\Interfaces\MethodInterface;
     use KimchiRPC\Objects\Request;
@@ -105,7 +106,7 @@
             {
                 $SessionEstablished = $NetworkSession->createSession($SessionClient, $request->ClientIP);
             }
-            catch(\Exception $e)
+            catch(Exception $e)
             {
                 // Allow standard errors
                 if(Validate::isStandardError($e->getCode()))

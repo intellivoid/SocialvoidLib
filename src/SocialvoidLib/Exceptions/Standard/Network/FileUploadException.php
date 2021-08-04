@@ -11,6 +11,7 @@
     namespace SocialvoidLib\Exceptions\Standard\Network;
 
 
+    use Exception;
     use SocialvoidLib\Abstracts\StandardErrorCodes;
     use Throwable;
 
@@ -18,7 +19,7 @@
      * Class FileUploadException
      * @package SocialvoidLib\Exceptions\Standard\Network
      */
-    class FileUploadException extends \Exception
+    class FileUploadException extends Exception
     {
         /**
          * @var Throwable|null

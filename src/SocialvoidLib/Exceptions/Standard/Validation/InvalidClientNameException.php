@@ -4,6 +4,7 @@
 
     namespace SocialvoidLib\Exceptions\Standard\Validation;
 
+    use Exception;
     use SocialvoidLib\Abstracts\StandardErrorCodes;
     use Throwable;
 
@@ -11,7 +12,7 @@
      * Class InvalidClientNameException
      * @package SocialvoidLib\Exceptions\Standard\Validation
      */
-    class InvalidClientNameException extends \Exception
+    class InvalidClientNameException extends Exception
     {
         /**
          * @var Throwable|null
