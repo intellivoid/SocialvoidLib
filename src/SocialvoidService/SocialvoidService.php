@@ -1,4 +1,11 @@
 <?php
+
+    /** @noinspection ALL */
+    /** @noinspection ALL */
+    /** @noinspection ALL */
+    /** @noinspection ALL */
+    /** @noinspection ALL */
+
     /*
      * Copyright (c) 2017-2021. Intellivoid Technologies
      *
@@ -8,7 +15,7 @@
      * must have a written permission from Intellivoid Technologies to do so.
      */
 
-    namespace SocialvoidService;
+        namespace SocialvoidService;
 
     use BackgroundWorker\BackgroundWorker;
     use SocialvoidLib\SocialvoidLib;
