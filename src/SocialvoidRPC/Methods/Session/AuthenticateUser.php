@@ -13,17 +13,14 @@
     use SocialvoidLib\Exceptions\GenericInternal\CacheException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
-    use SocialvoidLib\Exceptions\Internal\AlreadyAuthenticatedToNetwork;
     use SocialvoidLib\Exceptions\Standard\Authentication\AlreadyAuthenticatedException;
     use SocialvoidLib\Exceptions\Standard\Authentication\AuthenticationFailureException;
     use SocialvoidLib\Exceptions\Standard\Authentication\AuthenticationNotApplicableException;
     use SocialvoidLib\Exceptions\Standard\Authentication\BadSessionChallengeAnswerException;
     use SocialvoidLib\Exceptions\Standard\Authentication\IncorrectLoginCredentialsException;
     use SocialvoidLib\Exceptions\Standard\Authentication\IncorrectTwoFactorAuthenticationCodeException;
-    use SocialvoidLib\Exceptions\Standard\Authentication\NoPasswordAuthenticationAvailableException;
     use SocialvoidLib\Exceptions\Standard\Authentication\PrivateAccessTokenRequiredException;
     use SocialvoidLib\Exceptions\Standard\Authentication\SessionExpiredException;
-    use SocialvoidLib\Exceptions\Standard\Authentication\SessionNoLongerAuthenticatedException;
     use SocialvoidLib\Exceptions\Standard\Authentication\SessionNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Authentication\TwoFactorAuthenticationRequiredException;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
@@ -107,7 +104,6 @@
          * @param Request $request
          * @return Response
          * @throws AlreadyAuthenticatedException
-         * @throws AlreadyAuthenticatedToNetwork !may
          * @throws AuthenticationFailureException
          * @throws AuthenticationNotApplicableException
          * @throws BadSessionChallengeAnswerException
@@ -122,13 +118,11 @@
          * @throws InvalidSessionIdentificationException
          * @throws InvalidUsernameException
          * @throws MissingParameterException
-         * @throws NoPasswordAuthenticationAvailableException
          * @throws PeerNotFoundException !may
          * @throws PrivateAccessTokenRequiredException
          * @throws SessionExpiredException
          * @throws SessionNotFoundException !may
          * @throws TwoFactorAuthenticationRequiredException
-         * @throws SessionNoLongerAuthenticatedException
          */
         public function execute(Request $request): Response
         {
