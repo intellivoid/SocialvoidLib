@@ -1,7 +1,6 @@
 <?php
 
-    /** @noinspection PhpMissingFieldTypeInspection */
-    /** @noinspection PhpPropertyOnlyWrittenInspection */
+/** @noinspection PhpPropertyOnlyWrittenInspection */
 
     /*
      * Copyright (c) 2017-2021. Intellivoid Technologies
@@ -39,7 +38,6 @@
          * @param string $message
          * @param string $username
          * @param Throwable|null $previous
-         * @noinspection PhpPureAttributeCanBeAddedInspection
          */
         public function __construct($message = "", $username="", Throwable $previous = null)
         {

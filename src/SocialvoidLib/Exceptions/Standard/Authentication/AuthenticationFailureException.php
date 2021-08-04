@@ -23,7 +23,6 @@
          * AuthenticationFailureException constructor.
          * @param string $message
          * @param Throwable|null $previous
-         * @noinspection PhpPureAttributeCanBeAddedInspection
          */
         public function __construct($message = "There was an unexpected error while trying to authenticate", Throwable $previous = null)
         {

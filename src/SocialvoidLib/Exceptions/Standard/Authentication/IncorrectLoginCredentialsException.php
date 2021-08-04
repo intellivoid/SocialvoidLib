@@ -32,7 +32,6 @@
          * IncorrectPasswordException constructor.
          * @param string $message
          * @param Throwable|null $previous
-         * @noinspection PhpPureAttributeCanBeAddedInspection
          */
         public function __construct($message = "The given login credentials are incorrect", Throwable $previous = null)
         {

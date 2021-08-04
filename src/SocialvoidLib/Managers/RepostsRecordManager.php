@@ -127,7 +127,6 @@
          * @return RepostRecord
          * @throws DatabaseException
          * @throws RepostRecordNotFoundException
-         * @noinspection DuplicatedCode
          */
         public function getRecord(int $user_id, string $original_post_id): RepostRecord
         {

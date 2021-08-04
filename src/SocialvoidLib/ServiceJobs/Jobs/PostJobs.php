@@ -68,7 +68,6 @@
             }
 
             // Prepare the BackgroundWorker for the jobs
-            /** @noinspection PhpUnhandledExceptionInspection */
             $this->socialvoidLib->getBackgroundWorker()->getClient()->getGearmanClient()->clearCallbacks();
 
             /** @var ServiceJobResults $results */
@@ -76,7 +75,6 @@
             $context_id = JobType::ResolvePosts . "_" . (int)time();
 
             // Handles the job callbacks
-            /** @noinspection PhpUnhandledExceptionInspection */
             $this->socialvoidLib->getBackgroundWorker()->getClient()->getGearmanClient()->setCompleteCallback(
                 function(GearmanTask $task, $context) use (&$results, &$context_id)
                 {

@@ -76,7 +76,6 @@
          *
          * @param array $data
          * @return LikeRecord
-         * @noinspection DuplicatedCode
          */
         public static function fromArray(array $data): LikeRecord
         {

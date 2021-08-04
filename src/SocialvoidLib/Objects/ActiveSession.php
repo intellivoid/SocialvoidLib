@@ -349,7 +349,6 @@
 
         /**
          * ActiveSession constructor.
-         * @noinspection PhpPureAttributeCanBeAddedInspection
          */
         public function __construct()
         {
@@ -361,7 +360,6 @@
          * Returns an array representation of the object
          *
          * @return array
-         * @noinspection PhpPureAttributeCanBeAddedInspection
          */
         public function toArray(): array
         {

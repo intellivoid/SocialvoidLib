@@ -69,7 +69,6 @@
          *
          * @param array $data
          * @return Name
-         * @noinspection DuplicatedCode
          */
         public static function fromArray(array $data): Name
         {

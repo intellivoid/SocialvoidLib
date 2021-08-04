@@ -126,7 +126,6 @@
          * Returns an array representation of the object
          *
          * @return array
-         * @noinspection PhpArrayShapeAttributeCanBeAddedInspection
          */
         public function toArray(): array
         {
@@ -142,7 +141,6 @@
          *
          * @param array $data
          * @return SessionIdentification
-         * @noinspection PhpPureAttributeCanBeAddedInspection
          */
         public static function fromArray(array $data): SessionIdentification
         {

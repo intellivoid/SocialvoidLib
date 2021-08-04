@@ -84,7 +84,6 @@
          *
          * @param array $data
          * @return ReplyRecord
-         * @noinspection DuplicatedCode
          */
         public static function fromArray(array $data): ReplyRecord
         {

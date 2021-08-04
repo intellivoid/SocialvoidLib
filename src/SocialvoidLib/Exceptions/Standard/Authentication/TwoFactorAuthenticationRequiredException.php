@@ -23,7 +23,6 @@
          * TwoFactorAuthenticationRequiredException constructor.
          * @param string $message
          * @param Throwable|null $previous
-         * @noinspection PhpPureAttributeCanBeAddedInspection
          */
         public function __construct($message = "Two Factor Authentication is required to authenticate", Throwable $previous = null)
         {

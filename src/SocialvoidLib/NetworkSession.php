@@ -90,7 +90,6 @@
         /**
          * Network constructor.
          * @param SocialvoidLib $socialvoidLib
-         * @noinspection PhpPureAttributeCanBeAddedInspection
          */
         public function __construct(SocialvoidLib $socialvoidLib)
         {

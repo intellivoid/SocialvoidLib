@@ -23,7 +23,6 @@
          * InvalidVersionException constructor.
          * @param string $message
          * @param Throwable|null $previous
-         * @noinspection PhpPureAttributeCanBeAddedInspection
          */
         public function __construct($message = "", Throwable $previous = null)
         {

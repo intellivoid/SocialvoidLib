@@ -23,7 +23,6 @@
          * PrivateAccessTokenRequiredException constructor.
          * @param string $message
          * @param Throwable|null $previous
-         * @noinspection PhpPureAttributeCanBeAddedInspection
          */
         public function __construct($message = "This entity can only be authenticated using a private access token", Throwable $previous = null)
         {

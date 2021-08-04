@@ -66,7 +66,6 @@
             }
 
             // Prepare the BackgroundWorker for the jobs
-            /** @noinspection PhpUnhandledExceptionInspection */
             $this->socialvoidLib->getBackgroundWorker()->getClient()->getGearmanClient()->clearCallbacks();
             $context_id = JobType::DistributeTimelinePost . "_" . (int)time();
 
@@ -144,7 +143,6 @@
             $ServiceJobQueries[] = $ServiceJobQuery;
 
             // Prepare the BackgroundWorker for the jobs
-            /** @noinspection PhpUnhandledExceptionInspection */
             $this->socialvoidLib->getBackgroundWorker()->getClient()->getGearmanClient()->clearCallbacks();
             $context_id = JobType::DistributeTimelinePost . "_" . (int)time();
 

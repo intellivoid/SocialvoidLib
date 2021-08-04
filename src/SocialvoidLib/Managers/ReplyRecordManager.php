@@ -126,7 +126,6 @@
          * @return ReplyRecord
          * @throws DatabaseException
          * @throws ReplyRecordNotFoundException
-         * @noinspection DuplicatedCode
          */
         public function getRecord(string $post_id, string $reply_post_id): ReplyRecord
         {

@@ -23,7 +23,6 @@
          * BadSessionChallengeAnswerException constructor.
          * @param string $message
          * @param Throwable|null $previous
-         * @noinspection PhpPureAttributeCanBeAddedInspection
          */
         public function __construct($message = "The session challenge answer is incorrect", Throwable $previous = null)
         {

@@ -126,7 +126,6 @@
          * @return QuoteRecord
          * @throws DatabaseException
          * @throws QuoteRecordNotFoundException
-         * @noinspection DuplicatedCode
          */
         public function getRecord(string $post_id, string $original_post_id): QuoteRecord
         {

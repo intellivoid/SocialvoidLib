@@ -52,7 +52,6 @@
          * Returns an array representation of the object
          *
          * @return array
-         * @noinspection PhpArrayShapeAttributeCanBeAddedInspection
          */
         public function toArray(): array
         {
@@ -70,7 +69,6 @@
          *
          * @param array $data
          * @return Session
-         * @noinspection PhpPureAttributeCanBeAddedInspection
          */
         public static function fromArray(array $data): Session
         {
@@ -99,7 +97,6 @@
          *
          * @param ActiveSession $activeSession
          * @return Session
-         * @noinspection PhpPureAttributeCanBeAddedInspection
          * @noinspection PhpUnused
          */
         public static function fromActiveSession(ActiveSession $activeSession): Session
