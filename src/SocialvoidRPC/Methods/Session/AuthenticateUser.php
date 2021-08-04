@@ -23,6 +23,7 @@
     use SocialvoidLib\Exceptions\Standard\Authentication\NoPasswordAuthenticationAvailableException;
     use SocialvoidLib\Exceptions\Standard\Authentication\PrivateAccessTokenRequiredException;
     use SocialvoidLib\Exceptions\Standard\Authentication\SessionExpiredException;
+    use SocialvoidLib\Exceptions\Standard\Authentication\SessionNoLongerAuthenticatedException;
     use SocialvoidLib\Exceptions\Standard\Authentication\SessionNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Authentication\TwoFactorAuthenticationRequiredException;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
@@ -105,6 +106,8 @@
         /**
          * @param Request $request
          * @return Response
+         * @throws AlreadyAuthenticatedException
+         * @throws AlreadyAuthenticatedToNetwork !may
          * @throws AuthenticationFailureException
          * @throws AuthenticationNotApplicableException
          * @throws BadSessionChallengeAnswerException
@@ -120,12 +123,12 @@
          * @throws InvalidUsernameException
          * @throws MissingParameterException
          * @throws NoPasswordAuthenticationAvailableException
+         * @throws PeerNotFoundException !may
          * @throws PrivateAccessTokenRequiredException
+         * @throws SessionExpiredException
          * @throws SessionNotFoundException !may
          * @throws TwoFactorAuthenticationRequiredException
-         * @throws AlreadyAuthenticatedException
-         * @throws SessionExpiredException
-         * @throws PeerNotFoundException !may
+         * @throws SessionNoLongerAuthenticatedException
          */
         public function execute(Request $request): Response
         {
