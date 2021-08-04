@@ -12,7 +12,7 @@
                 "package": "net.intellivoid.socialvoidlib",
                 "version": "latest",
                 "source": "default@github/intellivoid/SocialvoidLib",
-                "required": true
+                "required": false
             },
             {
                 "package": "net.intellivoid.acm",
@@ -57,9 +57,9 @@
         }
     ],
     "files": [
-        "update_worker",
         "package.json",
-        "query_worker",
-        "main"
+        "main",
+        "update_worker",
+        "query_worker"
     ]
 }
