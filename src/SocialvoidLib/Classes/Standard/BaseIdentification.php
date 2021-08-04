@@ -13,7 +13,6 @@
     use SocialvoidLib\Classes\Security\Hashing;
     use SocialvoidLib\InputTypes\DocumentInput;
     use SocialvoidLib\InputTypes\SessionClient;
-    use SocialvoidLib\InputTypes\SessionDevice;
     use SocialvoidLib\Objects\ActiveSession\SessionSecurity;
 
     /**

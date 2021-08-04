@@ -15,7 +15,6 @@
     use msqg\QueryBuilder;
     use SocialvoidLib\Abstracts\StatusStates\FollowerState;
     use SocialvoidLib\Abstracts\StatusStates\UserPrivacyState;
-    use SocialvoidLib\Classes\Standard\BaseIdentification;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\Internal\FollowerStateNotFoundException;
     use SocialvoidLib\Objects\Follower;

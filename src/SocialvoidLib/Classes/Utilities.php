@@ -16,7 +16,6 @@ namespace SocialvoidLib\Classes;
     use SocialvoidLib\Abstracts\Types\Standard\PostType;
     use SocialvoidLib\Classes\Security\Hashing;
     use SocialvoidLib\Objects\Post;
-    use SocialvoidLib\SocialvoidLib;
 
     /**
      * Class Utilities

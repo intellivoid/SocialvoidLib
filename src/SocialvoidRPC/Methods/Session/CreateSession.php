@@ -7,7 +7,6 @@
     use KimchiRPC\Interfaces\MethodInterface;
     use KimchiRPC\Objects\Request;
     use KimchiRPC\Objects\Response;
-    use SocialvoidLib\Classes\Utilities;
     use SocialvoidLib\Classes\Validate;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientNameException;
