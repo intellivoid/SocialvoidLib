@@ -1,0 +1,39 @@
+{
+    "package": {
+        "package_name": "net.intellivoid.socialvoid_admin",
+        "name": "Socialvoid Admin",
+        "version": "1.0.0.0",
+        "author": "Zi Xing Narrakas",
+        "organization": "Intellivoid",
+        "description": "The Socialvoid Administrator Program",
+        "url": "https://github.com/intellivoid/socialvoidlib",
+        "dependencies": [
+            {
+                "package": "net.intellivoid.socialvoidlib",
+                "version": "latest",
+                "source": "default@github/intellivoid/SocialvoidLib",
+                "required": false
+            }
+        ],
+        "configuration": {
+            "autoload_method": "generated_spl",
+            "main": {
+                "execution_point": "main",
+                "create_symlink": true,
+                "name": "socialvoid"
+            },
+            "post_installation": [],
+            "pre_installation": []
+        }
+    },
+    "components": [
+        {
+            "required": true,
+            "file": "SocialvoidAdmin.php"
+        }
+    ],
+    "files": [
+        "package.json",
+        "main"
+    ]
+}
