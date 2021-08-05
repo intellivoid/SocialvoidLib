@@ -103,13 +103,6 @@
                 throw new InvalidPeerInputException("The given peer input is invalid", $peer);
             }
 
-            // Cache the results partially to the session cache
-            if($cache_session)
-            {
-                $this->networkSession->active_session->SessionCache->cachePeer($peer_result);
-                $this->networkSession->updateActiveSession();
-            }
-
             return $peer_result;
         }
 
@@ -129,16 +122,7 @@
         {
             // TODO: Update the timeline upon a follow event
             // Resolve the Peer ID
-            $cache_peer = $this->networkSession->getActiveSession()->getSessionCache()->getCachedPeer($peer);
-
-            if($cache_peer == null)
-            {
-                $peer_id = $this->resolvePeer($peer)->ID;
-            }
-            else
-            {
-                $peer_id = $cache_peer->PeerID;
-            }
+            $peer_id = $this->resolvePeer($peer)->ID;
 
             try
             {
@@ -197,16 +181,7 @@
         public function getFollowerData($peer): FollowerData
         {
             // Resolve the Peer ID
-            $cache_peer = $this->networkSession->getActiveSession()->getSessionCache()->getCachedPeer($peer);
-
-            if($cache_peer == null)
-            {
-                $peer_id = $this->resolvePeer($peer)->ID;
-            }
-            else
-            {
-                $peer_id = $cache_peer->PeerID;
-            }
+            $peer_id = $this->resolvePeer($peer)->ID;
 
             return $this->networkSession->getSocialvoidLib()->getFollowerDataManager()->resolveRecord($peer_id);
         }
