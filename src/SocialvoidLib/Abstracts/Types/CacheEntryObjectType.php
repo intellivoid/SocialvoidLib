@@ -12,4 +12,6 @@
         const User = "user";
 
         const Post = "post";
+
+        const Session = "session";
     }

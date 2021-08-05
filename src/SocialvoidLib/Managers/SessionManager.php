@@ -16,13 +16,19 @@
     use Exception;
     use msqg\QueryBuilder;
     use SocialvoidLib\Abstracts\SearchMethods\ActiveSessionSearchMethod;
+    use SocialvoidLib\Abstracts\Types\CacheEntryObjectType;
     use SocialvoidLib\Abstracts\UserAuthenticationMethod;
     use SocialvoidLib\Classes\Standard\BaseIdentification;
+    use SocialvoidLib\Exceptions\GenericInternal\CacheException;
+    use SocialvoidLib\Exceptions\GenericInternal\CacheMissedException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
+    use SocialvoidLib\Exceptions\GenericInternal\DependencyError;
     use SocialvoidLib\Exceptions\GenericInternal\DeprecatedComponentException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
+    use SocialvoidLib\Exceptions\GenericInternal\RedisCacheException;
     use SocialvoidLib\Exceptions\GenericInternal\SecurityException;
     use SocialvoidLib\Exceptions\Standard\Authentication\SessionNotFoundException;
+    use SocialvoidLib\InputTypes\RegisterCacheInput;
     use SocialvoidLib\InputTypes\SessionClient;
     use SocialvoidLib\Objects\ActiveSession;
     use SocialvoidLib\Objects\ActiveSession\SessionData;
@@ -124,6 +130,7 @@
          * @throws DatabaseException
          * @throws InvalidSearchMethodException
          * @throws SessionNotFoundException
+         * @throws CacheException
          * @noinspection PhpDocMissingThrowsInspection
          */
         public function getSession(string $search_method, string $value): ActiveSession
@@ -136,12 +143,19 @@
                     break;
 
 
+                /** @noinspection PhpDeprecationInspection */
                 case ActiveSessionSearchMethod::ByPublicId:
                     /** @noinspection PhpUnhandledExceptionInspection */
                     throw new DeprecatedComponentException("The search method  'ByPublicId' is deprecated, use 'ById' instead.");
 
                 default:
                     throw new InvalidSearchMethodException("The given search method is not applicable to getSession()", $search_method, $value);
+            }
+
+            if($this->socialvoidLib->getRedisBasicCacheConfiguration()["Enabled"] && $this->socialvoidLib->getRedisBasicCacheConfiguration()["SessionCacheEnabled"])
+            {
+                $CachedPost = $this->getSessionCacheEntry($value);
+                if($CachedPost !== null) return $CachedPost;
             }
 
             $Query = QueryBuilder::select("sessions", [
@@ -176,7 +190,9 @@
                     $Row["data"] = ZiProto::decode($Row["data"]);
                     $Row["security"] = ZiProto::decode($Row["security"]);
 
-                    return(ActiveSession::fromArray($Row));
+                    $returnResults = ActiveSession::fromArray($Row);
+                    $this->registerSessionCacheEntry($returnResults);
+                    return $returnResults;
                 }
             }
             else
@@ -193,6 +209,7 @@
          *
          * @param ActiveSession $activeSession
          * @return ActiveSession
+         * @throws CacheException
          * @throws DatabaseException
          */
         public function updateSession(ActiveSession $activeSession): ActiveSession
@@ -220,6 +237,7 @@
 
             if($QueryResults)
             {
+                $this->registerSessionCacheEntry($activeSession);
                 return $activeSession;
             }
             else
@@ -230,4 +248,70 @@
                 );
             }
         }
+
+        /**
+         * Registers a session cache entry
+         *
+         * @param ActiveSession $activeSession
+         * @throws CacheException
+         */
+        private function registerSessionCacheEntry(ActiveSession $activeSession): void
+        {
+            if(
+                $this->socialvoidLib->getRedisBasicCacheConfiguration()["Enabled"] &&
+                $this->socialvoidLib->getRedisBasicCacheConfiguration()["SessionCacheEnabled"]
+            )
+            {
+                $CacheEntryInput = new RegisterCacheInput();
+                $CacheEntryInput->ObjectType = CacheEntryObjectType::Session;
+                $CacheEntryInput->ObjectData = $activeSession->toArray();
+                $CacheEntryInput->Pointers = [$activeSession->ID];
+
+                try
+                {
+                    $this->socialvoidLib->getBasicRedisCacheManager()->registerCache(
+                        $CacheEntryInput,
+                        $this->socialvoidLib->getRedisBasicCacheConfiguration()["SessionCacheTTL"],
+                        $this->socialvoidLib->getRedisBasicCacheConfiguration()["SessionCacheLimit"]
+                    );
+                }
+                catch(Exception $e)
+                {
+                    throw new CacheException("There was an error while trying to register the session cache entry", 0, $e);
+                }
+            }
+        }
+
+        /**
+         * Gets a session cache entry
+         *
+         * @param string $value
+         * @return ActiveSession|null
+         * @throws CacheException
+         */
+        private function getSessionCacheEntry(string $value): ?ActiveSession
+        {
+            if($this->socialvoidLib->getRedisBasicCacheConfiguration()["Enabled"] == false)
+                throw new CacheException("BasicRedisCache is not enabled");
+
+            if($this->socialvoidLib->getRedisBasicCacheConfiguration()["SessionCacheEnabled"] == false)
+                return null;
+
+            try
+            {
+                $CacheEntryResults = $this->socialvoidLib->getBasicRedisCacheManager()->getCacheEntry(
+                    CacheEntryObjectType::Session, $value);
+            }
+            catch (CacheMissedException $e)
+            {
+                return null;
+            }
+            catch (DependencyError | RedisCacheException $e)
+            {
+                throw new CacheException("There was an issue while trying to request a session cache entry", 0, $e);
+            }
+
+            return ActiveSession::fromArray($CacheEntryResults->ObjectData);
+        }
+
     }

@@ -763,6 +763,7 @@
          */
         private function registerPostCacheEntry(Post $post): void
         {
+            // TODO: Add check if post cache is enabled
             if($this->socialvoidLib->getRedisBasicCacheConfiguration()["Enabled"])
             {
                 $CacheEntryInput = new RegisterCacheInput();
@@ -794,6 +795,7 @@
          */
         private function getPostCacheEntry(string $value): ?Post
         {
+            // TODO: Add check if post cache is enabled
             if($this->socialvoidLib->getRedisBasicCacheConfiguration()["Enabled"] == false)
                 throw new CacheException("BasicRedisCache is not enabled");
 

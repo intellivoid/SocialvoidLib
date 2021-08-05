@@ -35,7 +35,11 @@
     "components": [
         {
             "required": true,
-            "file": "SocialvoidRPC.php"
+            "file": "Methods/Session/AuthenticateUser.php"
+        },
+        {
+            "required": true,
+            "file": "Methods/Session/Logout.php"
         },
         {
             "required": true,
@@ -47,16 +51,12 @@
         },
         {
             "required": true,
-            "file": "Methods/Session/AuthenticateUser.php"
-        },
-        {
-            "required": true,
-            "file": "Methods/Session/Logout.php"
+            "file": "SocialvoidRPC.php"
         }
     ],
     "files": [
+        "rpc_worker",
         "package.json",
-        "main",
-        "rpc_worker"
+        "main"
     ]
 }
