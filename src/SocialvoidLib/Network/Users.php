@@ -52,17 +52,18 @@
          *
          * @param $peer
          * @param bool $cache_session
+         * @param bool $resolve_internally
          * @return User
+         * @throws CacheException
          * @throws DatabaseException
          * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
          * @throws PeerNotFoundException
-         * @throws CacheException
          */
-        public function resolvePeer($peer, bool $cache_session=True): User
+        public function resolvePeer($peer, bool $cache_session=True, bool $resolve_internally=True): User
         {
             // Probably an ID
-            if(ctype_digit($peer) || is_int($peer))
+            if((ctype_digit($peer) && $resolve_internally) || (is_int($peer) && $resolve_internally))
             {
                 // Self-Resolved, no need to ask the database.
                 if($peer == $this->networkSession->getAuthenticatedUser()->ID)
