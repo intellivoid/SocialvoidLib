@@ -21,10 +21,17 @@
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
     use SocialvoidLib\Exceptions\Internal\FollowerDataNotFound;
     use SocialvoidLib\Exceptions\Internal\FollowerStateNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Authentication\BadSessionChallengeAnswerException;
+    use SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException;
+    use SocialvoidLib\Exceptions\Standard\Authentication\SessionExpiredException;
+    use SocialvoidLib\Exceptions\Standard\Authentication\SessionNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPublicHashException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPeerInputException;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\NetworkSession;
     use SocialvoidLib\Objects\FollowerData;
+    use SocialvoidLib\Objects\Standard\SessionIdentification;
     use SocialvoidLib\Objects\User;
 
     /**
@@ -50,6 +57,7 @@
         /**
          * Resolves a peer ID, Username or Public ID.
          *
+         * @param SessionIdentification $sessionIdentification
          * @param $peer
          * @param bool $resolve_internally
          * @return User
@@ -57,10 +65,20 @@
          * @throws DatabaseException
          * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
+         * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
+         * @throws BadSessionChallengeAnswerException
+         * @throws SessionExpiredException
+         * @throws SessionNotFoundException
+         * @throws InternalServerException
+         * @throws InvalidClientPublicHashException
          */
-        public function resolvePeer($peer, bool $resolve_internally=True): User
+        public function resolvePeer(SessionIdentification $sessionIdentification, $peer, bool $resolve_internally=True): User
         {
+            $this->networkSession->loadSession($sessionIdentification);
+            if($this->networkSession->isAuthenticated() == false)
+                throw new NotAuthenticatedException();
+
             // Probably an ID
             if((ctype_digit($peer) && $resolve_internally) || (is_int($peer) && $resolve_internally))
             {
@@ -108,20 +126,31 @@
         /**
          * Follows another peer on the network
          *
+         * @param SessionIdentification $sessionIdentification
          * @param $peer
          * @return string
+         * @throws BadSessionChallengeAnswerException
+         * @throws CacheException
          * @throws DatabaseException
          * @throws FollowerDataNotFound
+         * @throws InternalServerException
+         * @throws InvalidClientPublicHashException
          * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
+         * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
-         * @throws CacheException
+         * @throws SessionExpiredException
+         * @throws SessionNotFoundException
          */
-        public function followPeer($peer): string
+        public function followPeer(SessionIdentification $sessionIdentification, $peer): string
         {
+            $this->networkSession->loadSession($sessionIdentification);
+            if($this->networkSession->isAuthenticated() == false)
+                throw new NotAuthenticatedException();
+
             // TODO: Update the timeline upon a follow event
             // Resolve the Peer ID
-            $peer_id = $this->resolvePeer($peer)->ID;
+            $peer_id = $this->resolvePeer($sessionIdentification, $peer)->ID;
 
             try
             {
@@ -136,7 +165,7 @@
                 unset($e);
             }
 
-            $TargetPeer = $this->resolvePeer($peer_id);
+            $TargetPeer = $this->resolvePeer($sessionIdentification, $peer_id);
 
             $FollowerState = $this->networkSession->getSocialvoidLib()->getFollowerStateManager()->registerFollowingState(
                 $this->networkSession->getAuthenticatedUser()->ID, $TargetPeer
@@ -168,19 +197,30 @@
         /**
          * Gets following data of a peer
          *
+         * @param SessionIdentification $sessionIdentification
          * @param $peer
          * @return FollowerData
+         * @throws BadSessionChallengeAnswerException
          * @throws CacheException
          * @throws DatabaseException
          * @throws FollowerDataNotFound
+         * @throws InternalServerException
+         * @throws InvalidClientPublicHashException
          * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
+         * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
+         * @throws SessionExpiredException
+         * @throws SessionNotFoundException
          */
-        public function getFollowerData($peer): FollowerData
+        public function getFollowerData(SessionIdentification $sessionIdentification, $peer): FollowerData
         {
+            $this->networkSession->loadSession($sessionIdentification);
+            if($this->networkSession->isAuthenticated() == false)
+                throw new NotAuthenticatedException();
+
             // Resolve the Peer ID
-            $peer_id = $this->resolvePeer($peer)->ID;
+            $peer_id = $this->resolvePeer($sessionIdentification, $peer)->ID;
 
             return $this->networkSession->getSocialvoidLib()->getFollowerDataManager()->resolveRecord($peer_id);
         }
@@ -188,22 +228,33 @@
         /**
          * Gets a list of users that are following this peer
          *
+         * @param SessionIdentification $sessionIdentification
          * @param $peer
          * @param int $offset
          * @param int $limit
          * @return array
+         * @throws BadSessionChallengeAnswerException
          * @throws CacheException
          * @throws DatabaseException
          * @throws FollowerDataNotFound
+         * @throws InternalServerException
+         * @throws InvalidClientPublicHashException
          * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
+         * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
+         * @throws SessionExpiredException
+         * @throws SessionNotFoundException
          */
-        public function getFollowers($peer, int $offset=0, int $limit=100): array
+        public function getFollowers(SessionIdentification $sessionIdentification, $peer, int $offset=0, int $limit=100): array
         {
+            $this->networkSession->loadSession($sessionIdentification);
+            if($this->networkSession->isAuthenticated() == false)
+                throw new NotAuthenticatedException();
+
             $Results = [];
             $CurrentIteration = 0;
-            $FollowerData = $this->getFollowerData($peer);
+            $FollowerData = $this->getFollowerData($sessionIdentification, $peer);
 
             foreach($FollowerData->FollowersIDs as $followersID)
             {
@@ -211,7 +262,7 @@
                 {
                     try
                     {
-                        $Results[] = $this->resolvePeer($followersID);
+                        $Results[] = $this->resolvePeer($sessionIdentification, $followersID);
                     }
                     catch(Exception $e)
                     {
@@ -231,40 +282,62 @@
         /**
          * Returns an array of followers via IDs
          *
+         * @param SessionIdentification $sessionIdentification
          * @param $peer
          * @return array
+         * @throws BadSessionChallengeAnswerException
          * @throws CacheException
          * @throws DatabaseException
          * @throws FollowerDataNotFound
+         * @throws InternalServerException
+         * @throws InvalidClientPublicHashException
          * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
+         * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
+         * @throws SessionExpiredException
+         * @throws SessionNotFoundException
          */
-        public function getFollowerIDs($peer): array
+        public function getFollowerIDs(SessionIdentification $sessionIdentification, $peer): array
         {
-            $FollowerData = $this->getFollowerData($peer);
+            $this->networkSession->loadSession($sessionIdentification);
+            if($this->networkSession->isAuthenticated() == false)
+                throw new NotAuthenticatedException();
+
+            $FollowerData = $this->getFollowerData($sessionIdentification, $peer);
             return $FollowerData->FollowersIDs;
         }
 
         /**
          * Gets a list of users that the peer is following
          *
+         * @param SessionIdentification $sessionIdentification
          * @param $peer
          * @param int $offset
          * @param int $limit
          * @return array
+         * @throws BadSessionChallengeAnswerException
          * @throws CacheException
          * @throws DatabaseException
          * @throws FollowerDataNotFound
+         * @throws InternalServerException
+         * @throws InvalidClientPublicHashException
          * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
+         * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
+         * @throws SessionExpiredException
+         * @throws SessionNotFoundException
          */
-        public function getFollowing($peer, int $offset=0, int $limit=100): array
+        public function getFollowing(SessionIdentification $sessionIdentification, $peer, int $offset=0, int $limit=100): array
         {
+            $this->networkSession->loadSession($sessionIdentification);
+            if($this->networkSession->isAuthenticated() == false)
+                throw new NotAuthenticatedException();
+
             $Results = [];
             $CurrentIteration = 0;
-            $FollowerData = $this->getFollowerData($peer);
+            $FollowerData = $this->getFollowerData($sessionIdentification, $peer);
 
             foreach($FollowerData->FollowingIDs as $followingsID)
             {
@@ -272,7 +345,7 @@
                 {
                     try
                     {
-                        $Results[] = $this->resolvePeer($followingsID);
+                        $Results[] = $this->resolvePeer($sessionIdentification, $followingsID);
                     }
                     catch(Exception $e)
                     {
@@ -292,18 +365,29 @@
         /**
          * Returns an array of following via IDs
          *
+         * @param SessionIdentification $sessionIdentification
          * @param $peer
          * @return array
+         * @throws BadSessionChallengeAnswerException
          * @throws CacheException
          * @throws DatabaseException
          * @throws FollowerDataNotFound
+         * @throws InternalServerException
+         * @throws InvalidClientPublicHashException
          * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
+         * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
+         * @throws SessionExpiredException
+         * @throws SessionNotFoundException
          */
-        public function getFollowingIDs($peer): array
+        public function getFollowingIDs(SessionIdentification $sessionIdentification, $peer): array
         {
-            $FollowerData = $this->getFollowerData($peer);
+            $this->networkSession->loadSession($sessionIdentification);
+            if($this->networkSession->isAuthenticated() == false)
+                throw new NotAuthenticatedException();
+
+            $FollowerData = $this->getFollowerData($sessionIdentification, $peer);
             return $FollowerData->FollowingIDs;
         }
     }
