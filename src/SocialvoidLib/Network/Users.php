@@ -51,7 +51,6 @@
          * Resolves a peer ID, Username or Public ID.
          *
          * @param $peer
-         * @param bool $cache_session
          * @param bool $resolve_internally
          * @return User
          * @throws CacheException
@@ -60,7 +59,7 @@
          * @throws InvalidSearchMethodException
          * @throws PeerNotFoundException
          */
-        public function resolvePeer($peer, bool $cache_session=True, bool $resolve_internally=True): User
+        public function resolvePeer($peer, bool $resolve_internally=True): User
         {
             // Probably an ID
             if((ctype_digit($peer) && $resolve_internally) || (is_int($peer) && $resolve_internally))
@@ -212,7 +211,7 @@
                 {
                     try
                     {
-                        $Results[] = $this->resolvePeer($followersID, false);
+                        $Results[] = $this->resolvePeer($followersID);
                     }
                     catch(Exception $e)
                     {
@@ -273,7 +272,7 @@
                 {
                     try
                     {
-                        $Results[] = $this->resolvePeer($followingsID, false);
+                        $Results[] = $this->resolvePeer($followingsID);
                     }
                     catch(Exception $e)
                     {
