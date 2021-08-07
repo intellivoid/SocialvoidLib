@@ -73,8 +73,6 @@
                 throw new MissingParameterException("Missing parameter 'session_identification'");
             if(gettype($request->Parameters["session_identification"]) !== "array")
                 throw new InvalidSessionIdentificationException("The parameter 'session_identification' is not a object");
-            if(gettype($request->Parameters["session_identification"]) !== "array")
-                throw new InvalidSessionIdentificationException("The parameter 'session_identification' is not a object");
         }
 
         /**
