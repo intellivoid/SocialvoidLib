@@ -119,11 +119,22 @@
                 throw new InternalServerException("There was an unexpected error", $e);
             }
 
+            try
+            {
+                $resolved_peer = $NetworkSession->getUsers()->resolvePeer($SessionIdentification, $NetworkSession->getAuthenticatedUser()->PublicID);
+            }
+            catch(Exception $e)
+            {
+                // Allow standard errors
+                if(Validate::isStandardError($e->getCode()))
+                    throw $e;
 
+                // If anything else, suppress the error.
+                throw new InternalServerException("There was an unexpected error", $e);
+            }
+            
             $Response = Response::fromRequest($request);
-            $Response->ResultData = Peer::fromUser($NetworkSession->getUsers()->resolvePeer(
-                $SessionIdentification, $NetworkSession->getAuthenticatedUser()->PublicID
-            ))->toArray();
+            $Response->ResultData = Peer::fromUser($resolved_peer)->toArray();
 
             return $Response;
         }
