@@ -18,7 +18,6 @@
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPublicHashException;
-    use SocialvoidLib\Exceptions\Standard\Validation\InvalidPeerInputException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidSessionIdentificationException;
     use SocialvoidLib\NetworkSession;
     use SocialvoidLib\Objects\Standard\Peer;
@@ -78,19 +77,18 @@
         /**
          * @param Request $request
          * @return Response
-         * @throws InternalServerException
-         * @throws InvalidSessionIdentificationException
-         * @throws MissingParameterException
+         * @throws BadSessionChallengeAnswerException
          * @throws CacheException !may
          * @throws DatabaseException !may
+         * @throws InternalServerException
+         * @throws InvalidClientPublicHashException
          * @throws InvalidSearchMethodException !may
-         * @throws BadSessionChallengeAnswerException
+         * @throws InvalidSessionIdentificationException
+         * @throws MissingParameterException
          * @throws NotAuthenticatedException
+         * @throws PeerNotFoundException
          * @throws SessionExpiredException
          * @throws SessionNotFoundException
-         * @throws PeerNotFoundException
-         * @throws InvalidClientPublicHashException
-         * @throws InvalidPeerInputException
          */
         public function execute(Request $request): Response
         {
@@ -132,7 +130,7 @@
                 // If anything else, suppress the error.
                 throw new InternalServerException("There was an unexpected error", $e);
             }
-            
+
             $Response = Response::fromRequest($request);
             $Response->ResultData = Peer::fromUser($resolved_peer)->toArray();
 
