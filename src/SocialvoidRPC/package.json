@@ -47,6 +47,10 @@
         },
         {
             "required": true,
+            "file": "Methods/Session/Register.php"
+        },
+        {
+            "required": true,
             "file": "Methods/Session/AuthenticateUser.php"
         },
         {

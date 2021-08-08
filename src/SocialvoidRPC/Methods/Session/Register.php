@@ -1,6 +1,6 @@
 <?php
 
-    namespace SocialvoidRPC\Methods\Network;
+    namespace SocialvoidRPC\Methods\Session;
 
     use Exception;
     use KimchiRPC\Exceptions\Server\MissingParameterException;
@@ -11,20 +11,24 @@
     use SocialvoidLib\Exceptions\GenericInternal\CacheException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
+    use SocialvoidLib\Exceptions\Standard\Authentication\AlreadyAuthenticatedException;
     use SocialvoidLib\Exceptions\Standard\Authentication\BadSessionChallengeAnswerException;
-    use SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException;
     use SocialvoidLib\Exceptions\Standard\Authentication\SessionExpiredException;
     use SocialvoidLib\Exceptions\Standard\Authentication\SessionNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPublicHashException;
-    use SocialvoidLib\Exceptions\Standard\Validation\InvalidPeerInputException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidFirstNameException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidLastNameException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidPasswordException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidSessionIdentificationException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidUsernameException;
+    use SocialvoidLib\Exceptions\Standard\Validation\UsernameAlreadyExistsException;
     use SocialvoidLib\NetworkSession;
     use SocialvoidLib\Objects\Standard\SessionIdentification;
     use SocialvoidRPC\SocialvoidRPC;
 
-    class GetMe implements MethodInterface
+    class Register implements MethodInterface
     {
 
         /**
@@ -32,7 +36,7 @@
          */
         public function getMethodName(): string
         {
-            return "GetMe";
+            return "Register";
         }
 
         /**
@@ -40,7 +44,7 @@
          */
         public function getMethod(): string
         {
-            return "network.get_me";
+            return "session.register";
         }
 
         /**
@@ -48,7 +52,7 @@
          */
         public function getDescription(): string
         {
-            return "Returns a User object of the current authenticated user";
+            return "Registers a new peer into the network";
         }
 
         /**
@@ -59,37 +63,55 @@
             return "1.0.0.0";
         }
 
-        /**
-         * Checks the parameters of the server
-         *
-         * @param Request $request
-         * @throws InvalidSessionIdentificationException
-         * @throws MissingParameterException
-         */
         private function checkParameters(Request $request)
         {
             if(isset($request->Parameters["session_identification"]) == false)
                 throw new MissingParameterException("Missing parameter 'session_identification'");
             if(gettype($request->Parameters["session_identification"]) !== "array")
                 throw new InvalidSessionIdentificationException("The parameter 'session_identification' is not a object");
+
+            if(isset($request->Parameters["username"]) == false)
+                throw new MissingParameterException("Missing parameter 'username'");
+            if(gettype($request->Parameters["username"]) !== "string")
+                throw new InvalidUsernameException("The 'username' parameter must be a string", $request->Parameters["username"]);
+
+            if(isset($request->Parameters["password"]) == false)
+                throw new MissingParameterException("Missing parameter 'password'");
+            if(gettype($request->Parameters["password"]) !== "string")
+                throw new InvalidPasswordException("The 'password' parameter must be a string", $request->Parameters["password"]);
+
+            if(isset($request->Parameters["first_name"]) == false)
+                throw new MissingParameterException("Missing parameter 'first_name'");
+            if(gettype($request->Parameters["first_name"]) !== "string")
+                throw new InvalidFirstNameException("The 'first_name' parameter must be a string", $request->Parameters["first_name"]);
+
+            if(isset($request->Parameters["last_name"]))
+            {
+                if(gettype($request->Parameters["last_name"]) !== "string")
+                    throw new InvalidLastNameException("The 'last_name' parameter must be a string", $request->Parameters["last_name"]);
+            }
         }
 
         /**
          * @param Request $request
          * @return Response
-         * @throws InternalServerException
-         * @throws InvalidSessionIdentificationException
-         * @throws MissingParameterException
-         * @throws CacheException !may
-         * @throws DatabaseException !may
-         * @throws InvalidSearchMethodException !may
+         * @throws AlreadyAuthenticatedException
          * @throws BadSessionChallengeAnswerException
-         * @throws NotAuthenticatedException
+         * @throws CacheException
+         * @throws DatabaseException
+         * @throws InternalServerException
+         * @throws InvalidClientPublicHashException
+         * @throws InvalidFirstNameException
+         * @throws InvalidLastNameException
+         * @throws InvalidPasswordException
+         * @throws InvalidSearchMethodException
+         * @throws InvalidSessionIdentificationException
+         * @throws InvalidUsernameException
+         * @throws MissingParameterException
+         * @throws PeerNotFoundException
          * @throws SessionExpiredException
          * @throws SessionNotFoundException
-         * @throws PeerNotFoundException
-         * @throws InvalidClientPublicHashException
-         * @throws InvalidPeerInputException
+         * @throws UsernameAlreadyExistsException
          */
         public function execute(Request $request): Response
         {
@@ -106,24 +128,26 @@
 
             try
             {
-                $NetworkSession->loadSession($SessionIdentification);
+                $RegisteredPeer = $NetworkSession->registerUser(
+                    $SessionIdentification,
+                    $request->Parameters["username"],
+                    $request->Parameters["password"],
+                    $request->Parameters["first_name"],
+                    ($request->Parameters["last_name"] ?? null),
+                );
             }
-            catch(Exception $e)
+            catch (Exception $e)
             {
                 // Allow standard errors
                 if(Validate::isStandardError($e->getCode()))
                     throw $e;
 
                 // If anything else, suppress the error.
-                throw new InternalServerException("There was an unexpected error", $e);
+                throw new InternalServerException("There was an unexpected error while tyring to register the peer to the network", $e);
             }
 
-
             $Response = Response::fromRequest($request);
-            $Response->ResultData = $NetworkSession->getUsers()->resolvePeer(
-                $SessionIdentification, $NetworkSession->getAuthenticatedUser()->PublicID
-            )->toArray();
-
+            $Response->ResultData = $RegisteredPeer->toArray();
             return $Response;
         }
     }

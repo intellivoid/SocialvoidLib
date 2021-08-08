@@ -113,6 +113,7 @@
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Session\GetSession());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Session\AuthenticateUser());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Session\Logout());
+            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Session\Register());
         }
 
         /**

@@ -13,6 +13,7 @@
     use SocialvoidLib\Exceptions\GenericInternal\CacheException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
+    use SocialvoidLib\Exceptions\Internal\NoPasswordAuthenticationAvailableException;
     use SocialvoidLib\Exceptions\Standard\Authentication\AlreadyAuthenticatedException;
     use SocialvoidLib\Exceptions\Standard\Authentication\AuthenticationFailureException;
     use SocialvoidLib\Exceptions\Standard\Authentication\AuthenticationNotApplicableException;
@@ -123,6 +124,7 @@
          * @throws SessionExpiredException
          * @throws SessionNotFoundException !may
          * @throws TwoFactorAuthenticationRequiredException
+         * @throws NoPasswordAuthenticationAvailableException !may
          */
         public function execute(Request $request): Response
         {
@@ -163,7 +165,6 @@
 
                 // If anything else, suppress the error.
                 throw new InternalServerException("There was an unexpected error while tyring to establish your session", $e);
-
             }
 
             $Response = Response::fromRequest($request);

@@ -87,8 +87,11 @@
             if(Validate::firstName($first_name) == false)
                 throw new InvalidFirstNameException("The given first name is invalid or empty", $first_name);
 
-            if(Validate::lastName($last_name) == false)
-                throw new InvalidLastNameException("The given last name is invalid or empty", $last_name);
+            if($last_name !== null)
+            {
+                if(Validate::lastName($last_name) == false)
+                    throw new InvalidLastNameException("The given last name is invalid or empty", $last_name);
+            }
 
             if($this->checkUsernameExists($username))
                 throw new UsernameAlreadyExistsException("The given username is already registered on the network", $username);

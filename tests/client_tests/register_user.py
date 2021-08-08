@@ -9,12 +9,18 @@ with open(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', 'ses
     session_info = json.load(f)
 
 response = request(
-    client_info["endpoint"], "network.get_me",
+    client_info["endpoint"], "session.register",
+
      session_identification={
         "session_id": session_info["id"],
         "client_public_hash": client_info["public_hash"],
         "challenge_answer": answer_challenge(client_info["private_hash"], session_info["challenge"])
-     }
+     },
+
+     username="netkas",
+     password="SuperExtreme1Password24...",
+     first_name="Zi",
+     last_name="Xing"
 )
 
 print(response.data.result)
