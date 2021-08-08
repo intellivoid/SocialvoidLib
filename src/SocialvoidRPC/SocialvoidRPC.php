@@ -107,6 +107,7 @@
 
             // Network Methods
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Network\GetMe());
+            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Network\ResolvePeer());
 
             // Session methods
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Session\CreateSession());
