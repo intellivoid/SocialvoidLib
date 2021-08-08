@@ -21,6 +21,7 @@
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPeerInputException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidSessionIdentificationException;
     use SocialvoidLib\NetworkSession;
+    use SocialvoidLib\Objects\Standard\Peer;
     use SocialvoidLib\Objects\Standard\SessionIdentification;
     use SocialvoidRPC\SocialvoidRPC;
 
@@ -120,9 +121,9 @@
 
 
             $Response = Response::fromRequest($request);
-            $Response->ResultData = $NetworkSession->getUsers()->resolvePeer(
+            $Response->ResultData = Peer::fromUser($NetworkSession->getUsers()->resolvePeer(
                 $SessionIdentification, $NetworkSession->getAuthenticatedUser()->PublicID
-            )->toArray();
+            ))->toArray();
 
             return $Response;
         }

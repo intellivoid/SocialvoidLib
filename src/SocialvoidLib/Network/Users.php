@@ -74,7 +74,7 @@
          * @throws SessionExpiredException
          * @throws SessionNotFoundException
          */
-        public function resolvePeer(SessionIdentification $sessionIdentification, $peer, bool $resolve_internally=True): Peer
+        public function resolvePeer(SessionIdentification $sessionIdentification, $peer, bool $resolve_internally=True): User
         {
             $this->networkSession->loadSession($sessionIdentification);
             if($this->networkSession->isAuthenticated() == false)
@@ -85,7 +85,7 @@
             {
                 // Self-Resolved, no need to ask the database.
                 if($peer == $this->networkSession->getAuthenticatedUser()->ID)
-                    return Peer::fromUser($this->networkSession->getAuthenticatedUser());
+                    return $this->networkSession->getAuthenticatedUser();
 
                 // Ask the database
                 $peer_result = $this->networkSession->getSocialvoidLib()->getUserManager()->getUser(
@@ -97,7 +97,7 @@
             {
                 // Self-Resolved, no need to ask the database.
                 if(strtolower(substr($peer, 1)) == $this->networkSession->getAuthenticatedUser()->UsernameSafe)
-                    return Peer::fromUser($this->networkSession->getAuthenticatedUser());
+                    return $this->networkSession->getAuthenticatedUser();
 
                 // Ask the database
                 $peer_result = $this->networkSession->getSocialvoidLib()->getUserManager()->getUser(
@@ -109,7 +109,7 @@
             {
                 // Self-Resolved, no need to ask the database.
                 if($peer == $this->networkSession->getAuthenticatedUser()->PublicID)
-                    return Peer::fromUser($this->networkSession->getAuthenticatedUser());
+                    return $this->networkSession->getAuthenticatedUser();
 
                 // Ask the database
                 $peer_result = $this->networkSession->getSocialvoidLib()->getUserManager()->getUser(
@@ -121,7 +121,7 @@
                 throw new InvalidPeerInputException("The given peer input is invalid", $peer);
             }
 
-            return Peer::fromUser($peer_result);
+            return $peer_result;
         }
 
         /**
