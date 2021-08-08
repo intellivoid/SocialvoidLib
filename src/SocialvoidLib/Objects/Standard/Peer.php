@@ -13,6 +13,7 @@
 
     namespace SocialvoidLib\Objects\Standard;
 
+    use SocialvoidLib\Abstracts\Types\Standard\PeerType;
     use SocialvoidLib\Objects\Standard\Peer\Name;
     use SocialvoidLib\Objects\User;
 
@@ -30,6 +31,13 @@
         public $ID;
 
         /**
+         * The account type of this peer
+         *
+         * @var string|PeerType
+         */
+        public $Type;
+
+        /**
          * The username of the peer (Without the @)
          *
          * @var string
@@ -37,32 +45,11 @@
         public $Username;
 
         /**
-         * The network that this peer is from
-         *
-         * @var string
-         */
-        public $Network;
-
-        /**
-         * The full network address of the peer
-         *
-         * @var string
-         */
-        public $NetworkAddress;
-
-        /**
          * The name of the peer
          *
          * @var Name
          */
         public $Name;
-
-        /**
-         * The Unix Timestamp for when this peer registered to the network
-         *
-         * @var int
-         */
-        public $CreatedTimestamp;
 
         /**
          * Array of flags associated with this peer
@@ -80,11 +67,9 @@
         {
             return [
                 "id" => $this->ID,
+                "type" => $this->Type,
                 "username" => $this->Username,
-                "network" => $this->Network,
-                "network_address" => $this->NetworkAddress,
                 "name" => $this->Name->toArray(),
-                "created_timestamp"=> $this->CreatedTimestamp,
                 "flags" => $this->Flags
             ];
         }
@@ -99,13 +84,11 @@
         {
             $PeerObject = new Peer();
 
-            $PeerObject->Username = $user->Username;
             $PeerObject->ID = $user->PublicID;
-            $PeerObject->Network = $user->Network;
+            $PeerObject->Type = PeerType::User; // TODO: This needs to be re-implemented
+            $PeerObject->Username = $user->Username;
             $PeerObject->Name = Name::fromProfile($user->Profile);
-            $PeerObject->CreatedTimestamp = $user->CreatedTimestamp;
             $PeerObject->Flags = $user->Flags;
-            $PeerObject->NetworkAddress = $user->Username . "@" . $user->Network;
 
             return $PeerObject;
         }
@@ -123,22 +106,17 @@
             if(isset($data["id"]))
                 $PeerObject->ID = $data["id"];
 
+            if(isset($data["type"]))
+                $PeerObject->Type = $data["type"];
+
             if(isset($data["username"]))
                 $PeerObject->Username = $data["username"];
-
-            if(isset($data["network"]))
-                $PeerObject->Network = $data["network"];
 
             if(isset($data["name"]))
                 $PeerObject->Name = Name::fromArray($data["name"]);
 
-            if(isset($data["created_timestamp"]))
-                $PeerObject->CreatedTimestamp = $data["created_timestamp"];
-
             if(isset($data["flags"]))
                 $PeerObject->Flags = $data["flags"];
-
-            $PeerObject->NetworkAddress = $PeerObject->Username . "@" . $PeerObject->Network;
 
             return $PeerObject;
         }

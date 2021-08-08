@@ -31,6 +31,7 @@
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\NetworkSession;
     use SocialvoidLib\Objects\FollowerData;
+    use SocialvoidLib\Objects\Standard\Peer;
     use SocialvoidLib\Objects\Standard\SessionIdentification;
     use SocialvoidLib\Objects\User;
 
@@ -60,20 +61,20 @@
          * @param SessionIdentification $sessionIdentification
          * @param $peer
          * @param bool $resolve_internally
-         * @return User
+         * @return Peer
+         * @throws BadSessionChallengeAnswerException
          * @throws CacheException
          * @throws DatabaseException
+         * @throws InternalServerException
+         * @throws InvalidClientPublicHashException
          * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
          * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
-         * @throws BadSessionChallengeAnswerException
          * @throws SessionExpiredException
          * @throws SessionNotFoundException
-         * @throws InternalServerException
-         * @throws InvalidClientPublicHashException
          */
-        public function resolvePeer(SessionIdentification $sessionIdentification, $peer, bool $resolve_internally=True): User
+        public function resolvePeer(SessionIdentification $sessionIdentification, $peer, bool $resolve_internally=True): Peer
         {
             $this->networkSession->loadSession($sessionIdentification);
             if($this->networkSession->isAuthenticated() == false)
@@ -84,7 +85,7 @@
             {
                 // Self-Resolved, no need to ask the database.
                 if($peer == $this->networkSession->getAuthenticatedUser()->ID)
-                    return $this->networkSession->getAuthenticatedUser();
+                    return Peer::fromUser($this->networkSession->getAuthenticatedUser());
 
                 // Ask the database
                 $peer_result = $this->networkSession->getSocialvoidLib()->getUserManager()->getUser(
@@ -96,7 +97,7 @@
             {
                 // Self-Resolved, no need to ask the database.
                 if(strtolower(substr($peer, 1)) == $this->networkSession->getAuthenticatedUser()->UsernameSafe)
-                    return $this->networkSession->getAuthenticatedUser();
+                    return Peer::fromUser($this->networkSession->getAuthenticatedUser());
 
                 // Ask the database
                 $peer_result = $this->networkSession->getSocialvoidLib()->getUserManager()->getUser(
@@ -108,7 +109,7 @@
             {
                 // Self-Resolved, no need to ask the database.
                 if($peer == $this->networkSession->getAuthenticatedUser()->PublicID)
-                    return $this->networkSession->getAuthenticatedUser();
+                    return Peer::fromUser($this->networkSession->getAuthenticatedUser());
 
                 // Ask the database
                 $peer_result = $this->networkSession->getSocialvoidLib()->getUserManager()->getUser(
@@ -120,7 +121,7 @@
                 throw new InvalidPeerInputException("The given peer input is invalid", $peer);
             }
 
-            return $peer_result;
+            return Peer::fromUser($peer_result);
         }
 
         /**

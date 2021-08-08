@@ -160,6 +160,28 @@
 
                     throw new InternalServerException("There was an error while trying to access the session", $e);
                 }
+
+                if($this->active_session->isAuthenticated() && $this->active_session->UserID !== null)
+                {
+                    if($this->authenticated_user !== null && $this->authenticated_user->ID !== $this->active_session->UserID)
+                    {
+                        try
+                        {
+                            $this->authenticated_user = $this->socialvoidLib->getUserManager()->getUser(
+                                UserSearchMethod::ById, $this->active_session->UserID
+                            );
+                        }
+                        catch(Exception $e)
+                        {
+                            if(Validate::isStandardError($e->getCode()))
+                                /** @noinspection PhpUnhandledExceptionInspection */
+                                throw $e;
+
+                            throw new InternalServerException("There was an error while trying identify the authenticated user", $e);
+                        }
+
+                    }
+                }
             }
 
             // Always validate the challenge answer!
@@ -170,7 +192,16 @@
 
             // Update the session if it hasn't been updated in more than 3 minutes
             if((time() - $this->active_session->LastActiveTimestamp) > 300)
-                $this->active_session = $this->socialvoidLib->getSessionManager()->updateSession($this->active_session);
+            {
+                try
+                {
+                    $this->active_session = $this->socialvoidLib->getSessionManager()->updateSession($this->active_session);
+                }
+                catch(Exception $e)
+                {
+                    throw new InternalServerException("There was an error while trying to make changes to the session", $e);
+                }
+            }
         }
 
         /**

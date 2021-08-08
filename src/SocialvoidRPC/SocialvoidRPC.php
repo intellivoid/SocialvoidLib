@@ -105,6 +105,9 @@
             if(self::$RpcServer == null)
                 throw new RuntimeException("No RPC Server has been defined");
 
+            // Network Methods
+            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Network\GetMe());
+
             // Session methods
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Session\CreateSession());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Session\GetSession());
