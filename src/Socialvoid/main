@@ -1,0 +1,69 @@
+<?php
+
+    use VerboseAdventure\Abstracts\EventType;
+    use VerboseAdventure\Classes\ErrorHandler;
+    use VerboseAdventure\VerboseAdventure;
+
+    require("ppm");
+
+    import("net.intellivoid.proclib");
+
+    $current_directory = getcwd();
+
+    if(file_exists($current_directory . DIRECTORY_SEPARATOR . 'banner.txt'))
+    {
+        print(file_get_contents($current_directory . DIRECTORY_SEPARATOR . 'banner.txt') . PHP_EOL);
+    }
+    elseif(file_exists(__DIR__ . DIRECTORY_SEPARATOR . 'SocialvoidService.php'))
+    {
+        print(file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'SocialvoidService.php') . PHP_EOL);
+    }
+
+    sleep(1);
+
+    /**
+     * Socialvoid Service
+     */
+    $ServiceProcess = new \ProcLib\Process(["ppm", "--main=net.intellivoid.socialvoid_service"]);
+    $ServiceProcess->enableOutput();
+    $ServiceProcess->setTimeout(null);
+    $ServiceProcess->start(function ($type, $buffer)
+    {
+        print($buffer);
+    });
+
+    /**
+     * Socialvoid RPC
+     */
+    $RpcProcess = new \ProcLib\Process(["ppm", "--main=net.intellivoid.socialvoid_rpc"]);
+    $RpcProcess->enableOutput();
+    $RpcProcess->setTimeout(null);
+    $RpcProcess->start(function ($type, $buffer)
+    {
+        print($buffer);
+    });
+
+    while(true)
+    {
+        if($ServiceProcess->isRunning() == false || $RpcProcess->isRunning() == false)
+        {
+            print("CRITICAL FAILURE: A service module has exited unexpectedly." . PHP_EOL);
+
+            $RpcProcess->stop();
+            $ServiceProcess->stop();
+
+            print(" ---- SocialvoidRPC ----" . PHP_EOL);
+            print("Exit Code: " . $RpcProcess->getExitCode() . PHP_EOL);
+            print("Exit code text: " . $RpcProcess->getExitCodeText() . PHP_EOL);
+            print(PHP_EOL);
+
+            print(" ---- SocialvoidService ----" . PHP_EOL);
+            print("Exit Code: " . $ServiceProcess->getExitCode() . PHP_EOL);
+            print("Exit code text: " . $ServiceProcess->getExitCodeText() . PHP_EOL);
+            print(PHP_EOL);
+
+            exit(1);
+        }
+
+        usleep(500000);
+    }

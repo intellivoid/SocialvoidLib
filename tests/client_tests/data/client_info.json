@@ -1,5 +1,5 @@
 {
-  "endpoint": "http://127.0.0.1",
+  "endpoint": "http://127.0.0.1:5001/",
   "public_hash": "4c7148caff498d24deee6c8325f1c15773d637ed76c3a4056e00b77b2beb3097",
   "private_hash": "866d3218b239d39c174fa2b16f54e0fa58f9c69fce8c2d941c12a47a7bc75229",
   "platform": "Linux",

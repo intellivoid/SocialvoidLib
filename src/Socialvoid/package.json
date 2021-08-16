@@ -1,18 +1,18 @@
 {
     "package": {
-        "package_name": "net.intellivoid.socialvoid_admin",
-        "name": "Socialvoid Admin",
+        "package_name": "net.intellivoid.socialvoid",
+        "name": "Socialvoid Daemon",
         "version": "1.0.0.0",
         "author": "Zi Xing Narrakas",
         "organization": "Intellivoid",
-        "description": "The Socialvoid Administrator Program",
+        "description": "The Socialvoid RPC Server service",
         "url": "https://github.com/intellivoid/socialvoidlib",
         "dependencies": [
             {
-                "package": "net.intellivoid.socialvoidlib",
+                "package": "net.intellivoid.proclib",
                 "version": "latest",
-                "source": "default@github/intellivoid/SocialvoidLib",
-                "required": false
+                "source": "default@github/intellivoid/ProcLib",
+                "required": true
             }
         ],
         "configuration": {
@@ -20,19 +20,15 @@
             "main": {
                 "execution_point": "main",
                 "create_symlink": true,
-                "name": "socialvoid-admin"
+                "name": "socialvoid"
             },
             "post_installation": [],
             "pre_installation": []
         }
     },
-    "components": [
-        {
-            "required": true,
-            "file": "SocialvoidAdmin.php"
-        }
-    ],
+    "components": [],
     "files": [
+        "banner.txt",
         "package.json",
         "main"
     ]

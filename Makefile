@@ -2,12 +2,14 @@ socialvoidlib_src_dir = src/SocialvoidLib
 socivlvoidservice_src_dir = src/SocialvoidService
 socivlvoidrpc_src_dir = src/SocialvoidRPC
 socivlvoidadmin_src_dir = src/SocialvoidAdmin
+socialvoid_src_dir = src/Socialvoid
 install_branch = production
 build_dir = build
 socialvoidlib_name = net.intellivoid.socialvoidlib
 socialvoidservice_name = net.intellivoid.socialvoid_service
 socialvoidrpc_name = net.intellivoid.socialvoid_rpc
 socialvoidadmin_name = net.intellivoid.socialvoid_admin
+socialvoid_name = net.intellivoid.socialvoid
 query_workers = SocialvoidQueryService
 update_workers = SocialvoidUpdateService
 main_worker = $(socivlvoidservice_src_dir)/worker.php
@@ -23,6 +25,7 @@ update:
 	ppm --generate-package="$(socivlvoidservice_src_dir)"
 	ppm --generate-package="$(socivlvoidrpc_src_dir)"
 	ppm --generate-package="$(socivlvoidadmin_src_dir)"
+	ppm --generate-package="$(socialvoid_src_dir)"
 	#php$(docs_runtime_version) $(docs_phar_location)
 
 build:
@@ -31,18 +34,21 @@ build:
 	ppm --no-intro --cerror --lwarning --compile="$(socivlvoidrpc_src_dir)" --directory="$(build_dir)"
 	ppm --no-intro --cerror --lwarning --compile="$(socivlvoidadmin_src_dir)" --directory="$(build_dir)"
 	ppm --no-intro --cerror --lwarning --compile="$(socialvoidlib_src_dir)" --directory="$(build_dir)"
+	ppm --no-intro --cerror --lwarning --compile="$(socialvoid_src_dir)" --directory="$(build_dir)"
 
 install:
 	ppm --no-prompt --fix-conflict --install="$(build_dir)/$(socialvoidlib_name).ppm" --branch="$(install_branch)"
 	ppm --no-prompt --fix-conflict --install="$(build_dir)/$(socialvoidservice_name).ppm" --branch="$(install_branch)"
 	ppm --no-prompt --fix-conflict --install="$(build_dir)/$(socialvoidrpc_name).ppm" --branch="$(install_branch)"
 	ppm --no-prompt --fix-conflict --install="$(build_dir)/$(socialvoidadmin_name).ppm" --branch="$(install_branch)"
+	ppm --no-prompt --fix-conflict --install="$(build_dir)/$(socialvoid_name).ppm" --branch="$(install_branch)"
 
 install_fast:
 	ppm --no-prompt --skip-dependencies --fix-conflict --install="$(build_dir)/$(socialvoidservice_name).ppm" --branch="$(install_branch)"
 	ppm --no-prompt --skip-dependencies --fix-conflict --install="$(build_dir)/$(socialvoidrpc_name).ppm" --branch="$(install_branch)"
 	ppm --no-prompt --skip-dependencies --fix-conflict --install="$(build_dir)/$(socialvoidadmin_name).ppm" --branch="$(install_branch)"
 	ppm --no-prompt --skip-dependencies --fix-conflict --install="$(build_dir)/$(socialvoidlib_name).ppm" --branch="$(install_branch)"
+	ppm --no-prompt --skip-dependencies --fix-conflict --install="$(build_dir)/$(socialvoid_name).ppm" --branch="$(install_branch)"
 
 start_service:
 	ppm --main="$(socialvoidservice_name)" --version="latest" --runtime-version="$(runtime_version)"

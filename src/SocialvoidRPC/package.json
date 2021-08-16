@@ -35,7 +35,23 @@
     "components": [
         {
             "required": true,
-            "file": "SocialvoidRPC.php"
+            "file": "Methods/Network/GetMe.php"
+        },
+        {
+            "required": true,
+            "file": "Methods/Network/ResolvePeer.php"
+        },
+        {
+            "required": true,
+            "file": "Methods/Session/AuthenticateUser.php"
+        },
+        {
+            "required": true,
+            "file": "Methods/Session/Register.php"
+        },
+        {
+            "required": true,
+            "file": "Methods/Session/Logout.php"
         },
         {
             "required": true,
@@ -47,28 +63,12 @@
         },
         {
             "required": true,
-            "file": "Methods/Session/Register.php"
-        },
-        {
-            "required": true,
-            "file": "Methods/Session/AuthenticateUser.php"
-        },
-        {
-            "required": true,
-            "file": "Methods/Session/Logout.php"
-        },
-        {
-            "required": true,
-            "file": "Methods/Network/ResolvePeer.php"
-        },
-        {
-            "required": true,
-            "file": "Methods/Network/GetMe.php"
+            "file": "SocialvoidRPC.php"
         }
     ],
     "files": [
+        "rpc_worker",
         "package.json",
-        "main",
-        "rpc_worker"
+        "main"
     ]
 }
