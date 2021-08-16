@@ -86,4 +86,6 @@
     {
         SocialvoidService::getBackgroundWorker()->getSupervisor()->monitor("SocialvoidQueryService");
         SocialvoidService::getBackgroundWorker()->getSupervisor()->monitor("SocialvoidUpdateService");
+
+        usleep(500000);
     }
