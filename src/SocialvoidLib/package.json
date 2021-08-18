@@ -105,6 +105,10 @@
         },
         {
             "required": true,
+            "file": "Abstracts/Types/DocumentType.php"
+        },
+        {
+            "required": true,
             "file": "Abstracts/Types/Standard/PostType.php"
         },
         {
@@ -646,10 +650,6 @@
         {
             "required": true,
             "file": "Objects/FollowerData.php"
-        },
-        {
-            "required": true,
-            "file": "Objects/Document/ThirdPartySource.php"
         },
         {
             "required": true,
