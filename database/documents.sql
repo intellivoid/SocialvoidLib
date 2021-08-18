@@ -1,51 +1,40 @@
-/*
- * Copyright (c) 2017-2021. Intellivoid Technologies
- *
- * All rights reserved, SocialvoidLib was written by Zi Xing Narrakas <netkas@intellivoid.net> licensed by
- * Intellivoid Technologies, no part of this source code is open source. SocialvoidLib is a closed-source
- * solution for the Socialvoid Community Standard, if you wish to redistribute this source code you
- * must have a written permission from Intellivoid Technologies to do so.
- */
-
 create table if not exists documents
 (
-    public_id               varchar(256) not null comment 'The Public ID of the media content',
-    content_source          varchar(64)  not null comment 'The source of the content',
-    cdn_public_id           varchar(255) null comment 'The Public CDN ID that this record is related to',
-    third_party_source      blob         null comment 'ZiProto encoded blob which indicates more information about how to obtain the content from a third-party source',
-    file_mime               varchar(64)  not null comment 'The content type of the the document',
-    file_size               int          null comment 'The size of the file in bytes',
-    file_name               varchar(256) null comment 'The original file name, including the optional file extension',
-    file_extension          varchar(32)  null comment 'The extension of the file name (Everything after the first prefix)',
-    owner_user_id           int          not null comment 'The User ID that owns this content',
-    forward_user_id         int          null comment 'The user ID that forwarded this document if any. The Public ID will change but not the references',
-    access_type             varchar(126) not null comment 'The Access Type of the content, if further checks are required or not.',
-    access_roles            blob         null comment 'ZiProto Blob, the access roles of users related to this content',
-    flags                   blob         null comment 'ZiProto Blob flags associated with this document',
-    properties              blob         null comment 'ZiProto encoded object of properties related to this record',
-    last_updated_timestamp  int          null comment 'The Unix Timestamp for when this record was last updated',
-    last_accessed_timestamp int          null comment 'The Unix Timestamp of when this content was last accessed',
-    created_timestamp       int          null comment 'The Unix Timestmap for when this record was first created',
-    constraint documents_public_id_uindex
-        unique (public_id),
-    constraint documents_telegram_cdn_public_id_fk
-        foreign key (cdn_public_id) references telegram_cdn (public_id),
+    id                      varchar(126)         not null comment 'The ID of the document',
+    content_source          varchar(32)          not null comment 'The source of where the content is hosted at',
+    content_identifier      varchar(126)         null comment 'The content identifier that points this record to the content source',
+    file_mime               varchar(64)          null comment 'The content type of the document',
+    file_size               int                  null comment 'The size of the file',
+    file_name               varchar(256)         null comment 'The name of the file',
+    file_hash               varchar(64)          null comment 'The SHA256 checksum of the file contents',
+    document_type           int                  null comment 'The Document type that the client should represent as to the user',
+    deleted                 tinyint(1) default 0 not null comment 'Indicates if this document has been deleted or not',
+    owner_user_id           int                  null comment 'The user ID that owns this content',
+    forward_user_id         int                  null comment 'The User ID that forwarded this document if any, the Public ID will change but the rest of the information will stay the same',
+    access_type             int                  null comment 'The Access Type of the content, if further checks are required or not to determine if the peer can access this document',
+    access_roles            blob                 null comment 'ZiProto Blob, the access roles of the users related to this content',
+    flags                   blob                 null comment 'ZiProto Blob, flags associated with this document',
+    properties              blob                 null comment 'ZiProto encoded object of properties related to this record',
+    last_accessed_timestamp int                  null comment 'The Unix Timestamp for when this record was last accessed',
+    created_timestamp       int                  null comment 'The Unix Timestamp for when this record was first created',
+    constraint documents_id_uindex
+        unique (id),
     constraint documents_users_id_fk
-        foreign key (forward_user_id) references users (id),
+        foreign key (owner_user_id) references users (id),
     constraint documents_users_id_fk_2
-        foreign key (owner_user_id) references users (id)
+        foreign key (forward_user_id) references users (id)
 )
-    comment 'Table of uploaded media content and their permission control access';
+    comment 'Table for housing documents uploaded to the network';
 
-create index cloud_content_cdn_public_id_index
-    on documents (cdn_public_id);
-
-create index cloud_content_owner_id_index
-    on documents (owner_user_id);
+create index documents_content_identifier_index
+    on documents (content_identifier);
 
 create index documents_forward_user_id_index
     on documents (forward_user_id);
 
+create index documents_owner_user_id_index
+    on documents (owner_user_id);
+
 alter table documents
-    add primary key (public_id);
+    add primary key (id);
 

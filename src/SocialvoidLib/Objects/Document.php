@@ -5,9 +5,9 @@
 
     namespace SocialvoidLib\Objects;
 
+    use SocialvoidLib\Abstracts\Types\DocumentType;
     use SocialvoidLib\Abstracts\Types\Security\DocumentAccessType;
     use SocialvoidLib\Objects\Document\Properties;
-    use SocialvoidLib\Objects\Document\ThirdPartySource;
 
     /**
      * Class Document
@@ -16,11 +16,11 @@
     class Document
     {
         /**
-         * The Public ID of this record
+         * The ID of this record
          *
          * @var string
          */
-        public $PublicID;
+        public $ID;
 
         /**
          * The source of the content
@@ -30,18 +30,11 @@
         public $ContentSource;
 
         /**
-         * The
+         * The unique identifier that points to the source of the content source
          *
-         * @var string|null
+         * @var string
          */
-        public $CdnPublicID;
-
-        /**
-         * The third-party source if applicable to the document's source
-         *
-         * @var ThirdPartySource|null
-         */
-        public $ThirdPartySource;
+        public $ContentIdentifier;
 
         /**
          * The file mime (File type)
@@ -69,7 +62,19 @@
          *
          * @var string
          */
-        public $FileExtension;
+        public $FileHash;
+
+        /**
+         * @var int|DocumentType
+         */
+        public $Type;
+
+        /**
+         * Indicates if the document has been deleted or not
+         *
+         * @var bool
+         */
+        public $Deleted;
 
         /**
          * The User ID that originally created this document
@@ -114,13 +119,6 @@
         public $Properties;
 
         /**
-         * The Unix Timestamp for when this record's properties (other than last accessed) was last updated
-         *
-         * @var int
-         */
-        public $LastUpdatedTimestamp;
-
-        /**
          * The Unix Timestamp for when this property was last accessed on the network
          *
          * @var int
@@ -153,21 +151,21 @@
         public function toArray(): array
         {
             return [
-                "public_id" => $this->PublicID,
+                "id" => $this->ID,
                 "content_source" => $this->ContentSource,
-                "cdn_public_id" => $this->CdnPublicID,
-                "third_party_source" =>  ($this->ThirdPartySource == null ? null : $this->ThirdPartySource->toArray()),
+                "content_identifier" => $this->ContentIdentifier,
                 "file_mime" => $this->FileMime,
                 "file_size" => $this->FileSize,
                 "file_name" => $this->FileName,
-                "file_extension" => $this->FileExtension,
+                "file_hash" => $this->FileHash,
+                "document_type" => $this->Type,
+                "deleted" => $this->Deleted,
                 "owner_user_id" => $this->OwnerUserID,
                 "forward_user_id" => $this->ForwardUserID,
                 "access_type" => $this->AccessType,
                 "access_roles" => $this->AccessRoles->toArray(),
                 "flags" => $this->Flags,
                 "properties" => $this->Properties->toArray(),
-                "last_updated_timestamp" => $this->LastUpdatedTimestamp,
                 "last_accessed_timestamp" => $this->LastAccessedTimestamp,
                 "created_timestamp" => $this->CreatedTimestamp
             ];
@@ -183,17 +181,14 @@
         {
             $DocumentObject = new Document();
 
-            if(Isset($data["public_id"]))
-                $DocumentObject->PublicID = $data["public_id"];
+            if(Isset($data["id"]))
+                $DocumentObject->ID = $data["id"];
 
             if(isset($data["content_source"]))
                 $DocumentObject->ContentSource = $data["content_source"];
 
-            if(isset($data["cdn_public_id"]))
-                $DocumentObject->CdnPublicID = $data["cdn_public_id"];
-
-            if(isset($data["third_party_source"]))
-                $DocumentObject->ThirdPartySource = ThirdPartySource::fromArray($data["third_party_source"]);
+            if(isset($data["content_identifier"]))
+                $DocumentObject->ContentIdentifier = $data["content_identifier"];
 
             if(isset($data["file_mime"]))
                 $DocumentObject->FileMime = $data["file_mime"];
@@ -204,8 +199,14 @@
             if(isset($data["file_name"]))
                 $DocumentObject->FileName = $data["file_name"];
 
-            if(isset($data["file_extension"]))
-                $DocumentObject->FileExtension = $data["file_extension"];
+            if(isset($data["file_hash"]))
+                $DocumentObject->FileHash = $data["file_hash"];
+
+            if(isset($data["document_type"]))
+                $DocumentObject->Type = $data["document_type"];
+
+            if(isset($data["deleted"]))
+                $DocumentObject->Deleted = $data["deleted"];
 
             if(isset($data["owner_user_id"]))
                 $DocumentObject->OwnerUserID = $data["owner_user_id"];
@@ -224,9 +225,6 @@
 
             if(isset($data["properties"]))
                 $DocumentObject->Properties = Properties::fromArray($data["properties"]);
-
-            if(isset($data["last_updated_timestamp"]))
-                $DocumentObject->LastUpdatedTimestamp = $data["last_updated_timestamp"];
 
             if(isset($data["last_accessed_timestamp"]))
                 $DocumentObject->LastAccessedTimestamp = $data["last_accessed_timestamp"];
