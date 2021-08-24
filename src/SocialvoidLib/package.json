@@ -49,6 +49,12 @@
                 "version": "latest",
                 "source": "default@github/intellivoid/Telegram-CDN",
                 "required": true
+            },
+            {
+                "package": "net.intellivoid.mimelib",
+                "version": "latest",
+                "source": "default@github/intellivoid/MimeLib",
+                "required": true
             }
         ],
         "configuration": {
@@ -98,10 +104,6 @@
         {
             "required": true,
             "file": "Abstracts/Types/JobType.php"
-        },
-        {
-            "required": true,
-            "file": "Abstracts/Types/MediaType.php"
         },
         {
             "required": true,
@@ -670,6 +672,10 @@
         {
             "required": true,
             "file": "Objects/CacheEntryPointer.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/FileValidationResults.php"
         },
         {
             "required": true,

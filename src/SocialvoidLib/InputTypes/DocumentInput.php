@@ -22,21 +22,11 @@
         public $ContentSource;
 
         /**
-         * The CDN public ID if the content source is from the network
+         * The identifier for the source of the content
          *
-         * @var string|null
+         * @var string
          */
-        public $CdnPublicID;
-
-        /**
-         * The Third Party source if the content source is from a third party network/service (eg; Twitter)
-         *
-         * NOTE: It is preferable that the network downloads and processes it's own copy than to depend on third-party
-         * sources for the content as at anytime the content can be made unavailable.
-         *
-         * @var ThirdPartySource|null
-         */
-        public $ThirdPartySource;
+        public $ContentIdentifier;
 
         /**
          * The User ID that owns this document and registered it originally into the database
@@ -58,6 +48,13 @@
          * @var AccessRoles
          */
         public $AccessRoles;
+
+        /**
+         * The path to the file to be processed
+         *
+         * @var string
+         */
+        public $FilePath;
 
         /**
          * DocumentInput constructor.

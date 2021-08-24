@@ -3,7 +3,6 @@
 
     namespace SocialvoidLib\Managers;
 
-
     use msqg\QueryBuilder;
     use SocialvoidLib\Classes\Standard\BaseIdentification;
     use SocialvoidLib\InputTypes\DocumentInput;

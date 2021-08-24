@@ -10,7 +10,11 @@
 
 namespace SocialvoidLib\Classes;
 
+    use MimeLib\Exceptions\CannotDetectFileTypeException;
+    use MimeLib\Exceptions\FileNotFoundException;
+    use MimeLib\MimeLib;
     use SocialvoidLib\Abstracts\StandardErrorCodeType;
+    use SocialvoidLib\Objects\FileValidationResults;
 
     /**
      * Class Validation
@@ -160,6 +164,25 @@ namespace SocialvoidLib\Classes;
             }
 
             return true;
+        }
+
+        /**
+         * Validates information about a file
+         *
+         * @param string $file_path
+         * @return FileValidationResults
+         * @throws CannotDetectFileTypeException
+         * @throws FileNotFoundException
+         */
+        public static function validateFileInformation(string $file_path): FileValidationResults
+        {
+            $results = new FileValidationResults();
+            $results->Size = filesize($file_path);
+            $results->Hash = hash_file('sha256', $file_path);
+            $results->Mime = MimeLib::detectFileType($file_path)->getMime();
+            $results->Name = basename($file_path);
+
+            return $results;
         }
 
         /**
