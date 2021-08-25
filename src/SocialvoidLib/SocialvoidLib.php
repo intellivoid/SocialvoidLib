@@ -271,8 +271,7 @@
 
             // Data storage Schema Configuration
             $DataStorageSchema = new Schema();
-            $DataStorageSchema->setDefinition("ProfilesLocation_Unix", "/etc/socialvoid_avatars");
-            $DataStorageSchema->setDefinition("ProfilesLocation_Windows", "C:\\socialvoid_avatars");
+            $DataStorageSchema->setDefinition("ProfilesLocation", "/var/socialvoid/avatars");
             $this->acm->defineSchema("DataStorage", $DataStorageSchema);
 
             try
@@ -332,15 +331,14 @@
          *
          * @param string $name
          * @param $value
-         * @return bool
+         * @return void
          */
-        private static function defineLibConstant(string $name, $value): bool
+        private static function defineLibConstant(string $name, $value): void
         {
             if(defined($name))
-                return false;
+                return;
 
             define($name, $value);
-            return true;
         }
 
 
@@ -700,7 +698,7 @@
         /**
          * @return mixed
          */
-        public function getRpcServerConfiguration(): mixed
+        public function getRpcServerConfiguration()
         {
             return $this->RpcServerConfiguration;
         }
