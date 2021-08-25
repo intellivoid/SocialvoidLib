@@ -27,9 +27,9 @@
                 "required": true
             },
             {
-                "package": "net.intellivoid.udp",
+                "package": "net.intellivoid.udp2",
                 "version": "latest",
-                "source": "default@github/intellivoid/udp_manager",
+                "source": "default@github/intellivoid/udp2",
                 "required": true
             },
             {
