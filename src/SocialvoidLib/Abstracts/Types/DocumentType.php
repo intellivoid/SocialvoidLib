@@ -9,4 +9,6 @@
         const Photo = 1;
 
         const Video = 2;
+
+        const Audio = 3;
     }

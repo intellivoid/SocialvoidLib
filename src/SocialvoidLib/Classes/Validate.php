@@ -14,6 +14,7 @@ namespace SocialvoidLib\Classes;
     use MimeLib\Exceptions\FileNotFoundException;
     use MimeLib\MimeLib;
     use SocialvoidLib\Abstracts\StandardErrorCodeType;
+    use SocialvoidLib\Abstracts\Types\DocumentType;
     use SocialvoidLib\Objects\FileValidationResults;
 
     /**
@@ -181,6 +182,24 @@ namespace SocialvoidLib\Classes;
             $results->Hash = hash_file('sha256', $file_path);
             $results->Mime = MimeLib::detectFileType($file_path)->getMime();
             $results->Name = basename($file_path);
+
+            // Attempt to detect the file type
+            if(stripos(strtolower($results->Mime), 'audio'))
+            {
+                $results->FileType = DocumentType::Audio;
+            }
+            elseif(stripos(strtolower($results->Mime), 'image'))
+            {
+                $results->FileType = DocumentType::Photo;
+            }
+            elseif(stripos(strtolower($results->Mime), 'video'))
+            {
+                $results->FileType = DocumentType::Video;
+            }
+            else
+            {
+                $results->FileType = DocumentType::Document;
+            }
 
             return $results;
         }

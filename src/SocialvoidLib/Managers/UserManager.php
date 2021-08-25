@@ -407,4 +407,5 @@
 
             return User::fromArray($CacheEntryResults->ObjectData);
         }
+
     }

@@ -123,6 +123,10 @@
         },
         {
             "required": true,
+            "file": "Abstracts/ContentSource.php"
+        },
+        {
+            "required": true,
             "file": "Abstracts/JobPriority.php"
         },
         {
