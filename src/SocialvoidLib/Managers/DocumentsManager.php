@@ -52,7 +52,6 @@
          */
         public function createDocument(DocumentInput $documentInput, User $uploaderUser, ?AccessRoles $accessRoles = null): string
         {
-            // TODO: Validate object
             if(file_exists($documentInput->FilePath) == false)
                 throw new FileNotFoundException('The file path in the document input was not found', $documentInput->FilePath);
 
