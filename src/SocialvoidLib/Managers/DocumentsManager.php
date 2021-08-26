@@ -181,4 +181,28 @@
                 );
             }
         }
+
+        /**
+         * Marks the document as deleted
+         *
+         * @param Document $document
+         * @throws DatabaseException
+         */
+        public function deleteDocument(Document $document)
+        {
+            /** @noinspection PhpBooleanCanBeSimplifiedInspection */
+            $query = QueryBuilder::update('documents', [
+                'deleted' => (int)false
+            ], 'id', $document->ID);
+
+            $QueryResults = $this->socialvoidLib->getDatabase()->query($query);
+
+            if($QueryResults == false)
+            {
+                throw new DatabaseException(
+                    'There was an error while trying to update the document attribute',
+                    $query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
+                );
+            }
+        }
     }
