@@ -158,4 +158,27 @@
                 );
             }
         }
+
+        /**
+         * Updates the last accessed timestamp of the document
+         *
+         * @param Document $document
+         * @throws DatabaseException
+         */
+        public function updateLastAccessTime(Document $document)
+        {
+            $query = QueryBuilder::update('documents', [
+                'last_accessed_timestamp' => time()
+            ], 'id', $document->ID);
+
+            $QueryResults = $this->socialvoidLib->getDatabase()->query($query);
+
+            if($QueryResults == false)
+            {
+                throw new DatabaseException(
+                    'There was an error while trying to update the document attribute',
+                    $query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
+                );
+            }
+        }
     }
