@@ -22,6 +22,7 @@
     use SocialvoidLib\Exceptions\Standard\Authentication\TwoFactorAuthenticationRequiredException;
     use SocialvoidLib\Exceptions\Standard\Media\InvalidImageDimensionsException;
     use SocialvoidLib\Exceptions\Standard\Network\AlreadyRepostedException;
+    use SocialvoidLib\Exceptions\Standard\Network\DocumentNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\FileUploadException;
     use SocialvoidLib\Exceptions\Standard\Network\PostDeletedException;
     use SocialvoidLib\Exceptions\Standard\Network\PostNotFoundException;
@@ -272,6 +273,13 @@
          * @see FileUploadException
          */
         const FileUploadErrorException = 0x03104;
+
+        /**
+         * Raised when the requested document ID was not found
+         *
+         * @see DocumentNotFoundException
+         */
+        const DocumentNotFoundException = 0x03105;
 
         /** 40-Set error codes (Server) */
 
