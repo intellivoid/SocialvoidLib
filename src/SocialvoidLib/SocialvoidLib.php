@@ -183,7 +183,7 @@
         /**
          * @var mixed
          */
-        private $TelegramCdnConfiguration;
+        private $CdnConfiguration;
 
         /**
          * @var TelegramCdnManager
@@ -248,12 +248,14 @@
             $EngineSchema->setDefinition("TimelineChunkSize", 20);
             $this->acm->defineSchema("Engine", $EngineSchema);
 
-            // Telegram CDN Schema Configuration
-            $TelegramCdnSchema = new Schema();
-            $TelegramCdnSchema->setDefinition("Enabled", True);
-            $TelegramCdnSchema->setDefinition("BotToken", "<BOT TOKEN>");
-            $TelegramCdnSchema->setDefinition("Channels", []);
-            $this->acm->defineSchema("TelegramCDN", $TelegramCdnSchema);
+            // CDN Schema Configuration
+            $CdnSchema = new Schema();
+            $CdnSchema->setDefinition("CdnEndpoint", "https://cdn.socialvoid.cc");
+            $CdnSchema->setDefinition("TelegramCdnEnabled", True);
+            $CdnSchema->setDefinition("TelegramCdnEnabled", True);
+            $CdnSchema->setDefinition("TelegramBotToken", "<BOT TOKEN>");
+            $CdnSchema->setDefinition("TelegramChannels", []);
+            $this->acm->defineSchema("CDN", $CdnSchema);
 
             // Redis Basic Cache (Entity resolve cache)
             $RedisBasicCacheSchema = new Schema();
@@ -288,7 +290,7 @@
                 $this->ServiceEngineConfiguration = $this->acm->getConfiguration("ServiceEngine");
                 $this->EngineConfiguration = $this->acm->getConfiguration("Engine");
                 $this->RedisBasicCacheConfiguration = $this->acm->getConfiguration("RedisBasicCache");
-                $this->TelegramCdnConfiguration = $this->acm->getConfiguration("TelegramCDN");
+                $this->CdnConfiguration = $this->acm->getConfiguration("TelegramCDN");
                 $this->RpcServerConfiguration = $this->acm->getConfiguration("RpcServer");
             }
             catch(Exception $e)
@@ -690,9 +692,9 @@
         /**
          * @return mixed
          */
-        public function getTelegramCdnConfiguration()
+        public function getCdnConfiguration()
         {
-            return $this->TelegramCdnConfiguration;
+            return $this->CdnConfiguration;
         }
 
         /**

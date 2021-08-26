@@ -6,7 +6,7 @@
 
     use SocialvoidLib\Abstracts\Types\Security\DocumentAccessType;
     use SocialvoidLib\Objects\AccessRoles;
-    use SocialvoidLib\Objects\Document\ThirdPartySource;
+    use SocialvoidLib\Objects\Document\Properties;
 
     /**
      * Class DocumentInput
@@ -50,6 +50,13 @@
         public $AccessRoles;
 
         /**
+         * The properties of the document
+         *
+         * @var Properties
+         */
+        public $Properties;
+
+        /**
          * The path to the file to be processed
          *
          * @var string
@@ -62,6 +69,7 @@
         public function __construct()
         {
             $this->AccessRoles = new AccessRoles();
+            $this->Properties = new Properties();
             $this->AccessType = DocumentAccessType::Protected;
         }
     }

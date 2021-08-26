@@ -5,17 +5,13 @@
 
     use MimeLib\Exceptions\CannotDetectFileTypeException;
     use msqg\QueryBuilder;
-    use SocialvoidLib\Abstracts\Types\Security\DocumentAccessType;
     use SocialvoidLib\Classes\Standard\BaseIdentification;
-    use SocialvoidLib\Classes\Utilities;
     use SocialvoidLib\Classes\Validate;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\GenericInternal\FileNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\DocumentNotFoundException;
     use SocialvoidLib\InputTypes\DocumentInput;
-    use SocialvoidLib\Objects\AccessRoles;
     use SocialvoidLib\Objects\Document;
-    use SocialvoidLib\Objects\User;
     use SocialvoidLib\SocialvoidLib;
     use ZiProto\ZiProto;
 
@@ -44,7 +40,6 @@
          * successful
          *
          * @param DocumentInput $documentInput
-         * @param AccessRoles|null $accessRoles
          * @return string
          * @throws CannotDetectFileTypeException
          * @throws DatabaseException
@@ -65,7 +60,6 @@
             }
 
             $id = BaseIdentification::documentId($documentInput);
-            $properties = new Document\Properties();
 
             $query = QueryBuilder::insert_into("documents", [
                 'id' => $this->socialvoidLib->getDatabase()->real_escape_string($id),
@@ -82,7 +76,7 @@
                 'access_type' => $this->socialvoidLib->getDatabase()->real_escape_string($documentInput->AccessType),
                 'access_roles' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($documentInput->AccessRoles->toArray())),
                 'flags' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
-                'properties' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($properties->toArray())),
+                'properties' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($documentInput->Properties->toArray())),
                 'last_accessed_timestamp' => null,
                 'created_timestamp' => time()
             ]);

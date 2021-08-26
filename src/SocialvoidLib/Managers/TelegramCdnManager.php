@@ -47,8 +47,8 @@
         {
             $this->socialvoidLib = $socialvoidLib;
             $this->cdn = new TelegramCDN(
-                $socialvoidLib->getTelegramCdnConfiguration()["BotToken"],
-                $socialvoidLib->getTelegramCdnConfiguration()["Channels"]
+                $socialvoidLib->getCdnConfiguration()["BotToken"],
+                $socialvoidLib->getCdnConfiguration()["Channels"]
             );
         }
 
