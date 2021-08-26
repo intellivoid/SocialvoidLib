@@ -44,14 +44,13 @@
          * successful
          *
          * @param DocumentInput $documentInput
-         * @param User $uploaderUser
          * @param AccessRoles|null $accessRoles
          * @return string
          * @throws CannotDetectFileTypeException
          * @throws DatabaseException
          * @throws FileNotFoundException
          */
-        public function createDocument(DocumentInput $documentInput, User $uploaderUser, ?AccessRoles $accessRoles = null): string
+        public function createDocument(DocumentInput $documentInput): string
         {
             if(file_exists($documentInput->FilePath) == false)
                 throw new FileNotFoundException('The file path in the document input was not found', $documentInput->FilePath);
@@ -68,9 +67,6 @@
             $id = BaseIdentification::documentId($documentInput);
             $properties = new Document\Properties();
 
-            if($accessRoles == null)
-                $accessRoles = new AccessRoles();
-
             $query = QueryBuilder::insert_into("documents", [
                 'id' => $this->socialvoidLib->getDatabase()->real_escape_string($id),
                 'content_source' => $this->socialvoidLib->getDatabase()->real_escape_string($documentInput->ContentSource),
@@ -81,10 +77,10 @@
                 'file_hash' => $this->socialvoidLib->getDatabase()->real_escape_string($file_validation->Hash),
                 'document_type' => $this->socialvoidLib->getDatabase()->real_escape_string($file_validation->FileType),
                 'deleted' => (int)false,
-                'owner_user_id' => $uploaderUser->ID,
+                'owner_user_id' => $documentInput->OwnerUserID,
                 'forward_user_id' => null,
-                'access_type' => DocumentAccessType::Public,
-                'access_roles' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($accessRoles->toArray())),
+                'access_type' => $this->socialvoidLib->getDatabase()->real_escape_string($documentInput->AccessType),
+                'access_roles' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($documentInput->AccessRoles->toArray())),
                 'flags' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
                 'properties' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($properties->toArray())),
                 'last_accessed_timestamp' => null,

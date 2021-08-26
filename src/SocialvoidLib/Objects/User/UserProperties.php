@@ -1,4 +1,5 @@
 <?php
+
     /*
      * Copyright (c) 2017-2021. Intellivoid Technologies
      *
@@ -8,9 +9,10 @@
      * must have a written permission from Intellivoid Technologies to do so.
      */
 
+    /** @noinspection PhpMissingFieldTypeInspection */
     /** @noinspection PhpUnused */
 
-namespace SocialvoidLib\Objects\User;
+    namespace SocialvoidLib\Objects\User;
 
     /**
      * Class UserProperties
@@ -19,13 +21,26 @@ namespace SocialvoidLib\Objects\User;
     class UserProperties
     {
         /**
+         * @var string|null
+         */
+        public $DefaultProfilePictureDocumentID;
+
+        /**
+         * @var string|null
+         */
+        public $ProfilePictureDocumentID;
+
+        /**
          * Returns an array representation of the object
          *
          * @return array
          */
         public function toArray(): array
         {
-            return [];
+            return [
+                'default_profile_picture_document_id' => $this->DefaultProfilePictureDocumentID,
+                'profile_picture_document_id' => $this->ProfilePictureDocumentID
+            ];
         }
 
         /**
@@ -37,6 +52,12 @@ namespace SocialvoidLib\Objects\User;
         public static function fromArray(array $data): UserProperties
         {
             $UserPropertiesObject = new UserProperties();
+
+            if(isset($data['default_profile_picture_document_id']))
+                $UserPropertiesObject->DefaultProfilePictureDocumentID = $data['default_profile_picture_document_id'];
+
+            if(isset($data['profile_picture_document_id']))
+                $UserPropertiesObject->ProfilePictureDocumentID = $data['profile_picture_document_id'];
 
             return $UserPropertiesObject;
         }

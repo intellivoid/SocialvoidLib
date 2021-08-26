@@ -28,6 +28,7 @@
     use SocialvoidLib\Exceptions\GenericInternal\RedisCacheException;
     use SocialvoidLib\Managers\BasicRedisCacheManager;
     use SocialvoidLib\Managers\CoaAuthenticationManager;
+    use SocialvoidLib\Managers\DocumentsManager;
     use SocialvoidLib\Managers\FollowerDataManager;
     use SocialvoidLib\Managers\FollowerStateManager;
     use SocialvoidLib\Managers\LikesRecordManager;
@@ -40,7 +41,7 @@
     use SocialvoidLib\Managers\TelegramCdnManager;
     use SocialvoidLib\Managers\TimelineManager;
     use SocialvoidLib\Managers\UserManager;
-    use udp\udp;
+    use udp2\udp2;
 
     /**
      * Class SocialvoidLib
@@ -69,9 +70,9 @@
         private $DataStorageConfiguration;
 
         /**
-         * @var udp
+         * @var udp2
          */
-        private udp $UserDisplayPictureManager;
+        private udp2 $UserDisplayPictureManager;
 
         /**
          * @var mysqli|null
@@ -139,6 +140,11 @@
          * @var QuotesRecordManager|null
          */
         private $QuotesRecordManager;
+
+        /**
+         * @var DocumentsManager|null
+         */
+        private $DocumentsManager;
 
         /**
          * @var CoaAuthenticationManager|null
@@ -271,7 +277,7 @@
 
             // Data storage Schema Configuration
             $DataStorageSchema = new Schema();
-            $DataStorageSchema->setDefinition("ProfilesLocation", "/var/socialvoid/avatars");
+            $DataStorageSchema->setDefinition("UserAvatarsLocation", "/var/socialvoid/avatars");
             $this->acm->defineSchema("DataStorage", $DataStorageSchema);
 
             try
@@ -308,14 +314,8 @@
             // Initialize UDP
             try
             {
-                if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN')
-                {
-                    $this->UserDisplayPictureManager = new udp($this->DataStorageConfiguration['ProfilesLocation_Windows']);
-                }
-                else
-                {
-                    $this->UserDisplayPictureManager = new udp($this->DataStorageConfiguration['ProfilesLocation_Unix']);
-                }
+                $this->UserDisplayPictureManager = new udp2();
+                $this->UserDisplayPictureManager->setStorageLocation($this->DataStorageConfiguration['UserAvatarsLocation']);
             }
             catch(Exception $e)
             {
@@ -393,9 +393,9 @@
         }
 
         /**
-         * @return udp
+         * @return udp2
          */
-        public function getUserDisplayPictureManager(): udp
+        public function getUserDisplayPictureManager(): udp2
         {
             return $this->UserDisplayPictureManager;
         }
@@ -701,5 +701,16 @@
         public function getRpcServerConfiguration()
         {
             return $this->RpcServerConfiguration;
+        }
+
+        /**
+         * @return DocumentsManager
+         */
+        public function getDocumentsManager(): DocumentsManager
+        {
+            if($this->DocumentsManager == null)
+                $this->DocumentsManager = new DocumentsManager($this);
+
+            return $this->DocumentsManager;
         }
     }

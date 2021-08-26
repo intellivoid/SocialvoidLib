@@ -14,11 +14,14 @@
     namespace SocialvoidLib\Managers;
 
     use Exception;
+    use MimeLib\Exceptions\CannotDetectFileTypeException;
     use msqg\QueryBuilder;
+    use SocialvoidLib\Abstracts\ContentSource;
     use SocialvoidLib\Abstracts\SearchMethods\UserSearchMethod;
     use SocialvoidLib\Abstracts\StatusStates\UserPrivacyState;
     use SocialvoidLib\Abstracts\StatusStates\UserStatus;
     use SocialvoidLib\Abstracts\Types\CacheEntryObjectType;
+    use SocialvoidLib\Abstracts\Types\Security\DocumentAccessType;
     use SocialvoidLib\Abstracts\UserAuthenticationMethod;
     use SocialvoidLib\Classes\Converter;
     use SocialvoidLib\Classes\Standard\BaseIdentification;
@@ -29,17 +32,26 @@
     use SocialvoidLib\Exceptions\GenericInternal\CacheMissedException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\GenericInternal\DependencyError;
+    use SocialvoidLib\Exceptions\GenericInternal\FileNotFoundException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
     use SocialvoidLib\Exceptions\GenericInternal\RedisCacheException;
     use SocialvoidLib\Exceptions\GenericInternal\ServiceJobException;
+    use SocialvoidLib\Exceptions\Standard\Network\DocumentNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidFirstNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidLastNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidUsernameException;
     use SocialvoidLib\Exceptions\Standard\Validation\UsernameAlreadyExistsException;
+    use SocialvoidLib\InputTypes\DocumentInput;
     use SocialvoidLib\InputTypes\RegisterCacheInput;
+    use SocialvoidLib\Objects\Document;
     use SocialvoidLib\Objects\User;
     use SocialvoidLib\SocialvoidLib;
+    use udp2\Abstracts\ColorScheme;
+    use udp2\Abstracts\DefaultAvatarType;
+    use udp2\Exceptions\AvatarGeneratorException;
+    use udp2\Exceptions\ImageTooSmallException;
+    use udp2\Exceptions\UnsupportedAvatarGeneratorException;
     use ZiProto\ZiProto;
 
     /**
@@ -408,4 +420,126 @@
             return User::fromArray($CacheEntryResults->ObjectData);
         }
 
+        /**
+         * Gets the default profile picture of the user
+         *
+         * @param User $user
+         * @return Document
+         * @throws CacheException
+         * @throws DatabaseException
+         * @throws CannotDetectFileTypeException
+         * @throws FileNotFoundException
+         * @throws DocumentNotFoundException
+         * @throws AvatarGeneratorException
+         * @throws ImageTooSmallException
+         * @throws UnsupportedAvatarGeneratorException
+         */
+        public function getDefaultProfilePictureDocument(User $user): Document
+        {
+            if($user->Properties->DefaultProfilePictureDocumentID == null)
+            {
+                $this->socialvoidLib->getUserDisplayPictureManager()->generateAvatar(
+                    $user->PublicID, $user->getDisplayName(),
+                    DefaultAvatarType::InitialsBase, ColorScheme::Dark
+                );
+
+                $avatar_location = $this->socialvoidLib->getUserDisplayPictureManager()->getAvatarLocation($user->PublicID . "_default");
+                $document_input = new DocumentInput();
+                $document_input->FilePath = $avatar_location;
+                $document_input->AccessType = DocumentAccessType::Public;
+                $document_input->OwnerUserID = $user->ID;
+                $document_input->ContentSource = ContentSource::UserProfilePicture;
+                $document_input->ContentIdentifier = $user->PublicID . "_default";
+
+                $user->Properties->DefaultProfilePictureDocumentID = $this->socialvoidLib->getDocumentsManager()->createDocument($document_input);
+                $this->updateUser($user);
+            }
+
+            return $this->socialvoidLib->getDocumentsManager()->getDocument($user->Properties->DefaultProfilePictureDocumentID);
+        }
+
+        /**
+         * Gets the profile picture of the user, if none is set then it will return the default value.
+         *
+         * @param User $user
+         * @return Document
+         * @throws AvatarGeneratorException
+         * @throws CacheException
+         * @throws CannotDetectFileTypeException
+         * @throws DatabaseException
+         * @throws DocumentNotFoundException
+         * @throws FileNotFoundException
+         * @throws ImageTooSmallException
+         * @throws UnsupportedAvatarGeneratorException
+         */
+        public function getProfilePictureDocument(User $user): Document
+        {
+            if($user->Properties->ProfilePictureDocumentID == null)
+                return $this->getDefaultProfilePictureDocument($user);
+
+            return $this->socialvoidLib->getDocumentsManager()->getDocument($user->Properties->ProfilePictureDocumentID);
+        }
+
+        /**
+         * Applies a new profile picture to the user
+         *
+         * @param User $user
+         * @param string $filePath
+         * @throws AvatarGeneratorException
+         * @throws CacheException
+         * @throws CannotDetectFileTypeException
+         * @throws DatabaseException
+         * @throws DocumentNotFoundException
+         * @throws FileNotFoundException
+         * @throws ImageTooSmallException
+         * @throws UnsupportedAvatarGeneratorException
+         */
+        public function setProfilePicture(User $user, string $filePath)
+        {
+            $this->socialvoidLib->getUserDisplayPictureManager()->applyAvatar($filePath, $user->PublicID);
+            $avatar_location = $this->socialvoidLib->getUserDisplayPictureManager()->getAvatarLocation($user->PublicID);
+
+            $document_input = new DocumentInput();
+            $document_input->FilePath = $avatar_location;
+            $document_input->AccessType = DocumentAccessType::Public;
+            $document_input->OwnerUserID = $user->ID;
+            $document_input->ContentSource = ContentSource::UserProfilePicture;
+            $document_input->ContentIdentifier = $user->PublicID;
+
+            $new_document_id = $this->socialvoidLib->getDocumentsManager()->createDocument($document_input);
+
+            if($user->Properties->ProfilePictureDocumentID !== null)
+            {
+                $old_document = $this->getProfilePictureDocument($user);
+                $this->socialvoidLib->getDocumentsManager()->deleteDocument($old_document);
+            }
+
+            $user->Properties->ProfilePictureDocumentID = $new_document_id;
+            $this->updateUser($user);
+        }
+
+        /**
+         * Deletes the users profile picture if it exists
+         *
+         * @param User $user
+         * @throws AvatarGeneratorException
+         * @throws CacheException
+         * @throws CannotDetectFileTypeException
+         * @throws DatabaseException
+         * @throws DocumentNotFoundException
+         * @throws FileNotFoundException
+         * @throws ImageTooSmallException
+         * @throws UnsupportedAvatarGeneratorException
+         */
+        public function deleteProfilePicture(User $user)
+        {
+            if($user->Properties->ProfilePictureDocumentID !== null)
+            {
+                $old_document = $this->getProfilePictureDocument($user);
+                $this->socialvoidLib->getDocumentsManager()->deleteDocument($old_document);
+
+                $user->Properties->ProfilePictureDocumentID = null;
+                $this->updateUser($user);
+            }
+        }
     }

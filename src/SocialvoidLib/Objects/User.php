@@ -273,6 +273,26 @@
         }
 
         /**
+         * Returns the display name of the user
+         *
+         * @return string
+         */
+        public function getDisplayName(): string
+        {
+            if($this->Profile->LastName == null)
+            {
+                if($this->Profile->FirstName == null)
+                {
+                    return $this->Username;
+                }
+
+                return $this->Profile->FirstName;
+            }
+
+            return $this->Profile->FirstName . ' ' . $this->Profile->LastName;
+        }
+
+        /**
          * Returns an array representation of the user object
          *
          * @return array
