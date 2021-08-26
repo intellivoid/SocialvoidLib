@@ -40,12 +40,14 @@
          * successful
          *
          * @param DocumentInput $documentInput
+         * @param string|null $file_mime
+         * @param int|null $document_type
          * @return string
          * @throws CannotDetectFileTypeException
          * @throws DatabaseException
          * @throws FileNotFoundException
          */
-        public function createDocument(DocumentInput $documentInput): string
+        public function createDocument(DocumentInput $documentInput, ?string $file_mime=null, ?int $document_type=null): string
         {
             if(file_exists($documentInput->FilePath) == false)
                 throw new FileNotFoundException('The file path in the document input was not found', $documentInput->FilePath);
@@ -53,6 +55,10 @@
             try
             {
                 $file_validation = Validate::validateFileInformation($documentInput->FilePath);
+                if($file_mime !== null)
+                    $file_validation->Mime = $file_mime;
+                if($document_type !== null)
+                    $file_validation->FileType = $document_type;
             }
             catch (\MimeLib\Exceptions\FileNotFoundException $e)
             {
