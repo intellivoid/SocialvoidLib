@@ -147,8 +147,7 @@
                     $Row['flags'] = ZiProto::decode($Row['flags']);
                     $Row['properties'] = ZiProto::decode($Row['properties']);
 
-                    $ReturnResults = Document::fromArray($Row);
-                    return $ReturnResults;
+                    return Document::fromArray($Row);
                 }
             }
             else
