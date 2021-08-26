@@ -10,13 +10,20 @@
     class Properties
     {
         /**
+         * @var array
+         */
+        public $AvailableImageSizes = [];
+
+        /**
          * Returns an array representation of the object
          *
          * @return array
          */
         public function toArray(): array
         {
-            return [];
+            return [
+                'available_image_sizes' => $this->AvailableImageSizes
+            ];
         }
 
         /**
@@ -27,6 +34,11 @@
          */
         public static function fromArray(array $data): Properties
         {
-            return new Properties();
+            $properties = new Properties();
+
+            if(isset($data['available_image_sizes']))
+                $properties = $properties->AvailableImageSizes;
+
+            return $properties;
         }
     }

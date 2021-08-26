@@ -35,13 +35,15 @@
         public $Name;
 
         /**
-         * The SHA256 checksum of the file
+         * The crc32 checksum of the file
          *
          * @var string
          */
         public $Hash;
 
         /**
+         * Returns an array representation of the file
+         *
          * @return array
          */
         public function toArray(): array
@@ -55,6 +57,12 @@
             ];
         }
 
+        /**
+         * Constructs the object from an array representation
+         *
+         * @param array $data
+         * @return FileValidationResults
+         */
         public static function fromArray(array $data): FileValidationResults
         {
             $return_object = new FileValidationResults();

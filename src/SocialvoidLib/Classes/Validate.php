@@ -179,7 +179,7 @@ namespace SocialvoidLib\Classes;
         {
             $results = new FileValidationResults();
             $results->Size = filesize($file_path);
-            $results->Hash = hash_file('sha256', $file_path);
+            $results->Hash = hash_file('crc32', $file_path);
             $results->Mime = MimeLib::detectFileType($file_path)->getMime();
             $results->Name = basename($file_path);
 

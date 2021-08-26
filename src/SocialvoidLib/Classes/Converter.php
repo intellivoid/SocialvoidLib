@@ -10,7 +10,10 @@
 
     namespace SocialvoidLib\Classes;
 
+    use SocialvoidLib\Abstracts\Types\DocumentType;
     use SocialvoidLib\Objects\ActiveSession;
+    use SocialvoidLib\Objects\Document\File;
+    use Zimage\Zimage;
 
     /**
      * Class Converter
@@ -115,5 +118,32 @@
         public static function normalizeText(string $input): string
         {
             return str_ireplace(" ", "_", strtolower($input));
+        }
+
+        /**
+         * Converts a Zimage object to a array of Document files
+         *
+         * @param Zimage $zimage
+         * @param string $image_name
+         * @return File[]
+         */
+        public static function zimageToFiles(Zimage $zimage, string $image_name): array
+        {
+            $document_files = [];
+
+            foreach($zimage->getImages() as $image)
+            {
+                $document_file = new File();
+                $document_file->Mime = 'image/jpeg';
+                $document_file->Hash = hash('crc32', $image->getData());
+                $document_file->Size = strlen($image->getSize());
+                $document_file->Name = $image_name . (string)$image->getSize() . '.jpg';
+                $document_file->ID = $image->getSize();
+                $document_file->Type = DocumentType::Photo;
+
+                $document_files[] = $document_file;
+            }
+
+            return $document_files;
         }
     }

@@ -72,7 +72,7 @@
         public static function documentId(DocumentInput $documentInput): string
         {
             return hash("sha256",
-                Hashing::pepper($documentInput->OwnerUserID . $documentInput->ContentSource, time()) .
-                $documentInput->OwnerUserID);
+                Hashing::pepper($documentInput->OwnerUserID . $documentInput->ContentSource . time()) .
+                $documentInput->OwnerUserID . $documentInput->ContentIdentifier);
         }
     }

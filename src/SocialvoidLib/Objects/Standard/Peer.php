@@ -15,6 +15,7 @@
 
     use SocialvoidLib\Abstracts\Types\Standard\PeerType;
     use SocialvoidLib\Objects\Standard\Peer\Name;
+    use SocialvoidLib\Objects\Standard\Peer\DisplayPictureSize;
     use SocialvoidLib\Objects\User;
 
     /**
@@ -52,6 +53,11 @@
         public $Name;
 
         /**
+         * @var DisplayPictureSize[]
+         */
+        public $DisplayPictureSizes;
+
+        /**
          * Array of flags associated with this peer
          *
          * @var string[]
@@ -65,11 +71,16 @@
          */
         public function toArray(): array
         {
+            $profilePicturesSizes = [];
+            foreach($this->DisplayPictureSizes as $datum)
+                $profilePicturesSizes[$datum->Size] = $datum->DocumentID;
+
             return [
                 "id" => $this->ID,
                 "type" => $this->Type,
                 "username" => $this->Username,
                 "name" => $this->Name->toArray(),
+                "display_picture_sizes" => $profilePicturesSizes,
                 "flags" => $this->Flags
             ];
         }

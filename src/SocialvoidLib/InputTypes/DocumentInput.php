@@ -6,6 +6,7 @@
 
     use SocialvoidLib\Abstracts\Types\Security\DocumentAccessType;
     use SocialvoidLib\Objects\AccessRoles;
+    use SocialvoidLib\Objects\Document\File;
     use SocialvoidLib\Objects\Document\Properties;
 
     /**
@@ -57,11 +58,11 @@
         public $Properties;
 
         /**
-         * The path to the file to be processed
+         * The files associated with this document
          *
-         * @var string
+         * @var File[]
          */
-        public $FilePath;
+        public $Files;
 
         /**
          * DocumentInput constructor.

@@ -55,6 +55,12 @@
                 "version": "latest",
                 "source": "default@github/intellivoid/MimeLib",
                 "required": true
+            },
+            {
+                "package": "net.intellivoid.zimage",
+                "version": "latest",
+                "source": "default@github/intellivoid/Zimage",
+                "required": true
             }
         ],
         "configuration": {
@@ -667,6 +673,10 @@
         },
         {
             "required": true,
+            "file": "Objects/Document/File.php"
+        },
+        {
+            "required": true,
             "file": "Objects/Document.php"
         },
         {
@@ -712,6 +722,10 @@
         {
             "required": true,
             "file": "Objects/Standard/SessionIdentification.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/Standard/Peer/DisplayPictureSize.php"
         },
         {
             "required": true,

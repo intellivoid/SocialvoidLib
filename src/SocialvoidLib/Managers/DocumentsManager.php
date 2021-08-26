@@ -3,12 +3,9 @@
 
     namespace SocialvoidLib\Managers;
 
-    use MimeLib\Exceptions\CannotDetectFileTypeException;
     use msqg\QueryBuilder;
     use SocialvoidLib\Classes\Standard\BaseIdentification;
-    use SocialvoidLib\Classes\Validate;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
-    use SocialvoidLib\Exceptions\GenericInternal\FileNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\DocumentNotFoundException;
     use SocialvoidLib\InputTypes\DocumentInput;
     use SocialvoidLib\Objects\Document;
@@ -40,42 +37,22 @@
          * successful
          *
          * @param DocumentInput $documentInput
-         * @param string|null $file_mime
-         * @param int|null $document_type
          * @return string
-         * @throws CannotDetectFileTypeException
          * @throws DatabaseException
-         * @throws FileNotFoundException
          */
-        public function createDocument(DocumentInput $documentInput, ?string $file_mime=null, ?int $document_type=null): string
+        public function createDocument(DocumentInput $documentInput): string
         {
-            if(file_exists($documentInput->FilePath) == false)
-                throw new FileNotFoundException('The file path in the document input was not found', $documentInput->FilePath);
-
-            try
-            {
-                $file_validation = Validate::validateFileInformation($documentInput->FilePath);
-                if($file_mime !== null)
-                    $file_validation->Mime = $file_mime;
-                if($document_type !== null)
-                    $file_validation->FileType = $document_type;
-            }
-            catch (\MimeLib\Exceptions\FileNotFoundException $e)
-            {
-                throw new FileNotFoundException('The file path in the document input was not found', $documentInput->FilePath, null, $e);
-            }
-
             $id = BaseIdentification::documentId($documentInput);
+
+            $files = [];
+            foreach($documentInput->Files as $file)
+                $files[] = $file->toArray();
 
             $query = QueryBuilder::insert_into("documents", [
                 'id' => $this->socialvoidLib->getDatabase()->real_escape_string($id),
                 'content_source' => $this->socialvoidLib->getDatabase()->real_escape_string($documentInput->ContentSource),
                 'content_identifier' => $this->socialvoidLib->getDatabase()->real_escape_string($documentInput->ContentIdentifier),
-                'file_mime' => $this->socialvoidLib->getDatabase()->real_escape_string($file_validation->Mime),
-                'file_size' => $this->socialvoidLib->getDatabase()->real_escape_string((int)$file_validation->Size),
-                'file_name' => $this->socialvoidLib->getDatabase()->real_escape_string($file_validation->Name),
-                'file_hash' => $this->socialvoidLib->getDatabase()->real_escape_string($file_validation->Hash),
-                'document_type' => $this->socialvoidLib->getDatabase()->real_escape_string($file_validation->FileType),
+                'files' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($files)),
                 'deleted' => (int)false,
                 'owner_user_id' => $documentInput->OwnerUserID,
                 'forward_user_id' => null,

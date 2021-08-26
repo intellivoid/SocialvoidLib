@@ -142,6 +142,13 @@
         public $Profile;
 
         /**
+         * The display picture document for the user
+         *
+         * @var Document
+         */
+        public $DisplayPictureDocument;
+
+        /**
          * The settings configuration of the user
          *
          * @var UserSettings

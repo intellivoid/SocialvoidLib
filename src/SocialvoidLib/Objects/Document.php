@@ -5,8 +5,8 @@
 
     namespace SocialvoidLib\Objects;
 
-    use SocialvoidLib\Abstracts\Types\DocumentType;
     use SocialvoidLib\Abstracts\Types\Security\DocumentAccessType;
+    use SocialvoidLib\Objects\Document\File;
     use SocialvoidLib\Objects\Document\Properties;
 
     /**
@@ -37,37 +37,11 @@
         public $ContentIdentifier;
 
         /**
-         * The file mime (File type)
+         * The array of files associated with this document
          *
-         * @var string
+         * @var File[]
          */
-        public $FileMime;
-
-        /**
-         * The size of the file in bytes
-         *
-         * @var int
-         */
-        public $FileSize;
-
-        /**
-         * The file name
-         *
-         * @var string
-         */
-        public $FileName;
-
-        /**
-         * The file extension extracted from the file name
-         *
-         * @var string
-         */
-        public $FileHash;
-
-        /**
-         * @var int|DocumentType
-         */
-        public $Type;
+        public $Files;
 
         /**
          * Indicates if the document has been deleted or not
@@ -150,15 +124,15 @@
          */
         public function toArray(): array
         {
+            $files = [];
+            foreach($this->Files as $file)
+                $files[] = $file->toArray();
+
             return [
                 "id" => $this->ID,
                 "content_source" => $this->ContentSource,
                 "content_identifier" => $this->ContentIdentifier,
-                "file_mime" => $this->FileMime,
-                "file_size" => $this->FileSize,
-                "file_name" => $this->FileName,
-                "file_hash" => $this->FileHash,
-                "document_type" => $this->Type,
+                "files" => $files,
                 "deleted" => $this->Deleted,
                 "owner_user_id" => $this->OwnerUserID,
                 "forward_user_id" => $this->ForwardUserID,
@@ -190,21 +164,6 @@
             if(isset($data["content_identifier"]))
                 $DocumentObject->ContentIdentifier = $data["content_identifier"];
 
-            if(isset($data["file_mime"]))
-                $DocumentObject->FileMime = $data["file_mime"];
-
-            if(isset($data["file_size"]))
-                $DocumentObject->FileSize = $data["file_size"];
-
-            if(isset($data["file_name"]))
-                $DocumentObject->FileName = $data["file_name"];
-
-            if(isset($data["file_hash"]))
-                $DocumentObject->FileHash = $data["file_hash"];
-
-            if(isset($data["document_type"]))
-                $DocumentObject->Type = $data["document_type"];
-
             if(isset($data["deleted"]))
                 $DocumentObject->Deleted = $data["deleted"];
 
@@ -231,6 +190,10 @@
 
             if(isset($data["created_timestamp"]))
                 $DocumentObject->CreatedTimestamp = $data["created_timestamp"];
+
+            $DocumentObject->Files = [];
+            foreach($data['files'] as $file)
+                $DocumentObject->Files[] = File::fromArray($file);
 
             return $DocumentObject;
         }
