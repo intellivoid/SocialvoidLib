@@ -542,4 +542,23 @@
                 $this->updateUser($user);
             }
         }
+
+        /**
+         * Returns the path of the user display picture
+         *
+         * @param User $user
+         * @return string
+         * @throws AvatarGeneratorException
+         * @throws CacheException
+         * @throws CannotDetectFileTypeException
+         * @throws DatabaseException
+         * @throws DocumentNotFoundException
+         * @throws FileNotFoundException
+         * @throws ImageTooSmallException
+         * @throws UnsupportedAvatarGeneratorException
+         */
+        public function getProfilePictureLocation(User $user): string
+        {
+            return $this->socialvoidLib->getUserDisplayPictureManager()->getAvatarLocation($this->getProfilePictureDocument($user)->ContentIdentifier);
+        }
     }
