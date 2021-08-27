@@ -3,11 +3,7 @@ create table if not exists documents
     id                      varchar(126)         not null comment 'The ID of the document',
     content_source          varchar(32)          not null comment 'The source of where the content is hosted at',
     content_identifier      varchar(126)         null comment 'The content identifier that points this record to the content source',
-    file_mime               varchar(64)          null comment 'The content type of the document',
-    file_size               int                  null comment 'The size of the file',
-    file_name               varchar(256)         null comment 'The name of the file',
-    file_hash               varchar(64)          null comment 'The SHA256 checksum of the file contents',
-    document_type           int                  null comment 'The Document type that the client should represent as to the user',
+    files                   blob                 null comment 'ZiProto encoded array of files associated with this document',
     deleted                 tinyint(1) default 0 not null comment 'Indicates if this document has been deleted or not',
     owner_user_id           int                  null comment 'The user ID that owns this content',
     forward_user_id         int                  null comment 'The User ID that forwarded this document if any, the Public ID will change but the rest of the information will stay the same',
@@ -28,6 +24,9 @@ create table if not exists documents
 
 create index documents_content_identifier_index
     on documents (content_identifier);
+
+create index documents_content_source_content_identifier_index
+    on documents (content_source, content_identifier);
 
 create index documents_forward_user_id_index
     on documents (forward_user_id);
