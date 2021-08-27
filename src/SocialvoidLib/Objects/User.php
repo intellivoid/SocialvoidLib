@@ -321,6 +321,7 @@
                 "private_access_token" => $this->PrivateAccessToken,
                 "coa_user_entity" => $this->CoaUserEntity->toArray(),
                 "profile" => $this->Profile->toArray(),
+                "display_picture_document" => $this->DisplayPictureDocument->toArray(),
                 "settings" => $this->Settings->toArray(),
                 "privacy_state" => $this->PrivacyState,
                 "last_activity_timestamp" => $this->LastActivityTimestamp,
@@ -387,6 +388,9 @@
 
             if(isset($data["profile"]))
                 $UserObject->Profile = Profile::fromArray($data["profile"]);
+
+            if(isset($data["display_picture_document"]))
+                $UserObject->DisplayPictureDocument = Document::fromArray($data["display_picture_document"]);
 
             if(isset($data["settings"]))
                 $UserObject->Settings = UserSettings::fromArray($data["settings"]);

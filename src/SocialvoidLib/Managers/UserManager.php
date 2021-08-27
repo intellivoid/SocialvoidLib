@@ -52,6 +52,7 @@
     use udp2\Exceptions\ImageTooSmallException;
     use udp2\Exceptions\UnsupportedAvatarGeneratorException;
     use Zimage\Exceptions\CannotGetOriginalImageException;
+    use Zimage\Exceptions\FileNotFoundException;
     use Zimage\Exceptions\InvalidZimageFileException;
     use Zimage\Exceptions\SizeNotSetException;
     use Zimage\Exceptions\UnsupportedImageTypeException;
@@ -438,7 +439,7 @@
          * @throws ImageTooSmallException
          * @throws UnsupportedAvatarGeneratorException
          * @throws CannotGetOriginalImageException
-         * @throws \Zimage\Exceptions\FileNotFoundException
+         * @throws FileNotFoundException
          * @throws InvalidZimageFileException
          * @throws SizeNotSetException
          * @throws UnsupportedImageTypeException
@@ -460,13 +461,21 @@
                 $document_input->OwnerUserID = $user->ID;
                 $document_input->ContentSource = ContentSource::UserProfilePicture;
                 $document_input->ContentIdentifier = $user->PublicID . "_default";
-                $document_input->Files = Converter::zimageToFiles($avatar_zimage, $user->PublicID);
+                $document_input->Files = Converter::zimageToFiles($avatar_zimage, $user->PublicID . "_default");
 
                 $user->Properties->DefaultProfilePictureDocumentID = $this->socialvoidLib->getDocumentsManager()->createDocument($document_input);
                 $this->updateUser($user);
             }
 
-            return $this->socialvoidLib->getDocumentsManager()->getDocument($user->Properties->DefaultProfilePictureDocumentID);
+            try
+            {
+                return $this->socialvoidLib->getDocumentsManager()->getDocument($user->Properties->DefaultProfilePictureDocumentID);
+            }
+            catch (DocumentNotFoundException $e)
+            {
+                $user->Properties->DefaultProfilePictureDocumentID = null;
+                return $this->getDefaultDisplayPictureDocument($user);
+            }
         }
 
         /**
@@ -479,20 +488,27 @@
          * @throws CacheException
          * @throws CannotGetOriginalImageException
          * @throws DatabaseException
-         * @throws DocumentNotFoundException
          * @throws ImageTooSmallException
          * @throws InvalidZimageFileException
          * @throws SizeNotSetException
          * @throws UnsupportedAvatarGeneratorException
          * @throws UnsupportedImageTypeException
-         * @throws \Zimage\Exceptions\FileNotFoundException
+         * @throws FileNotFoundException
+         * @throws DocumentNotFoundException
          */
         public function getDisplayPictureDocument(User &$user): Document
         {
             if($user->Properties->ProfilePictureDocumentID == null)
                 return $this->getDefaultDisplayPictureDocument($user);
 
-            return $this->socialvoidLib->getDocumentsManager()->getDocument($user->Properties->ProfilePictureDocumentID);
+            try
+            {
+                return $this->socialvoidLib->getDocumentsManager()->getDocument($user->Properties->ProfilePictureDocumentID);
+            }
+            catch (DocumentNotFoundException $e)
+            {
+                return $this->getDefaultDisplayPictureDocument($user);
+            }
         }
 
         /**
@@ -505,13 +521,13 @@
          * @throws CacheException
          * @throws CannotGetOriginalImageException
          * @throws DatabaseException
-         * @throws DocumentNotFoundException
          * @throws ImageTooSmallException
          * @throws InvalidZimageFileException
          * @throws SizeNotSetException
          * @throws UnsupportedAvatarGeneratorException
          * @throws UnsupportedImageTypeException
-         * @throws \Zimage\Exceptions\FileNotFoundException
+         * @throws FileNotFoundException
+         * @throws DocumentNotFoundException
          */
         public function setDisplayPicture(User &$user, string $filePath)
         {
@@ -530,7 +546,15 @@
             if($user->Properties->ProfilePictureDocumentID !== null)
             {
                 $old_document = $this->getDisplayPictureDocument($user);
-                $this->socialvoidLib->getDocumentsManager()->deleteDocument($old_document);
+
+                try
+                {
+                    $this->socialvoidLib->getDocumentsManager()->deleteDocument($old_document);
+                }
+                catch (DatabaseException $e)
+                {
+                    unset($e);
+                }
             }
 
             $user->Properties->ProfilePictureDocumentID = $new_document_id;
@@ -552,7 +576,7 @@
          * @throws SizeNotSetException
          * @throws UnsupportedAvatarGeneratorException
          * @throws UnsupportedImageTypeException
-         * @throws \Zimage\Exceptions\FileNotFoundException
+         * @throws FileNotFoundException
          */
         public function deleteDisplayPicture(User &$user)
         {
@@ -582,7 +606,7 @@
          * @throws SizeNotSetException
          * @throws UnsupportedAvatarGeneratorException
          * @throws UnsupportedImageTypeException
-         * @throws \Zimage\Exceptions\FileNotFoundException
+         * @throws FileNotFoundException
          */
         public function getDisplayPicture(User &$user): Zimage
         {

@@ -89,10 +89,7 @@
                 'id',
                 'content_source',
                 'content_identifier',
-                'file_mime',
-                'file_size',
-                'file_hash',
-                'document_type',
+                'files',
                 'deleted',
                 'owner_user_id',
                 'forward_user_id',
@@ -100,7 +97,7 @@
                 'access_roles',
                 'flags',
                 'properties',
-                'last_access_timestamp',
+                'last_accessed_timestamp',
                 'created_timestamp'
             ], 'id', $this->socialvoidLib->getDatabase()->real_escape_string($document_id));
 
@@ -116,6 +113,7 @@
                 }
                 else
                 {
+                    $Row['files'] = ZiProto::decode($Row['files']);
                     $Row['access_roles'] = ZiProto::decode($Row['access_roles']);
                     $Row['flags'] = ZiProto::decode($Row['flags']);
                     $Row['properties'] = ZiProto::decode($Row['properties']);
@@ -126,7 +124,7 @@
             else
             {
                 throw new DatabaseException(
-                    'There was an error while trying to retrieve the Document',
+                    $this->socialvoidLib->getDatabase()->error,
                     $query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
                 );
             }

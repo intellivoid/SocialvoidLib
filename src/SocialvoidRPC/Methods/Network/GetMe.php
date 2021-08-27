@@ -113,6 +113,8 @@
                 if(Validate::isStandardError($e->getCode()))
                     throw $e;
 
+                SocialvoidRPC::$LogHandler->logException($e, "GetMe");
+
                 // If anything else, suppress the error.
                 throw new InternalServerException("There was an unexpected error", $e);
             }
@@ -126,6 +128,8 @@
                 // Allow standard errors
                 if(Validate::isStandardError($e->getCode()))
                     throw $e;
+
+                SocialvoidRPC::$LogHandler->logException($e, "GetMe");
 
                 // If anything else, suppress the error.
                 throw new InternalServerException("There was an unexpected error", $e);
