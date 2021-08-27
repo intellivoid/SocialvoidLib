@@ -137,12 +137,13 @@
                 $document_file->Mime = 'image/jpeg';
                 $document_file->Hash = hash('crc32', $image->getData());
                 $document_file->Size = strlen($image->getSize());
-                $document_file->Name = $image_name . (string)$image->getSize() . '.jpg';
-                $document_file->ID = $image->getSize();
+                $document_file->Name = $image_name . $image->getSize() . '.jpg';
+                $document_file->ID = (string)$image->getSize();
                 $document_file->Type = DocumentType::Photo;
 
                 $document_files[] = $document_file;
             }
+
 
             return $document_files;
         }

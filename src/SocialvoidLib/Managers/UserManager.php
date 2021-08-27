@@ -449,7 +449,7 @@
             if($user->Properties->DefaultProfilePictureDocumentID == null)
             {
                 $this->socialvoidLib->getUserDisplayPictureManager()->generateAvatar(
-                    $user->PublicID, $user->getDisplayName(),
+                    $user->PublicID . '_default', $user->getDisplayName(),
                     DefaultAvatarType::InitialsBase, ColorScheme::Dark
                 );
 
