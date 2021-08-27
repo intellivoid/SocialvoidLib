@@ -82,6 +82,8 @@
          */
         public function toArray(): array
         {
+            if($this->Data == null)
+                return [];
             return $this->Data;
         }
 
@@ -95,6 +97,9 @@
         {
             $AccessRoleObject = new AccessRoles();
             $AccessRoleObject->Data = $data;
+
+            if($AccessRoleObject->Data == [])
+                $AccessRoleObject->Data = [];
 
             return $AccessRoleObject;
         }
