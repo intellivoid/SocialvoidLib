@@ -118,6 +118,23 @@
         }
 
         /**
+         * Returns the file by hash
+         *
+         * @param string $file_hash
+         * @return File|null
+         */
+        public function getFile(string $file_hash): ?File
+        {
+            foreach($this->Files as $file)
+            {
+                if($file->Hash == $file_hash)
+                    return $file;
+            }
+
+            return null;
+        }
+
+        /**
          * Returns an array representation of the object
          *
          * @return array
