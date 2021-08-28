@@ -21,6 +21,7 @@
     use SocialvoidLib\Exceptions\Standard\Authentication\SessionExpiredException;
     use SocialvoidLib\Exceptions\Standard\Authentication\TwoFactorAuthenticationRequiredException;
     use SocialvoidLib\Exceptions\Standard\Media\InvalidImageDimensionsException;
+    use SocialvoidLib\Exceptions\Standard\Network\AccessDeniedException;
     use SocialvoidLib\Exceptions\Standard\Network\AlreadyRepostedException;
     use SocialvoidLib\Exceptions\Standard\Network\DocumentNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\FileUploadException;
@@ -280,6 +281,14 @@
          * @see DocumentNotFoundException
          */
         const DocumentNotFoundException = 0x03105;
+
+        /**
+         * Raised when the requested resource is not accessible to the user
+         *
+         * @see AccessDeniedException
+         */
+        const AccessDeniedException = 0x03106;
+
 
         /** 40-Set error codes (Server) */
 

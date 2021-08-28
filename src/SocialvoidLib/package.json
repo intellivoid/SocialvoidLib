@@ -97,6 +97,10 @@
         },
         {
             "required": true,
+            "file": "Abstracts/Types/AccessEntityType.php"
+        },
+        {
+            "required": true,
             "file": "Abstracts/Types/Security/AccessRoleEntityType.php"
         },
         {
@@ -490,6 +494,10 @@
         {
             "required": true,
             "file": "Exceptions/Standard/Network/AlreadyRepostedException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Network/AccessDeniedException.php"
         },
         {
             "required": true,

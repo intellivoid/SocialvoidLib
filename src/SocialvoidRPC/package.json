@@ -43,6 +43,10 @@
         },
         {
             "required": true,
+            "file": "Methods/Cloud/GetDocument.php"
+        },
+        {
+            "required": true,
             "file": "Methods/Session/AuthenticateUser.php"
         },
         {
