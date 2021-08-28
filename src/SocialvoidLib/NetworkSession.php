@@ -86,6 +86,11 @@
         /**
          * @var Cloud
          */
+        private Cloud $cloud;
+
+        /**
+         * @var Cloud
+         */
         //private Cloud $cloud;
 
         /**
@@ -96,7 +101,7 @@
         {
             $this->flags = [];
             $this->socialvoidLib = $socialvoidLib;
-            //$this->cloud = new Cloud($this);
+            $this->cloud = new Cloud($this);
             $this->users = new Users($this);
             $this->timeline = new Timeline($this);
         }
@@ -228,6 +233,7 @@
          * @throws NotAuthenticatedException
          * @throws SessionExpiredException
          * @throws Exceptions\GenericInternal\CacheException
+         * @throws PeerNotFoundException
          */
         public function logout(SessionIdentification $sessionIdentification)
         {
@@ -279,6 +285,7 @@
          * @throws PeerNotFoundException
          * @throws SessionExpiredException
          * @throws Exceptions\Internal\NoPasswordAuthenticationAvailableException
+         * @throws NotAuthenticatedException
          */
         public function authenticateUser(SessionIdentification $sessionIdentification, string $username, string $password, ?string $otp=null): bool
         {
@@ -366,6 +373,7 @@
          * @throws InternalServerException
          * @throws PeerNotFoundException
          * @throws SessionExpiredException
+         * @throws NotAuthenticatedException
          */
         public function registerUser(SessionIdentification $sessionIdentification, string $username, string $password, string $first_name, ?string $last_name=null): Peer
         {

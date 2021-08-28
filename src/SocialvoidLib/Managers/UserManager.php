@@ -464,7 +464,10 @@
                 $document_input->Files = Converter::zimageToFiles($avatar_zimage, $user->PublicID . "_default");
 
                 $user->Properties->DefaultProfilePictureDocumentID = $this->socialvoidLib->getDocumentsManager()->createDocument($document_input);
+                $user->DisplayPictureDocument = $this->socialvoidLib->getDocumentsManager()->getDocument($user->Properties->DefaultProfilePictureDocumentID);
                 $this->updateUser($user);
+
+                return $user->DisplayPictureDocument;
             }
 
             try
@@ -558,6 +561,7 @@
             }
 
             $user->Properties->ProfilePictureDocumentID = $new_document_id;
+            $user->DisplayPictureDocument = $this->socialvoidLib->getDocumentsManager()->getDocument($new_document_id);
             $this->updateUser($user);
         }
 
@@ -586,6 +590,7 @@
                 $this->socialvoidLib->getDocumentsManager()->deleteDocument($old_document);
 
                 $user->Properties->ProfilePictureDocumentID = null;
+                $user->DisplayPictureDocument = $this->getDefaultDisplayPictureDocument($user);
                 $this->updateUser($user);
             }
         }

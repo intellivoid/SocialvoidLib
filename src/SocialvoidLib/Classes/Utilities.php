@@ -15,6 +15,7 @@ namespace SocialvoidLib\Classes;
     use SocialvoidLib\Abstracts\Types\JobType;
     use SocialvoidLib\Abstracts\Types\Standard\PostType;
     use SocialvoidLib\Classes\Security\Hashing;
+    use SocialvoidLib\Objects\ContentResults;
     use SocialvoidLib\Objects\Post;
 
     /**
@@ -256,5 +257,17 @@ namespace SocialvoidLib\Classes;
         public static function generateTelegramCdnId(string $file_contents): string
         {
             return Hashing::pepper($file_contents . time());
+        }
+
+        /**
+         * Sets the content headers for the content results
+         *
+         * @param ContentResults $contentResults
+         */
+        public static function setContentHeaders(ContentResults $contentResults)
+        {
+            header('Content-Type: ' . $contentResults->FileMime);
+            header('Content-Disposition: filename="' . $contentResults->FileName . '"');
+            header('X-File-Hash: ' . $contentResults->FileHash);
         }
     }

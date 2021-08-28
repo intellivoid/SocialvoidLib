@@ -12,12 +12,17 @@
 
 
     use Exception;
+    use SocialvoidLib\Abstracts\ContentSource;
+    use SocialvoidLib\Abstracts\Types\FetchLocationType;
     use SocialvoidLib\Abstracts\Types\MediaType;
     use SocialvoidLib\Classes\Security\ImageProcessing;
     use SocialvoidLib\Classes\Utilities;
+    use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\Standard\Media\InvalidImageDimensionsException;
+    use SocialvoidLib\Exceptions\Standard\Network\DocumentNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\FileUploadException;
     use SocialvoidLib\NetworkSession;
+    use SocialvoidLib\Objects\ContentResults;
     use SocialvoidLib\Objects\Post\MediaContent;
 
     /**
@@ -41,53 +46,50 @@
         }
 
         /**
-         * Uploads an image to the CDN and returns a media content object
+         * Fetches a document from the cloud
          *
-         * @param string $file_path
-         * @return MediaContent
-         * @throws FileUploadException
+         * @param string $document_id
+         * @return ContentResults
+         * @throws DocumentNotFoundException
+         * @throws DatabaseException
          */
-        public function uploadImage(string $file_path): MediaContent
+        public function getDocument(string $document_id): ContentResults
         {
-            try
+            // TODO: Check if user is authenticated
+            // TODO: Run access role check
+            $parsed_id = explode('-', $document_id);
+
+            if(count($parsed_id) !== 2)
+                throw new DocumentNotFoundException('The requested document was not found in the network');
+
+            $document = $this->networkSession->getSocialvoidLib()->getDocumentsManager()->getDocument($parsed_id[0]);
+            $file = $document->getFile($parsed_id[1]);
+
+            if($file == null)
+                throw new DocumentNotFoundException('The requested document was not found in the network');
+
+            $content_results = new ContentResults();
+            $content_results->ContentSource = $document->ContentSource;
+            $content_results->ContentIdentifier = $document->ContentIdentifier;
+            $content_results->DocumentID = $document->ID;
+            $content_results->FileID = $file->ID;
+            $content_results->FileMime = $file->Mime;
+            $content_results->FileName = $file->Name;
+            $content_results->FileSize = $file->Size;
+            $content_results->FileHash = $parsed_id[1];
+
+            switch($document->ContentSource)
             {
-                $image_details = ImageProcessing::verifyImage($file_path);
-            }
-            catch(Exception $e)
-            {
-                throw new FileUploadException("The given image file is invalid and cannot be processed", $e);
-            }
+                case ContentSource::UserProfilePicture:
+                    $content_results->FetchLocationType = FetchLocationType::Custom;
+                    $content_results->Location = $this->networkSession->getSocialvoidLib()->getUserDisplayPictureManager()->getAvatarLocation($document->ContentIdentifier);
+                    break;
 
-            if($image_details->Width > 10000 || $image_details->Height > 10000)
-            {
-                throw new FileUploadException("The given image file exceeds in the supported dimensions, 10000.",
-                    new InvalidImageDimensionsException("The given image file exceeds in the supported dimensions, 10000")
-                );
+                default:
+                    $content_results->FetchLocationType = FetchLocationType::None;
+                    break;
             }
 
-            try {
-                $uploaded_content = $this->networkSession->getSocialvoidLib()->getTelegramCdnManager()->uploadContent(
-                    $file_path, $this->networkSession->getAuthenticatedUser()->PublicID
-                );
-            }
-            catch(Exception $e)
-            {
-                throw new FileUploadException("There was an error while trying to upload the file to the CDN", $e);
-            }
-
-            $media_content = new MediaContent();
-            $media_content->ProviderUrl = "https://" . Utilities::getBoolDefinition("SOCIALVOID_LIB_NETWORK_DOMAIN");
-            $media_content->ProviderName = Utilities::getBoolDefinition("SOCIALVOID_LIB_NETWORK_NAME");
-            $media_content->MediaType = MediaType::Image;
-            $media_content->URL = 
-                "https://cdn." . Utilities::getBoolDefinition("SOCIALVOID_LIB_NETWORK_DOMAIN") . 
-                "/public/" . $uploaded_content;
-            
-            return $media_content;
-        }
-
-        public function getDocument(string $document_id): MediaContent
-        {
-
+            return $content_results;
         }
     }
