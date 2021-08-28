@@ -217,4 +217,36 @@
             }
         }
 
+        /**
+         * Gets a document cache entry
+         *
+         * @param string $value
+         * @return Document|null
+         * @throws CacheException
+         */
+        private function getSessionCacheEntry(string $value): ?Document
+        {
+            if($this->socialvoidLib->getRedisBasicCacheConfiguration()["Enabled"] == false)
+                throw new CacheException("BasicRedisCache is not enabled");
+
+            if($this->socialvoidLib->getRedisBasicCacheConfiguration()["DocumentCacheEnabled"] == false)
+                return null;
+
+            try
+            {
+                $CacheEntryResults = $this->socialvoidLib->getBasicRedisCacheManager()->getCacheEntry(
+                    CacheEntryObjectType::Session, $value);
+            }
+            catch (CacheMissedException $e)
+            {
+                return null;
+            }
+            catch (DependencyError | RedisCacheException $e)
+            {
+                throw new CacheException("There was an issue while trying to request a session cache entry", 0, $e);
+            }
+
+            return Document::fromArray($CacheEntryResults->ObjectData);
+        }
+
     }
