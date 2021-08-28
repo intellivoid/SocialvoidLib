@@ -1,7 +1,7 @@
 <?php
 
     /** @noinspection PhpMissingFieldTypeInspection */
-    
+
     namespace SocialvoidLib\Objects\Document;
 
     use SocialvoidLib\Abstracts\Types\DocumentType;

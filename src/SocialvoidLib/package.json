@@ -85,6 +85,10 @@
         },
         {
             "required": true,
+            "file": "Abstracts/StatusStates/UserStatus.php"
+        },
+        {
+            "required": true,
             "file": "Abstracts/StatusStates/UserPrivacyState.php"
         },
         {
@@ -855,7 +859,6 @@
     "files": [
         "Classes/PostText/TwitterMethod/README.md",
         "package.json",
-        "Objects/Standard/README.md",
-        "Abstracts/StatusStates/UserStatus.php"
+        "Objects/Standard/README.md"
     ]
 }
