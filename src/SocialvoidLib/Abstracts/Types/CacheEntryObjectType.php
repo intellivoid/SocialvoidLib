@@ -14,4 +14,6 @@
         const Post = "post";
 
         const Session = "session";
+
+        const Document = "document";
     }

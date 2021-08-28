@@ -272,6 +272,9 @@
             $RedisBasicCacheSchema->setDefinition("SessionCacheEnabled", True);
             $RedisBasicCacheSchema->setDefinition("SessionCacheTTL", 300);
             $RedisBasicCacheSchema->setDefinition("SessionCacheLimit", 1000);
+            $RedisBasicCacheSchema->setDefinition("DocumentCacheEnabled", True);
+            $RedisBasicCacheSchema->setDefinition("DocumentCacheTTL", 300);
+            $RedisBasicCacheSchema->setDefinition("DocumentCacheLimit", 1000);
             $RedisBasicCacheSchema->setDefinition("RedisHost", "127.0.0.1");
             $RedisBasicCacheSchema->setDefinition("RedisPort", 6379);
             $RedisBasicCacheSchema->setDefinition("Password", "admin");

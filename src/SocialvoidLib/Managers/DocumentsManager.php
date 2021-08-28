@@ -3,11 +3,18 @@
 
     namespace SocialvoidLib\Managers;
 
+    use Exception;
     use msqg\QueryBuilder;
+    use SocialvoidLib\Abstracts\Types\CacheEntryObjectType;
     use SocialvoidLib\Classes\Standard\BaseIdentification;
+    use SocialvoidLib\Exceptions\GenericInternal\CacheException;
+    use SocialvoidLib\Exceptions\GenericInternal\CacheMissedException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
+    use SocialvoidLib\Exceptions\GenericInternal\DependencyError;
+    use SocialvoidLib\Exceptions\GenericInternal\RedisCacheException;
     use SocialvoidLib\Exceptions\Standard\Network\DocumentNotFoundException;
     use SocialvoidLib\InputTypes\DocumentInput;
+    use SocialvoidLib\InputTypes\RegisterCacheInput;
     use SocialvoidLib\Objects\Document;
     use SocialvoidLib\SocialvoidLib;
     use ZiProto\ZiProto;
@@ -176,4 +183,38 @@
                 );
             }
         }
+
+        /**
+         * Registers a document cache entry
+         *
+         * @param Document $document
+         * @throws CacheException
+         */
+        private function registerDocumentCacheEntry(Document $document): void
+        {
+            if(
+                $this->socialvoidLib->getRedisBasicCacheConfiguration()["Enabled"] &&
+                $this->socialvoidLib->getRedisBasicCacheConfiguration()["DocumentCacheEnabled"]
+            )
+            {
+                $CacheEntryInput = new RegisterCacheInput();
+                $CacheEntryInput->ObjectType = CacheEntryObjectType::Document;
+                $CacheEntryInput->ObjectData = $document->toArray();
+                $CacheEntryInput->Pointers = [$document->ID];
+
+                try
+                {
+                    $this->socialvoidLib->getBasicRedisCacheManager()->registerCache(
+                        $CacheEntryInput,
+                        $this->socialvoidLib->getRedisBasicCacheConfiguration()["DocumentCacheTTL"],
+                        $this->socialvoidLib->getRedisBasicCacheConfiguration()["DocumentCacheLimit"]
+                    );
+                }
+                catch(Exception $e)
+                {
+                    throw new CacheException("There was an error while trying to register the document cache entry", 0, $e);
+                }
+            }
+        }
+
     }
