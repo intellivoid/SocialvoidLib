@@ -1,8 +1,10 @@
 <?php
 
-namespace SocialvoidLib\Abstracts\Types;
+    namespace SocialvoidLib\Abstracts\Types;
 
-class FetchLocationType
-{
+    abstract class FetchLocationType
+    {
+        const Local = "LOCAL";
 
-}
+        const Remote = "REMOTE";
+    }

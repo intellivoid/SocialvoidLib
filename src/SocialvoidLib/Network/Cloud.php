@@ -86,7 +86,7 @@
             return $media_content;
         }
 
-        public function downloadImage(string $public_id): MediaContent
+        public function getDocument(string $document_id): MediaContent
         {
 
         }

@@ -129,6 +129,10 @@
         },
         {
             "required": true,
+            "file": "Abstracts/Types/FetchLocationType.php"
+        },
+        {
+            "required": true,
             "file": "Abstracts/ContentSource.php"
         },
         {
@@ -626,6 +630,10 @@
         {
             "required": true,
             "file": "Objects/ActiveSession/SessionSecurity.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/ContentResults.php"
         },
         {
             "required": true,
