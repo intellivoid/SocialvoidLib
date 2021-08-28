@@ -59,8 +59,8 @@
             $CacheEntryObject->ObjectType = $registerCacheInput->ObjectType;
             $CacheEntryObject->ObjectData = $registerCacheInput->ObjectData;
 
-            $CacheKeyEntry = str_ireplace(" ", "_", strtolower(
-                $CacheEntryObject->ObjectType . "_i_" . $CacheID)
+            $CacheKeyEntry = str_ireplace(" ", ".", strtolower(
+                $CacheEntryObject->ObjectType . ".i." . $CacheID)
             );
 
             foreach($registerCacheInput->Pointers as $pointer)
@@ -76,7 +76,7 @@
                 }
 
                 $this->socialvoidLib->getBasicRedis()->set(
-                    Converter::normalizeText($CacheEntryObject->ObjectType . "_" . $pointer), $pointerData,
+                    Converter::normalizeText($CacheEntryObject->ObjectType . "." . $pointer), $pointerData,
                     ['ex'=>$ttl]);
             }
 
@@ -101,7 +101,7 @@
          */
         public function getCacheEntry(string $object_type, string $pointer_value): CacheEntry
         {
-            $CachePointerRequest = $this->socialvoidLib->getBasicRedis()->get($object_type . "_" . $pointer_value);
+            $CachePointerRequest = $this->socialvoidLib->getBasicRedis()->get($object_type . "." . $pointer_value);
             if($CachePointerRequest == false)
                 throw new CacheMissedException("The requested cache request was a miss");
 
@@ -130,6 +130,6 @@
          */
         public function countRegisteredCacheEntries(string $object_type): int
         {
-            return count($this->socialvoidLib->getBasicRedis()->keys($object_type . "_i_*"));
+            return count($this->socialvoidLib->getBasicRedis()->keys($object_type . ".i.*"));
         }
     }
