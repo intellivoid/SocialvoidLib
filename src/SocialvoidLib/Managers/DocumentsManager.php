@@ -86,12 +86,23 @@
          * Retrieves the Document from the database
          *
          * @param string $document_id
+         * @param bool $cache
          * @return Document
+         * @throws CacheException
          * @throws DatabaseException
          * @throws DocumentNotFoundException
          */
-        public function getDocument(string $document_id): Document
+        public function getDocument(string $document_id, bool $cache=true): Document
         {
+            if(
+                $this->socialvoidLib->getRedisBasicCacheConfiguration()["Enabled"] &&
+                $this->socialvoidLib->getRedisBasicCacheConfiguration()["SessionCacheEnabled"] && $cache)
+            {
+                $CachedDocument = $this->getSessionCacheEntry($document_id);
+                if($CachedDocument !== null) return $CachedDocument;
+            }
+
+
             $query = QueryBuilder::select('documents', [
                 'id',
                 'content_source',
@@ -125,7 +136,9 @@
                     $Row['flags'] = ZiProto::decode($Row['flags']);
                     $Row['properties'] = ZiProto::decode($Row['properties']);
 
-                    return Document::fromArray($Row);
+                    $Document = Document::fromArray($Row);
+                    $this->registerDocumentCacheEntry($Document);
+                    return $Document;
                 }
             }
             else
@@ -141,7 +154,10 @@
          * Updates the last accessed timestamp of the document
          *
          * @param Document $document
+         * @throws CacheException
          * @throws DatabaseException
+         * @throws DocumentNotFoundException
+         * @noinspection DuplicatedCode
          */
         public function updateLastAccessTime(Document $document)
         {
@@ -158,6 +174,15 @@
                     $query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
                 );
             }
+
+            if(
+                $this->socialvoidLib->getRedisBasicCacheConfiguration()["Enabled"] &&
+                $this->socialvoidLib->getRedisBasicCacheConfiguration()["DocumentCacheEnabled"]
+            )
+            {
+                $this->registerDocumentCacheEntry($this->getDocument($document->ID, false));
+
+            }
         }
 
         /**
@@ -165,6 +190,9 @@
          *
          * @param Document $document
          * @throws DatabaseException
+         * @throws DocumentNotFoundException
+         * @throws CacheException
+         * @noinspection DuplicatedCode
          */
         public function deleteDocument(Document $document)
         {
@@ -181,6 +209,15 @@
                     'There was an error while trying to update the document attribute',
                     $query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
                 );
+            }
+
+            if(
+                $this->socialvoidLib->getRedisBasicCacheConfiguration()["Enabled"] &&
+                $this->socialvoidLib->getRedisBasicCacheConfiguration()["DocumentCacheEnabled"]
+            )
+            {
+                $this->registerDocumentCacheEntry($this->getDocument($document->ID, false));
+
             }
         }
 
