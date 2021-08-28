@@ -4,17 +4,29 @@
 
     use Exception;
     use KimchiRPC\Exceptions\Server\MissingParameterException;
+    use KimchiRPC\Interfaces\MethodInterface;
     use KimchiRPC\Objects\Request;
     use KimchiRPC\Objects\Response;
     use SocialvoidLib\Classes\Validate;
+    use SocialvoidLib\Exceptions\GenericInternal\CacheException;
+    use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
+    use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
+    use SocialvoidLib\Exceptions\Standard\Authentication\BadSessionChallengeAnswerException;
+    use SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException;
+    use SocialvoidLib\Exceptions\Standard\Authentication\SessionExpiredException;
+    use SocialvoidLib\Exceptions\Standard\Authentication\SessionNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Network\DocumentNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPublicHashException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPeerInputException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidSessionIdentificationException;
     use SocialvoidLib\NetworkSession;
+    use SocialvoidLib\Objects\Standard\Document;
     use SocialvoidLib\Objects\Standard\SessionIdentification;
     use SocialvoidRPC\SocialvoidRPC;
 
-    class GetDocument implements \KimchiRPC\Interfaces\MethodInterface
+    class GetDocument implements MethodInterface
     {
 
         /**
@@ -54,6 +66,7 @@
          * @throws InvalidSessionIdentificationException
          * @throws MissingParameterException
          * @throws InvalidPeerInputException
+         * @throws DocumentNotFoundException
          * @noinspection DuplicatedCode
          */
         private function checkParameters(Request $request)
@@ -63,14 +76,35 @@
             if(gettype($request->Parameters["session_identification"]) !== "array")
                 throw new InvalidSessionIdentificationException("The parameter 'session_identification' is not a object");
 
-            if(isset($request->Parameters["peer"]) == false)
-                throw new InvalidPeerInputException("Missing parameter 'peer'");
-            if(gettype($request->Parameters["peer"]) !== "string")
-                throw new InvalidPeerInputException("The parameter 'peer' is not a string");
+            if(isset($request->Parameters["document"]) == false)
+                throw new InvalidPeerInputException("Missing parameter 'document'");
+            if(gettype($request->Parameters["document"]) !== "string")
+                throw new InvalidPeerInputException("The parameter 'document' is not a string");
+
+            $parsed_id = explode('-', $request->Parameters['document']);
+
+            // Validate the document ID
+            if(count($parsed_id) !== 2 ||  strlen($parsed_id[0]) !== 64 || strlen($parsed_id[1]) !== 8)
+                throw new DocumentNotFoundException('The requested document was not found in the network');
         }
 
         /**
-         * @inheritDoc
+         * @param Request $request
+         * @return Response
+         * @throws DocumentNotFoundException
+         * @throws InternalServerException
+         * @throws InvalidPeerInputException
+         * @throws InvalidSessionIdentificationException
+         * @throws MissingParameterException
+         * @throws CacheException !may
+         * @throws DatabaseException !may
+         * @throws InvalidSearchMethodException !may
+         * @throws BadSessionChallengeAnswerException
+         * @throws NotAuthenticatedException
+         * @throws SessionExpiredException
+         * @throws SessionNotFoundException
+         * @throws PeerNotFoundException
+         * @throws InvalidClientPublicHashException
          * @noinspection DuplicatedCode
          */
         public function execute(Request $request): Response
@@ -101,10 +135,9 @@
             }
 
 
-
             try
             {
-                $document = $NetworkSession->getUsers()->resolvePeer($SessionIdentification, $NetworkSession->getAuthenticatedUser()->PublicID);
+                $content_results = $NetworkSession->getCloud()->getDocument($SessionIdentification, $request->Parameters['document']);
             }
             catch(Exception $e)
             {
@@ -117,7 +150,7 @@
             }
 
             $Response = Response::fromRequest($request);
-            $Response->ResultData = Peer::fromUser($resolved_peer)->toArray();
+            $Response->ResultData = Document::fromContentResults($content_results)->toArray();
 
             return $Response;
         }

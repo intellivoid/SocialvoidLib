@@ -10,7 +10,7 @@
 
     namespace SocialvoidLib\Classes;
 
-    use SocialvoidLib\Abstracts\Types\DocumentType;
+    use SocialvoidLib\Abstracts\Types\Standard\DocumentType;
     use SocialvoidLib\Objects\ActiveSession;
     use SocialvoidLib\Objects\Document\File;
     use Zimage\Zimage;
@@ -72,6 +72,7 @@
          * @param array $flags
          * @param mixed $flag
          * @return bool
+         * @noinspection PhpParameterByRefIsNotUsedAsReferenceInspection
          */
         public static function hasFlag(array &$flags, $flag): bool
         {
@@ -136,7 +137,7 @@
                 $document_file = new File();
                 $document_file->Mime = 'image/jpeg';
                 $document_file->Hash = hash('crc32', $image->getData());
-                $document_file->Size = strlen($image->getSize());
+                $document_file->Size = strlen($image->getData());
                 $document_file->Name = $image_name . '_' . $image->getSize() . '.jpg';
                 $document_file->ID = (string)$image->getSize();
                 $document_file->Type = DocumentType::Photo;

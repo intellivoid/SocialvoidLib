@@ -2,7 +2,7 @@
 
     namespace SocialvoidLib\Objects;
 
-    use SocialvoidLib\Abstracts\Types\DocumentType;
+    use SocialvoidLib\Abstracts\Types\Standard\DocumentType;
 
     class FileValidationResults
     {

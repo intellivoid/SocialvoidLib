@@ -5,6 +5,8 @@
 
     namespace SocialvoidLib\Objects\Standard\Peer;
 
+    use SocialvoidLib\Objects\Standard\Document;
+
     class DisplayPictureSize
     {
         /**
@@ -15,9 +17,9 @@
         public $Size;
 
         /**
-         * The ID of the document
+         * The document
          *
-         * @var string
+         * @var Document
          */
-        public $DocumentID;
+        public $Document;
     }

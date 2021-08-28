@@ -73,7 +73,7 @@
         {
             $profilePicturesSizes = [];
             foreach($this->DisplayPictureSizes as $datum)
-                $profilePicturesSizes[$datum->Size] = $datum->DocumentID;
+                $profilePicturesSizes[$datum->Size] = $datum->Document->toArray();
 
             return [
                 "id" => $this->ID,
@@ -101,10 +101,11 @@
             $PeerObject->Name = Name::fromProfile($user->Profile);
             $PeerObject->Flags = $user->Flags;
             $PeerObject->DisplayPictureSizes = [];
+
             foreach($user->DisplayPictureDocument->Files as $item)
             {
                 $display_size = new DisplayPictureSize();
-                $display_size->DocumentID = $user->DisplayPictureDocument->ID . '-' . $item->Hash;
+                $display_size->Document = Document::fromDocument($user->DisplayPictureDocument, $item->Hash);
                 $display_size->Size = $item->ID;
                 $PeerObject->DisplayPictureSizes[] = $display_size;
             }

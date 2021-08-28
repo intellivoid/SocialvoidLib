@@ -121,15 +121,15 @@
         },
         {
             "required": true,
-            "file": "Abstracts/Types/DocumentType.php"
-        },
-        {
-            "required": true,
             "file": "Abstracts/Types/Standard/PostType.php"
         },
         {
             "required": true,
             "file": "Abstracts/Types/Standard/PeerType.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/Types/Standard/DocumentType.php"
         },
         {
             "required": true,
@@ -738,6 +738,10 @@
         {
             "required": true,
             "file": "Objects/Standard/SessionEstablished.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/Standard/Document.php"
         },
         {
             "required": true,

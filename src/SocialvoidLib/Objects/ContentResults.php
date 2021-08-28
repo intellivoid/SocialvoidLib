@@ -69,6 +69,27 @@
         public $FileSize;
 
         /**
+         * The file type
+         *
+         * @var string
+         */
+        public $FileType;
+
+        /**
+         * Array of flags associated with this file
+         *
+         * @var array
+         */
+        public $Flags;
+
+        /**
+         * The Unix Timestamp for when this record was created
+         *
+         * @var int
+         */
+        public $CreatedTimestamp;
+
+        /**
          * Returns an array representation of the object
          *
          * @return array
@@ -85,7 +106,10 @@
                 'file_hash' => $this->FileHash,
                 'file_mime' => $this->FileMime,
                 'file_name' => $this->FileName,
-                'file_size' => $this->FileSize
+                'file_size' => $this->FileSize,
+                'file_type' => $this->FileType,
+                'flags' => $this->Flags,
+                'created_timestamp' => $this->CreatedTimestamp
             ];
         }
 
@@ -128,6 +152,16 @@
 
             if(isset($data['file_size']))
                 $content_results_object->FileSize = $data['file_size'];
+
+            /** @noinspection DuplicatedCode */
+            if(isset($data['file_type']))
+                $content_results_object->FileType = $data['file_type'];
+
+            if(isset($data['flags']))
+                $content_results_object->Flags = $data['flags'];
+
+            if(isset($data['created_timestamp']))
+                $content_results_object->CreatedTimestamp = $data['created_timestamp'];
 
             return $content_results_object;
         }

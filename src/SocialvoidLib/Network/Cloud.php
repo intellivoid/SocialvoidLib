@@ -121,11 +121,14 @@
             $content_results = new ContentResults();
             $content_results->ContentSource = $document->ContentSource;
             $content_results->ContentIdentifier = $document->ContentIdentifier;
+            $content_results->CreatedTimestamp = $document->CreatedTimestamp;
+            $content_results->Flags = $document->Flags;
             $content_results->DocumentID = $document->ID;
             $content_results->FileID = $file->ID;
             $content_results->FileMime = $file->Mime;
             $content_results->FileName = $file->Name;
             $content_results->FileSize = $file->Size;
+            $content_results->FileType = $file->Type;
             $content_results->FileHash = $parsed_id[1];
 
             switch($document->ContentSource)

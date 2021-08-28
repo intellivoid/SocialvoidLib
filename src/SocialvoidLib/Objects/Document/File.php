@@ -4,7 +4,7 @@
 
     namespace SocialvoidLib\Objects\Document;
 
-    use SocialvoidLib\Abstracts\Types\DocumentType;
+    use SocialvoidLib\Abstracts\Types\Standard\DocumentType;
 
     class File
     {
@@ -44,7 +44,7 @@
         public $Hash;
 
         /**
-         * @var int|DocumentType
+         * @var string|DocumentType
          */
         public $Type;
 
@@ -61,7 +61,7 @@
                 'size' => $this->Size,
                 'name' => $this->Name,
                 'hash' => $this->Hash,
-                'type' => $this->Hash
+                'type' => $this->Type
             ];
         }
 

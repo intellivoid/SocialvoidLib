@@ -14,7 +14,7 @@ namespace SocialvoidLib\Classes;
     use MimeLib\Exceptions\FileNotFoundException;
     use MimeLib\MimeLib;
     use SocialvoidLib\Abstracts\StandardErrorCodeType;
-    use SocialvoidLib\Abstracts\Types\DocumentType;
+    use SocialvoidLib\Abstracts\Types\Standard\DocumentType;
     use SocialvoidLib\Objects\FileValidationResults;
 
     /**

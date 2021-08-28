@@ -71,6 +71,6 @@
         {
             $this->AccessRoles = new AccessRoles();
             $this->Properties = new Properties();
-            $this->AccessType = DocumentAccessType::Protected;
+            $this->AccessType = DocumentAccessType::Public;
         }
     }
