@@ -1,5 +1,7 @@
 <?php
 
+    /** @noinspection PhpMissingFieldTypeInspection */
+    
     namespace SocialvoidLib\Objects\Document;
 
     use SocialvoidLib\Abstracts\Types\DocumentType;
@@ -46,6 +48,11 @@
          */
         public $Type;
 
+        /**
+         * Returns an array representation of the object
+         *
+         * @return array
+         */
         public function toArray(): array
         {
             return [
