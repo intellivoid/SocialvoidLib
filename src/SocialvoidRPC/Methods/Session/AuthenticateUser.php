@@ -83,6 +83,7 @@
          */
         private function checkParameters(Request $request)
         {
+            /** @noinspection DuplicatedCode */
             if(isset($request->Parameters["session_identification"]) == false)
                 throw new MissingParameterException("Missing parameter 'session_identification'");
             if(gettype($request->Parameters["session_identification"]) !== "array")
