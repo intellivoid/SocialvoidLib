@@ -16,4 +16,6 @@
         const Session = "session";
 
         const Document = "document";
+
+        const TelegramCdnObject = "telegram_cdn_object";
     }

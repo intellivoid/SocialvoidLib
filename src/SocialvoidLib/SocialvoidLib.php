@@ -276,6 +276,9 @@
             $RedisBasicCacheSchema->setDefinition("DocumentCacheEnabled", True);
             $RedisBasicCacheSchema->setDefinition("DocumentCacheTTL", 300);
             $RedisBasicCacheSchema->setDefinition("DocumentCacheLimit", 1000);
+            $RedisBasicCacheSchema->setDefinition("TelegramCdnCacheEnabled", True);
+            $RedisBasicCacheSchema->setDefinition("TelegramCdnCacheTTL", 300);
+            $RedisBasicCacheSchema->setDefinition("TelegramCdnCacheLimit", 1000);
             $RedisBasicCacheSchema->setDefinition("RedisHost", "127.0.0.1");
             $RedisBasicCacheSchema->setDefinition("RedisPort", 6379);
             $RedisBasicCacheSchema->setDefinition("Password", "admin");
@@ -294,7 +297,7 @@
                 $this->ServiceEngineConfiguration = $this->acm->getConfiguration("ServiceEngine");
                 $this->EngineConfiguration = $this->acm->getConfiguration("Engine");
                 $this->RedisBasicCacheConfiguration = $this->acm->getConfiguration("RedisBasicCache");
-                $this->CdnConfiguration = $this->acm->getConfiguration("TelegramCDN");
+                $this->CdnConfiguration = $this->acm->getConfiguration("CDN");
                 $this->RpcServerConfiguration = $this->acm->getConfiguration("RpcServer");
             }
             catch(Exception $e)

@@ -14,12 +14,16 @@
     use Defuse\Crypto\Exception\BadFormatException;
     use Defuse\Crypto\Exception\EnvironmentIsBrokenException;
     use Defuse\Crypto\Exception\WrongKeyOrModifiedCiphertextException;
+    use Exception;
     use Longman\TelegramBot\Exception\TelegramException;
     use msqg\QueryBuilder;
+    use SocialvoidLib\Abstracts\Types\CacheEntryObjectType;
     use SocialvoidLib\Classes\Utilities;
+    use SocialvoidLib\Exceptions\GenericInternal\CacheException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\Internal\CdnFileNotFoundException;
     use SocialvoidLib\Exceptions\Internal\FileTooLargeException;
+    use SocialvoidLib\InputTypes\RegisterCacheInput;
     use SocialvoidLib\Objects\TelegramCdnUploadRecord;
     use SocialvoidLib\SocialvoidLib;
     use TelegramCDN\Exceptions\FileSecurityException;
@@ -53,8 +57,8 @@
         {
             $this->socialvoidLib = $socialvoidLib;
             $this->cdn = new TelegramCDN(
-                $socialvoidLib->getCdnConfiguration()['BotToken'],
-                $socialvoidLib->getCdnConfiguration()['Channels']
+                $socialvoidLib->getCdnConfiguration()['TelegramBotToken'],
+                $socialvoidLib->getCdnConfiguration()['TelegramChannels']
             );
         }
 
@@ -247,6 +251,39 @@
                     'There was an error while trying execute the query',
                     $query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
                 );
+            }
+        }
+
+        /**
+         * Registers a session cache entry
+         *
+         * @param TelegramCdnUploadRecord $uploadRecord
+         * @throws CacheException
+         */
+        private function registerObjectCacheEntry(TelegramCdnUploadRecord $uploadRecord): void
+        {
+            if(
+                $this->socialvoidLib->getRedisBasicCacheConfiguration()["Enabled"] &&
+                $this->socialvoidLib->getRedisBasicCacheConfiguration()["TelegramCdnCacheEnabled"]
+            )
+            {
+                $CacheEntryInput = new RegisterCacheInput();
+                $CacheEntryInput->ObjectType = CacheEntryObjectType::TelegramCdnObject;
+                $CacheEntryInput->ObjectData = $uploadRecord->toArray();
+                $CacheEntryInput->Pointers = [$uploadRecord->ID, $uploadRecord->OriginalFileHash];
+
+                try
+                {
+                    $this->socialvoidLib->getBasicRedisCacheManager()->registerCache(
+                        $CacheEntryInput,
+                        $this->socialvoidLib->getRedisBasicCacheConfiguration()["TelegramCdnCacheTTL"],
+                        $this->socialvoidLib->getRedisBasicCacheConfiguration()["TelegramCdnCacheLimit"]
+                    );
+                }
+                catch(Exception $e)
+                {
+                    throw new CacheException("There was an error while trying to register the session cache entry", 0, $e);
+                }
             }
         }
     }
