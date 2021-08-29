@@ -52,7 +52,6 @@
 
 
     // Start the worker instance
-    SocialvoidService::getLogHandler()->log(EventType::INFO, "Starting Query Worker", "Query Worker");
     SocialvoidService::$SocialvoidLib = new SocialvoidLib();
     SocialvoidService::$SocialvoidLib->connectDatabase();
 
@@ -86,9 +85,6 @@
 
 
     /** END Define the functions  */
-
-    // Start working
-    SocialvoidService::getLogHandler()->log(EventType::INFO, "Worker started successfully", "Query Worker");
 
     // Set the timeout to 5 seconds
     SocialvoidService::getBackgroundWorker()->getWorker()->getGearmanWorker()->setTimeout(500);

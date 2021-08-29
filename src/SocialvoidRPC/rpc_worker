@@ -73,8 +73,6 @@
     }
 
     // Done!
-    SocialvoidRPC::getLogHandler()->log(EventType::INFO, "Successfully started.", "RPC Worker");
-
     while(true)
     {
         // Finally, start working
