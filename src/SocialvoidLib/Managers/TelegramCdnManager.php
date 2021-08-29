@@ -207,7 +207,6 @@
                 $telegramCdnUploadRecord = $this->updateAccessURL($telegramCdnUploadRecord);
             }
 
-            var_dump($telegramCdnUploadRecord->toArray());
             return $this->cdn->decryptFile(EncryptedFile::fromArray($telegramCdnUploadRecord->toArray()), true);
         }
 
