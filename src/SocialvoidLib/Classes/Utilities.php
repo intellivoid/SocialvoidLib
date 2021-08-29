@@ -264,10 +264,13 @@ namespace SocialvoidLib\Classes;
          *
          * @param ContentResults $contentResults
          */
-        public static function setContentHeaders(ContentResults $contentResults)
+        public static function setContentHeaders(ContentResults $contentResults, bool $contentLength=true)
         {
+            http_response_code(200);
             header('Content-Type: ' . $contentResults->FileMime);
             header('Content-Disposition: filename="' . $contentResults->FileName . '"');
+            if($contentLength)
+                header('Content-Length: ' . $contentResults->FileSize);
             header('X-File-Hash: ' . $contentResults->FileHash);
         }
     }

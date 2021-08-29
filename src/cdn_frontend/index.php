@@ -160,6 +160,7 @@
         $socialvoidlib = new \SocialvoidLib\SocialvoidLib();
         $networkSession = new SocialvoidLib\NetworkSession($socialvoidlib);
         $networkSession->loadSession($SessionIdentification);
+        $contentLength = true;
     }
     catch(Exception $e)
     {
@@ -187,13 +188,13 @@
                         case \SocialvoidLib\Abstracts\ContentSource::UserProfilePicture:
                             $avatar = $socialvoidlib->getUserDisplayPictureManager()->getAvatar($content_results->ContentIdentifier);
                             $image_data = $avatar->getImageBySize(new \Zimage\Objects\Size($content_results->FileID));
-                            \SocialvoidLib\Classes\Utilities::setContentHeaders($content_results);
+                            \SocialvoidLib\Classes\Utilities::setContentHeaders($content_results, $contentLength);
                             print($image_data->getData());
                             break;
 
                         case \SocialvoidLib\Abstracts\ContentSource::TelegramCdn:
                             $cdn_content_record = $socialvoidlib->getTelegramCdnManager()->getUploadRecord($content_results->ContentIdentifier);
-                            \SocialvoidLib\Classes\Utilities::setContentHeaders($content_results);
+                            \SocialvoidLib\Classes\Utilities::setContentHeaders($content_results, $contentLength);
                             print($socialvoidlib->getTelegramCdnManager()->downloadFile($cdn_content_record));
                             break;
                     }
