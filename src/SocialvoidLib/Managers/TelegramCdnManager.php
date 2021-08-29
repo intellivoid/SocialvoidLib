@@ -11,6 +11,10 @@
 
     namespace SocialvoidLib\Managers;
 
+    use Defuse\Crypto\Exception\BadFormatException;
+    use Defuse\Crypto\Exception\EnvironmentIsBrokenException;
+    use Defuse\Crypto\Exception\WrongKeyOrModifiedCiphertextException;
+    use Longman\TelegramBot\Exception\TelegramException;
     use msqg\QueryBuilder;
     use SocialvoidLib\Classes\Utilities;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
@@ -42,13 +46,15 @@
         /**
          * TelegramCdnManager constructor.
          * @param SocialvoidLib $socialvoidLib
+         * @throws TelegramException
+         * @throws TelegramException
          */
         public function __construct(SocialvoidLib $socialvoidLib)
         {
             $this->socialvoidLib = $socialvoidLib;
             $this->cdn = new TelegramCDN(
-                $socialvoidLib->getCdnConfiguration()["BotToken"],
-                $socialvoidLib->getCdnConfiguration()["Channels"]
+                $socialvoidLib->getCdnConfiguration()['BotToken'],
+                $socialvoidLib->getCdnConfiguration()['Channels']
             );
         }
 
@@ -56,18 +62,16 @@
          * Uploads a file to the Telegram CDN
          *
          * @param string $file_path
-         * @param string|null $unique_identifier
          * @return string
          * @throws DatabaseException
          * @throws FileTooLargeException
          * @throws UploadError
+         * @throws EnvironmentIsBrokenException
          */
-        public function uploadContent(string $file_path, ?string $unique_identifier=null): string
+        public function uploadContent(string $file_path): string
         {
-            $file_contents = file_get_contents($file_path);
-            if(strlen($file_contents) > $this->socialvoidLib->getCdnConfiguration()['MaxFileUploadSize']) // 15MB
-                throw new FileTooLargeException("The maximum upload size is 15MB");
-
+            if(filesize($file_path) > $this->socialvoidLib->getCdnConfiguration()['MaxFileUploadSize'])
+                throw new FileTooLargeException('The maximum upload size is ' . $this->socialvoidLib->getCdnConfiguration()['MaxFileUploadSize'] . ' bytes');
 
             // If the file has already been uploaded, return the existing cdn id.
             $public_id = $this->fileHashExists($file_path);
@@ -75,20 +79,20 @@
                 return $public_id;
 
             // Generate a new one
-            $public_id = Utilities::generateTelegramCdnId($file_contents . (string)$unique_identifier);
+            $public_id = Utilities::generateTelegramCdnId(hash_file('sha256', $file_path) . $file_path);
             $upload_result = $this->cdn->uploadFile($file_path);
 
-            $query = QueryBuilder::insert_into("telegram_cdn", [
-                "public_id" => $this->socialvoidLib->getDatabase()->real_escape_string($public_id),
-                "file_id" => $this->socialvoidLib->getDatabase()->real_escape_string($upload_result->FileID),
-                "file_unique_id" => $this->socialvoidLib->getDatabase()->real_escape_string($upload_result->FileUniqueID),
-                "mime_type" => $this->socialvoidLib->getDatabase()->real_escape_string($upload_result->MimeType),
-                "cdn_file_size" => (int)$upload_result->CdnFileSize,
-                "cdn_file_hash" => $this->socialvoidLib->getDatabase()->real_escape_string($upload_result->CdnFileHash),
-                "original_file_size" => (int)$upload_result->OriginalFileSize,
-                "original_file_hash" => $this->socialvoidLib->getDatabase()->real_escape_string($upload_result->OriginalFileHash),
-                "encryption_key" => $this->socialvoidLib->getDatabase()->real_escape_string($upload_result->EncryptionKey),
-                "created_timestamp" => (int)time()
+            $query = QueryBuilder::insert_into('telegram_cdn', [
+                'public_id' => $this->socialvoidLib->getDatabase()->real_escape_string($public_id),
+                'file_id' => $this->socialvoidLib->getDatabase()->real_escape_string($upload_result->FileID),
+                'file_unique_id' => $this->socialvoidLib->getDatabase()->real_escape_string($upload_result->FileUniqueID),
+                'mime_type' => $this->socialvoidLib->getDatabase()->real_escape_string($upload_result->MimeType),
+                'cdn_file_size' => (int)$upload_result->CdnFileSize,
+                'cdn_file_hash' => $this->socialvoidLib->getDatabase()->real_escape_string($upload_result->CdnFileHash),
+                'original_file_size' => (int)$upload_result->OriginalFileSize,
+                'original_file_hash' => $this->socialvoidLib->getDatabase()->real_escape_string($upload_result->OriginalFileHash),
+                'encryption_key' => $this->socialvoidLib->getDatabase()->real_escape_string($upload_result->EncryptionKey),
+                'created_timestamp' => time()
             ]);
 
             $QueryResults = $this->socialvoidLib->getDatabase()->query($query);
@@ -98,7 +102,7 @@
             }
             else
             {
-                throw new DatabaseException("There was an error while trying to upload the content",
+                throw new DatabaseException('There was an error while trying to upload the content',
                     $query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
                 );
             }
@@ -112,33 +116,31 @@
          * @return TelegramCdnUploadRecord
          * @throws CdnFileNotFoundException
          * @throws DatabaseException
+         * @throws TelegramException
          */
         public function getUploadRecord(string $public_id): TelegramCdnUploadRecord
         {
-            $query = QueryBuilder::select("telegram_cdn", [
-                "public_id",
-                "file_id",
-                "file_unique_id",
-                "mime_type",
-                "cdn_file_size",
-                "cdn_file_hash",
-                "original_file_size",
-                "original_file_hash",
-                "encryption_key",
-                "access_url",
-                "access_url_expiry_timestamp",
-                "created_timestamp"
-            ], "public_id", $public_id);
+            $query = QueryBuilder::select('telegram_cdn', [
+                'public_id',
+                'file_id',
+                'file_unique_id',
+                'mime_type',
+                'cdn_file_size',
+                'cdn_file_hash',
+                'original_file_size',
+                'original_file_hash',
+                'encryption_key',
+                'access_url',
+                'access_url_expiry_timestamp',
+                'created_timestamp'
+            ], 'public_id', $public_id);
 
             $QueryResults = $this->socialvoidLib->getDatabase()->query($query);
 
             if($QueryResults)
             {
                 if ($QueryResults->num_rows == 0)
-                {
-                    var_dump($public_id);
-                    throw new CdnFileNotFoundException("The requested file was not found in the database", $public_id);
-                }
+                    throw new CdnFileNotFoundException('The requested file was not found in the database', $public_id);
 
                 $return_results = TelegramCdnUploadRecord::fromArray($QueryResults->fetch_array(MYSQLI_ASSOC));
 
@@ -152,7 +154,7 @@
             else
             {
                 throw new DatabaseException(
-                    "There was an error while trying retrieve the file from the CDN",
+                    'There was an error while trying retrieve the file from the CDN',
                     $query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
                 );
             }
@@ -164,16 +166,17 @@
          * @param TelegramCdnUploadRecord $telegramCdnUploadRecord
          * @return TelegramCdnUploadRecord
          * @throws DatabaseException
+         * @throws TelegramException
          */
         public function updateAccessURL(TelegramCdnUploadRecord $telegramCdnUploadRecord): TelegramCdnUploadRecord
         {
             $telegramCdnUploadRecord->AccessUrl = $this->cdn->getFileUrl($telegramCdnUploadRecord->FileID);
             $telegramCdnUploadRecord->AccessUrlExpiryTimestamp = time() + 2700; // 45 Minutes
 
-            $query = QueryBuilder::update("telegram_cdn", [
-                "access_url" => $this->socialvoidLib->getDatabase()->real_escape_string($telegramCdnUploadRecord->AccessUrl),
-                "access_url_expiry_timestamp" => $telegramCdnUploadRecord->AccessUrlExpiryTimestamp,
-            ], "public_id", $telegramCdnUploadRecord->PublicID);
+            $query = QueryBuilder::update('telegram_cdn', [
+                'access_url' => $this->socialvoidLib->getDatabase()->real_escape_string($telegramCdnUploadRecord->AccessUrl),
+                'access_url_expiry_timestamp' => $telegramCdnUploadRecord->AccessUrlExpiryTimestamp,
+            ], 'public_id', $telegramCdnUploadRecord->PublicID);
 
             $QueryResults = $this->socialvoidLib->getDatabase()->query($query);
 
@@ -184,19 +187,23 @@
             else
             {
                 throw new DatabaseException(
-                    "There was an error while trying to update the Access URL",
+                    'There was an error while trying to update the Access URL',
                     $query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
                 );
             }
         }
 
         /**
-         * Downloads the file from a upload record and returns the file contents
+         * Downloads the file from an upload record and returns the file contents
          *
          * @param TelegramCdnUploadRecord $telegramCdnUploadRecord
          * @return string
          * @throws DatabaseException
+         * @throws EnvironmentIsBrokenException
          * @throws FileSecurityException
+         * @throws TelegramException
+         * @throws BadFormatException
+         * @throws WrongKeyOrModifiedCiphertextException
          */
         public function downloadFile(TelegramCdnUploadRecord $telegramCdnUploadRecord): string
         {
@@ -219,10 +226,9 @@
          */
         private function fileHashExists(string $file_path): ?string
         {
-            $file_contents = file_get_contents($file_path);
-            $query = QueryBuilder::select("telegram_cdn", [
-                "public_id"
-            ], "original_file_hash", hash("sha256", $file_contents));
+            $query = QueryBuilder::select('telegram_cdn', [
+                'public_id'
+            ], 'original_file_hash', hash_file('sha256', $file_path));
 
             $QueryResults = $this->socialvoidLib->getDatabase()->query($query);
 
@@ -238,7 +244,7 @@
             else
             {
                 throw new DatabaseException(
-                    "There was an error while trying execute the query",
+                    'There was an error while trying execute the query',
                     $query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
                 );
             }
