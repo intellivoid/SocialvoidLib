@@ -98,6 +98,7 @@
             switch ($document->AccessType)
             {
                 case DocumentAccessType::Public:
+                case DocumentAccessType::None:
                     $has_access = true;
                     break;
 
@@ -134,6 +135,7 @@
             switch($document->ContentSource)
             {
                 case ContentSource::UserProfilePicture:
+                case ContentSource::TelegramCdn:
                     $content_results->FetchLocationType = FetchLocationType::Custom;
                     break;
 

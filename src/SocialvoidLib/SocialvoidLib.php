@@ -251,6 +251,7 @@
             // CDN Schema Configuration
             $CdnSchema = new Schema();
             $CdnSchema->setDefinition("CdnEndpoint", "https://cdn.socialvoid.cc");
+            $CdnSchema->setDefinition("MaxFileUploadSize", 26214400); // 25 MB
             $CdnSchema->setDefinition("TelegramCdnEnabled", True);
             $CdnSchema->setDefinition("TelegramCdnEnabled", True);
             $CdnSchema->setDefinition("TelegramBotToken", "<BOT TOKEN>");

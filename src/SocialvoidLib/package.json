@@ -61,6 +61,12 @@
                 "version": "latest",
                 "source": "default@github/intellivoid/Zimage",
                 "required": true
+            },
+            {
+                "package": "net.intellivoid.tmpfile",
+                "version": "latest",
+                "source": "default@github/intellivoid/TmpFile",
+                "required": true
             }
         ],
         "configuration": {
@@ -570,6 +576,10 @@
         {
             "required": true,
             "file": "Exceptions/Standard/Validation/InvalidFirstNameException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Server/DocumentUploadException.php"
         },
         {
             "required": true,

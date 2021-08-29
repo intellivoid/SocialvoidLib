@@ -4,7 +4,10 @@
 
     namespace SocialvoidLib\Objects\Document;
 
+    use MimeLib\Exceptions\CannotDetectFileTypeException;
+    use MimeLib\Exceptions\FileNotFoundException;
     use SocialvoidLib\Abstracts\Types\Standard\DocumentType;
+    use SocialvoidLib\Classes\Validate;
 
     class File
     {
@@ -96,4 +99,25 @@
             return $file_object;
         }
 
+        /**
+         * Creates a file object from a file
+         *
+         * @param string $path
+         * @return File
+         * @throws CannotDetectFileTypeException
+         * @throws FileNotFoundException
+         */
+        public static function fromFile(string $path): File
+        {
+            $file_validation = Validate::validateFileInformation($path);
+            $file_object = new File();
+
+            $file_object->Hash = $file_validation->Hash;
+            $file_object->Name = $file_validation->Name;
+            $file_object->Mime = $file_validation->Mime;
+            $file_object->Size = $file_validation->Size;
+            $file_object->Type = $file_validation->FileType;
+
+            return $file_object;
+        }
     }

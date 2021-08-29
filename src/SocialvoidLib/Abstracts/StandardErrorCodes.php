@@ -28,6 +28,7 @@
     use SocialvoidLib\Exceptions\Standard\Network\PostDeletedException;
     use SocialvoidLib\Exceptions\Standard\Network\PostNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Server\DocumentUploadException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidBiographyException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientNameException;
@@ -298,4 +299,11 @@
          * @see InternalServerException
          */
         const InternalServerError = 0x04000;
+
+        /**
+         * Raised when there was an error while trying to process the document upload
+         *
+         * @see DocumentUploadException
+         */
+        const DocumentUploadException = 0x04001;
     }

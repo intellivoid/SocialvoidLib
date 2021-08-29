@@ -10,6 +10,11 @@
     abstract class DocumentAccessType
     {
         /**
+         * Indicates that nobody has access to the document until the server sets the appropriate permissions
+         */
+        const None = "NONE";
+
+        /**
          * Indicates that the object is accessible to the public, even to users that aren't authenticated.
          */
         const Public = "PUBLIC";

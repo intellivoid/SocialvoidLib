@@ -65,15 +65,17 @@
         public function uploadContent(string $file_path, ?string $unique_identifier=null): string
         {
             $file_contents = file_get_contents($file_path);
-            if(strlen($file_contents) > 15728640) // 15MB
+            if(strlen($file_contents) > $this->socialvoidLib->getCdnConfiguration()['MaxFileUploadSize']) // 15MB
                 throw new FileTooLargeException("The maximum upload size is 15MB");
 
-            $public_id = Utilities::generateTelegramCdnId($file_contents . (string)$unique_identifier);
 
             // If the file has already been uploaded, return the existing cdn id.
-            if($this->fileHashExists($file_path))
+            $public_id = $this->fileHashExists($file_path);
+            if($public_id !== null)
                 return $public_id;
 
+            // Generate a new one
+            $public_id = Utilities::generateTelegramCdnId($file_contents . (string)$unique_identifier);
             $upload_result = $this->cdn->uploadFile($file_path);
 
             $query = QueryBuilder::insert_into("telegram_cdn", [
@@ -134,6 +136,7 @@
             {
                 if ($QueryResults->num_rows == 0)
                 {
+                    var_dump($public_id);
                     throw new CdnFileNotFoundException("The requested file was not found in the database", $public_id);
                 }
 
@@ -204,18 +207,18 @@
                 $telegramCdnUploadRecord = $this->updateAccessURL($telegramCdnUploadRecord);
             }
 
-            return $this->cdn->decryptFile(EncryptedFile::fromArray($telegramCdnUploadRecord->toArray()),
-                true, $telegramCdnUploadRecord->AccessUrl);
+            var_dump($telegramCdnUploadRecord->toArray());
+            return $this->cdn->decryptFile(EncryptedFile::fromArray($telegramCdnUploadRecord->toArray()), true);
         }
 
         /**
          * Determines if the file has already been uploaded
          *
          * @param string $file_path
-         * @return bool
+         * @return string|null
          * @throws DatabaseException
          */
-        private function fileHashExists(string $file_path): bool
+        private function fileHashExists(string $file_path): ?string
         {
             $file_contents = file_get_contents($file_path);
             $query = QueryBuilder::select("telegram_cdn", [
@@ -228,10 +231,10 @@
             {
                 if ($QueryResults->num_rows == 0)
                 {
-                    return false;
+                    return null;
                 }
 
-                return true;
+                return $QueryResults->fetch_array(MYSQLI_ASSOC)['public_id'];
             }
             else
             {
