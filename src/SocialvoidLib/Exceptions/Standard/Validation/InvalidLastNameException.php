@@ -37,7 +37,7 @@ namespace SocialvoidLib\Exceptions\Standard\Validation;
          * @param string|null $last_name
          * @param Throwable|null $previous
          */
-        public function __construct($message = "", string $last_name=null, Throwable $previous = null)
+        public function __construct($message = "The given last name is invalid", string $last_name=null, Throwable $previous = null)
         {
             parent::__construct($message, StandardErrorCodes::InvalidLastNameException, $previous);
             $this->message = $message;
