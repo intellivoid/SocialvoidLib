@@ -20,7 +20,10 @@
     use SocialvoidLib\Abstracts\Types\CacheEntryObjectType;
     use SocialvoidLib\Classes\Utilities;
     use SocialvoidLib\Exceptions\GenericInternal\CacheException;
+    use SocialvoidLib\Exceptions\GenericInternal\CacheMissedException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
+    use SocialvoidLib\Exceptions\GenericInternal\DependencyError;
+    use SocialvoidLib\Exceptions\GenericInternal\RedisCacheException;
     use SocialvoidLib\Exceptions\Internal\CdnFileNotFoundException;
     use SocialvoidLib\Exceptions\Internal\FileTooLargeException;
     use SocialvoidLib\InputTypes\RegisterCacheInput;
@@ -118,12 +121,27 @@
          *
          * @param string $public_id
          * @return TelegramCdnUploadRecord
+         * @throws CacheException
          * @throws CdnFileNotFoundException
          * @throws DatabaseException
          * @throws TelegramException
          */
         public function getUploadRecord(string $public_id): TelegramCdnUploadRecord
         {
+            if($this->socialvoidLib->getRedisBasicCacheConfiguration()["Enabled"] && $this->socialvoidLib->getRedisBasicCacheConfiguration()["TelegramCdnCacheEnabled"])
+            {
+                $CachedPost = $this->getObjectCacheEntry($public_id);
+                if($CachedPost !== null)
+                {
+                    if($CachedPost->AccessUrlExpiryTimestamp == null || time() > $CachedPost->AccessUrlExpiryTimestamp)
+                    {
+                        return $this->updateAccessURL($CachedPost);
+                    }
+
+                    return $CachedPost;
+                }
+            }
+
             $query = QueryBuilder::select('telegram_cdn', [
                 'public_id',
                 'file_id',
@@ -153,6 +171,7 @@
                     return $this->updateAccessURL($return_results);
                 }
 
+                $this->registerObjectCacheEntry($return_results);
                 return $return_results;
             }
             else
@@ -171,6 +190,7 @@
          * @return TelegramCdnUploadRecord
          * @throws DatabaseException
          * @throws TelegramException
+         * @throws CacheException
          */
         public function updateAccessURL(TelegramCdnUploadRecord $telegramCdnUploadRecord): TelegramCdnUploadRecord
         {
@@ -186,6 +206,7 @@
 
             if($QueryResults)
             {
+                $this->registerObjectCacheEntry($telegramCdnUploadRecord);
                 return $telegramCdnUploadRecord;
             }
             else
@@ -208,6 +229,7 @@
          * @throws TelegramException
          * @throws BadFormatException
          * @throws WrongKeyOrModifiedCiphertextException
+         * @throws CacheException
          */
         public function downloadFile(TelegramCdnUploadRecord $telegramCdnUploadRecord): string
         {
@@ -282,8 +304,40 @@
                 }
                 catch(Exception $e)
                 {
-                    throw new CacheException("There was an error while trying to register the session cache entry", 0, $e);
+                    throw new CacheException("There was an error while trying to register the cdn cache entry", 0, $e);
                 }
             }
+        }
+
+        /**
+         * Gets a cdn object cache entry
+         *
+         * @param string $value
+         * @return TelegramCdnUploadRecord|null
+         * @throws CacheException
+         */
+        private function getObjectCacheEntry(string $value): ?TelegramCdnUploadRecord
+        {
+            if($this->socialvoidLib->getRedisBasicCacheConfiguration()["Enabled"] == false)
+                throw new CacheException("BasicRedisCache is not enabled");
+
+            if($this->socialvoidLib->getRedisBasicCacheConfiguration()["TelegramCdnCacheEnabled"] == false)
+                return null;
+
+            try
+            {
+                $CacheEntryResults = $this->socialvoidLib->getBasicRedisCacheManager()->getCacheEntry(
+                    CacheEntryObjectType::TelegramCdnObject, $value);
+            }
+            catch (CacheMissedException $e)
+            {
+                return null;
+            }
+            catch (DependencyError | RedisCacheException $e)
+            {
+                throw new CacheException("There was an issue while trying to request a cdn cache entry", 0, $e);
+            }
+
+            return TelegramCdnUploadRecord::fromArray($CacheEntryResults->ObjectData);
         }
     }

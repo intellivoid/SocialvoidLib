@@ -75,9 +75,10 @@
                     $pointerData = gzcompress($pointerData, $this->socialvoidLib->getRedisBasicCacheConfiguration()["CompressionLevel"]);
                 }
 
-                $this->socialvoidLib->getBasicRedis()->set(
-                    Converter::normalizeText($CacheEntryObject->ObjectType . "." . $pointer), $pointerData,
-                    ['ex'=>$ttl]);
+                if(strlen($pointer) > 0)
+                    $this->socialvoidLib->getBasicRedis()->set(
+                        Converter::normalizeText($CacheEntryObject->ObjectType . "." . $pointer), $pointerData,
+                        ['ex'=>$ttl]);
             }
 
             $entryData = ZiProto::encode($CacheEntryObject->toArray());
