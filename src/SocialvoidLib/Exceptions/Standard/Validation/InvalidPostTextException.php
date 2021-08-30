@@ -37,7 +37,7 @@ namespace SocialvoidLib\Exceptions\Standard\Validation;
          * @param string|null $text
          * @param Throwable|null $previous
          */
-        public function __construct($message = "", string $text=null, Throwable $previous = null)
+        public function __construct($message = "The given post text is invalid", string $text=null, Throwable $previous = null)
         {
             parent::__construct($message, StandardErrorCodes::InvalidPostTextException, $previous);
             $this->message = $message;
