@@ -37,7 +37,7 @@ namespace SocialvoidLib\Exceptions\Standard\Validation;
          * @param string $password
          * @param Throwable|null $previous
          */
-        public function __construct($message = "", $password="", Throwable $previous = null)
+        public function __construct($message = "The given password is invalid", $password="", Throwable $previous = null)
         {
             parent::__construct($message, StandardErrorCodes::InvalidPasswordException, $previous);
             $this->message = $message;
