@@ -107,6 +107,7 @@
 
             // Account Methods
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Account\SetProfilePicture());
+            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Account\DeleteProfilePicture());
 
             // Cloud Methods
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Cloud\GetDocument());

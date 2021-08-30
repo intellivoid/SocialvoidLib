@@ -141,4 +141,42 @@
 
             return true;
         }
+
+        /**
+         * Deletes the current profile picture set by the user
+         *
+         * @param SessionIdentification $sessionIdentification
+         * @return bool
+         * @throws BadSessionChallengeAnswerException
+         * @throws CacheException
+         * @throws DatabaseException
+         * @throws InternalServerException
+         * @throws InvalidClientPublicHashException
+         * @throws InvalidSearchMethodException
+         * @throws NotAuthenticatedException
+         * @throws PeerNotFoundException
+         * @throws SessionExpiredException
+         * @throws SessionNotFoundException
+         */
+        public function deleteProfilePicture(SessionIdentification $sessionIdentification): bool
+        {
+            $this->networkSession->loadSession($sessionIdentification);
+            if($this->networkSession->isAuthenticated() == false)
+                throw new NotAuthenticatedException();
+
+            $user = $this->networkSession->getAuthenticatedUser();
+
+            try
+            {
+                $this->networkSession->getSocialvoidLib()->getUserManager()->deleteDisplayPicture($user);
+            }
+            catch(Exception $e)
+            {
+                throw new InternalServerException('There was an error while trying to update the user profile picture', $e);
+            }
+
+            $this->networkSession->setAuthenticatedUser($user);
+
+            return true;
+        }
     }
