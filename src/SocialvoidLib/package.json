@@ -775,10 +775,6 @@
         },
         {
             "required": true,
-            "file": "Objects/Standard/Peer/Name.php"
-        },
-        {
-            "required": true,
             "file": "Objects/Standard/TimelineState.php"
         },
         {

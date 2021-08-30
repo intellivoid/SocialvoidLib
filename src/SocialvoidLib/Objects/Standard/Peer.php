@@ -48,7 +48,7 @@
         /**
          * The name of the peer
          *
-         * @var Name
+         * @var string
          */
         public $Name;
 
@@ -78,8 +78,8 @@
             return [
                 "id" => $this->ID,
                 "type" => $this->Type,
+                "name" => $this->Name,
                 "username" => $this->Username,
-                "name" => $this->Name->toArray(),
                 "display_picture_sizes" => $profilePicturesSizes,
                 "flags" => $this->Flags
             ];
@@ -98,9 +98,17 @@
             $PeerObject->ID = $user->PublicID;
             $PeerObject->Type = PeerType::User; // TODO: This needs to be re-implemented
             $PeerObject->Username = $user->Username;
-            $PeerObject->Name = Name::fromProfile($user->Profile);
             $PeerObject->Flags = $user->Flags;
             $PeerObject->DisplayPictureSizes = [];
+            
+            if($user->Profile->LastName == null)
+            {
+                $PeerObject->Name = $user->Profile->FirstName;
+            }
+            else
+            {
+                $PeerObject->Name = $user->Profile->FirstName . ' ' . $user->Profile->LastName;
+            }
 
             foreach($user->DisplayPictureDocument->Files as $item)
             {
@@ -133,7 +141,7 @@
                 $PeerObject->Username = $data["username"];
 
             if(isset($data["name"]))
-                $PeerObject->Name = Name::fromArray($data["name"]);
+                $PeerObject->Name = $data['name'];
 
             if(isset($data["flags"]))
                 $PeerObject->Flags = $data["flags"];
