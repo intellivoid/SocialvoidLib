@@ -37,7 +37,7 @@ namespace SocialvoidLib\Exceptions\Standard\Validation;
          * @param string $username
          * @param Throwable|null $previous
          */
-        public function __construct($message = "", string $username="", Throwable $previous = null)
+        public function __construct($message = "The given username is already used on the network", string $username="", Throwable $previous = null)
         {
             parent::__construct($message, StandardErrorCodes::UsernameAlreadyExistsException, $previous);
             $this->message = $message;
