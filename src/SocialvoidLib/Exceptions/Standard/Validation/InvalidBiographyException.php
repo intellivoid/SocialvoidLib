@@ -37,7 +37,7 @@ namespace SocialvoidLib\Exceptions\Standard\Validation;
          * @param string|null $biography
          * @param Throwable|null $previous
          */
-        public function __construct($message = "", string $biography=null, Throwable $previous = null)
+        public function __construct($message = "The given biography is invalid", string $biography=null, Throwable $previous = null)
         {
             parent::__construct($message, StandardErrorCodes::InvalidBiographyException, $previous);
             $this->message = $message;
