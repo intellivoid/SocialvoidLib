@@ -39,7 +39,7 @@
          * @param string $username
          * @param Throwable|null $previous
          */
-        public function __construct($message = "", $username="", Throwable $previous = null)
+        public function __construct($message = "The given username is invalid", $username="", Throwable $previous = null)
         {
             parent::__construct($message, StandardErrorCodes::InvalidUsernameException, $previous);
 
