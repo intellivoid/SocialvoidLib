@@ -37,7 +37,7 @@ namespace SocialvoidLib\Exceptions\Standard\Validation;
          * @param null $peer
          * @param Throwable|null $previous
          */
-        public function __construct($message = "", $peer=null, Throwable $previous = null)
+        public function __construct($message = "The given peer input is invalid", $peer=null, Throwable $previous = null)
         {
             parent::__construct($message, StandardErrorCodes::InvalidPeerInputException, $previous);
             $this->message = $message;
