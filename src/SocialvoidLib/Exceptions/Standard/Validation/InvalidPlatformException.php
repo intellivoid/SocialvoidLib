@@ -24,7 +24,7 @@
          * @param string $message
          * @param Throwable|null $previous
          */
-        public function __construct($message = "", Throwable $previous = null)
+        public function __construct($message = "The given platform is invalid", Throwable $previous = null)
         {
             parent::__construct($message, StandardErrorCodes::InvalidPlatformException, $previous);
             $this->message = $message;
