@@ -177,29 +177,8 @@
         try
         {
             $content_results = $networkSession->getCloud()->getDocument($SessionIdentification, getParameter('document'));
-
-            switch($content_results->FetchLocationType)
-            {
-                // A custom source requires code to be executed to obtain the resource
-                case \SocialvoidLib\Abstracts\Types\FetchLocationType::Custom:
-                    switch($content_results->ContentSource)
-                    {
-                        // A user profile picture
-                        case \SocialvoidLib\Abstracts\ContentSource::UserProfilePicture:
-                            $avatar = $socialvoidlib->getUserDisplayPictureManager()->getAvatar($content_results->ContentIdentifier);
-                            $image_data = $avatar->getImageBySize(new \Zimage\Objects\Size($content_results->FileID));
-                            \SocialvoidLib\Classes\Utilities::setContentHeaders($content_results, $contentLength);
-                            print($image_data->getData());
-                            break;
-
-                        case \SocialvoidLib\Abstracts\ContentSource::TelegramCdn:
-                            $cdn_content_record = $socialvoidlib->getTelegramCdnManager()->getUploadRecord($content_results->ContentIdentifier);
-                            \SocialvoidLib\Classes\Utilities::setContentHeaders($content_results, $contentLength);
-                            print($socialvoidlib->getTelegramCdnManager()->downloadFile($cdn_content_record));
-                            break;
-                    }
-
-            }
+            \SocialvoidLib\Classes\Utilities::setContentHeaders($content_results, $contentLength);
+            print($networkSession->getCloud()->getDocumentContents($content_results));
         }
         catch (Exception $e)
         {

@@ -11,7 +11,11 @@
     namespace SocialvoidLib\Network;
 
 
+    use Defuse\Crypto\Exception\BadFormatException;
+    use Defuse\Crypto\Exception\EnvironmentIsBrokenException;
+    use Defuse\Crypto\Exception\WrongKeyOrModifiedCiphertextException;
     use Exception;
+    use Longman\TelegramBot\Exception\TelegramException;
     use SocialvoidLib\Abstracts\ContentSource;
     use SocialvoidLib\Abstracts\Types\AccessEntityType;
     use SocialvoidLib\Abstracts\Types\FetchLocationType;
@@ -22,6 +26,7 @@
     use SocialvoidLib\Exceptions\GenericInternal\CacheException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
+    use SocialvoidLib\Exceptions\Internal\CdnFileNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Authentication\BadSessionChallengeAnswerException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException;
     use SocialvoidLib\Exceptions\Standard\Authentication\SessionExpiredException;
@@ -37,6 +42,14 @@
     use SocialvoidLib\Objects\ContentResults;
     use SocialvoidLib\Objects\Post\MediaContent;
     use SocialvoidLib\Objects\Standard\SessionIdentification;
+    use TelegramCDN\Exceptions\FileSecurityException;
+    use udp2\Exceptions\AvatarNotFoundException;
+    use Zimage\Exceptions\CannotGetOriginalImageException;
+    use Zimage\Exceptions\FileNotFoundException;
+    use Zimage\Exceptions\InvalidZimageFileException;
+    use Zimage\Exceptions\SizeNotSetException;
+    use Zimage\Exceptions\UnsupportedImageTypeException;
+    use Zimage\Objects\Size;
 
     /**
      * Class Cloud
@@ -145,5 +158,49 @@
             }
 
             return $content_results;
+        }
+
+        /**
+         * Returns the contents of a document
+         *
+         * @param ContentResults $contentResults
+         * @return string|null
+         * @throws CacheException
+         * @throws DatabaseException
+         * @throws BadFormatException
+         * @throws EnvironmentIsBrokenException
+         * @throws WrongKeyOrModifiedCiphertextException
+         * @throws TelegramException
+         * @throws CdnFileNotFoundException
+         * @throws FileSecurityException
+         * @throws CannotGetOriginalImageException
+         * @throws FileNotFoundException
+         * @throws InvalidZimageFileException
+         * @throws SizeNotSetException
+         * @throws UnsupportedImageTypeException
+         * @throws AvatarNotFoundException
+         */
+        public function getDocumentContents(ContentResults $contentResults): ?string
+        {
+            switch($contentResults->FetchLocationType)
+            {
+                // A custom source requires code to be executed to obtain the resource
+                case FetchLocationType::Custom:
+                    switch($contentResults->ContentSource)
+                    {
+                        // A user profile picture
+                        case ContentSource::UserProfilePicture:
+                            $avatar = $this->networkSession->getSocialvoidLib()->getUserDisplayPictureManager()->getAvatar($contentResults->ContentIdentifier);
+                            $image_data = $avatar->getImageBySize(new Size($contentResults->FileID));
+                            return $image_data->getData();
+
+                        case ContentSource::TelegramCdn:
+                            $cdn_content_record = $this->networkSession->getSocialvoidLib()->getTelegramCdnManager()->getUploadRecord($contentResults->ContentIdentifier);
+                            return $this->networkSession->getSocialvoidLib()->getTelegramCdnManager()->downloadFile($cdn_content_record);
+                    }
+
+            }
+
+            return null;
         }
     }
