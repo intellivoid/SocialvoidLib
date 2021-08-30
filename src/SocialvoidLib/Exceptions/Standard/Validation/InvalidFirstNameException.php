@@ -37,7 +37,7 @@ namespace SocialvoidLib\Exceptions\Standard\Validation;
          * @param string|null $first_name
          * @param Throwable|null $previous
          */
-        public function __construct($message = "", string $first_name=null, Throwable $previous = null)
+        public function __construct($message = "The given first name is invalid", string $first_name=null, Throwable $previous = null)
         {
             parent::__construct($message, StandardErrorCodes::InvalidFirstNameException, $previous);
             $this->message = $message;
