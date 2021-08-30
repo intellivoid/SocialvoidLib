@@ -96,7 +96,6 @@
             SocialvoidService::getBackgroundWorker()->getWorker()->getGearmanWorker()->returnCode() == GEARMAN_TIMEOUT
         )
         {
-
             if (SocialvoidService::getBackgroundWorker()->getWorker()->getGearmanWorker()->returnCode() == GEARMAN_TIMEOUT)
             {
                 SocialvoidService::processSleepCycle(); // Go to sleep if there's no activity

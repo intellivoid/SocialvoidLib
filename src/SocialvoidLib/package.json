@@ -235,6 +235,10 @@
         },
         {
             "required": true,
+            "file": "Network/Account.php"
+        },
+        {
+            "required": true,
             "file": "Network/Timeline.php"
         },
         {
@@ -555,7 +559,15 @@
         },
         {
             "required": true,
+            "file": "Exceptions/Standard/Validation/InvalidFileForProfilePictureException.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/Standard/Validation/InvalidClientPublicHashException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Validation/FileTooLargeException.php"
         },
         {
             "required": true,

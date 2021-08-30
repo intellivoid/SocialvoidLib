@@ -110,6 +110,7 @@
 
             switch ($document->AccessType)
             {
+                // TODO: Improve the access types
                 case DocumentAccessType::Public:
                 case DocumentAccessType::None:
                     $has_access = true;

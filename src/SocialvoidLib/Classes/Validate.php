@@ -184,15 +184,15 @@ namespace SocialvoidLib\Classes;
             $results->Name = basename($file_path);
 
             // Attempt to detect the file type
-            if(stripos(strtolower($results->Mime), 'audio'))
+            if(stripos(strtolower($results->Mime), 'audio') !== false)
             {
                 $results->FileType = DocumentType::Audio;
             }
-            elseif(stripos(strtolower($results->Mime), 'image'))
+            elseif(stripos(strtolower($results->Mime), 'image') !== false)
             {
                 $results->FileType = DocumentType::Photo;
             }
-            elseif(stripos(strtolower($results->Mime), 'video'))
+            elseif(stripos(strtolower($results->Mime), 'video') !== false)
             {
                 $results->FileType = DocumentType::Video;
             }

@@ -28,6 +28,7 @@
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
     use SocialvoidLib\InputTypes\SessionClient;
+    use SocialvoidLib\Network\Account;
     use SocialvoidLib\Network\Cloud;
     use SocialvoidLib\Network\Timeline;
     use SocialvoidLib\Network\Users;
@@ -89,6 +90,11 @@
         private Cloud $cloud;
 
         /**
+         * @var Account
+         */
+        private Account $account;
+
+        /**
          * @var Cloud
          */
         //private Cloud $cloud;
@@ -104,6 +110,7 @@
             $this->cloud = new Cloud($this);
             $this->users = new Users($this);
             $this->timeline = new Timeline($this);
+            $this->account = new Account($this);
         }
 
         /**
@@ -546,5 +553,13 @@
         public function getCloud(): Cloud
         {
             return $this->cloud;
+        }
+
+        /**
+         * @return Account
+         */
+        public function getAccount(): Account
+        {
+            return $this->account;
         }
     }

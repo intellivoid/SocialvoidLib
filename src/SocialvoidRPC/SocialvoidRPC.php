@@ -105,6 +105,9 @@
             if(self::$RpcServer == null)
                 throw new RuntimeException("No RPC Server has been defined");
 
+            // Account Methods
+            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Account\SetProfilePicture());
+
             // Cloud Methods
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Cloud\GetDocument());
 
@@ -147,8 +150,6 @@
             {
                 if(self::isSleeping() == false)
                 {
-                    self::getLogHandler()->log(EventType::INFO, "RPC Worker hasn't been active the last 60 seconds, going to sleep.", "Service Worker");
-
                     self::getSocialvoidLib()->disconnectDatabase();
                     self::setIsSleeping(true);
                 }
@@ -157,7 +158,6 @@
             {
                 if(self::isSleeping() == true)
                 {
-                    self::getLogHandler()->log(EventType::INFO, "RPC Worker is active, awaking from sleep mode", "Service Worker");
                     self::getSocialvoidLib()->connectDatabase();
                     self::setIsSleeping(false);
                 }

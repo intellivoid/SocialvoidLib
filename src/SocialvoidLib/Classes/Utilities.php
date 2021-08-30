@@ -273,4 +273,64 @@ namespace SocialvoidLib\Classes;
                 header('Content-Length: ' . $contentResults->FileSize);
             header('X-File-Hash: ' . $contentResults->FileHash);
         }
+
+        /**
+         * Converts a transparent PNG file to a JPEG file
+         *
+         * @param string $path
+         */
+        public static function convertPngToJpeg(string $path)
+        {
+            $image = imagecreatefromstring(file_get_contents($path));
+            $bg = imagecreatetruecolor(imagesx($image), imagesy($image));
+            imagefill($bg, 0, 0, imagecolorallocate($bg, 255, 255, 255));
+            imagealphablending($bg, TRUE);
+            imagecopy($bg, $image, 0, 0, 0, 0, imagesx($image), imagesy($image));
+            imagedestroy($image);
+            imagejpeg($bg, $path, 100);
+            imagedestroy($bg);
+        }
+
+        /**
+         * Resizes an image while keeping the aspect ratio, the left-over content is blurred out.
+         *
+         * @param string $path
+         * @param int $width
+         * @param int $height
+         * @param int $blur_strength
+         */
+        public static function resizeImage(string $path, int $width, int $height, int $blur_strength=120)
+        {
+            $image = imagecreatefromstring(file_get_contents($path));
+            $wor = imagesx($image);
+            $hor = imagesy($image);
+            $back = imagecreatetruecolor($width, $height);
+
+            $max_fact = max($width/$wor, $height/$hor);
+            $new_w = $wor*$max_fact;
+            $new_h = $hor*$max_fact;
+            imagecopyresampled($back, $image, -(($new_w-$width)/2), -(($new_h-$height)/2), 0, 0, $new_w, $new_h, $wor, $hor);
+
+            // Blur Image
+            for ($x=1; $x <=$blur_strength; $x++)
+            {
+                imagefilter($back, IMG_FILTER_GAUSSIAN_BLUR, 999);
+            }
+            imagefilter($back, IMG_FILTER_SMOOTH,90);
+            imagefilter($back, IMG_FILTER_BRIGHTNESS, 10);
+
+            $min_fact = min($width/$wor, $height/$hor);
+            $new_w = $wor*$min_fact;
+            $new_h = $hor*$min_fact;
+
+            $front = imagecreatetruecolor($new_w, $new_h);
+            imagecopyresampled($front, $image, 0, 0, 0, 0, $new_w, $new_h, $wor, $hor);
+
+            imagecopymerge($back, $front,-(($new_w-$width)/2), -(($new_h-$height)/2), 0, 0, $new_w, $new_h, 100);
+
+            // Create the new file
+            imagejpeg($back, $path,100);
+            imagedestroy($back);
+            imagedestroy($front);
+        }
     }

@@ -10,7 +10,6 @@
 
     namespace SocialvoidLib\Abstracts;
 
-    use SocialvoidLib\Exceptions\Standard\Authentication\AccountNotRegisteredException;
     use SocialvoidLib\Exceptions\Standard\Authentication\AlreadyAuthenticatedException;
     use SocialvoidLib\Exceptions\Standard\Authentication\AuthenticationNotApplicableException;
     use SocialvoidLib\Exceptions\Standard\Authentication\BadSessionChallengeAnswerException;
@@ -30,10 +29,12 @@
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Server\DocumentUploadException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
+    use SocialvoidLib\Exceptions\Standard\Validation\FileTooLargeException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidBiographyException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPrivateHashException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPublicHashException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidFileForProfilePictureException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidFirstNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidLastNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPasswordException;
@@ -142,6 +143,20 @@
          * @see InvalidSessionIdentificationException
          */
         const InvalidSessionIdentificationException = 0x0210d;
+
+        /**
+         * Raised when the given file is invalid for a profile picture
+         *
+         * @see InvalidFileForProfilePictureException
+         */
+        const InvalidFileForProfilePictureException = 0x0210e;
+
+        /**
+         * Raised when the given file is too large to be processed
+         *
+         * @see FileTooLargeException
+         */
+        const FileTooLargeException = 0x0210f;
 
         /** 22-Set error codes (Authentication) */
 

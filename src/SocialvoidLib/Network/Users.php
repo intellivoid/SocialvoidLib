@@ -78,7 +78,7 @@
         {
             $this->networkSession->loadSession($sessionIdentification);
             if($this->networkSession->isAuthenticated() == false)
-                throw new NotAuthenticatedException($this->networkSession->getAuthenticatedUser()->toArray());
+                throw new NotAuthenticatedException();
 
             // Probably an ID
             if((ctype_digit($peer) && $resolve_internally) || (is_int($peer) && $resolve_internally))
