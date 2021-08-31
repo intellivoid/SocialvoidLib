@@ -431,7 +431,7 @@
         {
             $file_path = $this->socialvoidLib->getDataStorageConfiguration()['LegalDocumentsLocation'] . DIRECTORY_SEPARATOR . 'terms_of_service.md';
             $local_path = __DIR__ . DIRECTORY_SEPARATOR . 'Templates' . DIRECTORY_SEPARATOR . 'terms_of_service.md';
-            if(file_exists($file_path))
+            if(file_exists($file_path) == false)
                 copy($local_path, $file_path);
 
             return file_get_contents($file_path);
@@ -446,7 +446,7 @@
         {
             $file_path = $this->socialvoidLib->getDataStorageConfiguration()['LegalDocumentsLocation'] . DIRECTORY_SEPARATOR . 'privacy_policy.md';
             $local_path = __DIR__ . DIRECTORY_SEPARATOR . 'Templates' . DIRECTORY_SEPARATOR . 'privacy_policy.md';
-            if(file_exists($file_path))
+            if(file_exists($file_path) == false)
                 copy($local_path, $file_path);
 
             return file_get_contents($file_path);
@@ -461,7 +461,7 @@
         {
             $file_path = $this->socialvoidLib->getDataStorageConfiguration()['LegalDocumentsLocation'] . DIRECTORY_SEPARATOR . 'community_guidelines.md';
             $local_path = __DIR__ . DIRECTORY_SEPARATOR . 'Templates' . DIRECTORY_SEPARATOR . 'community_guidelines.md';
-            if(file_exists($file_path))
+            if(file_exists($file_path) == false)
                 copy($local_path, $file_path);
 
             return file_get_contents($file_path);
