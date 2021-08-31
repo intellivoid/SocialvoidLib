@@ -116,6 +116,7 @@
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Network\GetCommunityGuidelines());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Network\GetMe());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Network\GetPrivacyPolicy());
+            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Network\GetTermsOfService());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Network\ResolvePeer());
 
             // Session methods

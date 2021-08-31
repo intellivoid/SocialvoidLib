@@ -35,6 +35,10 @@
     "components": [
         {
             "required": true,
+            "file": "Methods/Network/GetTermsOfService.php"
+        },
+        {
+            "required": true,
             "file": "Methods/Network/GetCommunityGuidelines.php"
         },
         {
