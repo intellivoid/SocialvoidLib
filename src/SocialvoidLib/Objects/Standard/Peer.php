@@ -100,7 +100,7 @@
             $PeerObject->Username = $user->Username;
             $PeerObject->Flags = $user->Flags;
             $PeerObject->DisplayPictureSizes = [];
-            
+
             if($user->Profile->LastName == null)
             {
                 $PeerObject->Name = $user->Profile->FirstName;

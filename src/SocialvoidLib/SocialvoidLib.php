@@ -287,6 +287,7 @@
             // Data storage Schema Configuration
             $DataStorageSchema = new Schema();
             $DataStorageSchema->setDefinition("UserAvatarsLocation", "/var/socialvoid/avatars");
+            $DataStorageSchema->setDefinition("LegalDocumentsLocation", "/var/socialvoid/legal");
             $this->acm->defineSchema("DataStorage", $DataStorageSchema);
 
             try

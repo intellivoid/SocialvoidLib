@@ -20,6 +20,9 @@ r = requests.post(
     }
 )
 
+print(r.text)
+print()
+
 document_id = json.loads(r.text)["results"]["id"]
 print("{0}?action=download&document={1}&session_id={2}&client_public_hash={3}&challenge_answer={4}".format(
     client_info["cdn_endpoint"],

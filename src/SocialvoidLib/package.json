@@ -888,6 +888,9 @@
     ],
     "files": [
         "Classes/PostText/TwitterMethod/README.md",
+        "Templates/community_guidelines.md",
+        "Templates/privacy_policy.md",
+        "Templates/terms_of_service.md",
         "package.json",
         "Objects/Standard/README.md"
     ]
