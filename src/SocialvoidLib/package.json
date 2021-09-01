@@ -131,6 +131,10 @@
         },
         {
             "required": true,
+            "file": "Abstracts/Types/Standard/TextEntityType.php"
+        },
+        {
+            "required": true,
             "file": "Abstracts/Types/Standard/PeerType.php"
         },
         {
@@ -192,6 +196,10 @@
         {
             "required": true,
             "file": "Abstracts/StandardErrorCodeType.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/Modes/Standard/ParseMode.php"
         },
         {
             "required": true,
@@ -747,6 +755,10 @@
         },
         {
             "required": true,
+            "file": "Objects/Standard/TextEntity.php"
+        },
+        {
+            "required": true,
             "file": "Objects/Standard/Session.php"
         },
         {
@@ -888,9 +900,9 @@
     ],
     "files": [
         "Classes/PostText/TwitterMethod/README.md",
-        "Templates/community_guidelines.md",
-        "Templates/privacy_policy.md",
-        "Templates/terms_of_service.md",
+        "Templates/privacy_policy.txt",
+        "Templates/terms_of_service.txt",
+        "Templates/community_guidelines.txt",
         "package.json",
         "Objects/Standard/README.md"
     ]

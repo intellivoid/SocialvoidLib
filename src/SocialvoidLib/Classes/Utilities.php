@@ -10,13 +10,27 @@
 
 namespace SocialvoidLib\Classes;
 
+    use DOMDocument;
     use InvalidArgumentException;
     use SocialvoidLib\Abstracts\JobClass;
+    use SocialvoidLib\Abstracts\Modes\Standard\ParseMode;
+    use SocialvoidLib\Abstracts\RegexPatterns;
     use SocialvoidLib\Abstracts\Types\JobType;
     use SocialvoidLib\Abstracts\Types\Standard\PostType;
+    use SocialvoidLib\Abstracts\Types\Standard\TextEntityType;
+    use SocialvoidLib\Classes\PostText\Extractor;
     use SocialvoidLib\Classes\Security\Hashing;
     use SocialvoidLib\Objects\ContentResults;
     use SocialvoidLib\Objects\Post;
+    use SocialvoidLib\Objects\Standard\TextEntity;
+    use function html_entity_decode;
+    use function htmlentities;
+    use function ord;
+    use function preg_match_all;
+    use function preg_replace;
+    use function strlen;
+    use function substr;
+    use function trim;
 
     /**
      * Class Utilities
@@ -263,6 +277,7 @@ namespace SocialvoidLib\Classes;
          * Sets the content headers for the content results
          *
          * @param ContentResults $contentResults
+         * @param bool $contentLength
          */
         public static function setContentHeaders(ContentResults $contentResults, bool $contentLength=true)
         {
@@ -332,5 +347,379 @@ namespace SocialvoidLib\Classes;
             imagejpeg($back, $path,100);
             imagedestroy($back);
             imagedestroy($front);
+        }
+
+        /**
+         * Extracts only the supported HTML tags and fixes broken tags
+         *
+         * @param string $input
+         * @return string
+         */
+        public static function fixHtmlTags(string $input): string
+        {
+            $diff = 0;
+            preg_match_all(RegexPatterns::SupportedHtmlTags, $input, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE);
+            if ($matches) {
+                foreach ($matches as $match)
+                {
+                    if (trim($match[1][0]) != '')
+                    {
+                        $mod = htmlentities($match[1][0]);
+                        $temp = substr($input, 0, $match[1][1] + $diff);
+                        $temp .= $mod;
+                        $temp .= substr($input, $match[1][1] + $diff + strlen($match[1][0]));
+                        $diff += strlen($mod) - strlen($match[1][0]);
+                        $input = $temp;
+                    }
+
+                    $mod = htmlentities($match[4][0]);
+                    $temp = substr($input, 0, $match[4][1] + $diff);
+                    $temp .= $mod;
+                    $temp .= substr($input, $match[4][1] + $diff + strlen($match[4][0]));
+                    $diff += strlen($mod) - strlen($match[4][0]);
+                    $input = $temp;
+                }
+
+                $diff = 0;
+                preg_match_all(RegexPatterns::HtmlHrefTag, $input, $matches, PREG_OFFSET_CAPTURE);
+
+                foreach ($matches[2] as $match)
+                {
+                    $mod = htmlentities($match[0]);
+                    $temp = substr($input, 0, $match[1] + $diff);
+                    $temp .= $mod;
+                    $temp .= substr($input, $match[1] + $diff + strlen($match[0]));
+                    $diff += strlen($mod) - strlen($match[0]);
+                    $input = $temp;
+                }
+
+                return $input;
+            }
+
+            return htmlentities($input);
+        }
+
+        /**
+         * Decodes an HTML Entity
+         *
+         * @param string $input
+         * @return string
+         */
+        public static function decodeHtmlEntity(string $input): string
+        {
+            return html_entity_decode(preg_replace('#< *br */? *>#', "\n", $input));
+        }
+
+        /**
+         * Gets the string length while accounting for UTF-8 Characters
+         *
+         * @param string $input
+         * @return int
+         */
+        public static function mbStringLength(string $input): int
+        {
+            $length = 0;
+            $text_length = strlen($input);
+
+            for ($x = 0; $x < $text_length; $x++)
+            {
+                $char = ord($input[$x]);
+                if (($char & 0xc0) != 0x80)
+                    $length += 1 + ($char >= 0xf0);
+            }
+
+            return $length;
+        }
+
+        /**
+         * Parses a HTML AST Node.
+         *
+         * @param $node
+         * @param $entities
+         * @param $offset
+         */
+        private static function parseAstNode($node, &$entities, &$offset)
+        {
+            switch ($node->nodeName)
+            {
+                case 'br':
+                    $offset++;
+                    break;
+                case 's':
+                case 'strike':
+                case 'del':
+                    $text = self::decodeHtmlEntity($node->textContent);
+                    $length = self::mbStringLength($text);
+                    $entities[] = TextEntity::fromArray([
+                        'type' => TextEntityType::Strike,
+                        'offset' => $offset,
+                        'length' => $length,
+                        'value' => $text
+                    ]);
+                    $offset += $length;
+                    break;
+                case 'u':
+                    $text = self::decodeHtmlEntity($node->textContent);
+                    $length = self::mbStringLength($text);
+                    $entities[] = TextEntity::fromArray([
+                        'type' => TextEntityType::Underline,
+                        'offset' => $offset,
+                        'length' => $length,
+                        'value' => $text
+                    ]);
+                    $offset += $length;
+                    break;
+                case 'code':
+                case 'blockquote':
+                case 'pre':
+                    $text = self::decodeHtmlEntity($node->textContent);
+                    $length = self::mbStringLength($text);
+                    $entities[] = TextEntity::fromArray([
+                        'type' => TextEntityType::Code,
+                        'offset' => $offset,
+                        'length' => $length,
+                        'value' => $text
+                    ]);
+                    $offset += $length;
+                    break;
+                case 'b':
+                case 'strong':
+                    $text = self::decodeHtmlEntity($node->textContent);
+                    $length = self::mbStringLength($text);
+                    $entities[] = TextEntity::fromArray([
+                        'type' => TextEntityType::Bold,
+                        'offset' => $offset,
+                        'length' => $length,
+                        'value' => $text
+                    ]);
+                    $offset += $length;
+                    break;
+                case 'i':
+                case 'em':
+                    $text = self::decodeHtmlEntity($node->textContent);
+                    $length = self::mbStringLength($text);
+                    $entities[] = TextEntity::fromArray([
+                        'type' => TextEntityType::Italic,
+                        'offset' => $offset,
+                        'length' => $length,
+                        'value' => $text
+                    ]);
+                    $offset += $length;
+                    break;
+                case 'p':
+                    foreach ($node->childNodes as $node)
+                        self::parseAstNode($node, $entities, $offset);
+                    break;
+                case 'a':
+                    $text = self::decodeHtmlEntity($node->textContent);
+                    $length = self::mbStringLength($text);
+                    $entities[] = TextEntity::fromArray([
+                        'type' => TextEntityType::Url,
+                        'offset' => $offset,
+                        'length' => $length,
+                        'value' => $node->getAttribute('href')
+                    ]);
+                    $offset += $length;
+                    break;
+                default:
+                    $text = self::decodeHtmlEntity($node->textContent);
+                    $length = self::mbStringLength($text);
+                    $offset += $length;
+                    break;
+            }
+        }
+
+
+        /**
+         * Parses an HTML AST Node to a text entity
+         *
+         * @param $node
+         * @param $new_message
+         * @param $offset
+         */
+        private static function parseAstNodeToText($node, &$new_message, &$offset)
+        {
+            switch ($node->nodeName)
+            {
+                case 'br':
+                    $new_message .= "\n";
+                    $offset++;
+                    break;
+                case 'p':
+                    foreach ($node->childNodes as $node)
+                        self::parseAstNodeToText($node, $new_message, $offset);
+                    break;
+                default:
+                    $text = self::decodeHtmlEntity($node->textContent);
+                    $new_message .= $text;
+                    $offset += self::mbStringLength($text);
+                    break;
+            }
+        }
+
+        /**
+         * Extracts a stylized text without the styling entities
+         *
+         * @param string $input
+         * @param string $parse_mode
+         * @return string
+         */
+        public static function extractTextWithoutEntities(string $input, string $parse_mode=ParseMode::Markdown): string
+        {
+            $new_message = (string)null;
+
+            // Parse the stylized entities
+            if($parse_mode == ParseMode::HTML)
+            {
+                $input = self::fixHtmlTags($input);
+                $offset = 0;
+
+                $document = new DOMDocument();
+                $document->loadHTML($input);
+
+                foreach($document->getElementsByTagName('body')->item(0)->childNodes as $node)
+                    self::parseAstNodeToText($node, $new_message, $offset);
+            }
+
+            return $new_message;
+        }
+
+        /**
+         * Extracts the stylized entities from the input
+         *
+         * @param string $input
+         * @param string $parse_mode
+         * @return array
+         */
+        public static function extractStylizedEntities(string $input, string $parse_mode=ParseMode::Markdown): array
+        {
+            $results = [];
+
+            // Parse the stylized entities
+            if($parse_mode == ParseMode::HTML)
+            {
+                $input = self::fixHtmlTags($input);
+                $offset = 0;
+                $document = new DOMDocument();
+                $document->loadHTML($input);
+
+                foreach($document->getElementsByTagName('body')->item(0)->childNodes as $node)
+                    self::parseAstNode($node, $results, $offset);
+            }
+
+            return $results;
+        }
+
+        /**
+         * Sorts the text entities by offset order
+         *
+         * @param TextEntity[] $input
+         * @return TextEntity[]
+         */
+        private static function sortTextEntities(array $input): array
+        {
+            $results = [];
+            $offsets = [];
+
+            // Extract the offsets
+            foreach($input as $textEntity)
+            {
+                if(in_array($textEntity->Offset, $offsets) == false)
+                    $offsets[] = $textEntity->Offset;
+            }
+
+            asort($offsets);
+
+            foreach($offsets as $offset)
+            {
+                foreach($input as $textEntity)
+                {
+                    if($textEntity->Offset == $offset)
+                        $results[] = $textEntity;
+                }
+            }
+
+            return $results;
+        }
+
+        /**
+         * Extracts entities from the given text
+         *
+         * @param string $input
+         * @param string $parse_mode
+         * @return array
+         */
+        public static function extractTextEntities(string $input, string $parse_mode=ParseMode::Markdown): array
+        {
+            // Extract stylized entities
+            /** @var TextEntity[] $results */
+            $results = self::extractStylizedEntities($input, $parse_mode);
+
+            // Extract other entities such as mentions and URLs
+            $parsed_text = self::extractTextWithoutEntities($input, $parse_mode);
+            $extractor = new Extractor($parsed_text);
+
+            // Hashtags
+            $offset = null;
+            foreach($extractor->extractHashtags() as $hashtag)
+            {
+                $detected_offset = strpos($parsed_text, $hashtag, $offset) -1;
+                $length = self::mbStringLength($hashtag) +1;
+
+                $results[] = TextEntity::fromArray([
+                    'type' => TextEntityType::Hashtag,
+                    'offset' => $detected_offset,
+                    'length' => $length,
+                    'value' => $hashtag
+                ]);
+
+                $offset = $detected_offset + $length;
+            }
+
+            // Mentions
+            $offset = null;
+            foreach($extractor->extractMentionedUsernames() as $mention)
+            {
+                $detected_offset = strpos($parsed_text, $mention, $offset) -1;
+                $length = self::mbStringLength($mention) +1;
+
+                $results[] = TextEntity::fromArray([
+                    'type' => TextEntityType::Mention,
+                    'offset' => $detected_offset,
+                    'length' => $length,
+                    'value' => $mention
+                ]);
+
+                $offset = $detected_offset + $length;
+            }
+
+            // URLs
+            $offset = null;
+            foreach($extractor->extractURLs() as $url)
+            {
+                $detected_offset = strpos($parsed_text, $url, $offset);
+                $length = self::mbStringLength($url);
+
+                $skip = false;
+                foreach($results as $entity)
+                {
+                    if($entity->Type == TextEntityType::Url && $entity->Value == $url)
+                        $skip = true;
+                }
+
+                if($skip == false)
+                {
+                    $results[] = TextEntity::fromArray([
+                        'type' => TextEntityType::Url,
+                        'offset' => $detected_offset,
+                        'length' => $length,
+                        'value' => $url
+                    ]);
+                }
+
+                $offset = $detected_offset + $length;
+            }
+
+            return self::sortTextEntities($results);
         }
     }

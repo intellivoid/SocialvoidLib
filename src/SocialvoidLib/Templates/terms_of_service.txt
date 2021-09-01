@@ -1,6 +1,6 @@
-# Socialvoid Terms of Service
-
-Please read these terms of service ("terms", "terms of service") carefully before using Socialvoid website (the "service") operated by Intellivoid Technologies ("us", 'we", "our").
+  ======== Socialvoid Terms of Service ========
+Please read these terms of service ("terms", "terms of service") carefully before using Socialvoid website (the "service")
+ operated by Intellivoid Technologies ("us", 'we", "our").
 
 ## Conditions of Use
 
