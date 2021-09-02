@@ -12,6 +12,7 @@ namespace SocialvoidLib\Classes;
 
     use DOMDocument;
     use InvalidArgumentException;
+    use MarkdownParser\MarkdownParser;
     use SocialvoidLib\Abstracts\JobClass;
     use SocialvoidLib\Abstracts\Modes\Standard\ParseMode;
     use SocialvoidLib\Abstracts\RegexPatterns;
@@ -568,6 +569,13 @@ namespace SocialvoidLib\Classes;
         {
             $new_message = (string)null;
 
+            if($parse_mode == ParseMode::Markdown)
+            {
+                $markdown_parser = new MarkdownParser();
+                $input = $markdown_parser->line($input);
+                $parse_mode = ParseMode::HTML;
+            }
+
             // Parse the stylized entities
             if($parse_mode == ParseMode::HTML)
             {
@@ -594,6 +602,13 @@ namespace SocialvoidLib\Classes;
         public static function extractStylizedEntities(string $input, string $parse_mode=ParseMode::Markdown): array
         {
             $results = [];
+
+            if($parse_mode == ParseMode::Markdown)
+            {
+                $markdown_parser = new MarkdownParser();
+                $input = $markdown_parser->line($input);
+                $parse_mode = ParseMode::HTML;
+            }
 
             // Parse the stylized entities
             if($parse_mode == ParseMode::HTML)
