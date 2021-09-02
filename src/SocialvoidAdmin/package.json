@@ -7,14 +7,7 @@
         "organization": "Intellivoid",
         "description": "The Socialvoid Administrator Program",
         "url": "https://github.com/intellivoid/socialvoidlib",
-        "dependencies": [
-            {
-                "package": "net.intellivoid.socialvoidlib",
-                "version": "latest",
-                "source": "default@github/intellivoid/SocialvoidLib",
-                "required": false
-            }
-        ],
+        "dependencies": [],
         "configuration": {
             "autoload_method": "generated_spl",
             "main": {

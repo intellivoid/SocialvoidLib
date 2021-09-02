@@ -24,6 +24,7 @@
 
     /** @noinspection PhpUnhandledExceptionInspection */
     ppm::import("net.intellivoid.socialvoid_rpc");
+    ppm::import("net.intellivoid.socialvoidlib");
 
     // Determine the current working directory
     $current_directory = getcwd();

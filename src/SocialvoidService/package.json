@@ -9,12 +9,6 @@
         "url": "https://github.com/intellivoid/socialvoidlib",
         "dependencies": [
             {
-                "package": "net.intellivoid.socialvoidlib",
-                "version": "latest",
-                "source": "default@github/intellivoid/SocialvoidLib",
-                "required": false
-            },
-            {
                 "package": "net.intellivoid.acm",
                 "version": "latest",
                 "source": "default@github/intellivoid/acm",

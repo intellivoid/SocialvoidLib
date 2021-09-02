@@ -26,6 +26,7 @@
 
     /** @noinspection PhpUnhandledExceptionInspection */
     ppm::import("net.intellivoid.socialvoid_service");
+    ppm::import("net.intellivoid.socialvoidlib");
 
     $current_directory = getcwd();
     VerboseAdventure::setStdout(true); // Enable stdout

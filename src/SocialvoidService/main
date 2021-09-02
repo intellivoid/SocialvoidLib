@@ -24,6 +24,7 @@
 
     /** @noinspection PhpUnhandledExceptionInspection */
     ppm::import("net.intellivoid.socialvoid_service");
+    ppm::import("net.intellivoid.socialvoidlib");
 
     VerboseAdventure::setStdout(true); // Enable stdout
     ErrorHandler::registerHandlers(); // Register error handlers
