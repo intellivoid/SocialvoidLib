@@ -1,6 +1,6 @@
 <?php
 
-    namespace SocialvoidRPC\Methods\Network;
+    namespace SocialvoidRPC\Methods\Help;
 
     use KimchiRPC\Exceptions\RequestException;
     use KimchiRPC\Objects\Request;
@@ -24,7 +24,7 @@
          */
         public function getMethod(): string
         {
-            return "network.get_privacy_policy";
+            return "help.get_privacy_policy";
         }
 
         /**

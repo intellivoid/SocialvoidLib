@@ -35,18 +35,6 @@
     "components": [
         {
             "required": true,
-            "file": "Methods/Network/GetTermsOfService.php"
-        },
-        {
-            "required": true,
-            "file": "Methods/Network/GetCommunityGuidelines.php"
-        },
-        {
-            "required": true,
-            "file": "Methods/Network/GetPrivacyPolicy.php"
-        },
-        {
-            "required": true,
             "file": "Methods/Network/GetMe.php"
         },
         {
@@ -84,6 +72,18 @@
         {
             "required": true,
             "file": "Methods/Session/CreateSession.php"
+        },
+        {
+            "required": true,
+            "file": "Methods/Help/GetTermsOfService.php"
+        },
+        {
+            "required": true,
+            "file": "Methods/Help/GetCommunityGuidelines.php"
+        },
+        {
+            "required": true,
+            "file": "Methods/Help/GetPrivacyPolicy.php"
         },
         {
             "required": true,

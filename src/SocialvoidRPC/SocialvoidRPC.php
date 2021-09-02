@@ -112,11 +112,14 @@
             // Cloud Methods
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Cloud\GetDocument());
 
+            // Help Methods
+
+            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Help\GetCommunityGuidelines());
+            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Help\GetPrivacyPolicy());
+            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Help\GetTermsOfService());
+
             // Network Methods
-            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Network\GetCommunityGuidelines());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Network\GetMe());
-            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Network\GetPrivacyPolicy());
-            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Network\GetTermsOfService());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Network\ResolvePeer());
 
             // Session methods

@@ -1,6 +1,6 @@
 <?php
 
-    namespace SocialvoidRPC\Methods\Network;
+    namespace SocialvoidRPC\Methods\Help;
 
     use KimchiRPC\Exceptions\RequestException;
     use KimchiRPC\Objects\Request;
@@ -8,7 +8,7 @@
     use SocialvoidLib\NetworkSession;
     use SocialvoidRPC\SocialvoidRPC;
 
-    class GetCommunityGuidelines implements \KimchiRPC\Interfaces\MethodInterface
+    class GetTermsOfService implements \KimchiRPC\Interfaces\MethodInterface
     {
 
         /**
@@ -16,7 +16,7 @@
          */
         public function getMethodName(): string
         {
-            return "GetCommunityGuidelines";
+            return "GetTermsOfService";
         }
 
         /**
@@ -24,7 +24,7 @@
          */
         public function getMethod(): string
         {
-            return "network.get_community_guidelines";
+            return "help.get_terms_of_service";
         }
 
         /**
@@ -32,7 +32,7 @@
          */
         public function getDescription(): string
         {
-            return "Returns the contents of a Markdown document that states the community guidelines of the network";
+            return "Returns the contents of a Markdown document that states the Terms of Service of the network";
         }
 
         /**
@@ -50,7 +50,7 @@
         {
             $NetworkSession = new NetworkSession(SocialvoidRPC::$SocialvoidLib);
             $Response = Response::fromRequest($request);
-            $Response->ResultData = $NetworkSession->getCommunityGuidelines();
+            $Response->ResultData = $NetworkSession->getTermsOfService();
 
             return $Response;
         }
