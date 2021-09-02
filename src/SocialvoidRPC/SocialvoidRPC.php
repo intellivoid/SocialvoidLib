@@ -113,7 +113,6 @@
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Cloud\GetDocument());
 
             // Help Methods
-
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Help\GetCommunityGuidelines());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Help\GetPrivacyPolicy());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Help\GetTermsOfService());

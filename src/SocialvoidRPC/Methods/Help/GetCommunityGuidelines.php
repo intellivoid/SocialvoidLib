@@ -2,13 +2,15 @@
 
     namespace SocialvoidRPC\Methods\Help;
 
-    use KimchiRPC\Exceptions\RequestException;
+    use KimchiRPC\Interfaces\MethodInterface;
     use KimchiRPC\Objects\Request;
     use KimchiRPC\Objects\Response;
+    use SocialvoidLib\Abstracts\Modes\Standard\ParseMode;
+    use SocialvoidLib\Classes\Utilities;
     use SocialvoidLib\NetworkSession;
     use SocialvoidRPC\SocialvoidRPC;
 
-    class GetCommunityGuidelines implements \KimchiRPC\Interfaces\MethodInterface
+    class GetCommunityGuidelines implements MethodInterface
     {
 
         /**
@@ -45,12 +47,17 @@
 
         /**
          * @inheritDoc
+         * @noinspection PhpRedundantOptionalArgumentInspection
          */
         public function execute(Request $request): Response
         {
             $NetworkSession = new NetworkSession(SocialvoidRPC::$SocialvoidLib);
+            $Content = $NetworkSession->getCommunityGuidelines();
             $Response = Response::fromRequest($request);
-            $Response->ResultData = $NetworkSession->getCommunityGuidelines();
+            $Response->ResultData = [
+                'text' => Utilities::extractTextWithoutEntities($Content, ParseMode::Markdown),
+                'entities' => Utilities::extractTextEntities($Content, ParseMode::Markdown)
+            ];
 
             return $Response;
         }

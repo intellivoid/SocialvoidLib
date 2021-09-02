@@ -2,13 +2,15 @@
 
     namespace SocialvoidRPC\Methods\Help;
 
-    use KimchiRPC\Exceptions\RequestException;
+    use KimchiRPC\Interfaces\MethodInterface;
     use KimchiRPC\Objects\Request;
     use KimchiRPC\Objects\Response;
+    use SocialvoidLib\Abstracts\Modes\Standard\ParseMode;
+    use SocialvoidLib\Classes\Utilities;
     use SocialvoidLib\NetworkSession;
     use SocialvoidRPC\SocialvoidRPC;
 
-    class GetTermsOfService implements \KimchiRPC\Interfaces\MethodInterface
+    class GetTermsOfService implements MethodInterface
     {
 
         /**
@@ -49,8 +51,12 @@
         public function execute(Request $request): Response
         {
             $NetworkSession = new NetworkSession(SocialvoidRPC::$SocialvoidLib);
+            $Content = $NetworkSession->getTermsOfService();
             $Response = Response::fromRequest($request);
-            $Response->ResultData = $NetworkSession->getTermsOfService();
+            $Response->ResultData = [
+                'text' => Utilities::extractTextWithoutEntities($Content, ParseMode::Markdown),
+                'entities' => Utilities::extractTextEntities($Content, ParseMode::Markdown)
+            ];
 
             return $Response;
         }
