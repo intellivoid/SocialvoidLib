@@ -67,6 +67,12 @@
                 "version": "latest",
                 "source": "default@github/intellivoid/TmpFile",
                 "required": true
+            },
+            {
+                "package": "net.intellivoid.markdown_parser",
+                "version": "latest",
+                "source": "default@github/intellivoid/MarkdownParser",
+                "required": true
             }
         ],
         "configuration": {
