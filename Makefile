@@ -1,21 +1,19 @@
-socialvoidlib_src_dir = src/SocialvoidLib
-socivlvoidservice_src_dir = src/SocialvoidService
-socivlvoidrpc_src_dir = src/SocialvoidRPC
-socivlvoidadmin_src_dir = src/SocialvoidAdmin
-socialvoid_src_dir = src/Socialvoid
 install_branch = production
 build_dir = build
-socialvoidlib_name = net.intellivoid.socialvoidlib
-socialvoidservice_name = net.intellivoid.socialvoid_service
-socialvoidrpc_name = net.intellivoid.socialvoid_rpc
-socialvoidadmin_name = net.intellivoid.socialvoid_admin
-socialvoid_name = net.intellivoid.socialvoid
-query_workers = SocialvoidQueryService
-update_workers = SocialvoidUpdateService
-main_worker = $(socivlvoidservice_src_dir)/worker.php
 runtime_version = 8.0
 docs_runtime_version = 7.4
 docs_phar_location = ~/phpdoc.phar
+
+socialvoidlib_src_dir = src/SocialvoidLib
+socialvoidlib_name = net.intellivoid.socialvoidlib
+socivlvoidservice_src_dir = src/SocialvoidService
+socialvoidservice_name = net.intellivoid.socialvoid_service
+socivlvoidrpc_src_dir = src/SocialvoidRPC
+socialvoidrpc_name = net.intellivoid.socialvoid_rpc
+socivlvoidadmin_src_dir = src/SocialvoidAdmin
+socialvoidadmin_name = net.intellivoid.socialvoid_admin
+socialvoid_src_dir = src/Socialvoid
+socialvoid_name = net.intellivoid.socialvoid
 
 clean:
 	rm -rf "$(build_dir)"
@@ -26,7 +24,7 @@ update:
 	ppm --generate-package="$(socivlvoidrpc_src_dir)"
 	ppm --generate-package="$(socivlvoidadmin_src_dir)"
 	ppm --generate-package="$(socialvoid_src_dir)"
-	#php$(docs_runtime_version) $(docs_phar_location)
+	php$(docs_runtime_version) $(docs_phar_location)
 
 build:
 	mkdir build
