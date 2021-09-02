@@ -1,8 +1,6 @@
 install_branch = production
 build_dir = build
 runtime_version = 8.0
-docs_runtime_version = 7.4
-docs_phar_location = ~/phpdoc.phar
 
 socialvoidlib_src_dir = src/SocialvoidLib
 socialvoidlib_name = net.intellivoid.socialvoidlib
@@ -24,7 +22,6 @@ update:
 	ppm --generate-package="$(socivlvoidrpc_src_dir)"
 	ppm --generate-package="$(socivlvoidadmin_src_dir)"
 	ppm --generate-package="$(socialvoid_src_dir)"
-	php$(docs_runtime_version) $(docs_phar_location)
 
 build:
 	mkdir build
