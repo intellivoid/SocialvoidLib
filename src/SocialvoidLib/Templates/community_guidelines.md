@@ -1,4 +1,4 @@
-Socialvoid Community Guidelines
+**Socialvoid Community Guidelines**
 
   1. Do not talk about /b/
   2. Do NOT talk about /b/
