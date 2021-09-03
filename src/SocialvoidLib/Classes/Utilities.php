@@ -455,7 +455,7 @@ namespace SocialvoidLib\Classes;
                         'type' => TextEntityType::Strike,
                         'offset' => $offset,
                         'length' => $length,
-                        'value' => $text
+                        'value' => null
                     ]);
                     $offset += $length;
                     break;
@@ -466,7 +466,7 @@ namespace SocialvoidLib\Classes;
                         'type' => TextEntityType::Underline,
                         'offset' => $offset,
                         'length' => $length,
-                        'value' => $text
+                        'value' => null
                     ]);
                     $offset += $length;
                     break;
@@ -479,7 +479,7 @@ namespace SocialvoidLib\Classes;
                         'type' => TextEntityType::Code,
                         'offset' => $offset,
                         'length' => $length,
-                        'value' => $text
+                        'value' => null
                     ]);
                     $offset += $length;
                     break;
@@ -491,7 +491,7 @@ namespace SocialvoidLib\Classes;
                         'type' => TextEntityType::Bold,
                         'offset' => $offset,
                         'length' => $length,
-                        'value' => $text
+                        'value' => null
                     ]);
                     $offset += $length;
                     break;
@@ -503,7 +503,7 @@ namespace SocialvoidLib\Classes;
                         'type' => TextEntityType::Italic,
                         'offset' => $offset,
                         'length' => $length,
-                        'value' => $text
+                        'value' => null
                     ]);
                     $offset += $length;
                     break;
