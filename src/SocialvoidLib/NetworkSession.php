@@ -33,6 +33,7 @@
     use SocialvoidLib\Network\Timeline;
     use SocialvoidLib\Network\Users;
     use SocialvoidLib\Objects\ActiveSession;
+    use SocialvoidLib\Objects\Standard\HelpDocument;
     use SocialvoidLib\Objects\Standard\Peer;
     use SocialvoidLib\Objects\Standard\SessionEstablished;
     use SocialvoidLib\Objects\Standard\SessionIdentification;
@@ -425,46 +426,46 @@
         /**
          * Gets Markdown Document that contains information of the terms of service of the network
          *
-         * @return string
+         * @return HelpDocument
          */
-        public function getTermsOfService(): string
+        public function getTermsOfService(): HelpDocument
         {
             $file_path = $this->socialvoidLib->getDataStorageConfiguration()['LegalDocumentsLocation'] . DIRECTORY_SEPARATOR . 'terms_of_service.md';
             $local_path = __DIR__ . DIRECTORY_SEPARATOR . 'Templates' . DIRECTORY_SEPARATOR . 'terms_of_service.md';
             if(file_exists($file_path) == false)
                 copy($local_path, $file_path);
 
-            return file_get_contents($file_path);
+            return HelpDocument::fromMarkdownDocument(file_get_contents($file_path));
         }
 
         /**
          * Gets Markdown Document that contains information of the privacy policy of the network
          *
-         * @return string
+         * @return HelpDocument
          */
-        public function getPrivacyPolicy(): string
+        public function getPrivacyPolicy(): HelpDocument
         {
             $file_path = $this->socialvoidLib->getDataStorageConfiguration()['LegalDocumentsLocation'] . DIRECTORY_SEPARATOR . 'privacy_policy.md';
             $local_path = __DIR__ . DIRECTORY_SEPARATOR . 'Templates' . DIRECTORY_SEPARATOR . 'privacy_policy.md';
             if(file_exists($file_path) == false)
                 copy($local_path, $file_path);
 
-            return file_get_contents($file_path);
+            return HelpDocument::fromMarkdownDocument(file_get_contents($file_path));
         }
 
         /**
          * Gets a Markdown Document that contains information about the community guidelines of the network
          *
-         * @return string
+         * @return HelpDocument
          */
-        public function getCommunityGuidelines(): string
+        public function getCommunityGuidelines(): HelpDocument
         {
             $file_path = $this->socialvoidLib->getDataStorageConfiguration()['LegalDocumentsLocation'] . DIRECTORY_SEPARATOR . 'community_guidelines.md';
             $local_path = __DIR__ . DIRECTORY_SEPARATOR . 'Templates' . DIRECTORY_SEPARATOR . 'community_guidelines.md';
             if(file_exists($file_path) == false)
                 copy($local_path, $file_path);
 
-            return file_get_contents($file_path);
+            return HelpDocument::fromMarkdownDocument(file_get_contents($file_path));
         }
 
         /**

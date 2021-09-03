@@ -47,24 +47,12 @@
 
         /**
          * @inheritDoc
-         * @noinspection PhpRedundantOptionalArgumentInspection
          */
         public function execute(Request $request): Response
         {
             $NetworkSession = new NetworkSession(SocialvoidRPC::$SocialvoidLib);
-            $Content = $NetworkSession->getCommunityGuidelines();
             $Response = Response::fromRequest($request);
-
-            $Entities = Utilities::extractTextEntities($Content, ParseMode::Markdown);
-            $EntitiesArray = [];
-            foreach($Entities as $entity)
-                $EntitiesArray[] = $entity->toArray();
-
-            $Response->ResultData = [
-                'text' => Utilities::extractTextWithoutEntities($Content, ParseMode::Markdown),
-                'entities' => $EntitiesArray
-            ];
-
+            $Response->ResultData = $NetworkSession->getCommunityGuidelines()->toArray();
             return $Response;
         }
     }

@@ -793,6 +793,10 @@
         },
         {
             "required": true,
+            "file": "Objects/Standard/HelpDocument.php"
+        },
+        {
+            "required": true,
             "file": "Objects/Standard/TimelineState.php"
         },
         {
