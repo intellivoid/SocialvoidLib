@@ -35,6 +35,7 @@
     use SocialvoidLib\Objects\ActiveSession;
     use SocialvoidLib\Objects\Standard\HelpDocument;
     use SocialvoidLib\Objects\Standard\Peer;
+    use SocialvoidLib\Objects\Standard\ServerInformation;
     use SocialvoidLib\Objects\Standard\SessionEstablished;
     use SocialvoidLib\Objects\Standard\SessionIdentification;
     use SocialvoidLib\Objects\User;
@@ -466,6 +467,24 @@
                 copy($local_path, $file_path);
 
             return HelpDocument::fromMarkdownDocument(file_get_contents($file_path));
+        }
+
+        /**
+         * Returns information about the server configuration (public)
+         *
+         * @return ServerInformation
+         */
+        public function getServerInformation(): ServerInformation
+        {
+            $ServerInformation = new ServerInformation();
+
+            $ServerInformation->NetworkName = $this->socialvoidLib->getNetworkConfiguration()['Name'];
+            $ServerInformation->CdnServer = $this->socialvoidLib->getCdnConfiguration()['CdnEndpoint'];
+            $ServerInformation->UploadMaxFileSize = $this->socialvoidLib->getCdnConfiguration()['MaxFileUploadSize'];
+            $ServerInformation->UnauthorizedSessionTTL = (int)$this->socialvoidLib->getNetworkConfiguration()['UnauthorizedSessionTTL'];
+            $ServerInformation->AuthorizedSessionTTL = (int)$this->socialvoidLib->getNetworkConfiguration()['AuthorizedSessionTTL'];
+
+            return $ServerInformation;
         }
 
         /**

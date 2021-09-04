@@ -17,9 +17,12 @@ response = request(
      }
 )
 
+# Get the CDN Server endpoint
+cdn_endpoint = request(client_info["endpoint"], "help.get_server_information").data.result['cdn_server']
+
 for size in response.data.result['display_picture_sizes'].values():
     print("{0}?action=download&document={1}&session_id={2}&client_public_hash={3}&challenge_answer={4}".format(
-        client_info["cdn_endpoint"],
+        cdn_endpoint,
         size['id'],
         session_info["id"],
         client_info["public_hash"],

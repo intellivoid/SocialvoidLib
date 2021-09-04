@@ -115,6 +115,7 @@
             // Help Methods
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Help\GetCommunityGuidelines());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Help\GetPrivacyPolicy());
+            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Help\GetServerInformation());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Help\GetTermsOfService());
 
             // Network Methods

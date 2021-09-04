@@ -218,6 +218,8 @@
             $NetworkSchema = new Schema();
             $NetworkSchema->setDefinition("Domain", "socialvoid.cc");
             $NetworkSchema->setDefinition("Name", "Socialvoid");
+            $NetworkSchema->setDefinition("UnauthorizedSessionTTL", 600);
+            $NetworkSchema->setDefinition("AuthorizedSessionTTL", 259200);
             $this->acm->defineSchema("Network", $NetworkSchema);
 
             // RPC Schema Configuration
