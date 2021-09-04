@@ -89,9 +89,7 @@
             $helpDocumentObject = new HelpDocument();
             $helpDocumentObject->Text = Utilities::extractTextWithoutEntities($input, ParseMode::Markdown);
             $helpDocumentObject->ID = hash('crc32', $helpDocumentObject->Text);
-            $entities = Utilities::extractTextEntities($input, ParseMode::Markdown);
-            foreach($entities as $entity)
-                $helpDocumentObject->Entities[] = $entity->toArray();
+            $helpDocumentObject->Entities = Utilities::extractTextEntities($input, ParseMode::Markdown);
 
             return $helpDocumentObject;
         }

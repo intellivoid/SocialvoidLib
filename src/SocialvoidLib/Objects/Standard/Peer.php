@@ -73,7 +73,7 @@
         {
             $profilePicturesSizes = [];
             foreach($this->DisplayPictureSizes as $datum)
-                $profilePicturesSizes[$datum->Size] = $datum->Document->toArray();
+                $profilePicturesSizes[] = $datum->toArray();
 
             return [
                 "id" => $this->ID,
@@ -142,6 +142,12 @@
 
             if(isset($data["name"]))
                 $PeerObject->Name = $data['name'];
+
+            if(isset($data['display_picture_sizes']))
+            {
+                foreach($data['display_picture_sizes'] as $display_picture_size)
+                    $PeerObject->DisplayPictureSizes = DisplayPictureSize::fromArray($display_picture_size);
+            }
 
             if(isset($data["flags"]))
                 $PeerObject->Flags = $data["flags"];

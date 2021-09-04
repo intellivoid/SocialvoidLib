@@ -793,6 +793,10 @@
         },
         {
             "required": true,
+            "file": "Objects/Standard/ServerInformation.php"
+        },
+        {
+            "required": true,
             "file": "Objects/Standard/SessionIdentification.php"
         },
         {
