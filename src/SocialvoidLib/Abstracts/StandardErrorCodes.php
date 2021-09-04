@@ -29,6 +29,7 @@
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Server\DocumentUploadException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
+    use SocialvoidLib\Exceptions\Standard\Validation\AgreementRequiredException;
     use SocialvoidLib\Exceptions\Standard\Validation\FileTooLargeException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidBiographyException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientNameException;
@@ -36,6 +37,7 @@
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPublicHashException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidFileForProfilePictureException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidFirstNameException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidHelpDocumentId;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidLastNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPasswordException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPeerInputException;
@@ -157,6 +159,20 @@
          * @see FileTooLargeException
          */
         const FileTooLargeException = 0x0210f;
+
+        /**
+         * Raised when the given Help Document ID is invalid
+         *
+         * @see InvalidHelpDocumentId
+         */
+        const InvalidHelpDocumentId = 0x02110;
+
+        /**
+         * Raised when the agreement being required isn't being fulfilled
+         *
+         * @see AgreementRequiredException
+         */
+        const AgreementRequiredException = 0x02111;
 
         /** 22-Set error codes (Authentication) */
 

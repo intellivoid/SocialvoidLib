@@ -541,6 +541,10 @@
         },
         {
             "required": true,
+            "file": "Exceptions/Standard/Validation/InvalidHelpDocumentId.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/Standard/Validation/InvalidPeerInputException.php"
         },
         {
@@ -558,6 +562,10 @@
         {
             "required": true,
             "file": "Exceptions/Standard/Validation/InvalidBiographyException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Validation/AgreementRequiredException.php"
         },
         {
             "required": true,

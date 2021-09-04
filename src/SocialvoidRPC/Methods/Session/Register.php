@@ -13,12 +13,15 @@
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
     use SocialvoidLib\Exceptions\Standard\Authentication\AlreadyAuthenticatedException;
     use SocialvoidLib\Exceptions\Standard\Authentication\BadSessionChallengeAnswerException;
+    use SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException;
     use SocialvoidLib\Exceptions\Standard\Authentication\SessionExpiredException;
     use SocialvoidLib\Exceptions\Standard\Authentication\SessionNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
+    use SocialvoidLib\Exceptions\Standard\Validation\AgreementRequiredException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPublicHashException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidFirstNameException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidHelpDocumentId;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidLastNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPasswordException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidSessionIdentificationException;
@@ -63,12 +66,22 @@
             return "1.0.0.0";
         }
 
+        /** @noinspection DuplicatedCode */
         private function checkParameters(Request $request)
         {
             if(isset($request->Parameters["session_identification"]) == false)
                 throw new MissingParameterException("Missing parameter 'session_identification'");
             if(gettype($request->Parameters["session_identification"]) !== "array")
                 throw new InvalidSessionIdentificationException("The parameter 'session_identification' is not a object");
+
+            if(isset($request->Parameters["terms_of_service_id"]) == false)
+                throw new MissingParameterException("Missing parameter 'terms_of_service_id'");
+            if(gettype($request->Parameters["terms_of_service_id"]) !== "string")
+                throw new InvalidHelpDocumentId("The 'terms_of_service_id' parameter must be a string", $request->Parameters["terms_of_service_id"]);
+            if(isset($request->Parameters["terms_of_service_agree"]) == false)
+                throw new MissingParameterException("Missing parameter 'terms_of_service_agree'");
+            if(gettype($request->Parameters["terms_of_service_agree"]) !== "boolean")
+                throw new AgreementRequiredException("The 'terms_of_service_id' parameter must be a boolean", $request->Parameters["terms_of_service_agree"]);
 
             if(isset($request->Parameters["username"]) == false)
                 throw new MissingParameterException("Missing parameter 'username'");
@@ -95,6 +108,7 @@
         /**
          * @param Request $request
          * @return Response
+         * @throws AgreementRequiredException
          * @throws AlreadyAuthenticatedException
          * @throws BadSessionChallengeAnswerException
          * @throws CacheException
@@ -102,6 +116,7 @@
          * @throws InternalServerException
          * @throws InvalidClientPublicHashException
          * @throws InvalidFirstNameException
+         * @throws InvalidHelpDocumentId
          * @throws InvalidLastNameException
          * @throws InvalidPasswordException
          * @throws InvalidSearchMethodException
@@ -112,6 +127,7 @@
          * @throws SessionExpiredException
          * @throws SessionNotFoundException
          * @throws UsernameAlreadyExistsException
+         * @throws NotAuthenticatedException
          */
         public function execute(Request $request): Response
         {
@@ -125,6 +141,12 @@
 
             // Start the authentication
             $NetworkSession = new NetworkSession(SocialvoidRPC::$SocialvoidLib);
+
+            // Verify the terms of service condition
+            if($NetworkSession->getTermsOfService()->ID !== $request->Parameters['terms_of_service_id'])
+                throw new InvalidHelpDocumentId('The terms of service help document ID is incorrect');
+            if((bool)$request->Parameters['terms_of_service_agree'] == false)
+                throw new AgreementRequiredException('The user must agree to the Terms of Service to register an account');
 
             try
             {
