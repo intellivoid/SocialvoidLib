@@ -67,6 +67,16 @@
         }
 
         /** @noinspection DuplicatedCode */
+        /**
+         * @throws InvalidLastNameException
+         * @throws InvalidUsernameException
+         * @throws MissingParameterException
+         * @throws InvalidPasswordException
+         * @throws AgreementRequiredException
+         * @throws InvalidHelpDocumentId
+         * @throws InvalidSessionIdentificationException
+         * @throws InvalidFirstNameException
+         */
         private function checkParameters(Request $request)
         {
             if(isset($request->Parameters["session_identification"]) == false)
