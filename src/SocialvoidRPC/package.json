@@ -57,6 +57,10 @@
         },
         {
             "required": true,
+            "file": "Methods/Account/ClearBiography.php"
+        },
+        {
+            "required": true,
             "file": "Methods/Session/AuthenticateUser.php"
         },
         {

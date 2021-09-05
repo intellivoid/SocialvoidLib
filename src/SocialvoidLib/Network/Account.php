@@ -277,4 +277,43 @@
 
             return true;
         }
+
+        /**
+         * Clears the user biography
+         *
+         * @param SessionIdentification $sessionIdentification
+         * @return bool
+         * @throws BadSessionChallengeAnswerException
+         * @throws CacheException
+         * @throws DatabaseException
+         * @throws InternalServerException
+         * @throws InvalidClientPublicHashException
+         * @throws InvalidSearchMethodException
+         * @throws NotAuthenticatedException
+         * @throws PeerNotFoundException
+         * @throws SessionExpiredException
+         * @throws SessionNotFoundException
+         */
+        public function clearBiography(SessionIdentification $sessionIdentification): bool
+        {
+            $this->networkSession->loadSession($sessionIdentification);
+            if($this->networkSession->isAuthenticated() == false)
+                throw new NotAuthenticatedException();
+
+            $user = $this->networkSession->getAuthenticatedUser();
+            $user->Profile->Biography = null;
+
+            try
+            {
+                $this->networkSession->getSocialvoidLib()->getUserManager()->updateUser($user);
+            }
+            catch(Exception $e)
+            {
+                throw new InternalServerException('There was an error while trying to update the biography', $e);
+            }
+
+            $this->networkSession->setAuthenticatedUser($user);
+
+            return true;
+        }
     }
