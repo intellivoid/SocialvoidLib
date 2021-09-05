@@ -2,7 +2,7 @@ create table if not exists documents
 (
     id                      varchar(126)         not null comment 'The ID of the document',
     content_source          varchar(32)          not null comment 'The source of where the content is hosted at',
-    content_identifier      varchar(126)         null comment 'The content identifier that points this record to the content source',
+    content_identifier      varchar(132)         null comment 'The content identifier that points this record to the content source',
     files                   blob                 null comment 'ZiProto encoded array of files associated with this document',
     deleted                 tinyint(1) default 0 not null comment 'Indicates if this document has been deleted or not',
     owner_user_id           int                  null comment 'The user ID that owns this content',
