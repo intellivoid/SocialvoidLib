@@ -41,15 +41,19 @@
         },
         {
             "required": true,
-            "file": "Methods/Account/ChangeName.php"
-        },
-        {
-            "required": true,
             "file": "Methods/Account/SetProfilePicture.php"
         },
         {
             "required": true,
+            "file": "Methods/Account/UpdateBiography.php"
+        },
+        {
+            "required": true,
             "file": "Methods/Account/DeleteProfilePicture.php"
+        },
+        {
+            "required": true,
+            "file": "Methods/Account/UpdateName.php"
         },
         {
             "required": true,

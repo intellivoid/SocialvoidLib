@@ -106,9 +106,10 @@
                 throw new RuntimeException("No RPC Server has been defined");
 
             // Account Methods
-            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Account\UpdateName());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Account\SetProfilePicture());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Account\DeleteProfilePicture());
+            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Account\UpdateBiography());
+            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Account\UpdateName());
 
             // Cloud Methods
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Cloud\GetDocument());

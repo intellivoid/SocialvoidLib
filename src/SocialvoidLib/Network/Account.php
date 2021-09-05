@@ -22,6 +22,7 @@
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
     use SocialvoidLib\Exceptions\Standard\Validation\FileTooLargeException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidBiographyException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPublicHashException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidFileForProfilePictureException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidFirstNameException;
@@ -225,7 +226,51 @@
             }
             catch(Exception $e)
             {
-                throw new InternalServerException('There was an error while trying to update the user profile picture', $e);
+                throw new InternalServerException('There was an error while trying to update the display name', $e);
+            }
+
+            $this->networkSession->setAuthenticatedUser($user);
+
+            return true;
+        }
+
+        /**
+         * Updates the user's biography
+         *
+         * @param SessionIdentification $sessionIdentification
+         * @param string $biography
+         * @return bool
+         * @throws BadSessionChallengeAnswerException
+         * @throws CacheException
+         * @throws DatabaseException
+         * @throws InternalServerException
+         * @throws InvalidClientPublicHashException
+         * @throws InvalidSearchMethodException
+         * @throws NotAuthenticatedException
+         * @throws PeerNotFoundException
+         * @throws SessionExpiredException
+         * @throws SessionNotFoundException
+         * @throws InvalidBiographyException
+         */
+        public function updateBiography(SessionIdentification $sessionIdentification, string $biography): bool
+        {
+            $this->networkSession->loadSession($sessionIdentification);
+            if($this->networkSession->isAuthenticated() == false)
+                throw new NotAuthenticatedException();
+
+            if(Validate::biography($biography) == false)
+                throw new InvalidBiographyException('The given biography is invalid', $biography);
+
+            $user = $this->networkSession->getAuthenticatedUser();
+            $user->Profile->Biography = $biography;
+
+            try
+            {
+                $this->networkSession->getSocialvoidLib()->getUserManager()->updateUser($user);
+            }
+            catch(Exception $e)
+            {
+                throw new InternalServerException('There was an error while trying to update the biography', $e);
             }
 
             $this->networkSession->setAuthenticatedUser($user);
