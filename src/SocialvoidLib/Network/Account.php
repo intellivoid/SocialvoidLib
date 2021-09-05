@@ -203,7 +203,7 @@
          * @throws SessionExpiredException
          * @throws SessionNotFoundException
          */
-        public function changeName(SessionIdentification $sessionIdentification, string $first_name, ?string $last_name=null): bool
+        public function updateName(SessionIdentification $sessionIdentification, string $first_name, ?string $last_name=null): bool
         {
             $this->networkSession->loadSession($sessionIdentification);
             if($this->networkSession->isAuthenticated() == false)

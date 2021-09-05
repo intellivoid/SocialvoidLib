@@ -25,7 +25,7 @@
     use SocialvoidLib\Objects\Standard\SessionIdentification;
     use SocialvoidRPC\SocialvoidRPC;
 
-    class ChangeName implements MethodInterface
+    class UpdateName implements MethodInterface
     {
 
         /**
@@ -135,7 +135,7 @@
 
             try
             {
-                $NetworkSession->getAccount()->changeName($SessionIdentification, $request->Parameters['fist_name'], ($request->Parameters['last_name'] ?? null));
+                $NetworkSession->getAccount()->updateName($SessionIdentification, $request->Parameters['fist_name'], ($request->Parameters['last_name'] ?? null));
             }
             catch(Exception $e)
             {
