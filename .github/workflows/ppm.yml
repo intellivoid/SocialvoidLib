@@ -21,11 +21,11 @@ jobs:
       with:
         repository: intellivoid/ppm
         ref: "8.0"
-        token: ${{ secrets.ACCESS_TOKEN }}
+        token: ${{ secrets.PPM_ACCESS_TOKEN }}
     - name: Install PPM
       run: sudo ./install
     - name: Configuring PPM
-      run: sudo ppm --github-add-pat --alias="system" --token="${{ secrets.ACCESS_TOKEN }}"
+      run: sudo ppm --github-add-pat --alias="system" --token="${{ secrets.PPM_ACCESS_TOKEN }}"
     - uses: actions/checkout@master
     - name: Make build directory
       run: mkdir build
@@ -43,3 +43,24 @@ jobs:
       run: ppm --no-intro --verbose --compile="src/SocialvoidService" --directory="build"
     - name: Install SocialvoidService
       run: sudo -H ppm --no-prompt --fix-conflict --verbose --install="build/net.intellivoid.socialvoid_service.ppm" --branch="production"
+
+    - name: Prepare SocialvoidRPC
+      run: ppm --generate-package="src/SocialvoidRPC"
+    - name: Compile SocialvoidRPC
+      run: ppm --no-intro --verbose --compile="src/SocialvoidRPC" --directory="build"
+    - name: Install SocialvoidRPC
+      run: sudo -H ppm --no-prompt --fix-conflict --verbose --install="build/net.intellivoid.socialvoid_rpc.ppm" --branch="production"
+
+    - name: Prepare SocialvoidAdmin
+      run: ppm --generate-package="src/SocialvoidAdmin"
+    - name: Compile SocialvoidAdmin
+      run: ppm --no-intro --verbose --compile="src/SocialvoidAdmin" --directory="build"
+    - name: Install SocialvoidAdmin
+      run: sudo -H ppm --no-prompt --fix-conflict --verbose --install="build/net.intellivoid.socialvoid_admin.ppm" --branch="production"
+
+    - name: Prepare Socialvoid
+      run: ppm --generate-package="src/Socialvoid"
+    - name: Compile Socialvoid
+      run: ppm --no-intro --verbose --compile="src/Socialvoid" --directory="build"
+    - name: Install Socialvoid
+      run: sudo -H ppm --no-prompt --fix-conflict --verbose --install="build/net.intellivoid.socialvoid.ppm" --branch="production"
