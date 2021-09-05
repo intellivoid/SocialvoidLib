@@ -10,11 +10,18 @@
     class DisplayPictureSize
     {
         /**
-         * The size of the profile picture
+         * The width of the image
          *
-         * @var string
+         * @var int
          */
-        public $Size;
+        public $Width;
+
+        /**
+         * The height of the image
+         *
+         * @var int
+         */
+        public $Height;
 
         /**
          * The document
@@ -31,7 +38,8 @@
         public function toArray(): array
         {
             return [
-                'size' => $this->Size,
+                'width' => $this->Width,
+                'height' => $this->Height,
                 'document' => $this->Document->toArray()
             ];
         }
@@ -46,8 +54,11 @@
         {
             $displayPictureObject = new DisplayPictureSize();
 
-            if(isset($data['size']))
-                $displayPictureObject->Size = $data['size'];
+            if(isset($data['width']))
+                $displayPictureObject->Width = $data['width'];
+
+            if(isset($data['height']))
+                $displayPictureObject->Height = $data['height'];
 
             if(isset($data['document']))
                 $displayPictureObject->Document = Document::fromArray($data['document']);

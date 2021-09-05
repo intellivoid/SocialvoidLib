@@ -14,7 +14,6 @@
     namespace SocialvoidLib\Objects\Standard;
 
     use SocialvoidLib\Abstracts\Types\Standard\PeerType;
-    use SocialvoidLib\Objects\Standard\Peer\Name;
     use SocialvoidLib\Objects\Standard\Peer\DisplayPictureSize;
     use SocialvoidLib\Objects\User;
 
@@ -114,7 +113,9 @@
             {
                 $display_size = new DisplayPictureSize();
                 $display_size->Document = Document::fromDocument($user->DisplayPictureDocument, $item->Hash);
-                $display_size->Size = $item->ID;
+                $split_size = explode('x', strtolower($item->ID));
+                $display_size->Width = (int)$split_size[0];
+                $display_size->Height = (int)$split_size[1];
                 $PeerObject->DisplayPictureSizes[] = $display_size;
             }
 
