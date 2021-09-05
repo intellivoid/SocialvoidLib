@@ -41,6 +41,10 @@
         },
         {
             "required": true,
+            "file": "Methods/Account/ChangeName.php"
+        },
+        {
+            "required": true,
             "file": "Methods/Account/SetProfilePicture.php"
         },
         {

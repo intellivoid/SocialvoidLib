@@ -9,6 +9,7 @@
     use Longman\TelegramBot\Exception\TelegramException;
     use SocialvoidLib\Abstracts\Types\Standard\DocumentType;
     use SocialvoidLib\Classes\Utilities;
+    use SocialvoidLib\Classes\Validate;
     use SocialvoidLib\Exceptions\GenericInternal\CacheException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
@@ -23,6 +24,8 @@
     use SocialvoidLib\Exceptions\Standard\Validation\FileTooLargeException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPublicHashException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidFileForProfilePictureException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidFirstNameException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidLastNameException;
     use SocialvoidLib\NetworkSession;
     use SocialvoidLib\Objects\Standard\SessionIdentification;
     use TelegramCDN\Exceptions\FileSecurityException;
@@ -169,6 +172,56 @@
             try
             {
                 $this->networkSession->getSocialvoidLib()->getUserManager()->deleteDisplayPicture($user);
+            }
+            catch(Exception $e)
+            {
+                throw new InternalServerException('There was an error while trying to update the user profile picture', $e);
+            }
+
+            $this->networkSession->setAuthenticatedUser($user);
+
+            return true;
+        }
+
+        /**
+         * Changes the display name of the peer
+         *
+         * @param SessionIdentification $sessionIdentification
+         * @param string $first_name
+         * @param string|null $last_name
+         * @return bool
+         * @throws BadSessionChallengeAnswerException
+         * @throws CacheException
+         * @throws DatabaseException
+         * @throws InternalServerException
+         * @throws InvalidClientPublicHashException
+         * @throws InvalidFirstNameException
+         * @throws InvalidLastNameException
+         * @throws InvalidSearchMethodException
+         * @throws NotAuthenticatedException
+         * @throws PeerNotFoundException
+         * @throws SessionExpiredException
+         * @throws SessionNotFoundException
+         */
+        public function changeName(SessionIdentification $sessionIdentification, string $first_name, ?string $last_name=null): bool
+        {
+            $this->networkSession->loadSession($sessionIdentification);
+            if($this->networkSession->isAuthenticated() == false)
+                throw new NotAuthenticatedException();
+
+            if(Validate::firstName($first_name) == false)
+                throw new InvalidFirstNameException('The given first name is invalid', $first_name);
+
+            if($last_name !== null && Validate::lastName($last_name) == false)
+                throw new InvalidLastNameException('The given last name is invalid', $last_name);
+
+            $user = $this->networkSession->getAuthenticatedUser();
+            $user->Profile->FirstName = $first_name;
+            $user->Profile->LastName = $last_name;
+
+            try
+            {
+                $this->networkSession->getSocialvoidLib()->getUserManager()->updateUser($user);
             }
             catch(Exception $e)
             {
