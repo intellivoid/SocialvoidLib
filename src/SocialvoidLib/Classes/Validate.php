@@ -236,4 +236,15 @@ namespace SocialvoidLib\Classes;
 
             return false;
         }
+
+        /**
+         * Validates the representation of a hash
+         *
+         * @param string $input
+         * @return bool
+         */
+        public static function hash(string $input): bool
+        {
+            return (ctype_xdigit($input) && strlen($input) % 2 == 0 && hex2bin($input));
+        }
     }

@@ -156,7 +156,7 @@
             if(strlen($this->PublicHash) !== 64)
                 throw new InvalidClientPublicHashException("The client's public hash must be 64 characters in length");
 
-            if(preg_match(RegexPatterns::Alphanumeric, $this->PublicHash))
+            if(Validate::hash($this->PublicHash) == false)
                 throw new InvalidClientPublicHashException("The client's public hash is not a valid hash");
 
 
@@ -166,11 +166,13 @@
             if(strlen($this->PrivateHash) !== 64)
                 throw new InvalidClientPrivateHashException("The client's private hash must be 64 characters in length");
 
-            if(preg_match(RegexPatterns::Alphanumeric, $this->PrivateHash))
+            if( (ctype_xdigit($this->PrivateHash) && strlen($this->PrivateHash) % 2 == 0 && hex2bin($this->PrivateHash)) == false)
+                throw new InvalidClientPrivateHashException("The client's private hash is not a valid hash");
+
+            if(Validate::hash($this->PrivateHash) == false)
                 throw new InvalidClientPrivateHashException("The client's private hash is not a valid hash");
 
             if($this->PublicHash == $this->PrivateHash)
                 throw new InvalidClientPrivateHashException("The client's private hash cannot be the same as the client's public hash");
-
         }
     }
