@@ -665,14 +665,6 @@
         },
         {
             "required": true,
-            "file": "Exceptions/Standard/Media/InvalidImageTypeException.php"
-        },
-        {
-            "required": true,
-            "file": "Exceptions/Standard/Media/InvalidImageDimensionsException.php"
-        },
-        {
-            "required": true,
             "file": "NetworkSession.php"
         },
         {

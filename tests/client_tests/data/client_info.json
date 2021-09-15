@@ -1,8 +1,9 @@
 {
   "endpoint": "http://socialvoid.qlg1.com:5601/",
-  "public_hash": "4c7148caff498d24deee6c8325f1c15773d637ed76c3a4056e00b77b2beb3097",
-  "private_hash": "866d3218b239d39c174fa2b16f54e0fa58f9c69fce8c2d941c12a47a7bc75229",
+  "endpoint_alt": "http://127.0.0.1:5001/",
+  "public_hash": "c1a5356186e4041ea51463287dccbcc63362da76d5c9224efa4b67b6d9778ef4",
+  "private_hash": "78760040044534fe5483554b62fd7afb7d56f1ce722d1cbc6dfc3d006ba38e72",
   "platform": "Linux",
-  "name": "Test Python RCP Client",
-  "version": "1.0.0.0"
+  "name": "Social Void Rust",
+  "version": "0.0.1"
 }

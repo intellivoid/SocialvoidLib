@@ -19,7 +19,6 @@
     use SocialvoidLib\Exceptions\Standard\Authentication\PrivateAccessTokenRequiredException;
     use SocialvoidLib\Exceptions\Standard\Authentication\SessionExpiredException;
     use SocialvoidLib\Exceptions\Standard\Authentication\TwoFactorAuthenticationRequiredException;
-    use SocialvoidLib\Exceptions\Standard\Media\InvalidImageDimensionsException;
     use SocialvoidLib\Exceptions\Standard\Network\AccessDeniedException;
     use SocialvoidLib\Exceptions\Standard\Network\AlreadyRepostedException;
     use SocialvoidLib\Exceptions\Standard\Network\DocumentNotFoundException;
@@ -251,24 +250,6 @@
          * @see SessionExpiredException
          */
         const SessionExpiredException = 0x0220a;
-
-
-        /** 23-Set error codes (Media) */
-
-        /**
-         * Raised when the given image type is not supported
-         *
-         * @see InvalidImageTypeException
-         */
-        const InvalidImageTypeException = 0x02300;
-
-        /**
-         * Raised when the given password is incorrect
-         *
-         * @see InvalidImageDimensionsException
-         */
-        const InvalidImageDimensionsException = 0x02301;
-
 
         /** 31-Set error codes (Network) */
 
