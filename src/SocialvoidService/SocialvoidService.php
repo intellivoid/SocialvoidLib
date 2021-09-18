@@ -140,8 +140,6 @@
             {
                 if(self::isSleeping() == false)
                 {
-                    self::getLogHandler()->log(EventType::INFO, "Service Worker hasn't been active the last 60 seconds, going to sleep.", "Service Worker");
-
                     self::getSocialvoidLib()->disconnectDatabase();
                     self::setIsSleeping(true);
                 }
@@ -150,7 +148,6 @@
             {
                 if(self::isSleeping() == true)
                 {
-                    self::getLogHandler()->log(EventType::INFO, "Service Worker is active, awaking from sleep mode", "Service Worker");
                     self::getSocialvoidLib()->connectDatabase();
                     self::setIsSleeping(false);
                 }
