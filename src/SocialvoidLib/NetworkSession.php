@@ -27,6 +27,7 @@
     use SocialvoidLib\Exceptions\Standard\Authentication\SessionExpiredException;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidPasswordException;
     use SocialvoidLib\InputTypes\SessionClient;
     use SocialvoidLib\Network\Account;
     use SocialvoidLib\Network\Cloud;
@@ -39,6 +40,7 @@
     use SocialvoidLib\Objects\Standard\SessionEstablished;
     use SocialvoidLib\Objects\Standard\SessionIdentification;
     use SocialvoidLib\Objects\User;
+    use Zxcvbn\zxcvbn;
 
     /**
      * Class Network
@@ -390,6 +392,9 @@
 
             if($this->active_session->Authenticated)
                 throw new AlreadyAuthenticatedException("You are already authenticated to the network");
+
+            // Validate the password and throw the proper exception
+            Validate::password($password, true);
 
             try
             {

@@ -15,7 +15,9 @@ namespace SocialvoidLib\Classes;
     use MimeLib\MimeLib;
     use SocialvoidLib\Abstracts\StandardErrorCodeType;
     use SocialvoidLib\Abstracts\Types\Standard\DocumentType;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidPasswordException;
     use SocialvoidLib\Objects\FileValidationResults;
+    use Zxcvbn\zxcvbn;
 
     /**
      * Class Validation
@@ -40,12 +42,37 @@ namespace SocialvoidLib\Classes;
          *
          * @param string $input
          * @return bool
+         * @throws InvalidPasswordException
          */
-        public static function password(string $input): bool
+        public static function password(string $input, bool $throw_exception=false): bool
         {
-            /** @noinspection RegExpRedundantEscape */
-            preg_match('/^(?=.*[A-Z])(?=.*\d.*\d)(?=.*[ -\/:-@\[-`\{-~])[ -~]{12,128}$/m', $input, $matches);
-            return count($matches) >= 1 && $matches !== false;
+            if(strlen($input) <= 8)
+            {
+                if($throw_exception)
+                    throw new InvalidPasswordException('The given password must be longer than 8 characters', $input);
+                return false;
+            }
+
+            $zxcvbn = new zxcvbn();
+            $password_strength = $zxcvbn->passwordStrength($input);
+            if($password_strength->Feedback->getWarning() !== null)
+            {
+                if($throw_exception)
+                    throw new InvalidPasswordException('The given password is too weak, ' . $password_strength->Feedback->getWarning(), $input);
+                return false;
+            }
+            if($password_strength->EstimatedAttackTimes->Score <= 2)
+            {
+                if($throw_exception)
+                    throw new InvalidPasswordException('The given password is easily guessable', $input);
+                return false;
+            }
+
+            return true;
+
+            ///** @noinspection RegExpRedundantEscape */
+            //preg_match('/^(?=.*[A-Z])(?=.*\d.*\d)(?=.*[ -\/:-@\[-`\{-~])[ -~]{12,128}$/m', $input, $matches);
+            //return count($matches) >= 1 && $matches !== false;
         }
 
         /**
