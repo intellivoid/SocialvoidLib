@@ -1,8 +1,8 @@
 {
-  "endpoint": "http://socialvoid.qlg1.com:5601/",
-  "endpoint_alt": "http://127.0.0.1:5001/",
-  "public_hash": "c1a5356186e4041ea51463287dccbcc63362da76d5c9224efa4b67b6d9778ef4",
-  "private_hash": "78760040044534fe5483554b62fd7afb7d56f1ce722d1cbc6dfc3d006ba38e72",
+  "endpoint_alt": "http://socialvoid.qlg1.com:5601/",
+  "endpoint": "http://127.0.0.1:5001/",
+  "public_hash": "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08",
+  "private_hash": "60303ae22b998861bce3b28f33eec1be758a213c86c93c076dbe9f558c11c752",
   "platform": "Linux",
   "name": "Social Void Rust",
   "version": "0.0.1"

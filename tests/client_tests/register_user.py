@@ -23,7 +23,7 @@ response = request(
      terms_of_service_agree=True,
 
      username="netkas",
-     password="SuperExtreme1Password24...",
+     password="Password123123123123",
      first_name="Zi",
      last_name="Xing"
 )
