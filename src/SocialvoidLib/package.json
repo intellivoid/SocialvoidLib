@@ -73,6 +73,12 @@
                 "version": "latest",
                 "source": "default@github/intellivoid/MarkdownParser",
                 "required": true
+            },
+            {
+                "package": "net.intellivoid.zxcvbn",
+                "version": "latest",
+                "source": "default@github/intellivoid/zxcvbn",
+                "required": true
             }
         ],
         "configuration": {
