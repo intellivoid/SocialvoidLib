@@ -290,6 +290,7 @@
             $DataStorageSchema = new Schema();
             $DataStorageSchema->setDefinition("UserAvatarsLocation", "/var/socialvoid/avatars");
             $DataStorageSchema->setDefinition("LegalDocumentsLocation", "/var/socialvoid/legal");
+            $DataStorageSchema->setDefinition("WorkingLocation", "/var/socialvoid/lib");
             $this->acm->defineSchema("DataStorage", $DataStorageSchema);
 
             try
