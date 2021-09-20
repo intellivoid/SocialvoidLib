@@ -726,4 +726,14 @@
 
             return $this->DocumentsManager;
         }
+
+        /**
+         * Returns the working directory path where multiple data points are stored at
+         *
+         * @return string
+         */
+        public function getWorkingLocationPath(): string
+        {
+            return $this->getDataStorageConfiguration()['WorkingLocation'];
+        }
     }
