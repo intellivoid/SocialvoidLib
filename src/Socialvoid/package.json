@@ -29,7 +29,7 @@
     "components": [],
     "files": [
         "banner.txt",
-        "package.json",
-        "main"
+        "main",
+        "package.json"
     ]
 }

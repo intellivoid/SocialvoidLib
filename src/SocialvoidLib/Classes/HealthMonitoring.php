@@ -26,10 +26,10 @@
             if(self::$MonitoringCache == null)
                 self::$MonitoringCache = [];
             $this->WorkingDirectory = $socialvoidLib->getWorkingLocationPath();
-            if(is_dir($this->WorkingDirectory))
+            if(is_dir($this->WorkingDirectory) == false)
                 mkdir($this->WorkingDirectory);
             $this->WorkingDirectory = $this->WorkingDirectory . DIRECTORY_SEPARATOR . 'health';
-            if(is_dir($this->WorkingDirectory))
+            if(is_dir($this->WorkingDirectory) == false)
                 mkdir($this->WorkingDirectory);
         }
 

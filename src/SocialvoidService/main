@@ -30,7 +30,7 @@
     VerboseAdventure::setStdout(true); // Enable stdout
     ErrorHandler::registerHandlers(); // Register error handlers
 
-    define('SERVICE_NAME', 'service_name');
+    define('SERVICE_NAME', 'socialvoid_service');
 
     $current_directory = getcwd();
 

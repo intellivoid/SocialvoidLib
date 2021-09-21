@@ -51,9 +51,9 @@
         }
     ],
     "files": [
-        "update_worker",
+        "main",
         "package.json",
         "query_worker",
-        "main"
+        "update_worker"
     ]
 }
