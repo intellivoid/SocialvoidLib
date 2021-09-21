@@ -1,14 +1,16 @@
 <?php
 
-    use VerboseAdventure\Abstracts\EventType;
-    use VerboseAdventure\Classes\ErrorHandler;
-    use VerboseAdventure\VerboseAdventure;
+    use SocialvoidLib\Abstracts\StatusStates\HealthStatusCode;
 
     require("ppm");
 
     import("net.intellivoid.proclib");
+    import("net.intellivoid.socialvoidlib");
 
     $current_directory = getcwd();
+    define('SERVICE_NAME', 'main');
+    $SocialvoidLib = new \SocialvoidLib\SocialvoidLib();
+    $SocialvoidLib->getHealthMonitoring()->sync(SERVICE_NAME, HealthStatusCode::Starting);
 
     if(file_exists($current_directory . DIRECTORY_SEPARATOR . 'banner.txt'))
     {
@@ -47,6 +49,7 @@
     {
         if($ServiceProcess->isRunning() == false || $RpcProcess->isRunning() == false)
         {
+            $SocialvoidLib->getHealthMonitoring()->sync(SERVICE_NAME, HealthStatusCode::Fatal);
             print("CRITICAL FAILURE: A service module has exited unexpectedly." . PHP_EOL);
 
             $RpcProcess->stop();
@@ -65,5 +68,6 @@
             exit(1);
         }
 
+        $SocialvoidLib->getHealthMonitoring()->sync(SERVICE_NAME, HealthStatusCode::Ok);
         usleep(500000);
     }
