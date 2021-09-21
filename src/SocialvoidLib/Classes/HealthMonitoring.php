@@ -19,12 +19,19 @@
         private static $MonitoringCache;
 
         /**
+         * @var array
+         */
+        private static $MonitoringStatusCache;
+
+        /**
          * @param SocialvoidLib $socialvoidLib
          */
         public function __construct(SocialvoidLib $socialvoidLib)
         {
             if(self::$MonitoringCache == null)
                 self::$MonitoringCache = [];
+            if(self::$MonitoringStatusCache == null)
+                self::$MonitoringStatusCache = [];
             $this->WorkingDirectory = $socialvoidLib->getWorkingLocationPath();
             if(is_dir($this->WorkingDirectory) == false)
                 mkdir($this->WorkingDirectory);
@@ -43,12 +50,15 @@
         {
             if(isset(self::$MonitoringCache[$module_name]))
             {
-                $cache_timeout = (int)self::$MonitoringCache[$module_name];
-                if($cache_timeout > 5)
+                if(isset(self::$MonitoringStatusCache[$module_name]) && self::$MonitoringStatusCache[$module_name] == $status_code)
                 {
-                    // Prevent writing to disk all the time
-                    if(time() < (self::$MonitoringCache[$module_name] - 5))
-                        return;
+                    $cache_timeout = (int)self::$MonitoringCache[$module_name];
+                    if($cache_timeout > 5)
+                    {
+                        // Prevent writing to disk all the time
+                        if(time() < (self::$MonitoringCache[$module_name] - 5))
+                            return;
+                    }
                 }
             }
 
@@ -69,6 +79,7 @@
 
             file_put_contents($heartbeat_path, $sync_status);
             self::$MonitoringCache[$module_name] = time() + $timeout;
+            self::$MonitoringStatusCache[$module_name] = $status_code;
         }
 
         /**
