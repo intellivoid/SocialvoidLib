@@ -14,10 +14,17 @@
         private string $WorkingDirectory;
 
         /**
+         * @var array
+         */
+        private static $MonitoringCache;
+
+        /**
          * @param SocialvoidLib $socialvoidLib
          */
         public function __construct(SocialvoidLib $socialvoidLib)
         {
+            if(self::$MonitoringCache == null)
+                self::$MonitoringCache = [];
             $this->WorkingDirectory = $socialvoidLib->getWorkingLocationPath();
             if(is_dir($this->WorkingDirectory))
                 mkdir($this->WorkingDirectory);
@@ -34,6 +41,17 @@
          */
         public function sync(string $module_name, int $status_code, int $timeout=10)
         {
+            if(isset(self::$MonitoringCache[$module_name]))
+            {
+                $cache_timeout = (int)self::$MonitoringCache[$module_name];
+                if($cache_timeout > 5)
+                {
+                    // Prevent writing to disk all the time
+                    if(time() < (self::$MonitoringCache[$module_name] - 5))
+                        return;
+                }
+            }
+
             switch($status_code)
             {
                 case HealthStatusCode::Starting:
@@ -50,6 +68,7 @@
             $heartbeat_path = $this->WorkingDirectory . DIRECTORY_SEPARATOR . $module_name;
 
             file_put_contents($heartbeat_path, $sync_status);
+            self::$MonitoringCache[$module_name] = time() + $timeout;
         }
 
         /**
