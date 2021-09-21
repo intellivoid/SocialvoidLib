@@ -1,3 +1,8 @@
 <?php
 
-    print("Hello World!" . PHP_EOL);
+    require('ppm');
+    import('net.intellivoid.socialvoid_admin');
+    import('net.intellivoid.socialvoidlib');
+
+    $SocialvoidAdmin = new \SocialvoidAdmin\SocialvoidAdmin();
+    $SocialvoidAdmin->startApplication();

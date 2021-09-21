@@ -7,7 +7,14 @@
         "organization": "Intellivoid",
         "description": "The Socialvoid Administrator Program",
         "url": "https://github.com/intellivoid/socialvoidlib",
-        "dependencies": [],
+        "dependencies": [
+            {
+                "package": "com.php_school.cli_menu",
+                "version": "latest",
+                "source": "php-school@composer/cli-menu",
+                "required": true
+            }
+        ],
         "configuration": {
             "autoload_method": "generated_spl",
             "main": {
@@ -22,11 +29,24 @@
     "components": [
         {
             "required": true,
+            "file": "Interfaces/MenuInterface.php"
+        },
+        {
+            "required": true,
+            "file": "Menus/HealthStatusMenu.php"
+        },
+        {
+            "required": true,
+            "file": "Menus/MainMenu.php"
+        },
+        {
+            "required": true,
             "file": "SocialvoidAdmin.php"
         }
     ],
     "files": [
         "main",
+        "Menus/banner.txt",
         "package.json"
     ]
 }

@@ -83,6 +83,33 @@
         }
 
         /**
+         * Returns the health status of the module
+         *
+         * @param string $module_name
+         * @param bool $determine_correct_status_code
+         * @return int
+         */
+        public function getHealthStatus(string $module_name, bool $determine_correct_status_code=true): int
+        {
+            $heartbeat_path = $this->WorkingDirectory . DIRECTORY_SEPARATOR . $module_name;
+            if(file_exists($heartbeat_path) == false)
+                return HealthStatusCode::Terminated;
+
+            $status = explode(':', file_get_contents($heartbeat_path));
+            if(count($status) !== 3)
+                return HealthStatusCode::Fatal;
+
+            // If timeout is enabled and the correct status code is to be determined
+            if($status[1] > 0 && $determine_correct_status_code)
+            {
+                if((time() - $status[0]) > $status[1])
+                    return HealthStatusCode::Terminated;
+            }
+
+            return $status[2];
+        }
+
+        /**
          * Generates a simple syntax for the health state
          *
          * @param int $timestamp
