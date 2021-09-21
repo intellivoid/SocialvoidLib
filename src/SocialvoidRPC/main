@@ -63,16 +63,22 @@ use SocialvoidLib\SocialvoidLib;
             (int)SocialvoidRPC::getSocialvoidLib()->getRpcServerConfiguration()["GearmanPort"]
         );
 
-        SocialvoidRPC::$SocialvoidLib->getHealthMonitoring()->sync(SERVICE_NAME, HealthStatusCode::Ok);
-        SocialvoidRPC::$RpcServer->startService(
+        SocialvoidRPC::$RpcServer->getBackgroundWorker()->getSupervisor()->startWorkers(
             $current_directory . DIRECTORY_SEPARATOR . "rpc_worker",
-            SocialvoidRPC::getSocialvoidLib()->getRpcServerConfiguration()["Workers"]
-        );
-
+            SocialvoidRPC::$RpcServer->getServerName(),
+            SocialvoidRPC::getSocialvoidLib()->getRpcServerConfiguration()["Workers"]);
     }
     catch(Exception $e)
     {
         SocialvoidRPC::$SocialvoidLib->getHealthMonitoring()->sync(SERVICE_NAME, HealthStatusCode::Fatal);
         SocialvoidRPC::getLogHandler()->logException($e, "Main");
         exit(255);
+    }
+
+
+    while(true)
+    {
+        SocialvoidRPC::$RpcServer->getBackgroundWorker()->getSupervisor()->monitor(SocialvoidRPC::$RpcServer->getServerName());
+        SocialvoidRPC::$SocialvoidLib->getHealthMonitoring()->sync(SERVICE_NAME, HealthStatusCode::Ok);
+        usleep(500000);
     }
