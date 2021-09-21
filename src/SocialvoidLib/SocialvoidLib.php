@@ -19,9 +19,12 @@
     use acm\acm;
     use acm\Objects\Schema;
     use BackgroundWorker\BackgroundWorker;
+    use BackgroundWorker\Exceptions\ServerNotReachableException;
     use Exception;
+    use Longman\TelegramBot\Exception\TelegramException;
     use mysqli;
     use Redis;
+    use SocialvoidLib\Classes\HealthMonitoring;
     use SocialvoidLib\Exceptions\GenericInternal\BackgroundWorkerNotEnabledException;
     use SocialvoidLib\Exceptions\GenericInternal\ConfigurationError;
     use SocialvoidLib\Exceptions\GenericInternal\DependencyError;
@@ -194,6 +197,11 @@
          * @var mixed
          */
         private $RpcServerConfiguration;
+
+        /**
+         * @var HealthMonitoring|null
+         */
+        private $HealthMonitoring;
 
         /**
          * SocialvoidLib constructor.
@@ -501,6 +509,7 @@
          *
          * @return BackgroundWorker
          * @throws BackgroundWorkerNotEnabledException
+         * @throws ServerNotReachableException
          */
         public function getBackgroundWorker(): BackgroundWorker
         {
@@ -691,6 +700,8 @@
 
         /**
          * @return TelegramCdnManager
+         * @throws TelegramException
+         * @throws TelegramException
          */
         public function getTelegramCdnManager(): TelegramCdnManager
         {
@@ -735,5 +746,16 @@
         public function getWorkingLocationPath(): string
         {
             return $this->getDataStorageConfiguration()['WorkingLocation'];
+        }
+
+        /**
+         * @return HealthMonitoring
+         */
+        public function getHealthMonitoring(): HealthMonitoring
+        {
+            if($this->HealthMonitoring == null)
+                $this->HealthMonitoring = new HealthMonitoring($this);
+
+            return $this->HealthMonitoring;
         }
     }

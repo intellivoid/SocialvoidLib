@@ -18,6 +18,7 @@
     use SocialvoidLib\Exceptions\Internal\FileTooLargeException;
     use SocialvoidLib\Exceptions\Internal\FollowerDataNotFound;
     use SocialvoidLib\Exceptions\Internal\FollowerStateNotFoundException;
+    use SocialvoidLib\Exceptions\Internal\InvalidHealthStatusCodeException;
     use SocialvoidLib\Exceptions\Internal\InvalidImageTypeException;
     use SocialvoidLib\Exceptions\Internal\LikeRecordNotFoundException;
     use SocialvoidLib\Exceptions\Internal\NoPasswordAuthenticationAvailableException;
@@ -139,4 +140,9 @@
          * @see NoPasswordAuthenticationAvailableException
          */
         const NoPasswordAuthenticationAvailableException = 0x2019;
+
+        /**
+         * @see InvalidHealthStatusCodeException
+         */
+        const InvalidHealthStatusCodeException = 0x2020;
     }
