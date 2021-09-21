@@ -12,7 +12,8 @@
 
     use KimchiRPC\KimchiRPC;
     use ppm\ppm;
-    use SocialvoidLib\SocialvoidLib;
+use SocialvoidLib\Abstracts\StatusStates\HealthStatusCode;
+use SocialvoidLib\SocialvoidLib;
     use SocialvoidRPC\SocialvoidRPC;
     use VerboseAdventure\Abstracts\EventType;
     use VerboseAdventure\Classes\ErrorHandler;
@@ -28,6 +29,8 @@
 
     VerboseAdventure::setStdout(true); // Enable stdout
     ErrorHandler::registerHandlers(); // Register error handlers
+
+    define('SERVICE_NAME', 'rpc_server');
 
     $current_directory = getcwd();
 
@@ -51,6 +54,7 @@
     {
         // Prepare the service
         SocialvoidRPC::$SocialvoidLib = new SocialvoidLib();
+        SocialvoidRPC::$SocialvoidLib->getHealthMonitoring()->sync(SERVICE_NAME, HealthStatusCode::Starting);
         SocialvoidRPC::$RpcServer = new KimchiRPC("Socialvoid RPC");
         SocialvoidRPC::$RpcServer->setServerMode(\KimchiRPC\Abstracts\ServerMode::Service);
         SocialvoidRPC::$RpcServer->getBackgroundWorker()->getSupervisor()->setDisplayOutput(SocialvoidRPC::$RpcServer->getServerName(), true);
@@ -59,6 +63,7 @@
             (int)SocialvoidRPC::getSocialvoidLib()->getRpcServerConfiguration()["GearmanPort"]
         );
 
+        SocialvoidRPC::$SocialvoidLib->getHealthMonitoring()->sync(SERVICE_NAME, HealthStatusCode::Ok);
         SocialvoidRPC::$RpcServer->startService(
             $current_directory . DIRECTORY_SEPARATOR . "rpc_worker",
             SocialvoidRPC::getSocialvoidLib()->getRpcServerConfiguration()["Workers"]
@@ -67,6 +72,7 @@
     }
     catch(Exception $e)
     {
+        SocialvoidRPC::$SocialvoidLib->getHealthMonitoring()->sync(SERVICE_NAME, HealthStatusCode::Fatal);
         SocialvoidRPC::getLogHandler()->logException($e, "Main");
         exit(255);
     }

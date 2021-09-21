@@ -30,7 +30,7 @@
     VerboseAdventure::setStdout(true); // Enable stdout
     ErrorHandler::registerHandlers(); // Register error handlers
 
-    define('SERVICE_NAME', 'socialvoid_service');
+    define('SERVICE_NAME', 'service');
 
     $current_directory = getcwd();
 
@@ -81,6 +81,7 @@
     }
     catch(Exception $e)
     {
+        SocialvoidService::getSocialvoidLib()->getHealthMonitoring()->sync(SERVICE_NAME, HealthStatusCode::Fatal);
         SocialvoidService::getLogHandler()->logException($e, "Main");
         exit(255);
     }
