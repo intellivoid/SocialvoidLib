@@ -18,6 +18,7 @@
         namespace SocialvoidService;
 
     use BackgroundWorker\BackgroundWorker;
+    use SocialvoidLib\Abstracts\StatusStates\HealthStatusCode;
     use SocialvoidLib\SocialvoidLib;
     use VerboseAdventure\Abstracts\EventType;
     use VerboseAdventure\VerboseAdventure;

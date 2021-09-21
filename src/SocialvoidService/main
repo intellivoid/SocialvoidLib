@@ -12,6 +12,7 @@
 
     use BackgroundWorker\BackgroundWorker;
     use ppm\ppm;
+    use SocialvoidLib\Abstracts\StatusStates\HealthStatusCode;
     use SocialvoidLib\SocialvoidLib;
     use SocialvoidService\SocialvoidService;
     use VerboseAdventure\Abstracts\EventType;
@@ -28,6 +29,8 @@
 
     VerboseAdventure::setStdout(true); // Enable stdout
     ErrorHandler::registerHandlers(); // Register error handlers
+
+    define('SERVICE_NAME', 'service_name');
 
     $current_directory = getcwd();
 
@@ -51,6 +54,7 @@
     {
         SocialvoidService::$BackgroundWorker = new BackgroundWorker();
         SocialvoidService::$SocialvoidLib = new SocialvoidLib();
+        SocialvoidService::$SocialvoidLib->getHealthMonitoring()->sync(SERVICE_NAME, HealthStatusCode::Starting);
 
         SocialvoidService::getBackgroundWorker()->getClient()->addServer(
             SocialvoidService::getSocialvoidLib()->getServiceEngineConfiguration()["GearmanHost"],
@@ -87,6 +91,7 @@
     {
         SocialvoidService::getBackgroundWorker()->getSupervisor()->monitor("SocialvoidQueryService");
         SocialvoidService::getBackgroundWorker()->getSupervisor()->monitor("SocialvoidUpdateService");
+        SocialvoidService::getSocialvoidLib()->getHealthMonitoring()->sync(SERVICE_NAME, HealthStatusCode::Ok);
 
         usleep(500000);
     }

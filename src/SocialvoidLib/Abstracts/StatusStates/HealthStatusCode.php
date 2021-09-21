@@ -2,7 +2,7 @@
 
     namespace SocialvoidLib\Abstracts\StatusStates;
 
-    abstract class HeartBeatStatusCode
+    abstract class HealthStatusCode
     {
         /**
          * Indicates that the module is starting and isn't ready yet

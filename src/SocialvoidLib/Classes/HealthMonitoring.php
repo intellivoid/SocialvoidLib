@@ -2,7 +2,7 @@
 
     namespace SocialvoidLib\Classes;
 
-    use SocialvoidLib\Abstracts\StatusStates\HeartBeatStatusCode;
+    use SocialvoidLib\Abstracts\StatusStates\HealthStatusCode;
     use SocialvoidLib\Exceptions\Internal\InvalidHealthStatusCodeException;
     use SocialvoidLib\SocialvoidLib;
 
@@ -36,11 +36,11 @@
         {
             switch($status_code)
             {
-                case HeartBeatStatusCode::Starting:
-                case HeartBeatStatusCode::Ok:
-                case HeartBeatStatusCode::Failing:
-                case HeartBeatStatusCode::Fatal:
-                case HeartBeatStatusCode::Terminated:
+                case HealthStatusCode::Starting:
+                case HealthStatusCode::Ok:
+                case HealthStatusCode::Failing:
+                case HealthStatusCode::Fatal:
+                case HealthStatusCode::Terminated:
                     break;
                 default:
                     throw new InvalidHealthStatusCodeException('The given health status code \'' . $status_code . '\' is invalid');
