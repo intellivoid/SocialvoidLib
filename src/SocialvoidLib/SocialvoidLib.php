@@ -16,8 +16,8 @@
 
     namespace SocialvoidLib;
 
-    use acm\acm;
-    use acm\Objects\Schema;
+    use acm2\acm2;
+    use acm2\Objects\Schema;
     use BackgroundWorker\BackgroundWorker;
     use BackgroundWorker\Exceptions\ServerNotReachableException;
     use Exception;
@@ -53,9 +53,9 @@
     class SocialvoidLib
     {
         /**
-         * @var acm
+         * @var acm2
          */
-        private acm $acm;
+        private acm2 $acm;
 
         /**
          * @var mixed
@@ -211,37 +211,41 @@
         public function __construct()
         {
             // Advanced Configuration Manager
-            $this->acm = new acm(__DIR__, 'SocialvoidLib');
+            $this->acm = new acm2('SocialvoidLib');
 
             // Database Schema Configuration
             $DatabaseSchema = new Schema();
+            $DatabaseSchema->setName('Database');
             $DatabaseSchema->setDefinition("Host", "127.0.0.1");
             $DatabaseSchema->setDefinition("Port", "3306");
             $DatabaseSchema->setDefinition("Username", "root");
             $DatabaseSchema->setDefinition("Password", "");
             $DatabaseSchema->setDefinition("Name", 'socialvoid');
-            $this->acm->defineSchema('Database', $DatabaseSchema);
+            $this->acm->defineSchema($DatabaseSchema);
 
             // Network Schema Configuration
             $NetworkSchema = new Schema();
+            $NetworkSchema->setName('Network');
             $NetworkSchema->setDefinition("Domain", "socialvoid.cc");
             $NetworkSchema->setDefinition("Name", "Socialvoid");
             $NetworkSchema->setDefinition("UnauthorizedSessionTTL", 600);
             $NetworkSchema->setDefinition("AuthorizedSessionTTL", 259200);
-            $this->acm->defineSchema("Network", $NetworkSchema);
+            $this->acm->defineSchema($NetworkSchema);
 
             // RPC Schema Configuration
             $RpcSchema = new Schema();
+            $RpcSchema->setName('RpcServer');
             $RpcSchema->setDefinition("EnableBackgroundWorker", True);
             $RpcSchema->setDefinition("Workers", 100);
             $RpcSchema->setDefinition("GearmanHost", "127.0.0.1");
             $RpcSchema->setDefinition("GearmanPort", 4730);
             $RpcSchema->setDefinition("ServerName", "Socialvoid RPC");
             $RpcSchema->setDefinition("MaxRequests", 20);
-            $this->acm->defineSchema("RpcServer", $RpcSchema);
+            $this->acm->defineSchema($RpcSchema);
 
             // Service Engine Schema Configuration
             $ServiceEngineSchema = new Schema();
+            $ServiceEngineSchema->setName('ServiceEngine');
             $ServiceEngineSchema->setDefinition("EnableBackgroundWorker", True);
             $ServiceEngineSchema->setDefinition("GearmanHost", "127.0.0.1");
             $ServiceEngineSchema->setDefinition("GearmanPort", 4730);
@@ -249,27 +253,30 @@
             $ServiceEngineSchema->setDefinition("UpdateWorkers", 20);
             $ServiceEngineSchema->setDefinition("HeavyWorkers", 5);
             $ServiceEngineSchema->setDefinition("DisplayOutput", true);
-            $this->acm->defineSchema("ServiceEngine", $ServiceEngineSchema);
+            $this->acm->defineSchema($ServiceEngineSchema);
 
             // Engine Schema Configuration
             $EngineSchema = new Schema();
+            $EngineSchema->setName('Engine');
             $EngineSchema->setDefinition("MaxPeerResolveCacheCount", 20);
             $EngineSchema->setDefinition("TimelineMaxSize", 3200);
             $EngineSchema->setDefinition("TimelineChunkSize", 20);
-            $this->acm->defineSchema("Engine", $EngineSchema);
+            $this->acm->defineSchema($EngineSchema);
 
             // CDN Schema Configuration
             $CdnSchema = new Schema();
+            $CdnSchema->setName('CDN');
             $CdnSchema->setDefinition("CdnEndpoint", "https://cdn.socialvoid.cc");
             $CdnSchema->setDefinition("MaxFileUploadSize", 26214400); // 25 MB
             $CdnSchema->setDefinition("TelegramCdnEnabled", True);
             $CdnSchema->setDefinition("TelegramCdnEnabled", True);
             $CdnSchema->setDefinition("TelegramBotToken", "<BOT TOKEN>");
             $CdnSchema->setDefinition("TelegramChannels", []);
-            $this->acm->defineSchema("CDN", $CdnSchema);
+            $this->acm->defineSchema($CdnSchema);
 
             // Redis Basic Cache (Entity resolve cache)
             $RedisBasicCacheSchema = new Schema();
+            $RedisBasicCacheSchema->setName('RedisBasicCache');
             $RedisBasicCacheSchema->setDefinition("Enabled", True);
             $RedisBasicCacheSchema->setDefinition("UseAuthentication", True);
             $RedisBasicCacheSchema->setDefinition("UseCompression", True);
@@ -292,14 +299,18 @@
             $RedisBasicCacheSchema->setDefinition("RedisHost", "127.0.0.1");
             $RedisBasicCacheSchema->setDefinition("RedisPort", 6379);
             $RedisBasicCacheSchema->setDefinition("Password", "admin");
-            $this->acm->defineSchema("RedisBasicCache", $RedisBasicCacheSchema);
+            $this->acm->defineSchema($RedisBasicCacheSchema);
 
             // Data storage Schema Configuration
             $DataStorageSchema = new Schema();
+            $DataStorageSchema->setName('DataStorage');
             $DataStorageSchema->setDefinition("UserAvatarsLocation", "/var/socialvoid/avatars");
             $DataStorageSchema->setDefinition("LegalDocumentsLocation", "/var/socialvoid/legal");
             $DataStorageSchema->setDefinition("WorkingLocation", "/var/socialvoid/lib");
-            $this->acm->defineSchema("DataStorage", $DataStorageSchema);
+            $this->acm->defineSchema($DataStorageSchema);
+
+            // Save any changes
+            $this->acm->updateConfiguration();
 
             try
             {
@@ -364,9 +375,9 @@
 
 
         /**
-         * @return acm
+         * @return acm2
          */
-        public function getAcm(): acm
+        public function getAcm(): acm2
         {
             return $this->acm;
         }
