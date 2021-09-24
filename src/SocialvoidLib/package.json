@@ -91,10 +91,6 @@
     "components": [
         {
             "required": true,
-            "file": "Abstracts/CoaAvatarSize.php"
-        },
-        {
-            "required": true,
             "file": "Abstracts/ContentSource.php"
         },
         {
@@ -147,10 +143,6 @@
         },
         {
             "required": true,
-            "file": "Abstracts/SearchMethods/CoaAuthenticationSearchMethod.php"
-        },
-        {
-            "required": true,
             "file": "Abstracts/SearchMethods/FollowerDataSearchMethod.php"
         },
         {
@@ -172,10 +164,6 @@
         {
             "required": true,
             "file": "Abstracts/StandardErrorCodeType.php"
-        },
-        {
-            "required": true,
-            "file": "Abstracts/StatusStates/CoaAuthenticationStatus.php"
         },
         {
             "required": true,
@@ -388,10 +376,6 @@
         {
             "required": true,
             "file": "Exceptions/Internal/CdnFileNotFoundException.php"
-        },
-        {
-            "required": true,
-            "file": "Exceptions/Internal/CoaAuthenticationRecordNotFoundException.php"
         },
         {
             "required": true,
@@ -727,10 +711,6 @@
         },
         {
             "required": true,
-            "file": "Objects/CoaAuthentication.php"
-        },
-        {
-            "required": true,
             "file": "Objects/ContentResults.php"
         },
         {
@@ -864,14 +844,6 @@
         {
             "required": true,
             "file": "Objects/Timeline.php"
-        },
-        {
-            "required": true,
-            "file": "Objects/User/CoaAvatar.php"
-        },
-        {
-            "required": true,
-            "file": "Objects/User/CoaUserEntity.php"
         },
         {
             "required": true,

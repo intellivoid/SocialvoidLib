@@ -13,13 +13,11 @@
     use SocialvoidLib\Exceptions\Internal\AlreadyAuthenticatedToNetwork;
     use SocialvoidLib\Exceptions\Internal\AuthenticationFailureException;
     use SocialvoidLib\Exceptions\Internal\CdnFileNotFoundException;
-    use SocialvoidLib\Exceptions\Internal\CoaAuthenticationRecordNotFoundException;
     use SocialvoidLib\Exceptions\Internal\EntityWithoutAccessException;
     use SocialvoidLib\Exceptions\Internal\FileTooLargeException;
     use SocialvoidLib\Exceptions\Internal\FollowerDataNotFound;
     use SocialvoidLib\Exceptions\Internal\FollowerStateNotFoundException;
     use SocialvoidLib\Exceptions\Internal\InvalidHealthStatusCodeException;
-    use SocialvoidLib\Exceptions\Internal\InvalidImageTypeException;
     use SocialvoidLib\Exceptions\Internal\LikeRecordNotFoundException;
     use SocialvoidLib\Exceptions\Internal\NoPasswordAuthenticationAvailableException;
     use SocialvoidLib\Exceptions\Internal\NoRecoveryCodesAvailableException;
@@ -30,7 +28,6 @@
     use SocialvoidLib\Exceptions\Internal\ReplyRecordNotFoundException;
     use SocialvoidLib\Exceptions\Internal\RepostRecordNotFoundException;
     use SocialvoidLib\Exceptions\Internal\TimeBasedPrivateSignatureAlreadyExistsException;
-    use SocialvoidLib\Exceptions\Internal\TwoFactorAuthenticationRequiredException;
     use SocialvoidLib\Exceptions\Internal\UserTimelineNotFoundException;
 
     /**
@@ -100,11 +97,6 @@
          * @see QuoteRecordNotFoundException
          */
         const QuoteRecordNotFoundException = 0x2011;
-
-        /**
-         * @see CoaAuthenticationRecordNotFoundException
-         */
-        const CoaAuthenticationRecordNotFoundException = 0x2012;
 
         /**
          * @see ReplyRecordNotFoundException

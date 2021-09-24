@@ -85,18 +85,6 @@
         public $RecoveryCodesLastUpdated;
 
         /**
-         * The ID of the Application used to authenticate the user
-         *
-         * @var string|null
-         */
-        public $CoaApplicationId;
-
-        /**
-         * @var string
-         */
-        public $CoaApplicationIdLastUpdatedTimestamp;
-
-        /**
          * Generates a new set of recovery codes, if a set already exists
          * while 'override' is set to False, an exception will be thrown
          *
@@ -107,6 +95,7 @@
          * @throws BadLengthException
          * @throws SecuredRandomProcessorNotFoundException
          * @throws RecoveryCodesAlreadyExistsException
+         * @noinspection PhpConditionCheckedByNextConditionInspection
          */
         public function generateRecoveryCodes(bool $override=False): array
         {
@@ -125,7 +114,7 @@
             // Generate 12 sets of recovery codes
             for ($i = 0; $i < 12; $i++)
                 $this->RecoveryCodes[] = Hashing::generateRecoveryCode();
-            $this->RecoveryCodesLastUpdated = (int)time();
+            $this->RecoveryCodesLastUpdated = time();
 
             return $this->RecoveryCodes;
         }
@@ -190,7 +179,7 @@
         public function disableRecoveryCodes(): void
         {
             $this->RecoveryCodes = null;
-            $this->RecoveryCodesLastUpdated = (int)time();
+            $this->RecoveryCodesLastUpdated = time();
         }
 
         /**
@@ -218,7 +207,7 @@
             }
 
             $this->TimeBasedPrivateSignature = Crypto::BuildSecretSignature(32);
-            $this->TimeBasedPrivateSignatureLastUpdated = (int)time();
+            $this->TimeBasedPrivateSignatureLastUpdated = time();
 
             return $this->TimeBasedPrivateSignature;
         }
@@ -269,7 +258,7 @@
         public function disableTimeBasedPrivateSignature(): void
         {
             $this->TimeBasedPrivateSignature = null;
-            $this->TimeBasedPrivateSignatureLastUpdated = (int)time();
+            $this->TimeBasedPrivateSignatureLastUpdated = time();
         }
 
         /**
@@ -284,7 +273,7 @@
                 throw new InvalidPasswordException("The given password is considered unsafe or invalid", $password);
 
             $this->Password = Hashing::password($password);
-            $this->PasswordLastUpdated = (int)time();
+            $this->PasswordLastUpdated = time();
         }
 
         /**
@@ -293,33 +282,11 @@
         public function disablePassword(): void
         {
             $this->Password = null;
-            $this->PasswordLastUpdated = (int)time();
+            $this->PasswordLastUpdated = time();
         }
 
         /**
-         * Sets the COA Application ID used to authenticate the user
-         *
-         * @param string|null $application_id
-         */
-        public function setCoaApplicationId(?string $application_id): void
-        {
-            $this->CoaApplicationId = $application_id;
-            $this->CoaApplicationIdLastUpdatedTimestamp = (int)time();
-        }
-
-        /**
-         * Disables the COA Application ID
-         */
-        public function disableCoaApplicationId(): void
-        {
-            $this->CoaApplicationId = null;
-            $this->CoaApplicationIdLastUpdatedTimestamp = (int)time();
-        }
-
-        // TODO: Add coa authentication implementation
-
-        /**
-         * Validates the two factor authentication code
+         * Validates the two-factor authentication code
          *
          * @param string $input
          * @param bool $update
@@ -370,6 +337,7 @@
          * @return bool
          * @throws IncorrectLoginCredentialsException
          * @throws NoPasswordAuthenticationAvailableException
+         * @throws InvalidPasswordException
          */
         public function passwordAuthentication(string $password): bool
         {
@@ -399,8 +367,6 @@
                 "time_based_private_signature_last_updated" => $this->TimeBasedPrivateSignatureLastUpdated,
                 "recovery_codes" => $this->RecoveryCodes,
                 "recovery_codes_last_updated" => $this->RecoveryCodesLastUpdated,
-                "coa_application_id" => $this->CoaApplicationId,
-                "coa_application_id_last_updated" => $this->CoaApplicationIdLastUpdatedTimestamp
             ];
         }
 
@@ -431,12 +397,6 @@
 
             if(isset($data["recovery_codes_last_updated"]))
                 $UserAuthenticationPropertiesObject->RecoveryCodesLastUpdated = $data["recovery_codes_last_updated"];
-
-            if(isset($data["coa_application_id"]))
-                $UserAuthenticationPropertiesObject->CoaApplicationId = $data["coa_application_id"];
-
-            if(isset($data["coa_application_id_last_updated"]))
-                $UserAuthenticationPropertiesObject->CoaApplicationIdLastUpdatedTimestamp = $data["coa_application_id_last_updated"];
 
             return $UserAuthenticationPropertiesObject;
         }

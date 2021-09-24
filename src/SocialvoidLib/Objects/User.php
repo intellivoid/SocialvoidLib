@@ -28,7 +28,6 @@
     use SocialvoidLib\Exceptions\Standard\Authentication\PrivateAccessTokenRequiredException;
     use SocialvoidLib\Exceptions\Standard\Authentication\TwoFactorAuthenticationRequiredException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidUsernameException;
-    use SocialvoidLib\Objects\User\CoaUserEntity;
     use SocialvoidLib\Objects\User\Profile;
     use SocialvoidLib\Objects\User\UserAuthenticationProperties;
     use SocialvoidLib\Objects\User\UserProperties;
@@ -128,13 +127,6 @@
         public $PrivateAccessToken;
 
         /**
-         * The COA User Entity data collected from the COA provider
-         *
-         * @var CoaUserEntity
-         */
-        public $CoaUserEntity;
-
-        /**
          * The profile data of the user
          *
          * @var Profile
@@ -185,7 +177,6 @@
             $this->Flags = [];
             $this->Properties = new UserProperties();
             $this->AuthenticationProperties = new UserAuthenticationProperties();
-            $this->CoaUserEntity = new CoaUserEntity();
             $this->Profile = new Profile();
             $this->Settings = new UserSettings();
         }
@@ -259,9 +250,6 @@
                 case UserAuthenticationMethod::PrivateAccessToken:
                     throw new PrivateAccessTokenRequiredException("The user uses a private access token to authenticate");
 
-                case UserAuthenticationMethod::CrossOverAuthentication:
-                    throw new AuthenticationNotApplicableException("The user uses COA to authenticate");
-
             }
 
             return true;
@@ -274,7 +262,6 @@
         {
             $this->AuthenticationMethod = UserAuthenticationMethod::None;
             $this->AuthenticationProperties->disablePassword();
-            $this->AuthenticationProperties->disableCoaApplicationId();
             $this->AuthenticationProperties->disableRecoveryCodes();
             $this->AuthenticationProperties->disableTimeBasedPrivateSignature();
         }
@@ -319,7 +306,6 @@
                 "authentication_method" => $this->AuthenticationMethod,
                 "authentication_properties" => $this->AuthenticationProperties->toArray(),
                 "private_access_token" => $this->PrivateAccessToken,
-                "coa_user_entity" => $this->CoaUserEntity->toArray(),
                 "profile" => $this->Profile->toArray(),
                 "display_picture_document" => $this->DisplayPictureDocument->toArray(),
                 "settings" => $this->Settings->toArray(),
@@ -382,9 +368,6 @@
 
             if(isset($data["private_access_token"]))
                 $UserObject->PrivateAccessToken = $data["private_access_token"];
-
-            if(isset($data["coa_user_entity"]))
-                $UserObject->CoaUserEntity = CoaUserEntity::fromArray($data["coa_user_entity"]);
 
             if(isset($data["profile"]))
                 $UserObject->Profile = Profile::fromArray($data["profile"]);

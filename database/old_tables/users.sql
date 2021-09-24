@@ -1,4 +1,13 @@
-create table users
+/*
+ * Copyright (c) 2017-2021. Intellivoid Technologies
+ *
+ * All rights reserved, SocialvoidLib was written by Zi Xing Narrakas <netkas@intellivoid.net> licensed by
+ * Intellivoid Technologies, no part of this source code is open source. SocialvoidLib is a closed-source
+ * solution for the Socialvoid Community Standard, if you wish to redistribute this source code you
+ * must have a written permission from Intellivoid Technologies to do so.
+ */
+
+create table if not exists users
 (
     id                        int auto_increment comment 'The Unique Internal Database ID for this record',
     public_id                 varchar(256) null comment 'The Unique Public ID for this record',
@@ -12,6 +21,7 @@ create table users
     authentication_method     varchar(64)  null comment 'The authentication method used by the user',
     authentication_properties blob         null comment 'ZiProto encoded blob of the Authentication Properties',
     private_access_token      int          null comment 'The private access token of the the user used to access the network without full-auth, can be null if none is set.',
+    coa_user_entity           blob         null comment 'ZiProto encoded blob The COA User entity pulled from the provider if the user uses COA',
     profile                   blob         null comment 'ZiProto encoded blob of the user profile data',
     settings                  blob         null comment 'ZiProto encoded blob of the settings configuration made by the user',
     privacy_state             varchar(64)  null comment 'The Privacy State of the user account',

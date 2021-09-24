@@ -87,14 +87,24 @@
          * @param string $first_name
          * @param string|null $last_name
          * @return User
+         * @throws AvatarGeneratorException
+         * @throws AvatarNotFoundException
+         * @throws CacheException
+         * @throws CannotGetOriginalImageException
          * @throws DatabaseException
+         * @throws DocumentNotFoundException
+         * @throws FileNotFoundException
+         * @throws ImageTooSmallException
          * @throws InvalidFirstNameException
          * @throws InvalidLastNameException
          * @throws InvalidSearchMethodException
          * @throws InvalidUsernameException
+         * @throws InvalidZimageFileException
          * @throws PeerNotFoundException
+         * @throws SizeNotSetException
+         * @throws UnsupportedAvatarGeneratorException
+         * @throws UnsupportedImageTypeException
          * @throws UsernameAlreadyExistsException
-         * @throws CacheException
          */
         public function registerUser(string $username, string $first_name, string $last_name=null): User
         {
@@ -119,10 +129,9 @@
 
             $UserProperties = new User\UserProperties();
             $UserAuthenticationProperties = new User\UserAuthenticationProperties();
-            $CoaUserEntity = new User\CoaUserEntity();
             $Settings = new User\UserSettings();
 
-            $timestamp = (int)time();
+            $timestamp = time();
             $public_id = BaseIdentification::userPublicId($timestamp);
 
             $Query = QueryBuilder::insert_into("users", [
@@ -137,12 +146,11 @@
                 "authentication_method" => $this->socialvoidLib->getDatabase()->real_escape_string(UserAuthenticationMethod::None),
                 "authentication_properties" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($UserAuthenticationProperties->toArray())),
                 "private_access_token" => null,
-                "coa_user_entity" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($CoaUserEntity->toArray())),
                 "profile" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Profile->toArray())),
                 "settings" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Settings->toArray())),
                 "privacy_state" => $this->socialvoidLib->getDatabase()->real_escape_string(UserPrivacyState::Public),
-                "last_activity_timestamp" => (int)$timestamp,
-                "created_timestamp" => (int)$timestamp
+                "last_activity_timestamp" => $timestamp,
+                "created_timestamp" => $timestamp
             ]);
 
             $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
@@ -168,10 +176,20 @@
          * @param string $search_method
          * @param string|int $value
          * @return User
+         * @throws AvatarGeneratorException
+         * @throws AvatarNotFoundException
          * @throws CacheException
+         * @throws CannotGetOriginalImageException
          * @throws DatabaseException
+         * @throws DocumentNotFoundException
+         * @throws FileNotFoundException
+         * @throws ImageTooSmallException
          * @throws InvalidSearchMethodException
+         * @throws InvalidZimageFileException
          * @throws PeerNotFoundException
+         * @throws SizeNotSetException
+         * @throws UnsupportedAvatarGeneratorException
+         * @throws UnsupportedImageTypeException
          */
         public function getUser(string $search_method, $value): User
         {
@@ -217,7 +235,6 @@
                 "authentication_method",
                 "authentication_properties",
                 "private_access_token",
-                "coa_user_entity",
                 "profile",
                 "settings",
                 "privacy_state",
@@ -240,7 +257,6 @@
                     $Row["properties"] = ZiProto::decode($Row["properties"]);
                     $Row["flags"] = ZiProto::decode($Row["flags"]);
                     $Row["authentication_properties"] = ZiProto::decode($Row["authentication_properties"]);
-                    $Row["coa_user_entity"] = ZiProto::decode($Row["coa_user_entity"]);
                     $Row["profile"] = ZiProto::decode($Row["profile"]);
                     $Row["settings"] = ZiProto::decode($Row["settings"]);
 
@@ -271,19 +287,18 @@
          */
         public function updateUser(User $user): User
         {
-            $user->LastActivityTimestamp = (int)time();
+            $user->LastActivityTimestamp = time();
             $Query = QueryBuilder::update("users", [
                 "username" => $this->socialvoidLib->getDatabase()->real_escape_string($user->Username),
                 "username_safe" => $this->socialvoidLib->getDatabase()->real_escape_string($user->UsernameSafe),
                 "network" => $this->socialvoidLib->getDatabase()->real_escape_string($user->Network),
                 "status" => $user->Status,
-                "status_change_timestamp" => ($user->StatusChangeTimestamp !== null ? (int)$user->StatusChangeTimestamp : null),
+                "status_change_timestamp" => ($user->StatusChangeTimestamp !== null ? $user->StatusChangeTimestamp : null),
                 "properties" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($user->Properties->toArray())),
                 "flags" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($user->Flags)),
                 "authentication_method" => $this->socialvoidLib->getDatabase()->real_escape_string($user->AuthenticationMethod),
                 "authentication_properties" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($user->AuthenticationProperties->toArray())),
                 "private_access_token" => ($user->PrivateAccessToken !== null ? $this->socialvoidLib->getDatabase()->real_escape_string($user->PrivateAccessToken) : null),
-                "coa_user_entity" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($user->CoaUserEntity->toArray())),
                 "profile" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($user->Profile->toArray())),
                 "settings" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($user->Settings->toArray())),
                 "privacy_state" => $this->socialvoidLib->getDatabase()->real_escape_string($user->PrivacyState),
@@ -333,12 +348,22 @@
          * @param bool $skip_errors
          * @param int $utilization
          * @return User[]
+         * @throws AvatarGeneratorException
+         * @throws AvatarNotFoundException
          * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
+         * @throws CannotGetOriginalImageException
          * @throws DatabaseException
+         * @throws DocumentNotFoundException
+         * @throws FileNotFoundException
+         * @throws ImageTooSmallException
          * @throws InvalidSearchMethodException
+         * @throws InvalidZimageFileException
          * @throws PeerNotFoundException
          * @throws ServiceJobException
+         * @throws SizeNotSetException
+         * @throws UnsupportedAvatarGeneratorException
+         * @throws UnsupportedImageTypeException
          */
         public function getMultipleUsers(array $query, bool $skip_errors=True, int $utilization=100): array
         {
