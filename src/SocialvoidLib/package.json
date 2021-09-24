@@ -627,10 +627,6 @@
         },
         {
             "required": true,
-            "file": "Managers/CoaAuthenticationManager.php"
-        },
-        {
-            "required": true,
             "file": "Managers/DocumentsManager.php"
         },
         {

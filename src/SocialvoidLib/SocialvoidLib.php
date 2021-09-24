@@ -30,7 +30,6 @@
     use SocialvoidLib\Exceptions\GenericInternal\DependencyError;
     use SocialvoidLib\Exceptions\GenericInternal\RedisCacheException;
     use SocialvoidLib\Managers\BasicRedisCacheManager;
-    use SocialvoidLib\Managers\CoaAuthenticationManager;
     use SocialvoidLib\Managers\DocumentsManager;
     use SocialvoidLib\Managers\FollowerDataManager;
     use SocialvoidLib\Managers\FollowerStateManager;
@@ -149,11 +148,6 @@
          * @var DocumentsManager|null
          */
         private $DocumentsManager;
-
-        /**
-         * @var CoaAuthenticationManager|null
-         */
-        private $CoaAuthenticationManager;
 
         /**
          * @var ServiceJobManager|null
@@ -621,16 +615,6 @@
             if($this->ReplyRecordManager == null)
                 $this->ReplyRecordManager = new ReplyRecordManager($this);
             return $this->ReplyRecordManager;
-        }
-
-        /**
-         * @return CoaAuthenticationManager
-         */
-        public function getCoaAuthenticationManager(): CoaAuthenticationManager
-        {
-            if($this->CoaAuthenticationManager == null)
-                $this->CoaAuthenticationManager = new CoaAuthenticationManager($this);
-            return $this->CoaAuthenticationManager;
         }
 
         /**
