@@ -232,6 +232,15 @@
             $NetworkSchema->setDefinition("AuthorizedSessionTTL", 259200);
             $this->acm->defineSchema($NetworkSchema);
 
+            // Slave Servers Schema Configuration
+            $SlaveServerSchema = new Schema();
+            $SlaveServerSchema->setName('SlaveServers');
+            $SlaveServerSchema->setDefinition('Enabled', true);
+            $SlaveServerSchema->setDefinition('DatabaseSlaves', [
+                'mysql://servername:user:password@127.0.0.1:20801/db_name'
+            ]);
+            $this->acm->defineSchema($SlaveServerSchema);
+
             // RPC Schema Configuration
             $RpcSchema = new Schema();
             $RpcSchema->setName('RpcServer');
