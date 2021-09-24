@@ -101,7 +101,7 @@
         {
             if(gettype($this->SessionID) !== "string")
                 throw new SessionNotFoundException("The requested session was not found in the network");
-            if(strlen(Utilities::removeSlaveHashHash($this->SessionID)) !== 128)
+            if(strlen(Utilities::removeSlaveHashHash($this->SessionID)) !== 45)
                 throw new SessionNotFoundException("The requested session was not found in the network");
 
             if(gettype($this->ClientPublicHash) !== "string")
@@ -115,9 +115,6 @@
                 throw new BadSessionChallengeAnswerException("The client private hash is invalid (-s5)");
             if(strlen($this->ChallengeAnswer) !== 40)
                 throw new BadSessionChallengeAnswerException("The client private hash is invalid (-s6)");
-            // TODO: Fix the bad regex
-            //if(preg_match(RegexPatterns::Alphanumeric, $this->ChallengeAnswer))
-                //throw new BadSessionChallengeAnswerException("The client private hash is invalid (-s7)");
 
             return true;
         }

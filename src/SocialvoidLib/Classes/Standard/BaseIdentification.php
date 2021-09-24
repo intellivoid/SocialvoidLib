@@ -14,6 +14,7 @@
     use SocialvoidLib\InputTypes\DocumentInput;
     use SocialvoidLib\InputTypes\SessionClient;
     use SocialvoidLib\Objects\ActiveSession\SessionSecurity;
+    use Symfony\Component\Uid\Uuid;
 
     /**
      * Class BaseIdentification
@@ -42,11 +43,11 @@
          */
         public static function sessionId(SessionClient $session_client, SessionSecurity $session_security): string
         {
-            $client_hash = hash("sha256", json_encode($session_client->toArray()));
-            $security_hash = hash("sha256", json_encode($session_security->toArray()));
+            $client_hash = hash("md5", json_encode($session_client->toArray()));
+            $security_hash = hash("md5", json_encode($session_security->toArray()));
             $entity_pepper = Hashing::pepper($client_hash . $security_hash);
 
-            return hash("sha512", $client_hash . $security_hash . $entity_pepper);
+            return Uuid::v4()->toRfc4122() . '-' . hash("crc32", $client_hash . $security_hash . $entity_pepper);
         }
 
         /**

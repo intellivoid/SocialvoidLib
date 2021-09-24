@@ -88,6 +88,7 @@
             $Timestamp = time();
             $ExpiresTimestamp = $Timestamp + 600; // 10 Minutes due to no authentication
             $ID = BaseIdentification::sessionId($sessionClient, $SessionSecurity);
+            var_dump(strlen($ID));
             $SelectedServer = $this->socialvoidLib->getSlaveManager()->getRandomMySqlServer(true);
 
             /** @noinspection PhpBooleanCanBeSimplifiedInspection */
