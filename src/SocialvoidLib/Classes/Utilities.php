@@ -737,4 +737,38 @@ namespace SocialvoidLib\Classes;
 
             return self::sortTextEntities($results);
         }
+
+        /**
+         * Returns the slave hash from an identifier
+         *
+         * @param string $input
+         * @return string|null
+         */
+        public static function getSlaveHashHash(string $input): ?string
+        {
+            $exploded = explode('-', $input);
+
+            if(count($exploded) > 1)
+                return $exploded[0];
+
+            return null;
+        }
+
+        /**
+         * Removes the slave hash from the ID
+         *
+         * @param string $input
+         * @return string
+         */
+        public static function removeSlaveHashHash(string $input): string
+        {
+            $exploded = explode('-', $input);
+
+            if(count($exploded) > 1)
+            {
+                array_shift($exploded);
+            }
+
+            return implode('-', $exploded);
+        }
     }

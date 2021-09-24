@@ -41,6 +41,7 @@
     use SocialvoidLib\Managers\RepostsRecordManager;
     use SocialvoidLib\Managers\ServiceJobManager;
     use SocialvoidLib\Managers\SessionManager;
+    use SocialvoidLib\Managers\SlaveManager;
     use SocialvoidLib\Managers\TelegramCdnManager;
     use SocialvoidLib\Managers\TimelineManager;
     use SocialvoidLib\Managers\UserManager;
@@ -209,6 +210,11 @@
         private $SlaveServerConfiguration;
 
         /**
+         * @var SlaveManager
+         */
+        private $SlaveManager;
+
+        /**
          * SocialvoidLib constructor.
          * @throws ConfigurationError
          * @throws DependencyError
@@ -240,7 +246,7 @@
             // Slave Servers Schema Configuration
             $SlaveServerSchema = new Schema();
             $SlaveServerSchema->setName('SlaveServers');
-            $SlaveServerSchema->setDefinition('DatabaseSlaves', [
+            $SlaveServerSchema->setDefinition('MySqlSlaves', [
                 'mysql://main:admin:admin@127.0.0.1:3306/socialvoid'
             ]);
             $this->acm->defineSchema($SlaveServerSchema);
@@ -341,6 +347,8 @@
             {
                 throw new ConfigurationError("There was an error while trying to load ACM", 0, $e);
             }
+
+            $this->SlaveManager = new SlaveManager($this);
 
             // Initialize constants
             self::defineLibConstant("SOCIALVOID_LIB_MAX_PEER_RESOLVE_CACHE_COUNT", $this->getEngineConfiguration()["MaxPeerResolveCacheCount"]);
@@ -509,6 +517,14 @@
             if($this->FollowerDataManager == null)
                 $this->FollowerDataManager = new FollowerDataManager($this);
             return $this->FollowerDataManager;
+        }
+
+        /**
+         * @return SlaveManager
+         */
+        public function getSlaveManager(): SlaveManager
+        {
+            return $this->SlaveManager;
         }
 
         /**

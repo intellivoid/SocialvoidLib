@@ -1,6 +1,7 @@
-<?php /** @noinspection PhpMissingFieldTypeInspection */
+<?php
+    /** @noinspection PhpMissingFieldTypeInspection */
 
-namespace SocialvoidLib\Managers;
+    namespace SocialvoidLib\Managers;
 
     use mysqli;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSlaveHashException;
@@ -23,15 +24,16 @@ namespace SocialvoidLib\Managers;
 
         /**
          * @param SocialvoidLib $socialvoidLib
-         * @throws InvalidStringFormatException
+         * @noinspection PhpDocMissingThrowsInspection
          */
         public function __construct(SocialvoidLib $socialvoidLib)
         {
             $this->socialvoidLib = $socialvoidLib;
             $this->MySqlConnections = [];
 
-            foreach($this->socialvoidLib->getSlaveServerConfiguration()['DatabaseSlaves'] as $databaseSlave)
+            foreach($this->socialvoidLib->getSlaveServerConfiguration()['MySqlSlaves'] as $databaseSlave)
             {
+                /** @noinspection PhpUnhandledExceptionInspection */
                 $parsedSlave = self::createMySqlPointerFromString($databaseSlave);
                 $this->MySqlConnections[$parsedSlave->HashPointer] = new EstablishedMySqlConnection($parsedSlave);
             }
@@ -73,7 +75,7 @@ namespace SocialvoidLib\Managers;
 
                 if(count($alive_connections) > 0)
                 {
-                    return $alive_connections[array_rand($alive_connections)];
+                    return $this->MySqlConnections[$alive_connections[array_rand($alive_connections)]];
                 }
             }
 

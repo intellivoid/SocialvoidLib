@@ -19,12 +19,14 @@
     use SocialvoidLib\Abstracts\Types\CacheEntryObjectType;
     use SocialvoidLib\Abstracts\UserAuthenticationMethod;
     use SocialvoidLib\Classes\Standard\BaseIdentification;
+    use SocialvoidLib\Classes\Utilities;
     use SocialvoidLib\Exceptions\GenericInternal\CacheException;
     use SocialvoidLib\Exceptions\GenericInternal\CacheMissedException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\GenericInternal\DependencyError;
     use SocialvoidLib\Exceptions\GenericInternal\DeprecatedComponentException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
+    use SocialvoidLib\Exceptions\GenericInternal\InvalidSlaveHashException;
     use SocialvoidLib\Exceptions\GenericInternal\RedisCacheException;
     use SocialvoidLib\Exceptions\GenericInternal\SecurityException;
     use SocialvoidLib\Exceptions\Standard\Authentication\SessionNotFoundException;
@@ -65,6 +67,7 @@
          * @return SessionEstablished
          * @throws DatabaseException
          * @throws SecurityException
+         * @noinspection PhpRedundantOptionalArgumentInspection
          */
         public function createSession(SessionClient $sessionClient, string $ip_address): SessionEstablished
         {
@@ -85,6 +88,7 @@
             $Timestamp = time();
             $ExpiresTimestamp = $Timestamp + 600; // 10 Minutes due to no authentication
             $ID = BaseIdentification::sessionId($sessionClient, $SessionSecurity);
+            $SelectedServer = $this->socialvoidLib->getSlaveManager()->getRandomMySqlServer(true);
 
             /** @noinspection PhpBooleanCanBeSimplifiedInspection */
             $Query = QueryBuilder::insert_into("sessions", [
@@ -104,11 +108,11 @@
                 "expires_timestamp" => $ExpiresTimestamp
             ]);
 
-            $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
+            $QueryResults = $SelectedServer->getConnection()->query($Query);
             if($QueryResults)
             {
                 $SessionEstablishedObject = new SessionEstablished();
-                $SessionEstablishedObject->ID = $ID;
+                $SessionEstablishedObject->ID = $SelectedServer->MysqlServerPointer->HashPointer . '-' . $ID;
                 $SessionEstablishedObject->Challenge = $SessionSecurity->HashChallenge;
 
                 return $SessionEstablishedObject;
@@ -116,7 +120,7 @@
             else
             {
                 throw new DatabaseException("There was an error while trying to create a session",
-                    $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
+                    $Query, $SelectedServer->getConnection()->error, $SelectedServer->getConnection()
                 );
             }
         }
@@ -131,6 +135,7 @@
          * @throws InvalidSearchMethodException
          * @throws SessionNotFoundException
          * @throws CacheException
+         * @throws InvalidSlaveHashException
          * @noinspection PhpDocMissingThrowsInspection
          */
         public function getSession(string $search_method, string $value): ActiveSession
@@ -158,6 +163,13 @@
                 if($CachedPost !== null) return $CachedPost;
             }
 
+            $slaveHash = Utilities::getSlaveHashHash($value);
+
+            if($slaveHash == null)
+                throw new SessionNotFoundException();
+
+            $SelectedServer = $this->socialvoidLib->getSlaveManager()->getMySqlServer($slaveHash);
+
             $Query = QueryBuilder::select("sessions", [
                 "id",
                 "flags",
@@ -173,8 +185,8 @@
                 "last_active_timestamp",
                 "created_timestamp",
                 "expires_timestamp"
-            ], $search_method, $value, null, null, 1);
-            $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
+            ], $search_method, Utilities::removeSlaveHashHash($value), null, null, 1);
+            $QueryResults = $SelectedServer->getConnection()->query($Query);
 
             if($QueryResults)
             {
@@ -191,6 +203,7 @@
                     $Row["security"] = ZiProto::decode($Row["security"]);
 
                     $returnResults = ActiveSession::fromArray($Row);
+                    $returnResults->ID = $slaveHash . '-' . $returnResults->ID;
                     $this->registerSessionCacheEntry($returnResults);
                     return $returnResults;
                 }
@@ -199,7 +212,7 @@
             {
                 throw new DatabaseException(
                     "There was an error while trying retrieve the session from the network",
-                    $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
+                    $Query, $SelectedServer->getConnection()->error, $SelectedServer->getConnection()
                 );
             }
         }
@@ -211,6 +224,8 @@
          * @return ActiveSession
          * @throws CacheException
          * @throws DatabaseException
+         * @throws SessionNotFoundException
+         * @throws InvalidSlaveHashException
          */
         public function updateSession(ActiveSession $activeSession): ActiveSession
         {
@@ -232,8 +247,15 @@
                 "data" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($activeSession->Data->toArray())),
                 "last_active_timestamp" => $activeSession->LastActiveTimestamp,
                 "expires_timestamp" => $activeSession->ExpiresTimestamp
-            ], "id", $activeSession->ID);
-            $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
+            ], "id", Utilities::removeSlaveHashHash($activeSession->ID));
+
+            $slaveHash = Utilities::getSlaveHashHash($activeSession->ID);
+
+            if($slaveHash == null)
+                throw new SessionNotFoundException();
+
+            $SelectedServer = $this->socialvoidLib->getSlaveManager()->getMySqlServer($slaveHash);
+            $QueryResults = $SelectedServer->getConnection()->query($Query);
 
             if($QueryResults)
             {
@@ -243,8 +265,8 @@
             else
             {
                 throw new DatabaseException(
-                    "There was an error while trying to update the session",
-                    $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
+                    'There was an error while trying to update the session',
+                    $Query, $SelectedServer->getConnection()->error, $SelectedServer->getConnection()
                 );
             }
         }

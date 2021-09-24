@@ -80,7 +80,10 @@
         SocialvoidRPC::$RpcServer->work(false);
 
         if(SocialvoidRPC::$RpcServer->getBackgroundWorker()->getWorker()->getGearmanWorker()->returnCode() == GEARMAN_TIMEOUT)
+        {
             SocialvoidRPC::processSleepCycle();
+
+        }
     }
 
 

@@ -77,17 +77,18 @@
          * @param SessionIdentification $sessionIdentification
          * @param string $document_id
          * @return ContentResults
+         * @throws AccessDeniedException
+         * @throws BadSessionChallengeAnswerException
+         * @throws CacheException
          * @throws DatabaseException
          * @throws DocumentNotFoundException
-         * @throws NotAuthenticatedException
-         * @throws CacheException
-         * @throws InvalidSearchMethodException
-         * @throws BadSessionChallengeAnswerException
-         * @throws SessionExpiredException
-         * @throws SessionNotFoundException
-         * @throws PeerNotFoundException
          * @throws InternalServerException
          * @throws InvalidClientPublicHashException
+         * @throws InvalidSearchMethodException
+         * @throws NotAuthenticatedException
+         * @throws PeerNotFoundException
+         * @throws SessionExpiredException
+         * @throws SessionNotFoundException
          */
         public function getDocument(SessionIdentification $sessionIdentification, string $document_id): ContentResults
         {
@@ -97,14 +98,14 @@
 
             $parsed_id = explode('-', $document_id);
 
-            if (count($parsed_id) !== 2)
-                throw new DocumentNotFoundException('The requested document was not found in the network');
+            if (count($parsed_id) !== 3)
+                throw new DocumentNotFoundException('The requested document was not found in the network (-1)');
 
-            $document = $this->networkSession->getSocialvoidLib()->getDocumentsManager()->getDocument($parsed_id[0]);
-            $file = $document->getFile($parsed_id[1]);
+            $document = $this->networkSession->getSocialvoidLib()->getDocumentsManager()->getDocument($parsed_id[0] . '-' . $parsed_id[1]);
+            $file = $document->getFile($parsed_id[2]);
 
             if ($file == null)
-                throw new DocumentNotFoundException('The requested document was not found in the network');
+                throw new DocumentNotFoundException('The requested document was not found in the network (-2)');
 
             $has_access = false;
 
@@ -144,7 +145,7 @@
             $content_results->FileName = $file->Name;
             $content_results->FileSize = $file->Size;
             $content_results->FileType = $file->Type;
-            $content_results->FileHash = $parsed_id[1];
+            $content_results->FileHash = $parsed_id[2];
 
             switch($document->ContentSource)
             {

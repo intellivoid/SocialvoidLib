@@ -6,6 +6,7 @@
     namespace SocialvoidLib\Objects\Standard;
 
     use SocialvoidLib\Abstracts\RegexPatterns;
+    use SocialvoidLib\Classes\Utilities;
     use SocialvoidLib\Exceptions\Standard\Authentication\BadSessionChallengeAnswerException;
     use SocialvoidLib\Exceptions\Standard\Authentication\SessionNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPublicHashException;
@@ -100,7 +101,7 @@
         {
             if(gettype($this->SessionID) !== "string")
                 throw new SessionNotFoundException("The requested session was not found in the network");
-            if(strlen($this->SessionID) !== 128)
+            if(strlen(Utilities::removeSlaveHashHash($this->SessionID)) !== 128)
                 throw new SessionNotFoundException("The requested session was not found in the network");
 
             if(gettype($this->ClientPublicHash) !== "string")

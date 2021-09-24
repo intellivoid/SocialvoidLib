@@ -18,7 +18,7 @@ response = request(
      },
 
      username="netkas",
-     password="SuperExtreme1Password24..."
+     password="SuperSimplePassword123"
 )
 
 print(response.data.result)

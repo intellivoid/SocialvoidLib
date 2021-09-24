@@ -7,10 +7,12 @@
     use msqg\QueryBuilder;
     use SocialvoidLib\Abstracts\Types\CacheEntryObjectType;
     use SocialvoidLib\Classes\Standard\BaseIdentification;
+    use SocialvoidLib\Classes\Utilities;
     use SocialvoidLib\Exceptions\GenericInternal\CacheException;
     use SocialvoidLib\Exceptions\GenericInternal\CacheMissedException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\GenericInternal\DependencyError;
+    use SocialvoidLib\Exceptions\GenericInternal\InvalidSlaveHashException;
     use SocialvoidLib\Exceptions\GenericInternal\RedisCacheException;
     use SocialvoidLib\Exceptions\Standard\Network\DocumentNotFoundException;
     use SocialvoidLib\InputTypes\DocumentInput;
@@ -46,6 +48,7 @@
          * @param DocumentInput $documentInput
          * @return string
          * @throws DatabaseException
+         * @noinspection PhpBooleanCanBeSimplifiedInspection
          */
         public function createDocument(DocumentInput $documentInput): string
         {
@@ -71,15 +74,17 @@
                 'created_timestamp' => time()
             ]);
 
-            $QueryResults = $this->socialvoidLib->getDatabase()->query($query);
+            $SelectedServer = $this->socialvoidLib->getSlaveManager()->getRandomMySqlServer(true);
+
+            $QueryResults = $SelectedServer->getConnection()->query($query);
             if($QueryResults == false)
             {
                 throw new DatabaseException("There was an error while trying to register document",
-                    $query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
+                    $query, $SelectedServer->getConnection()->error, $SelectedServer->getConnection()
                 );
             }
 
-            return $id;
+            return $SelectedServer->MysqlServerPointer->HashPointer . '-' . $id;
         }
 
         /**
@@ -102,7 +107,6 @@
                 if($CachedDocument !== null) return $CachedDocument;
             }
 
-
             $query = QueryBuilder::select('documents', [
                 'id',
                 'content_source',
@@ -117,9 +121,21 @@
                 'properties',
                 'last_accessed_timestamp',
                 'created_timestamp'
-            ], 'id', $this->socialvoidLib->getDatabase()->real_escape_string($document_id));
+            ], 'id', $this->socialvoidLib->getDatabase()->real_escape_string(Utilities::removeSlaveHashHash($document_id)));
 
-            $QueryResults = $this->socialvoidLib->getDatabase()->query($query);
+            $slaveHash = Utilities::getSlaveHashHash($document_id);
+            if($slaveHash == null)
+                throw new DocumentNotFoundException('The requested document was not found in the network (-4)');
+            try
+            {
+                $SelectedServer = $this->socialvoidLib->getSlaveManager()->getMySqlServer($slaveHash);
+            }
+            catch (InvalidSlaveHashException $e)
+            {
+                throw new DocumentNotFoundException('The requested document was not found in the network (-5)');
+            }
+
+            $QueryResults = $SelectedServer->getConnection()->query($query);
 
             if($QueryResults)
             {
@@ -137,6 +153,7 @@
                     $Row['properties'] = ZiProto::decode($Row['properties']);
 
                     $Document = Document::fromArray($Row);
+                    $Document->ID = $slaveHash . '-' . $Document->ID;
                     $this->registerDocumentCacheEntry($Document);
                     return $Document;
                 }
@@ -144,8 +161,8 @@
             else
             {
                 throw new DatabaseException(
-                    $this->socialvoidLib->getDatabase()->error,
-                    $query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
+                    $SelectedServer->getConnection()->error,
+                    $query, $SelectedServer->getConnection()->error, $SelectedServer->getConnection()
                 );
             }
         }
@@ -163,15 +180,27 @@
         {
             $query = QueryBuilder::update('documents', [
                 'last_accessed_timestamp' => time()
-            ], 'id', $document->ID);
+            ], 'id', Utilities::removeSlaveHashHash($document->ID));
 
-            $QueryResults = $this->socialvoidLib->getDatabase()->query($query);
+            $slaveHash = Utilities::getSlaveHashHash($document->ID);
+            if($slaveHash == null)
+                throw new DocumentNotFoundException('The requested document was not found in the network (-4)');
+            try
+            {
+                $SelectedServer = $this->socialvoidLib->getSlaveManager()->getMySqlServer($slaveHash);
+            }
+            catch (InvalidSlaveHashException $e)
+            {
+                throw new DocumentNotFoundException('The requested document was not found in the network (-5)');
+            }
+
+            $QueryResults = $SelectedServer->getConnection()->query($query);
 
             if($QueryResults == false)
             {
                 throw new DatabaseException(
                     'There was an error while trying to update the document attribute',
-                    $query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
+                    $query, $SelectedServer->getConnection()->error, $SelectedServer->getConnection()
                 );
             }
 
@@ -199,15 +228,27 @@
             /** @noinspection PhpBooleanCanBeSimplifiedInspection */
             $query = QueryBuilder::update('documents', [
                 'deleted' => (int)false
-            ], 'id', $document->ID);
+            ], 'id', Utilities::removeSlaveHashHash($document->ID));
 
-            $QueryResults = $this->socialvoidLib->getDatabase()->query($query);
+            $slaveHash = Utilities::getSlaveHashHash($document->ID);
+            if($slaveHash == null)
+                throw new DocumentNotFoundException('The requested document was not found in the network (-4)');
+            try
+            {
+                $SelectedServer = $this->socialvoidLib->getSlaveManager()->getMySqlServer($slaveHash);
+            }
+            catch (InvalidSlaveHashException $e)
+            {
+                throw new DocumentNotFoundException('The requested document was not found in the network (-5)');
+            }
+
+            $QueryResults = $SelectedServer->getConnection()->query($query);
 
             if($QueryResults == false)
             {
                 throw new DatabaseException(
                     'There was an error while trying to update the document attribute',
-                    $query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
+                    $query, $SelectedServer->getConnection()->error, $SelectedServer->getConnection()
                 );
             }
 
