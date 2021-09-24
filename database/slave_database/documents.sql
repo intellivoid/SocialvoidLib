@@ -7,7 +7,7 @@ create table documents
     deleted                 tinyint(1) default 0 not null comment 'Indicates if this document has been deleted or not',
     owner_user_id           int                  null comment 'The user ID that owns this content',
     forward_user_id         int                  null comment 'The User ID that forwarded this document if any, the Public ID will change but the rest of the information will stay the same',
-    access_type             int                  null comment 'The Access Type of the content, if further checks are required or not to determine if the peer can access this document',
+    access_type             varchar(16)          null comment 'The Access Type of the content, if further checks are required or not to determine if the peer can access this document',
     access_roles            blob                 null comment 'ZiProto Blob, the access roles of the users related to this content',
     flags                   blob                 null comment 'ZiProto Blob, flags associated with this document',
     properties              blob                 null comment 'ZiProto encoded object of properties related to this record',

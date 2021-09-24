@@ -15,7 +15,7 @@ response = request(
         "client_public_hash": client_info["public_hash"],
         "challenge_answer": answer_challenge(client_info["private_hash"], session_info["challenge"])
      },
-     document="e4bfb3eeb8d86fc23d5d262725663114-39ec2a25b8ae81844baf5e777e676f1e15bf4762dbc074c83dfcf263f91cd5b6-118ff354"
+     document="492921dcbe1493964241b14648c0f685-16f603fb22430c8b0aa4b23bcc1fc3bc3caf873fb31a8576631323b3a75add65-2a2dafd9"
 )
 
 print(response.data.result)
