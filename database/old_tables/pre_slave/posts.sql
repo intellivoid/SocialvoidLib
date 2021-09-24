@@ -1,4 +1,15 @@
-create table posts
+/*
+ * Copyright (c) 2017-2021. Intellivoid Technologies
+ *
+ * All rights reserved, SocialvoidLib was written by Zi Xing Narrakas <netkas@intellivoid.net> licensed by
+ * Intellivoid Technologies, no part of this source code is open source. SocialvoidLib is a closed-source
+ * solution for the Socialvoid Community Standard, if you wish to redistribute this source code you
+ * must have a written permission from Intellivoid Technologies to do so.
+ */
+
+-- Cyclic dependencies found
+
+create table if not exists posts
 (
     public_id               varchar(64)   not null comment 'The Unique Public ID for this record',
     text                    varchar(1526) null comment 'The text content of the post, can be null',
@@ -31,6 +42,8 @@ create table posts
         foreign key (quote_original_post_id) references posts (public_id),
     constraint posts_posts_public_id_fk_3
         foreign key (reply_to_post_id) references posts (public_id),
+    constraint posts_sessions_id_fk
+        foreign key (session_id) references sessions (id),
     constraint posts_users_id_fk
         foreign key (poster_user_id) references users (id),
     constraint posts_users_id_fk_2
@@ -44,6 +57,9 @@ create table posts
 
 create index posts_created_timestamp_index
     on posts (created_timestamp);
+
+create index posts_is_deleted_index
+    on posts (is_deleted);
 
 create index posts_last_updated_timestamp_index
     on posts (last_updated_timestamp);
@@ -60,7 +76,7 @@ create index posts_quote_original_post_id_index
 create index posts_quote_original_user_id_index
     on posts (quote_original_user_id);
 
-create index posts_reply_to_post
+create index posts_reply_to_post_id_index
     on posts (reply_to_post_id);
 
 create index posts_reply_to_user_id_index

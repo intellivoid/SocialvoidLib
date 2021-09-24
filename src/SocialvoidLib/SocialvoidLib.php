@@ -204,6 +204,11 @@
         private $HealthMonitoring;
 
         /**
+         * @var mixed
+         */
+        private $SlaveServerConfiguration;
+
+        /**
          * SocialvoidLib constructor.
          * @throws ConfigurationError
          * @throws DependencyError
@@ -235,9 +240,8 @@
             // Slave Servers Schema Configuration
             $SlaveServerSchema = new Schema();
             $SlaveServerSchema->setName('SlaveServers');
-            $SlaveServerSchema->setDefinition('Enabled', true);
             $SlaveServerSchema->setDefinition('DatabaseSlaves', [
-                'mysql://servername:user:password@127.0.0.1:20801/db_name'
+                'mysql://main:admin:admin@127.0.0.1:3306/socialvoid'
             ]);
             $this->acm->defineSchema($SlaveServerSchema);
 
@@ -331,6 +335,7 @@
                 $this->RedisBasicCacheConfiguration = $this->acm->getConfiguration("RedisBasicCache");
                 $this->CdnConfiguration = $this->acm->getConfiguration("CDN");
                 $this->RpcServerConfiguration = $this->acm->getConfiguration("RpcServer");
+                $this->SlaveServerConfiguration = $this->acm->getConfiguration('SlaveServers');
             }
             catch(Exception $e)
             {
@@ -777,5 +782,13 @@
                 $this->HealthMonitoring = new HealthMonitoring($this);
 
             return $this->HealthMonitoring;
+        }
+
+        /**
+         * @return mixed
+         */
+        public function getSlaveServerConfiguration()
+        {
+            return $this->SlaveServerConfiguration;
         }
     }

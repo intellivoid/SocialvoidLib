@@ -359,6 +359,14 @@
         },
         {
             "required": true,
+            "file": "Exceptions/GenericInternal/InvalidSlaveHashException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/GenericInternal/InvalidStringFormatException.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/GenericInternal/RedisCacheException.php"
         },
         {
@@ -663,6 +671,10 @@
         },
         {
             "required": true,
+            "file": "Managers/SlaveManager.php"
+        },
+        {
+            "required": true,
             "file": "Managers/TelegramCdnManager.php"
         },
         {
@@ -739,6 +751,10 @@
         },
         {
             "required": true,
+            "file": "Objects/EstablishedMySqlConnection.php"
+        },
+        {
+            "required": true,
             "file": "Objects/FileValidationResults.php"
         },
         {
@@ -756,6 +772,10 @@
         {
             "required": true,
             "file": "Objects/LikeRecord.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/MySqlServerPointer.php"
         },
         {
             "required": true,
