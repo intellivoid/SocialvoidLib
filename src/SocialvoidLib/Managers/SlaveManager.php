@@ -41,15 +41,15 @@ namespace SocialvoidLib\Managers;
          * Returns a MySQL slave server connection
          *
          * @param string $hash
-         * @return mysqli
+         * @return EstablishedMySqlConnection
          * @throws InvalidSlaveHashException
          */
-        public function getMySqlServer(string $hash): mysqli
+        public function getMySqlServer(string $hash): EstablishedMySqlConnection
         {
             if(isset($this->MySqlConnections[$hash]) == false)
                 throw new InvalidSlaveHashException('The slave hash \'' . $hash . '\' does not exist');
 
-            return $this->MySqlConnections[$hash]->getConnection();
+            return $this->MySqlConnections[$hash];
         }
 
         /**
@@ -57,10 +57,9 @@ namespace SocialvoidLib\Managers;
          * selected first.
          *
          * @param bool $prioritize_alive
-         * @return mysqli
-         * @throws InvalidSlaveHashException
+         * @return EstablishedMySqlConnection
          */
-        public function getRandomMySqlServer(bool $prioritize_alive=true): mysqli
+        public function getRandomMySqlServer(bool $prioritize_alive=true): EstablishedMySqlConnection
         {
             if($prioritize_alive)
             {
@@ -74,11 +73,11 @@ namespace SocialvoidLib\Managers;
 
                 if(count($alive_connections) > 0)
                 {
-                    return $this->getMySqlServer($alive_connections[array_rand($alive_connections)]);
+                    return $alive_connections[array_rand($alive_connections)];
                 }
             }
 
-            return $this->getMySqlServer($this->MySqlConnections[array_rand($this->MySqlConnections)]->MysqlServerPointer->HashPointer);
+            return $this->MySqlConnections[array_rand($this->MySqlConnections)];
         }
 
         /**
