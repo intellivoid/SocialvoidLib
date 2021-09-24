@@ -121,7 +121,8 @@
                 'properties',
                 'last_accessed_timestamp',
                 'created_timestamp'
-            ], 'id', $this->socialvoidLib->getDatabase()->real_escape_string(Utilities::removeSlaveHashHash($document_id)));
+            ], 'id', $this->socialvoidLib->getDatabase()->real_escape_string(Utilities::removeSlaveHashHash($document_id)),
+            null, null, 1);
 
             $slaveHash = Utilities::getSlaveHashHash($document_id);
             if($slaveHash == null)
