@@ -16,6 +16,7 @@
     use SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException;
     use SocialvoidLib\Exceptions\Standard\Authentication\SessionExpiredException;
     use SocialvoidLib\Exceptions\Standard\Authentication\SessionNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Network\DocumentNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPublicHashException;
@@ -25,6 +26,15 @@
     use SocialvoidLib\Objects\Standard\Peer;
     use SocialvoidLib\Objects\Standard\SessionIdentification;
     use SocialvoidRPC\SocialvoidRPC;
+    use udp2\Exceptions\AvatarGeneratorException;
+    use udp2\Exceptions\AvatarNotFoundException;
+    use udp2\Exceptions\ImageTooSmallException;
+    use udp2\Exceptions\UnsupportedAvatarGeneratorException;
+    use Zimage\Exceptions\CannotGetOriginalImageException;
+    use Zimage\Exceptions\FileNotFoundException;
+    use Zimage\Exceptions\InvalidZimageFileException;
+    use Zimage\Exceptions\SizeNotSetException;
+    use Zimage\Exceptions\UnsupportedImageTypeException;
 
     class ResolvePeer implements MethodInterface
     {
@@ -83,20 +93,30 @@
         /**
          * @param Request $request
          * @return Response
-         * @throws InternalServerException
-         * @throws InvalidPeerInputException
-         * @throws InvalidSessionIdentificationException
-         * @throws MissingParameterException
+         * @throws BadSessionChallengeAnswerException
          * @throws CacheException
          * @throws DatabaseException
+         * @throws InternalServerException
+         * @throws InvalidClientPublicHashException
+         * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
-         * @throws BadSessionChallengeAnswerException
+         * @throws InvalidSessionIdentificationException
+         * @throws InvalidSlaveHashException
+         * @throws MissingParameterException
          * @throws NotAuthenticatedException
+         * @throws PeerNotFoundException
          * @throws SessionExpiredException
          * @throws SessionNotFoundException
-         * @throws PeerNotFoundException
-         * @throws InvalidClientPublicHashException
-         * @throws InvalidSlaveHashException
+         * @throws DocumentNotFoundException
+         * @throws CannotGetOriginalImageException
+         * @throws FileNotFoundException
+         * @throws InvalidZimageFileException
+         * @throws SizeNotSetException
+         * @throws UnsupportedImageTypeException
+         * @throws AvatarGeneratorException
+         * @throws AvatarNotFoundException
+         * @throws ImageTooSmallException
+         * @throws UnsupportedAvatarGeneratorException
          */
         public function execute(Request $request): Response
         {

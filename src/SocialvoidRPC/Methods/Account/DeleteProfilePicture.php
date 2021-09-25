@@ -8,14 +8,9 @@
     use KimchiRPC\Objects\Request;
     use KimchiRPC\Objects\Response;
     use SocialvoidLib\Classes\Validate;
-    use SocialvoidLib\Exceptions\GenericInternal\CacheException;
-    use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
-    use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
     use SocialvoidLib\Exceptions\Standard\Authentication\BadSessionChallengeAnswerException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException;
-    use SocialvoidLib\Exceptions\Standard\Authentication\SessionExpiredException;
     use SocialvoidLib\Exceptions\Standard\Authentication\SessionNotFoundException;
-    use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPublicHashException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidSessionIdentificationException;
@@ -75,18 +70,13 @@
         /**
          * @param Request $request
          * @return Response
+         * @throws BadSessionChallengeAnswerException
          * @throws InternalServerException
+         * @throws InvalidClientPublicHashException
          * @throws InvalidSessionIdentificationException
          * @throws MissingParameterException
-         * @throws CacheException !may
-         * @throws DatabaseException !may
-         * @throws InvalidSearchMethodException !may
-         * @throws BadSessionChallengeAnswerException
          * @throws NotAuthenticatedException
-         * @throws SessionExpiredException
          * @throws SessionNotFoundException
-         * @throws PeerNotFoundException
-         * @throws InvalidClientPublicHashException
          */
         public function execute(Request $request): Response
         {
@@ -101,7 +91,7 @@
             try
             {
                 $NetworkSession = new NetworkSession(SocialvoidRPC::$SocialvoidLib);
-                $NetworkSession->getAccount()->deleteProfilePicture($SessionIdentification);
+                $NetworkSession->getAccount()->deleteProfilePicture();
             }
             catch(Exception $e)
             {

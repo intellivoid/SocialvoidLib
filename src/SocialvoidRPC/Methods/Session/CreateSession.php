@@ -102,6 +102,7 @@
             SocialvoidRPC::processWakeup(); // Wake the worker up
 
             $NetworkSession = new NetworkSession(SocialvoidRPC::$SocialvoidLib);
+
             try
             {
                 $SessionEstablished = $NetworkSession->createSession($SessionClient, $request->ClientIP);

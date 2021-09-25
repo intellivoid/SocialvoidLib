@@ -13,9 +13,8 @@
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
     use SocialvoidLib\Exceptions\Standard\Authentication\AlreadyAuthenticatedException;
     use SocialvoidLib\Exceptions\Standard\Authentication\BadSessionChallengeAnswerException;
-    use SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException;
-    use SocialvoidLib\Exceptions\Standard\Authentication\SessionExpiredException;
     use SocialvoidLib\Exceptions\Standard\Authentication\SessionNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Network\DocumentNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
     use SocialvoidLib\Exceptions\Standard\Validation\AgreementRequiredException;
@@ -30,6 +29,15 @@
     use SocialvoidLib\NetworkSession;
     use SocialvoidLib\Objects\Standard\SessionIdentification;
     use SocialvoidRPC\SocialvoidRPC;
+    use udp2\Exceptions\AvatarGeneratorException;
+    use udp2\Exceptions\AvatarNotFoundException;
+    use udp2\Exceptions\ImageTooSmallException;
+    use udp2\Exceptions\UnsupportedAvatarGeneratorException;
+    use Zimage\Exceptions\CannotGetOriginalImageException;
+    use Zimage\Exceptions\FileNotFoundException;
+    use Zimage\Exceptions\InvalidZimageFileException;
+    use Zimage\Exceptions\SizeNotSetException;
+    use Zimage\Exceptions\UnsupportedImageTypeException;
 
     class Register implements MethodInterface
     {
@@ -134,10 +142,18 @@
          * @throws InvalidUsernameException
          * @throws MissingParameterException
          * @throws PeerNotFoundException
-         * @throws SessionExpiredException
          * @throws SessionNotFoundException
          * @throws UsernameAlreadyExistsException
-         * @throws NotAuthenticatedException
+         * @throws DocumentNotFoundException
+         * @throws CannotGetOriginalImageException
+         * @throws FileNotFoundException
+         * @throws InvalidZimageFileException
+         * @throws SizeNotSetException
+         * @throws UnsupportedImageTypeException
+         * @throws AvatarGeneratorException
+         * @throws AvatarNotFoundException
+         * @throws ImageTooSmallException
+         * @throws UnsupportedAvatarGeneratorException
          */
         public function execute(Request $request): Response
         {
@@ -161,7 +177,6 @@
             try
             {
                 $RegisteredPeer = $NetworkSession->registerUser(
-                    $SessionIdentification,
                     $request->Parameters["username"],
                     $request->Parameters["password"],
                     $request->Parameters["first_name"],

@@ -49,7 +49,6 @@
     use Zimage\Exceptions\InvalidZimageFileException;
     use Zimage\Exceptions\SizeNotSetException;
     use Zimage\Exceptions\UnsupportedImageTypeException;
-    use Zxcvbn\zxcvbn;
 
     /**
      * Class Network
@@ -264,33 +263,14 @@
         /**
          * Logs the current user out of the session
          *
-         * @param SessionIdentification $sessionIdentification
-         * @throws AvatarGeneratorException
-         * @throws AvatarNotFoundException
-         * @throws CannotGetOriginalImageException
          * @throws Exceptions\GenericInternal\CacheException
-         * @throws Exceptions\GenericInternal\DatabaseException
-         * @throws Exceptions\GenericInternal\InvalidSearchMethodException
          * @throws Exceptions\GenericInternal\InvalidSlaveHashException
-         * @throws Exceptions\Standard\Authentication\BadSessionChallengeAnswerException
          * @throws Exceptions\Standard\Authentication\SessionNotFoundException
-         * @throws Exceptions\Standard\Network\DocumentNotFoundException
-         * @throws Exceptions\Standard\Validation\InvalidClientPublicHashException
-         * @throws FileNotFoundException
-         * @throws ImageTooSmallException
          * @throws InternalServerException
-         * @throws InvalidZimageFileException
          * @throws NotAuthenticatedException
-         * @throws PeerNotFoundException
-         * @throws SessionExpiredException
-         * @throws SizeNotSetException
-         * @throws UnsupportedAvatarGeneratorException
-         * @throws UnsupportedImageTypeException
          */
-        public function logout(SessionIdentification $sessionIdentification)
+        public function logout()
         {
-            $this->loadSession($sessionIdentification);
-
             if($this->active_session->Authenticated == false)
                 throw new NotAuthenticatedException("You must be authenticated to preform this action");
 
@@ -315,46 +295,39 @@
         /**
          * Authenticates the user to the network session, updates both the user and session
          *
-         * @param SessionIdentification $sessionIdentification
          * @param string $username
          * @param string $password
          * @param string|null $otp
          * @return bool
          * @throws AlreadyAuthenticatedException
          * @throws AuthenticationFailureException
+         * @throws AvatarGeneratorException
+         * @throws AvatarNotFoundException
+         * @throws CannotGetOriginalImageException
          * @throws Exceptions\GenericInternal\CacheException
          * @throws Exceptions\GenericInternal\DatabaseException
          * @throws Exceptions\GenericInternal\InvalidSearchMethodException
          * @throws Exceptions\GenericInternal\InvalidSlaveHashException
          * @throws Exceptions\Internal\NoPasswordAuthenticationAvailableException
          * @throws Exceptions\Standard\Authentication\AuthenticationNotApplicableException
-         * @throws Exceptions\Standard\Authentication\BadSessionChallengeAnswerException
          * @throws Exceptions\Standard\Authentication\IncorrectTwoFactorAuthenticationCodeException
          * @throws Exceptions\Standard\Authentication\PrivateAccessTokenRequiredException
          * @throws Exceptions\Standard\Authentication\SessionNotFoundException
          * @throws Exceptions\Standard\Authentication\TwoFactorAuthenticationRequiredException
          * @throws Exceptions\Standard\Network\DocumentNotFoundException
-         * @throws Exceptions\Standard\Validation\InvalidClientPublicHashException
+         * @throws FileNotFoundException
+         * @throws ImageTooSmallException
          * @throws IncorrectLoginCredentialsException
          * @throws InternalServerException
          * @throws InvalidPasswordException
-         * @throws NotAuthenticatedException
-         * @throws PeerNotFoundException
-         * @throws SessionExpiredException
-         * @throws CannotGetOriginalImageException
-         * @throws FileNotFoundException
          * @throws InvalidZimageFileException
+         * @throws PeerNotFoundException
          * @throws SizeNotSetException
-         * @throws UnsupportedImageTypeException
-         * @throws AvatarGeneratorException
-         * @throws AvatarNotFoundException
-         * @throws ImageTooSmallException
          * @throws UnsupportedAvatarGeneratorException
+         * @throws UnsupportedImageTypeException
          */
-        public function authenticateUser(SessionIdentification $sessionIdentification, string $username, string $password, ?string $otp=null): bool
+        public function authenticateUser(string $username, string $password, ?string $otp=null): bool
         {
-            $this->loadSession($sessionIdentification);
-
             if($this->active_session->Authenticated)
                 throw new AlreadyAuthenticatedException("You are already authenticated to the network");
 
@@ -416,7 +389,6 @@
         /**
          * Registers a new peer to the network
          *
-         * @param SessionIdentification $sessionIdentification
          * @param string $username
          * @param string $password
          * @param string $first_name
@@ -429,11 +401,7 @@
          * @throws Exceptions\GenericInternal\CacheException
          * @throws Exceptions\GenericInternal\DatabaseException
          * @throws Exceptions\GenericInternal\InvalidSearchMethodException
-         * @throws Exceptions\GenericInternal\InvalidSlaveHashException
-         * @throws Exceptions\Standard\Authentication\BadSessionChallengeAnswerException
-         * @throws Exceptions\Standard\Authentication\SessionNotFoundException
          * @throws Exceptions\Standard\Network\DocumentNotFoundException
-         * @throws Exceptions\Standard\Validation\InvalidClientPublicHashException
          * @throws Exceptions\Standard\Validation\InvalidFirstNameException
          * @throws Exceptions\Standard\Validation\InvalidLastNameException
          * @throws Exceptions\Standard\Validation\InvalidUsernameException
@@ -443,17 +411,13 @@
          * @throws InternalServerException
          * @throws InvalidPasswordException
          * @throws InvalidZimageFileException
-         * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
-         * @throws SessionExpiredException
          * @throws SizeNotSetException
          * @throws UnsupportedAvatarGeneratorException
          * @throws UnsupportedImageTypeException
          */
-        public function registerUser(SessionIdentification $sessionIdentification, string $username, string $password, string $first_name, ?string $last_name=null): Peer
+        public function registerUser(string $username, string $password, string $first_name, ?string $last_name=null): Peer
         {
-            $this->loadSession($sessionIdentification);
-
             if($this->active_session->Authenticated)
                 throw new AlreadyAuthenticatedException("You are already authenticated to the network");
 

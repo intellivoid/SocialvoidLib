@@ -10,38 +10,22 @@
 
     namespace SocialvoidLib\Network;
 
-
     use Defuse\Crypto\Exception\BadFormatException;
     use Defuse\Crypto\Exception\EnvironmentIsBrokenException;
     use Defuse\Crypto\Exception\WrongKeyOrModifiedCiphertextException;
-    use Exception;
     use Longman\TelegramBot\Exception\TelegramException;
     use SocialvoidLib\Abstracts\ContentSource;
     use SocialvoidLib\Abstracts\Types\AccessEntityType;
     use SocialvoidLib\Abstracts\Types\FetchLocationType;
-    use SocialvoidLib\Abstracts\Types\MediaType;
     use SocialvoidLib\Abstracts\Types\Security\DocumentAccessType;
-    use SocialvoidLib\Classes\Security\ImageProcessing;
-    use SocialvoidLib\Classes\Utilities;
     use SocialvoidLib\Exceptions\GenericInternal\CacheException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
-    use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
     use SocialvoidLib\Exceptions\Internal\CdnFileNotFoundException;
-    use SocialvoidLib\Exceptions\Standard\Authentication\BadSessionChallengeAnswerException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException;
-    use SocialvoidLib\Exceptions\Standard\Authentication\SessionExpiredException;
-    use SocialvoidLib\Exceptions\Standard\Authentication\SessionNotFoundException;
-    use SocialvoidLib\Exceptions\Standard\Media\InvalidImageDimensionsException;
     use SocialvoidLib\Exceptions\Standard\Network\AccessDeniedException;
     use SocialvoidLib\Exceptions\Standard\Network\DocumentNotFoundException;
-    use SocialvoidLib\Exceptions\Standard\Network\FileUploadException;
-    use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
-    use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
-    use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPublicHashException;
     use SocialvoidLib\NetworkSession;
     use SocialvoidLib\Objects\ContentResults;
-    use SocialvoidLib\Objects\Post\MediaContent;
-    use SocialvoidLib\Objects\Standard\SessionIdentification;
     use TelegramCDN\Exceptions\FileSecurityException;
     use udp2\Exceptions\AvatarNotFoundException;
     use Zimage\Exceptions\CannotGetOriginalImageException;
@@ -74,25 +58,16 @@
         /**
          * Fetches a document from the cloud
          *
-         * @param SessionIdentification $sessionIdentification
          * @param string $document_id
          * @return ContentResults
          * @throws AccessDeniedException
-         * @throws BadSessionChallengeAnswerException
          * @throws CacheException
          * @throws DatabaseException
          * @throws DocumentNotFoundException
-         * @throws InternalServerException
-         * @throws InvalidClientPublicHashException
-         * @throws InvalidSearchMethodException
          * @throws NotAuthenticatedException
-         * @throws PeerNotFoundException
-         * @throws SessionExpiredException
-         * @throws SessionNotFoundException
          */
-        public function getDocument(SessionIdentification $sessionIdentification, string $document_id): ContentResults
+        public function getDocument(string $document_id): ContentResults
         {
-            $this->networkSession->loadSession($sessionIdentification);
             if ($this->networkSession->isAuthenticated() == false)
                 throw new NotAuthenticatedException();
 

@@ -10,7 +10,6 @@
 
     namespace SocialvoidLib\Network;
 
-
     use SocialvoidLib\Abstracts\Flags\PostFlags;
     use SocialvoidLib\Abstracts\Levels\PostPriorityLevel;
     use SocialvoidLib\Abstracts\SearchMethods\PostSearchMethod;
@@ -25,6 +24,7 @@
     use SocialvoidLib\Exceptions\Internal\FollowerDataNotFound;
     use SocialvoidLib\Exceptions\Internal\UserTimelineNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\AlreadyRepostedException;
+    use SocialvoidLib\Exceptions\Standard\Network\DocumentNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\PostDeletedException;
     use SocialvoidLib\Exceptions\Standard\Network\PostNotFoundException;
@@ -33,6 +33,15 @@
     use SocialvoidLib\Objects\Post;
     use SocialvoidLib\Objects\Standard\Peer;
     use SocialvoidLib\Objects\Standard\TimelineState;
+    use udp2\Exceptions\AvatarGeneratorException;
+    use udp2\Exceptions\AvatarNotFoundException;
+    use udp2\Exceptions\ImageTooSmallException;
+    use udp2\Exceptions\UnsupportedAvatarGeneratorException;
+    use Zimage\Exceptions\CannotGetOriginalImageException;
+    use Zimage\Exceptions\FileNotFoundException;
+    use Zimage\Exceptions\InvalidZimageFileException;
+    use Zimage\Exceptions\SizeNotSetException;
+    use Zimage\Exceptions\UnsupportedImageTypeException;
 
     /**
      * Class Timeline
@@ -122,6 +131,16 @@
          * @throws PostNotFoundException
          * @throws ServiceJobException
          * @throws UserTimelineNotFoundException
+         * @throws DocumentNotFoundException
+         * @throws CannotGetOriginalImageException
+         * @throws FileNotFoundException
+         * @throws InvalidZimageFileException
+         * @throws SizeNotSetException
+         * @throws UnsupportedImageTypeException
+         * @throws AvatarGeneratorException
+         * @throws AvatarNotFoundException
+         * @throws ImageTooSmallException
+         * @throws UnsupportedAvatarGeneratorException
          */
         public function retrieveTimeline(int $page_number, bool $recursive=True): array
         {
@@ -342,7 +361,7 @@
         }
 
         /**
-         * Distributes a new post to the timeline and it's users
+         * Distributes a new post to the timeline, and it's users
          *
          * @param string $post_public_id
          * @param string $text

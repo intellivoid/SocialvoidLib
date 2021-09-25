@@ -9,11 +9,10 @@
     use KimchiRPC\Objects\Request;
     use KimchiRPC\Objects\Response;
     use SocialvoidLib\Classes\Validate;
-    use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
-    use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
+    use SocialvoidLib\Exceptions\GenericInternal\CacheException;
+    use SocialvoidLib\Exceptions\GenericInternal\InvalidSlaveHashException;
     use SocialvoidLib\Exceptions\Standard\Authentication\BadSessionChallengeAnswerException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException;
-    use SocialvoidLib\Exceptions\Standard\Authentication\SessionExpiredException;
     use SocialvoidLib\Exceptions\Standard\Authentication\SessionNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPublicHashException;
@@ -78,16 +77,15 @@
         /**
          * @param Request $request
          * @return Response
+         * @throws BadSessionChallengeAnswerException
          * @throws InternalServerException
+         * @throws InvalidClientPublicHashException
          * @throws InvalidSessionIdentificationException
          * @throws MissingParameterException
-         * @throws DatabaseException
-         * @throws InvalidSearchMethodException
-         * @throws BadSessionChallengeAnswerException
          * @throws NotAuthenticatedException
-         * @throws SessionExpiredException
          * @throws SessionNotFoundException
-         * @throws InvalidClientPublicHashException
+         * @throws CacheException
+         * @throws InvalidSlaveHashException
          */
         public function execute(Request $request): Response
         {

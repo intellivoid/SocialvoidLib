@@ -11,10 +11,12 @@
     use SocialvoidLib\Exceptions\GenericInternal\CacheException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
+    use SocialvoidLib\Exceptions\GenericInternal\InvalidSlaveHashException;
     use SocialvoidLib\Exceptions\Standard\Authentication\BadSessionChallengeAnswerException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException;
     use SocialvoidLib\Exceptions\Standard\Authentication\SessionExpiredException;
     use SocialvoidLib\Exceptions\Standard\Authentication\SessionNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Network\DocumentNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidBiographyException;
@@ -23,6 +25,15 @@
     use SocialvoidLib\NetworkSession;
     use SocialvoidLib\Objects\Standard\SessionIdentification;
     use SocialvoidRPC\SocialvoidRPC;
+    use udp2\Exceptions\AvatarGeneratorException;
+    use udp2\Exceptions\AvatarNotFoundException;
+    use udp2\Exceptions\ImageTooSmallException;
+    use udp2\Exceptions\UnsupportedAvatarGeneratorException;
+    use Zimage\Exceptions\CannotGetOriginalImageException;
+    use Zimage\Exceptions\FileNotFoundException;
+    use Zimage\Exceptions\InvalidZimageFileException;
+    use Zimage\Exceptions\SizeNotSetException;
+    use Zimage\Exceptions\UnsupportedImageTypeException;
 
     class UpdateBiography implements MethodInterface
     {
@@ -84,19 +95,30 @@
         /**
          * @param Request $request
          * @return Response
-         * @throws InternalServerException
-         * @throws InvalidBiographyException
-         * @throws InvalidSessionIdentificationException
-         * @throws MissingParameterException
+         * @throws BadSessionChallengeAnswerException
          * @throws CacheException !may
          * @throws DatabaseException !may
+         * @throws InternalServerException
+         * @throws InvalidBiographyException
+         * @throws InvalidClientPublicHashException
          * @throws InvalidSearchMethodException !may
-         * @throws BadSessionChallengeAnswerException
+         * @throws InvalidSessionIdentificationException
+         * @throws MissingParameterException
          * @throws NotAuthenticatedException
+         * @throws PeerNotFoundException
          * @throws SessionExpiredException
          * @throws SessionNotFoundException
-         * @throws PeerNotFoundException
-         * @throws InvalidClientPublicHashException
+         * @throws InvalidSlaveHashException
+         * @throws DocumentNotFoundException
+         * @throws CannotGetOriginalImageException
+         * @throws FileNotFoundException
+         * @throws InvalidZimageFileException
+         * @throws SizeNotSetException
+         * @throws UnsupportedImageTypeException
+         * @throws AvatarGeneratorException
+         * @throws AvatarNotFoundException
+         * @throws ImageTooSmallException
+         * @throws UnsupportedAvatarGeneratorException
          * @noinspection DuplicatedCode
          */
         public function execute(Request $request): Response
@@ -123,12 +145,12 @@
                     throw $e;
 
                 // If anything else, suppress the error.
-                throw new InternalServerException('There was an unexpected error', $e);
+                throw new InternalServerException('There was an unexpected error while trying to loading your session', $e);
             }
 
             try
             {
-                $NetworkSession->getAccount()->updateBiography($SessionIdentification, $request->Parameters['biography']);
+                $NetworkSession->getAccount()->updateBiography($request->Parameters['biography']);
             }
             catch(Exception $e)
             {
