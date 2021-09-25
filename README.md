@@ -1,6 +1,8 @@
 ![SocialvoidLib](assets/banner.jpg)
 
-[![PPM CI](https://github.com/intellivoid/SocialvoidLib/actions/workflows/ppm.yml/badge.svg)](https://github.com/intellivoid/SocialvoidLib/actions/workflows/ppm.yml)
+[![PPM Compile Socialvoid](https://github.com/intellivoid/SocialvoidLib/actions/workflows/net.intellivoid.socialvoid.ppm.yml/badge.svg)](https://github.com/intellivoid/SocialvoidLib/actions/workflows/net.intellivoid.socialvoid.ppm.yml)
+[![PPM Release Socialvoid](https://github.com/intellivoid/SocialvoidLib/actions/workflows/net.intellivoid.socialvoid.ppm_release.yml/badge.svg)](https://github.com/intellivoid/SocialvoidLib/actions/workflows/net.intellivoid.socialvoid.ppm_release.yml)
+
 
 ###  Building and installing
 ```shell
