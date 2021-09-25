@@ -133,6 +133,7 @@
 
             $timestamp = time();
             $public_id = BaseIdentification::userPublicId($timestamp);
+            $slave_server = $this->socialvoidLib->getSlaveManager()->getRandomMySqlServer();
 
             $Query = QueryBuilder::insert_into("users", [
                 "public_id" => $this->socialvoidLib->getDatabase()->real_escape_string($public_id),
@@ -149,6 +150,7 @@
                 "profile" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Profile->toArray())),
                 "settings" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Settings->toArray())),
                 "privacy_state" => $this->socialvoidLib->getDatabase()->real_escape_string(UserPrivacyState::Public),
+                "slave_server" => $this->socialvoidLib->getDatabase()->real_escape_string($slave_server->MysqlServerPointer->HashPointer),
                 "last_activity_timestamp" => $timestamp,
                 "created_timestamp" => $timestamp
             ]);
@@ -238,6 +240,7 @@
                 "profile",
                 "settings",
                 "privacy_state",
+                "slave_server",
                 "last_activity_timestamp",
                 "created_timestamp"
             ], $search_method, $value, null, null, 1);

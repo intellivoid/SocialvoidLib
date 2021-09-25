@@ -27,6 +27,7 @@
     use SocialvoidLib\Exceptions\Standard\Authentication\IncorrectTwoFactorAuthenticationCodeException;
     use SocialvoidLib\Exceptions\Standard\Authentication\PrivateAccessTokenRequiredException;
     use SocialvoidLib\Exceptions\Standard\Authentication\TwoFactorAuthenticationRequiredException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidPasswordException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidUsernameException;
     use SocialvoidLib\Objects\User\Profile;
     use SocialvoidLib\Objects\User\UserAuthenticationProperties;
@@ -155,6 +156,13 @@
         public $PrivacyState;
 
         /**
+         * The slave server hash that this user has their data stored on
+         *
+         * @var string
+         */
+        public $SlaveServer;
+
+        /**
          * The Unix Timestamp for when this user last interacted with the network
          *
          * @var int
@@ -209,9 +217,10 @@
          * @throws AuthenticationNotApplicableException
          * @throws IncorrectLoginCredentialsException
          * @throws IncorrectTwoFactorAuthenticationCodeException
+         * @throws NoPasswordAuthenticationAvailableException
          * @throws PrivateAccessTokenRequiredException
          * @throws TwoFactorAuthenticationRequiredException
-         * @throws NoPasswordAuthenticationAvailableException
+         * @throws InvalidPasswordException
          */
         public function simpleAuthentication(string $password, string $otp=null, bool $ignore_otp=false, bool $update=true): bool
         {
@@ -310,6 +319,7 @@
                 "display_picture_document" => $this->DisplayPictureDocument->toArray(),
                 "settings" => $this->Settings->toArray(),
                 "privacy_state" => $this->PrivacyState,
+                "slave_server" => $this->SlaveServer,
                 "last_activity_timestamp" => $this->LastActivityTimestamp,
                 "created_timestamp" => $this->CreatedTimestamp
             ];
@@ -380,6 +390,9 @@
 
             if(isset($data["privacy_state"]))
                 $UserObject->PrivacyState = $data["privacy_state"];
+
+            if(isset($data["slave_server"]))
+                $UserObject->SlaveServer = $data["slave_server"];
 
             if(isset($data["last_activity_timestamp"]))
             {
