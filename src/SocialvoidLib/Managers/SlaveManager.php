@@ -96,7 +96,7 @@
         public static function createMySqlPointer(string $name, string $host, int $port, string $database_name, ?string $username=null, ?string $password=null): MySqlServerPointer
         {
             $mysql_server_pointer = new MySqlServerPointer();
-            $mysql_server_pointer->HashPointer = hash('ripemd128', $host . $port . $database_name);
+            $mysql_server_pointer->HashPointer = hash('ripemd128', $database_name);
             $mysql_server_pointer->Name = $name;
             $mysql_server_pointer->Host = $host;
             $mysql_server_pointer->Port = $port;
