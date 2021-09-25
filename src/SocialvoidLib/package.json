@@ -345,6 +345,10 @@
         },
         {
             "required": true,
+            "file": "Exceptions/GenericInternal/DuplicateSlaveNameException.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/GenericInternal/FileNotFoundException.php"
         },
         {

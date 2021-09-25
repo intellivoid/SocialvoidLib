@@ -4,6 +4,7 @@
     namespace SocialvoidLib\Managers;
 
     use mysqli;
+    use SocialvoidLib\Exceptions\GenericInternal\DuplicateSlaveNameException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSlaveHashException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidStringFormatException;
     use SocialvoidLib\Objects\EstablishedMySqlConnection;
@@ -24,7 +25,8 @@
 
         /**
          * @param SocialvoidLib $socialvoidLib
-         * @noinspection PhpDocMissingThrowsInspection
+         * @throws DuplicateSlaveNameException
+         * @throws InvalidStringFormatException
          */
         public function __construct(SocialvoidLib $socialvoidLib)
         {
@@ -35,6 +37,8 @@
             {
                 /** @noinspection PhpUnhandledExceptionInspection */
                 $parsedSlave = self::createMySqlPointerFromString($databaseSlave);
+                if(isset($this->getMySqlServer[$parsedSlave->HashPointer]))
+                    throw new DuplicateSlaveNameException('One or more MySQL Slaves are named ' . $parsedSlave->Name);
                 $this->MySqlConnections[$parsedSlave->HashPointer] = new EstablishedMySqlConnection($parsedSlave);
             }
         }
