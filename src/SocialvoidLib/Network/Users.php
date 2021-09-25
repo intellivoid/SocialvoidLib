@@ -21,19 +21,22 @@
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
     use SocialvoidLib\Exceptions\Internal\FollowerDataNotFound;
     use SocialvoidLib\Exceptions\Internal\FollowerStateNotFoundException;
-    use SocialvoidLib\Exceptions\Standard\Authentication\BadSessionChallengeAnswerException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException;
-    use SocialvoidLib\Exceptions\Standard\Authentication\SessionExpiredException;
-    use SocialvoidLib\Exceptions\Standard\Authentication\SessionNotFoundException;
-    use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
-    use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPublicHashException;
+    use SocialvoidLib\Exceptions\Standard\Network\DocumentNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPeerInputException;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\NetworkSession;
     use SocialvoidLib\Objects\FollowerData;
-    use SocialvoidLib\Objects\Standard\Peer;
-    use SocialvoidLib\Objects\Standard\SessionIdentification;
     use SocialvoidLib\Objects\User;
+    use udp2\Exceptions\AvatarGeneratorException;
+    use udp2\Exceptions\AvatarNotFoundException;
+    use udp2\Exceptions\ImageTooSmallException;
+    use udp2\Exceptions\UnsupportedAvatarGeneratorException;
+    use Zimage\Exceptions\CannotGetOriginalImageException;
+    use Zimage\Exceptions\FileNotFoundException;
+    use Zimage\Exceptions\InvalidZimageFileException;
+    use Zimage\Exceptions\SizeNotSetException;
+    use Zimage\Exceptions\UnsupportedImageTypeException;
 
     /**
      * Class Users
@@ -58,25 +61,28 @@
         /**
          * Resolves a peer ID, Username or Public ID.
          *
-         * @param SessionIdentification $sessionIdentification
          * @param $peer
          * @param bool $resolve_internally
-         * @return Peer
-         * @throws BadSessionChallengeAnswerException
+         * @return User
+         * @throws AvatarGeneratorException
+         * @throws AvatarNotFoundException
          * @throws CacheException
+         * @throws CannotGetOriginalImageException
          * @throws DatabaseException
-         * @throws InternalServerException
-         * @throws InvalidClientPublicHashException
+         * @throws DocumentNotFoundException
+         * @throws FileNotFoundException
+         * @throws ImageTooSmallException
          * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
+         * @throws InvalidZimageFileException
          * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
-         * @throws SessionExpiredException
-         * @throws SessionNotFoundException
+         * @throws SizeNotSetException
+         * @throws UnsupportedAvatarGeneratorException
+         * @throws UnsupportedImageTypeException
          */
-        public function resolvePeer(SessionIdentification $sessionIdentification, $peer, bool $resolve_internally=True): User
+        public function resolvePeer($peer, bool $resolve_internally=True): User
         {
-            $this->networkSession->loadSession($sessionIdentification);
             if($this->networkSession->isAuthenticated() == false)
                 throw new NotAuthenticatedException();
 
@@ -127,31 +133,34 @@
         /**
          * Follows another peer on the network
          *
-         * @param SessionIdentification $sessionIdentification
          * @param $peer
          * @return string
-         * @throws BadSessionChallengeAnswerException
+         * @throws AvatarGeneratorException
+         * @throws AvatarNotFoundException
          * @throws CacheException
+         * @throws CannotGetOriginalImageException
          * @throws DatabaseException
+         * @throws DocumentNotFoundException
+         * @throws FileNotFoundException
          * @throws FollowerDataNotFound
-         * @throws InternalServerException
-         * @throws InvalidClientPublicHashException
+         * @throws ImageTooSmallException
          * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
+         * @throws InvalidZimageFileException
          * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
-         * @throws SessionExpiredException
-         * @throws SessionNotFoundException
+         * @throws SizeNotSetException
+         * @throws UnsupportedAvatarGeneratorException
+         * @throws UnsupportedImageTypeException
          */
-        public function followPeer(SessionIdentification $sessionIdentification, $peer): string
+        public function followPeer($peer): string
         {
-            $this->networkSession->loadSession($sessionIdentification);
             if($this->networkSession->isAuthenticated() == false)
                 throw new NotAuthenticatedException();
 
             // TODO: Update the timeline upon a follow event
             // Resolve the Peer ID
-            $peer_id = $this->resolvePeer($sessionIdentification, $peer)->ID;
+            $peer_id = $this->resolvePeer($peer)->ID;
 
             try
             {
@@ -166,7 +175,7 @@
                 unset($e);
             }
 
-            $TargetPeer = $this->resolvePeer($sessionIdentification, $peer_id);
+            $TargetPeer = $this->resolvePeer($peer_id);
 
             $FollowerState = $this->networkSession->getSocialvoidLib()->getFollowerStateManager()->registerFollowingState(
                 $this->networkSession->getAuthenticatedUser()->ID, $TargetPeer
@@ -198,30 +207,33 @@
         /**
          * Gets following data of a peer
          *
-         * @param SessionIdentification $sessionIdentification
          * @param $peer
          * @return FollowerData
-         * @throws BadSessionChallengeAnswerException
+         * @throws AvatarGeneratorException
+         * @throws AvatarNotFoundException
          * @throws CacheException
+         * @throws CannotGetOriginalImageException
          * @throws DatabaseException
+         * @throws DocumentNotFoundException
+         * @throws FileNotFoundException
          * @throws FollowerDataNotFound
-         * @throws InternalServerException
-         * @throws InvalidClientPublicHashException
+         * @throws ImageTooSmallException
          * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
+         * @throws InvalidZimageFileException
          * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
-         * @throws SessionExpiredException
-         * @throws SessionNotFoundException
+         * @throws SizeNotSetException
+         * @throws UnsupportedAvatarGeneratorException
+         * @throws UnsupportedImageTypeException
          */
-        public function getFollowerData(SessionIdentification $sessionIdentification, $peer): FollowerData
+        public function getFollowerData($peer): FollowerData
         {
-            $this->networkSession->loadSession($sessionIdentification);
             if($this->networkSession->isAuthenticated() == false)
                 throw new NotAuthenticatedException();
 
             // Resolve the Peer ID
-            $peer_id = $this->resolvePeer($sessionIdentification, $peer)->ID;
+            $peer_id = $this->resolvePeer($peer)->ID;
 
             return $this->networkSession->getSocialvoidLib()->getFollowerDataManager()->resolveRecord($peer_id);
         }
@@ -229,33 +241,36 @@
         /**
          * Gets a list of users that are following this peer
          *
-         * @param SessionIdentification $sessionIdentification
          * @param $peer
          * @param int $offset
          * @param int $limit
          * @return array
-         * @throws BadSessionChallengeAnswerException
+         * @throws AvatarGeneratorException
+         * @throws AvatarNotFoundException
          * @throws CacheException
+         * @throws CannotGetOriginalImageException
          * @throws DatabaseException
+         * @throws DocumentNotFoundException
+         * @throws FileNotFoundException
          * @throws FollowerDataNotFound
-         * @throws InternalServerException
-         * @throws InvalidClientPublicHashException
+         * @throws ImageTooSmallException
          * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
+         * @throws InvalidZimageFileException
          * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
-         * @throws SessionExpiredException
-         * @throws SessionNotFoundException
+         * @throws SizeNotSetException
+         * @throws UnsupportedAvatarGeneratorException
+         * @throws UnsupportedImageTypeException
          */
-        public function getFollowers(SessionIdentification $sessionIdentification, $peer, int $offset=0, int $limit=100): array
+        public function getFollowers($peer, int $offset=0, int $limit=100): array
         {
-            $this->networkSession->loadSession($sessionIdentification);
             if($this->networkSession->isAuthenticated() == false)
                 throw new NotAuthenticatedException();
 
             $Results = [];
             $CurrentIteration = 0;
-            $FollowerData = $this->getFollowerData($sessionIdentification, $peer);
+            $FollowerData = $this->getFollowerData($peer);
 
             foreach($FollowerData->FollowersIDs as $followersID)
             {
@@ -263,7 +278,7 @@
                 {
                     try
                     {
-                        $Results[] = $this->resolvePeer($sessionIdentification, $followersID);
+                        $Results[] = $this->resolvePeer($followersID);
                     }
                     catch(Exception $e)
                     {
@@ -283,62 +298,68 @@
         /**
          * Returns an array of followers via IDs
          *
-         * @param SessionIdentification $sessionIdentification
          * @param $peer
          * @return array
-         * @throws BadSessionChallengeAnswerException
+         * @throws AvatarGeneratorException
+         * @throws AvatarNotFoundException
          * @throws CacheException
+         * @throws CannotGetOriginalImageException
          * @throws DatabaseException
+         * @throws DocumentNotFoundException
+         * @throws FileNotFoundException
          * @throws FollowerDataNotFound
-         * @throws InternalServerException
-         * @throws InvalidClientPublicHashException
+         * @throws ImageTooSmallException
          * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
+         * @throws InvalidZimageFileException
          * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
-         * @throws SessionExpiredException
-         * @throws SessionNotFoundException
+         * @throws SizeNotSetException
+         * @throws UnsupportedAvatarGeneratorException
+         * @throws UnsupportedImageTypeException
          */
-        public function getFollowerIDs(SessionIdentification $sessionIdentification, $peer): array
+        public function getFollowerIDs($peer): array
         {
-            $this->networkSession->loadSession($sessionIdentification);
             if($this->networkSession->isAuthenticated() == false)
                 throw new NotAuthenticatedException();
 
-            $FollowerData = $this->getFollowerData($sessionIdentification, $peer);
+            $FollowerData = $this->getFollowerData($peer);
             return $FollowerData->FollowersIDs;
         }
 
         /**
          * Gets a list of users that the peer is following
          *
-         * @param SessionIdentification $sessionIdentification
          * @param $peer
          * @param int $offset
          * @param int $limit
          * @return array
-         * @throws BadSessionChallengeAnswerException
+         * @throws AvatarGeneratorException
+         * @throws AvatarNotFoundException
          * @throws CacheException
+         * @throws CannotGetOriginalImageException
          * @throws DatabaseException
+         * @throws DocumentNotFoundException
+         * @throws FileNotFoundException
          * @throws FollowerDataNotFound
-         * @throws InternalServerException
-         * @throws InvalidClientPublicHashException
+         * @throws ImageTooSmallException
          * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
+         * @throws InvalidZimageFileException
          * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
-         * @throws SessionExpiredException
-         * @throws SessionNotFoundException
+         * @throws SizeNotSetException
+         * @throws UnsupportedAvatarGeneratorException
+         * @throws UnsupportedImageTypeException
          */
-        public function getFollowing(SessionIdentification $sessionIdentification, $peer, int $offset=0, int $limit=100): array
+        public function getFollowing($peer, int $offset=0, int $limit=100): array
         {
-            $this->networkSession->loadSession($sessionIdentification);
             if($this->networkSession->isAuthenticated() == false)
                 throw new NotAuthenticatedException();
 
             $Results = [];
             $CurrentIteration = 0;
-            $FollowerData = $this->getFollowerData($sessionIdentification, $peer);
+            $FollowerData = $this->getFollowerData($peer);
 
             foreach($FollowerData->FollowingIDs as $followingsID)
             {
@@ -346,7 +367,7 @@
                 {
                     try
                     {
-                        $Results[] = $this->resolvePeer($sessionIdentification, $followingsID);
+                        $Results[] = $this->resolvePeer($followingsID);
                     }
                     catch(Exception $e)
                     {
@@ -366,29 +387,32 @@
         /**
          * Returns an array of following via IDs
          *
-         * @param SessionIdentification $sessionIdentification
          * @param $peer
          * @return array
-         * @throws BadSessionChallengeAnswerException
+         * @throws AvatarGeneratorException
+         * @throws AvatarNotFoundException
          * @throws CacheException
+         * @throws CannotGetOriginalImageException
          * @throws DatabaseException
+         * @throws DocumentNotFoundException
+         * @throws FileNotFoundException
          * @throws FollowerDataNotFound
-         * @throws InternalServerException
-         * @throws InvalidClientPublicHashException
+         * @throws ImageTooSmallException
          * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
+         * @throws InvalidZimageFileException
          * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
-         * @throws SessionExpiredException
-         * @throws SessionNotFoundException
+         * @throws SizeNotSetException
+         * @throws UnsupportedAvatarGeneratorException
+         * @throws UnsupportedImageTypeException
          */
-        public function getFollowingIDs(SessionIdentification $sessionIdentification, $peer): array
+        public function getFollowingIDs($peer): array
         {
-            $this->networkSession->loadSession($sessionIdentification);
             if($this->networkSession->isAuthenticated() == false)
                 throw new NotAuthenticatedException();
 
-            $FollowerData = $this->getFollowerData($sessionIdentification, $peer);
+            $FollowerData = $this->getFollowerData($peer);
             return $FollowerData->FollowingIDs;
         }
     }

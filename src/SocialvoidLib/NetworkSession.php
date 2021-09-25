@@ -40,6 +40,15 @@
     use SocialvoidLib\Objects\Standard\SessionEstablished;
     use SocialvoidLib\Objects\Standard\SessionIdentification;
     use SocialvoidLib\Objects\User;
+    use udp2\Exceptions\AvatarGeneratorException;
+    use udp2\Exceptions\AvatarNotFoundException;
+    use udp2\Exceptions\ImageTooSmallException;
+    use udp2\Exceptions\UnsupportedAvatarGeneratorException;
+    use Zimage\Exceptions\CannotGetOriginalImageException;
+    use Zimage\Exceptions\FileNotFoundException;
+    use Zimage\Exceptions\InvalidZimageFileException;
+    use Zimage\Exceptions\SizeNotSetException;
+    use Zimage\Exceptions\UnsupportedImageTypeException;
     use Zxcvbn\zxcvbn;
 
     /**
@@ -150,16 +159,27 @@
          * Loads a session from a session identification
          *
          * @param SessionIdentification $sessionIdentification
+         * @throws AvatarGeneratorException
+         * @throws AvatarNotFoundException
+         * @throws CannotGetOriginalImageException
          * @throws Exceptions\GenericInternal\CacheException
          * @throws Exceptions\GenericInternal\DatabaseException
          * @throws Exceptions\GenericInternal\InvalidSearchMethodException
+         * @throws Exceptions\GenericInternal\InvalidSlaveHashException
          * @throws Exceptions\Standard\Authentication\BadSessionChallengeAnswerException
          * @throws Exceptions\Standard\Authentication\SessionNotFoundException
+         * @throws Exceptions\Standard\Network\DocumentNotFoundException
          * @throws Exceptions\Standard\Validation\InvalidClientPublicHashException
+         * @throws FileNotFoundException
+         * @throws ImageTooSmallException
          * @throws InternalServerException
+         * @throws InvalidZimageFileException
          * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
          * @throws SessionExpiredException
+         * @throws SizeNotSetException
+         * @throws UnsupportedAvatarGeneratorException
+         * @throws UnsupportedImageTypeException
          */
         public function loadSession(SessionIdentification $sessionIdentification)
         {
@@ -210,11 +230,21 @@
         /**
          * Loads the authenticated peer into the network session
          *
+         * @throws AvatarGeneratorException
+         * @throws AvatarNotFoundException
+         * @throws CannotGetOriginalImageException
          * @throws Exceptions\GenericInternal\CacheException
          * @throws Exceptions\GenericInternal\DatabaseException
          * @throws Exceptions\GenericInternal\InvalidSearchMethodException
+         * @throws Exceptions\Standard\Network\DocumentNotFoundException
+         * @throws FileNotFoundException
+         * @throws ImageTooSmallException
+         * @throws InvalidZimageFileException
          * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
+         * @throws SizeNotSetException
+         * @throws UnsupportedAvatarGeneratorException
+         * @throws UnsupportedImageTypeException
          */
         public function loadAuthenticatedPeer()
         {
@@ -235,16 +265,27 @@
          * Logs the current user out of the session
          *
          * @param SessionIdentification $sessionIdentification
+         * @throws AvatarGeneratorException
+         * @throws AvatarNotFoundException
+         * @throws CannotGetOriginalImageException
+         * @throws Exceptions\GenericInternal\CacheException
          * @throws Exceptions\GenericInternal\DatabaseException
          * @throws Exceptions\GenericInternal\InvalidSearchMethodException
+         * @throws Exceptions\GenericInternal\InvalidSlaveHashException
          * @throws Exceptions\Standard\Authentication\BadSessionChallengeAnswerException
          * @throws Exceptions\Standard\Authentication\SessionNotFoundException
+         * @throws Exceptions\Standard\Network\DocumentNotFoundException
          * @throws Exceptions\Standard\Validation\InvalidClientPublicHashException
+         * @throws FileNotFoundException
+         * @throws ImageTooSmallException
          * @throws InternalServerException
+         * @throws InvalidZimageFileException
          * @throws NotAuthenticatedException
-         * @throws SessionExpiredException
-         * @throws Exceptions\GenericInternal\CacheException
          * @throws PeerNotFoundException
+         * @throws SessionExpiredException
+         * @throws SizeNotSetException
+         * @throws UnsupportedAvatarGeneratorException
+         * @throws UnsupportedImageTypeException
          */
         public function logout(SessionIdentification $sessionIdentification)
         {
@@ -284,19 +325,31 @@
          * @throws Exceptions\GenericInternal\CacheException
          * @throws Exceptions\GenericInternal\DatabaseException
          * @throws Exceptions\GenericInternal\InvalidSearchMethodException
+         * @throws Exceptions\GenericInternal\InvalidSlaveHashException
+         * @throws Exceptions\Internal\NoPasswordAuthenticationAvailableException
          * @throws Exceptions\Standard\Authentication\AuthenticationNotApplicableException
          * @throws Exceptions\Standard\Authentication\BadSessionChallengeAnswerException
          * @throws Exceptions\Standard\Authentication\IncorrectTwoFactorAuthenticationCodeException
          * @throws Exceptions\Standard\Authentication\PrivateAccessTokenRequiredException
          * @throws Exceptions\Standard\Authentication\SessionNotFoundException
          * @throws Exceptions\Standard\Authentication\TwoFactorAuthenticationRequiredException
+         * @throws Exceptions\Standard\Network\DocumentNotFoundException
          * @throws Exceptions\Standard\Validation\InvalidClientPublicHashException
          * @throws IncorrectLoginCredentialsException
          * @throws InternalServerException
+         * @throws InvalidPasswordException
+         * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
          * @throws SessionExpiredException
-         * @throws Exceptions\Internal\NoPasswordAuthenticationAvailableException
-         * @throws NotAuthenticatedException
+         * @throws CannotGetOriginalImageException
+         * @throws FileNotFoundException
+         * @throws InvalidZimageFileException
+         * @throws SizeNotSetException
+         * @throws UnsupportedImageTypeException
+         * @throws AvatarGeneratorException
+         * @throws AvatarNotFoundException
+         * @throws ImageTooSmallException
+         * @throws UnsupportedAvatarGeneratorException
          */
         public function authenticateUser(SessionIdentification $sessionIdentification, string $username, string $password, ?string $otp=null): bool
         {
@@ -370,21 +423,32 @@
          * @param string|null $last_name
          * @return Peer
          * @throws AlreadyAuthenticatedException
+         * @throws AvatarGeneratorException
+         * @throws AvatarNotFoundException
+         * @throws CannotGetOriginalImageException
          * @throws Exceptions\GenericInternal\CacheException
          * @throws Exceptions\GenericInternal\DatabaseException
          * @throws Exceptions\GenericInternal\InvalidSearchMethodException
+         * @throws Exceptions\GenericInternal\InvalidSlaveHashException
          * @throws Exceptions\Standard\Authentication\BadSessionChallengeAnswerException
          * @throws Exceptions\Standard\Authentication\SessionNotFoundException
+         * @throws Exceptions\Standard\Network\DocumentNotFoundException
          * @throws Exceptions\Standard\Validation\InvalidClientPublicHashException
          * @throws Exceptions\Standard\Validation\InvalidFirstNameException
          * @throws Exceptions\Standard\Validation\InvalidLastNameException
-         * @throws Exceptions\Standard\Validation\InvalidPasswordException
          * @throws Exceptions\Standard\Validation\InvalidUsernameException
          * @throws Exceptions\Standard\Validation\UsernameAlreadyExistsException
+         * @throws FileNotFoundException
+         * @throws ImageTooSmallException
          * @throws InternalServerException
+         * @throws InvalidPasswordException
+         * @throws InvalidZimageFileException
+         * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
          * @throws SessionExpiredException
-         * @throws NotAuthenticatedException
+         * @throws SizeNotSetException
+         * @throws UnsupportedAvatarGeneratorException
+         * @throws UnsupportedImageTypeException
          */
         public function registerUser(SessionIdentification $sessionIdentification, string $username, string $password, string $first_name, ?string $last_name=null): Peer
         {
@@ -528,8 +592,10 @@
         /**
          * Updates the current active session
          *
-         * @throws Exceptions\GenericInternal\DatabaseException
          * @throws Exceptions\GenericInternal\CacheException
+         * @throws Exceptions\GenericInternal\DatabaseException
+         * @throws Exceptions\GenericInternal\InvalidSlaveHashException
+         * @throws Exceptions\Standard\Authentication\SessionNotFoundException
          */
         public function updateActiveSession(): void
         {

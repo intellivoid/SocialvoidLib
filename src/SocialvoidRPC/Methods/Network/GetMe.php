@@ -11,6 +11,7 @@
     use SocialvoidLib\Exceptions\GenericInternal\CacheException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
+    use SocialvoidLib\Exceptions\GenericInternal\InvalidSlaveHashException;
     use SocialvoidLib\Exceptions\Standard\Authentication\BadSessionChallengeAnswerException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException;
     use SocialvoidLib\Exceptions\Standard\Authentication\SessionExpiredException;
@@ -89,6 +90,8 @@
          * @throws PeerNotFoundException
          * @throws SessionExpiredException
          * @throws SessionNotFoundException
+         * @throws InvalidSlaveHashException
+         * @noinspection DuplicatedCode
          */
         public function execute(Request $request): Response
         {
@@ -114,12 +117,12 @@
                     throw $e;
 
                 // If anything else, suppress the error.
-                throw new InternalServerException("There was an unexpected error", $e);
+                throw new InternalServerException('There was an unexpected error while trying to loading your session', $e);
             }
 
             try
             {
-                $resolved_peer = $NetworkSession->getUsers()->resolvePeer($SessionIdentification, $NetworkSession->getAuthenticatedUser()->PublicID);
+                $resolved_peer = $NetworkSession->getUsers()->resolvePeer($NetworkSession->getAuthenticatedUser()->PublicID);
             }
             catch(Exception $e)
             {

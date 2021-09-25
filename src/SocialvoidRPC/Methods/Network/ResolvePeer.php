@@ -1,9 +1,8 @@
 <?php /** @noinspection DuplicatedCode */
 
-namespace SocialvoidRPC\Methods\Network;
+    namespace SocialvoidRPC\Methods\Network;
 
     use Exception;
-    use KimchiRPC\Exceptions\RequestException;
     use KimchiRPC\Exceptions\Server\MissingParameterException;
     use KimchiRPC\Interfaces\MethodInterface;
     use KimchiRPC\Objects\Request;
@@ -12,6 +11,7 @@ namespace SocialvoidRPC\Methods\Network;
     use SocialvoidLib\Exceptions\GenericInternal\CacheException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
+    use SocialvoidLib\Exceptions\GenericInternal\InvalidSlaveHashException;
     use SocialvoidLib\Exceptions\Standard\Authentication\BadSessionChallengeAnswerException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException;
     use SocialvoidLib\Exceptions\Standard\Authentication\SessionExpiredException;
@@ -96,6 +96,7 @@ namespace SocialvoidRPC\Methods\Network;
          * @throws SessionNotFoundException
          * @throws PeerNotFoundException
          * @throws InvalidClientPublicHashException
+         * @throws InvalidSlaveHashException
          */
         public function execute(Request $request): Response
         {
@@ -121,12 +122,12 @@ namespace SocialvoidRPC\Methods\Network;
                     throw $e;
 
                 // If anything else, suppress the error.
-                throw new InternalServerException("There was an unexpected error", $e);
+                throw new InternalServerException('There was an unexpected error while trying to loading your session', $e);
             }
 
             try
             {
-                $resolved_peer = $NetworkSession->getUsers()->resolvePeer($SessionIdentification, $request->Parameters["peer"]);
+                $resolved_peer = $NetworkSession->getUsers()->resolvePeer($request->Parameters["peer"]);
             }
             catch(Exception $e)
             {

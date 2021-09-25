@@ -11,6 +11,7 @@
     use SocialvoidLib\Exceptions\GenericInternal\CacheException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
+    use SocialvoidLib\Exceptions\GenericInternal\InvalidSlaveHashException;
     use SocialvoidLib\Exceptions\Standard\Authentication\BadSessionChallengeAnswerException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException;
     use SocialvoidLib\Exceptions\Standard\Authentication\SessionExpiredException;
@@ -90,20 +91,21 @@
         /**
          * @param Request $request
          * @return Response
-         * @throws InternalServerException
-         * @throws InvalidFirstNameException
-         * @throws InvalidLastNameException
-         * @throws InvalidSessionIdentificationException
-         * @throws MissingParameterException
+         * @throws BadSessionChallengeAnswerException
          * @throws CacheException !may
          * @throws DatabaseException !may
+         * @throws InternalServerException
+         * @throws InvalidClientPublicHashException
+         * @throws InvalidFirstNameException
+         * @throws InvalidLastNameException
          * @throws InvalidSearchMethodException !may
-         * @throws BadSessionChallengeAnswerException
+         * @throws InvalidSessionIdentificationException
+         * @throws MissingParameterException
          * @throws NotAuthenticatedException
+         * @throws PeerNotFoundException
          * @throws SessionExpiredException
          * @throws SessionNotFoundException
-         * @throws PeerNotFoundException
-         * @throws InvalidClientPublicHashException
+         * @throws InvalidSlaveHashException
          * @noinspection DuplicatedCode
          */
         public function execute(Request $request): Response
