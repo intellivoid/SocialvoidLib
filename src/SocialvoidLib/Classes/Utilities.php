@@ -744,7 +744,7 @@ namespace SocialvoidLib\Classes;
          * @param string $input
          * @return string|null
          */
-        public static function getSlaveHashHash(string $input): ?string
+        public static function getSlaveHash(string $input): ?string
         {
             $exploded = explode('-', $input);
 
@@ -760,7 +760,7 @@ namespace SocialvoidLib\Classes;
          * @param string $input
          * @return string
          */
-        public static function removeSlaveHashHash(string $input): string
+        public static function removeSlaveHash(string $input): string
         {
             $exploded = explode('-', $input);
 

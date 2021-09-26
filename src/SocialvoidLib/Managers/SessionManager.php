@@ -163,7 +163,7 @@
                 if($CachedPost !== null) return $CachedPost;
             }
 
-            $slaveHash = Utilities::getSlaveHashHash($value);
+            $slaveHash = Utilities::getSlaveHash($value);
 
             if($slaveHash == null)
                 throw new SessionNotFoundException();
@@ -185,7 +185,7 @@
                 "last_active_timestamp",
                 "created_timestamp",
                 "expires_timestamp"
-            ], $search_method, Utilities::removeSlaveHashHash($value), null, null, 1);
+            ], $search_method, Utilities::removeSlaveHash($value), null, null, 1);
             $QueryResults = $SelectedServer->getConnection()->query($Query);
 
             if($QueryResults)
@@ -247,9 +247,9 @@
                 "data" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($activeSession->Data->toArray())),
                 "last_active_timestamp" => $activeSession->LastActiveTimestamp,
                 "expires_timestamp" => $activeSession->ExpiresTimestamp
-            ], "id", Utilities::removeSlaveHashHash($activeSession->ID));
+            ], "id", Utilities::removeSlaveHash($activeSession->ID));
 
-            $slaveHash = Utilities::getSlaveHashHash($activeSession->ID);
+            $slaveHash = Utilities::getSlaveHash($activeSession->ID);
 
             if($slaveHash == null)
                 throw new SessionNotFoundException();

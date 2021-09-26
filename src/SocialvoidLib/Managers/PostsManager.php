@@ -204,9 +204,9 @@
                 'media_content',
                 'last_updated_timestamp',
                 'created_timestamp'
-            ], $search_method, Utilities::removeSlaveHashHash($value), null, null, 1);
+            ], $search_method, Utilities::removeSlaveHash($value), null, null, 1);
             
-            $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHashHash($value));
+            $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($value));
             $QueryResults = $SelectedSlave->getConnection()->query($Query);
 
             if($QueryResults)
@@ -292,9 +292,9 @@
                 'replies' => (is_null($post->Replies) ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Replies))),
                 'media_content' => (is_null($MediaContent) ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($MediaContent))),
                 'last_updated_timestamp' => $post->LastUpdatedTimestamp,
-            ], 'public_id', Utilities::removeSlaveHashHash($post->PublicID));
+            ], 'public_id', Utilities::removeSlaveHash($post->PublicID));
 
-            $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHashHash($post->PublicID));
+            $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($post->PublicID));
             $QueryResults = $SelectedSlave->getConnection()->query($Query);
 
             if($QueryResults)
@@ -352,7 +352,7 @@
                     return;
 
                 $this->socialvoidLib->getLikesRecordManager()->likeRecord(
-                    Utilities::getSlaveHashHash($post->PublicID), $user->ID, Utilities::removeSlaveHashHash($post->PublicID)
+                    Utilities::getSlaveHash($post->PublicID), $user->ID, Utilities::removeSlaveHash($post->PublicID)
                 );
                 Converter::addFlag($post->Likes, $user->ID);
                 $this->updatePost($post);
@@ -404,7 +404,7 @@
                     return;
 
                 $this->socialvoidLib->getLikesRecordManager()->unlikeRecord(
-                    Utilities::getSlaveHashHash($post->PublicID), $user->ID, Utilities::removeSlaveHashHash($post->PublicID)
+                    Utilities::getSlaveHash($post->PublicID), $user->ID, Utilities::removeSlaveHash($post->PublicID)
                 );
                 Converter::removeFlag($post->Likes, $user->ID);
                 $this->updatePost($post);

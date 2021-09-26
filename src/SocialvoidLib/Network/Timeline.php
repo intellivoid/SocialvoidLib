@@ -16,6 +16,7 @@
     use SocialvoidLib\Abstracts\SearchMethods\TimelineSearchMethod;
     use SocialvoidLib\Abstracts\SearchMethods\UserSearchMethod;
     use SocialvoidLib\Classes\Converter;
+    use SocialvoidLib\Classes\Utilities;
     use SocialvoidLib\Exceptions\GenericInternal\BackgroundWorkerNotEnabledException;
     use SocialvoidLib\Exceptions\GenericInternal\CacheException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
@@ -30,6 +31,7 @@
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\PostDeletedException;
     use SocialvoidLib\Exceptions\Standard\Network\PostNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidPeerInputException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPostTextException;
     use SocialvoidLib\NetworkSession;
     use SocialvoidLib\Objects\Post;
@@ -367,6 +369,45 @@
             $this->networkSession->getSocialvoidLib()->getPostsManager()->likePost(
                 $this->networkSession->getAuthenticatedUser(), $selected_post
             );
+        }
+
+        /**
+         * Returns the likes given to a certain post
+         *
+         * @param string $post_public_id
+         * @return array
+         * @throws AvatarGeneratorException
+         * @throws AvatarNotFoundException
+         * @throws CacheException
+         * @throws CannotGetOriginalImageException
+         * @throws DatabaseException
+         * @throws DocumentNotFoundException
+         * @throws FileNotFoundException
+         * @throws ImageTooSmallException
+         * @throws InvalidSearchMethodException
+         * @throws InvalidSlaveHashException
+         * @throws InvalidZimageFileException
+         * @throws NotAuthenticatedException
+         * @throws PeerNotFoundException
+         * @throws SizeNotSetException
+         * @throws UnsupportedAvatarGeneratorException
+         * @throws UnsupportedImageTypeException
+         * @throws InvalidPeerInputException
+         */
+        public function getLikes(string $post_public_id, int $offset=0, int $limit=100): array
+        {
+            $Likes = $this->networkSession->getSocialvoidLib()->getLikesRecordManager()->getLikes(
+                Utilities::getSlaveHash($post_public_id), Utilities::removeSlaveHash($post_public_id),
+                $offset, $limit
+            );
+
+            $results = [];
+            foreach($Likes as $user_id)
+            {
+                $results[] = $this->networkSession->getUsers()->resolvePeer($user_id);
+            }
+
+            return $results;
         }
 
         /**

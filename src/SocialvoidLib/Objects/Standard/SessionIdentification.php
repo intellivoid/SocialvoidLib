@@ -101,7 +101,7 @@
         {
             if(gettype($this->SessionID) !== "string")
                 throw new SessionNotFoundException("The requested session was not found in the network");
-            if(strlen(Utilities::removeSlaveHashHash($this->SessionID)) !== 45)
+            if(strlen(Utilities::removeSlaveHash($this->SessionID)) !== 45)
                 throw new SessionNotFoundException("The requested session was not found in the network");
 
             if(gettype($this->ClientPublicHash) !== "string")

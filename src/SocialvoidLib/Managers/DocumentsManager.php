@@ -121,10 +121,10 @@
                 'properties',
                 'last_accessed_timestamp',
                 'created_timestamp'
-            ], 'id', $this->socialvoidLib->getDatabase()->real_escape_string(Utilities::removeSlaveHashHash($document_id)),
+            ], 'id', $this->socialvoidLib->getDatabase()->real_escape_string(Utilities::removeSlaveHash($document_id)),
             null, null, 1);
 
-            $slaveHash = Utilities::getSlaveHashHash($document_id);
+            $slaveHash = Utilities::getSlaveHash($document_id);
             if($slaveHash == null)
                 throw new DocumentNotFoundException('The requested document was not found in the network (-4)');
             try
@@ -181,9 +181,9 @@
         {
             $query = QueryBuilder::update('documents', [
                 'last_accessed_timestamp' => time()
-            ], 'id', Utilities::removeSlaveHashHash($document->ID));
+            ], 'id', Utilities::removeSlaveHash($document->ID));
 
-            $slaveHash = Utilities::getSlaveHashHash($document->ID);
+            $slaveHash = Utilities::getSlaveHash($document->ID);
             if($slaveHash == null)
                 throw new DocumentNotFoundException('The requested document was not found in the network (-4)');
             try
@@ -229,9 +229,9 @@
             /** @noinspection PhpBooleanCanBeSimplifiedInspection */
             $query = QueryBuilder::update('documents', [
                 'deleted' => (int)false
-            ], 'id', Utilities::removeSlaveHashHash($document->ID));
+            ], 'id', Utilities::removeSlaveHash($document->ID));
 
-            $slaveHash = Utilities::getSlaveHashHash($document->ID);
+            $slaveHash = Utilities::getSlaveHash($document->ID);
             if($slaveHash == null)
                 throw new DocumentNotFoundException('The requested document was not found in the network (-4)');
             try

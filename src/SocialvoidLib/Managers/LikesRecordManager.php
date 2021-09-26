@@ -126,6 +126,44 @@
         }
 
         /**
+         * Returns an array of user IDs that liked this post
+         *
+         * @param string $slave_server
+         * @param string $post_id
+         * @param int $offset
+         * @param int $limit
+         * @return array
+         * @throws DatabaseException
+         * @throws InvalidSlaveHashException
+         */
+        public function getLikes(string $slave_server, string $post_id, int $offset=0, int $limit=100): array
+        {
+            $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer($slave_server);
+            $post_id = $this->socialvoidLib->getDatabase()->real_escape_string($post_id);
+            $Query = "SELECT user_id, FROM `likes` WHERE post_id='$post_id' AND liked=1 LIMIT $offset, $limit";
+            $QueryResults = $SelectedSlave->getConnection()->query($Query);
+
+            // Execute and process the query
+            if($QueryResults == false)
+            {
+                throw new DatabaseException('There was an error while trying to get the likes from this post',
+                    $Query, $SelectedSlave->getConnection()->error, $SelectedSlave->getConnection()
+                );
+            }
+            else
+            {
+                $ResultsArray = [];
+
+                while($Row = $QueryResults->fetch_assoc())
+                {
+                    $ResultsArray[] = $Row['user_id'];
+                }
+            }
+
+            return $ResultsArray;
+        }
+
+        /**
          * Gets an existing record from the database
          *
          * @param string $slave_server
@@ -186,7 +224,7 @@
                 'last_updated_timestamp' => time()
             ], 'id', ($likeRecord->UserID . $likeRecord->PostID));
 
-            $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHashHash($likeRecord->ID));
+            $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($likeRecord->ID));
             $QueryResults = $SelectedSlave->getConnection()->query($Query);
 
             if($QueryResults == false)
