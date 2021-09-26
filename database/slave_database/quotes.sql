@@ -1,4 +1,4 @@
-create table socialvoid_slave.quotes
+create table quotes
 (
     id                     varchar(286) not null comment 'The Unique Internal Database ID',
     user_id                int          null comment 'The User ID that quoted this post',
@@ -14,24 +14,24 @@ create table socialvoid_slave.quotes
     constraint quotes_user_id_post_id_uindex
         unique (user_id, post_id),
     constraint quotes_posts_public_id_fk
-        foreign key (post_id) references socialvoid_slave.posts (public_id),
+        foreign key (post_id) references posts (public_id),
     constraint quotes_posts_public_id_fk_2
-        foreign key (original_post_id) references socialvoid_slave.posts (public_id)
+        foreign key (original_post_id) references posts (public_id)
 )
     comment 'Table for housing quotes for posts';
 
 create index quotes_liked_index
-    on socialvoid_slave.quotes (quoted);
+    on quotes (quoted);
 
 create index quotes_original_post_id_index
-    on socialvoid_slave.quotes (original_post_id);
+    on quotes (original_post_id);
 
 create index quotes_post_id_index
-    on socialvoid_slave.quotes (post_id);
+    on quotes (post_id);
 
 create index quotes_user_id_index
-    on socialvoid_slave.quotes (user_id);
+    on quotes (user_id);
 
-alter table socialvoid_slave.quotes
+alter table quotes
     add primary key (id);
 

@@ -1,6 +1,6 @@
 -- Cyclic dependencies found
 
-create table socialvoid_slave.posts
+create table posts
 (
     public_id               varchar(64)   not null comment 'The Unique Public ID for this record',
     text                    varchar(1526) null comment 'The text content of the post, can be null',
@@ -28,47 +28,47 @@ create table socialvoid_slave.posts
     constraint posts_public_id_uindex
         unique (public_id),
     constraint posts_posts_public_id_fk
-        foreign key (repost_original_post_id) references socialvoid_slave.posts (public_id),
+        foreign key (repost_original_post_id) references posts (public_id),
     constraint posts_posts_public_id_fk_2
-        foreign key (quote_original_post_id) references socialvoid_slave.posts (public_id),
+        foreign key (quote_original_post_id) references posts (public_id),
     constraint posts_posts_public_id_fk_3
-        foreign key (reply_to_post_id) references socialvoid_slave.posts (public_id)
+        foreign key (reply_to_post_id) references posts (public_id)
 )
     comment 'Posts made by users on the network';
 
 create index posts_created_timestamp_index
-    on socialvoid_slave.posts (created_timestamp);
+    on posts (created_timestamp);
 
 create index posts_last_updated_timestamp_index
-    on socialvoid_slave.posts (last_updated_timestamp);
+    on posts (last_updated_timestamp);
 
 create index posts_poster_user_id_index
-    on socialvoid_slave.posts (poster_user_id);
+    on posts (poster_user_id);
 
 create index posts_priority_level_index
-    on socialvoid_slave.posts (priority_level);
+    on posts (priority_level);
 
 create index posts_quote_original_post_id_index
-    on socialvoid_slave.posts (quote_original_post_id);
+    on posts (quote_original_post_id);
 
 create index posts_quote_original_user_id_index
-    on socialvoid_slave.posts (quote_original_user_id);
+    on posts (quote_original_user_id);
 
 create index posts_reply_to_post
-    on socialvoid_slave.posts (reply_to_post_id);
+    on posts (reply_to_post_id);
 
 create index posts_reply_to_user_id_index
-    on socialvoid_slave.posts (reply_to_user_id);
+    on posts (reply_to_user_id);
 
 create index posts_repost_original_post_id_index
-    on socialvoid_slave.posts (repost_original_post_id);
+    on posts (repost_original_post_id);
 
 create index posts_repost_original_user_id_index
-    on socialvoid_slave.posts (repost_original_user_id);
+    on posts (repost_original_user_id);
 
 create index posts_session_id_index
-    on socialvoid_slave.posts (session_id);
+    on posts (session_id);
 
-alter table socialvoid_slave.posts
+alter table posts
     add primary key (public_id);
 
