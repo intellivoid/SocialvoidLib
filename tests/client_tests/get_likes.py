@@ -15,7 +15,7 @@ response = request(
         "client_public_hash": client_info["public_hash"],
         "challenge_answer": answer_challenge(client_info["private_hash"], session_info["challenge"])
      },
-     post_id="e3c158bfc9495b94f7f768662b1cea58-08e1344447946ccee8f60bb40384346b0b5d2bceffc28c9a6691c7f3f6f355e7",
+     post_id="e3c158bfc9495b94f7f768662b1cea58-a2d2b36c-1ed6-11ec-8d50-7baad10f2b00",
      offset=3, limit=25
 )
 

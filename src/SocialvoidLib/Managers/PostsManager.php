@@ -351,9 +351,7 @@
                 if(in_array($user->ID, $post->Likes))
                     return;
 
-                $this->socialvoidLib->getLikesRecordManager()->likeRecord(
-                    Utilities::getSlaveHash($post->PublicID), $user->ID, Utilities::removeSlaveHash($post->PublicID)
-                );
+                $this->socialvoidLib->getLikesRecordManager()->likeRecord($user->ID, $post->PublicID);
                 Converter::addFlag($post->Likes, $user->ID);
                 $this->updatePost($post);
             }
@@ -403,9 +401,7 @@
                 if(in_array($user->ID, $post->Likes) == false)
                     return;
 
-                $this->socialvoidLib->getLikesRecordManager()->unlikeRecord(
-                    Utilities::getSlaveHash($post->PublicID), $user->ID, Utilities::removeSlaveHash($post->PublicID)
-                );
+                $this->socialvoidLib->getLikesRecordManager()->unlikeRecord($user->ID, $post->PublicID);
                 Converter::removeFlag($post->Likes, $user->ID);
                 $this->updatePost($post);
             }

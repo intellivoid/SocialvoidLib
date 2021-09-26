@@ -372,6 +372,27 @@
         }
 
         /**
+         * Likes a post, if not already liked
+         *
+         * @param string $post_public_id
+         * @throws CacheException
+         * @throws DatabaseException
+         * @throws InvalidSearchMethodException
+         * @throws PostDeletedException
+         * @throws PostNotFoundException
+         * @throws InvalidSlaveHashException
+         */
+        public function unlikePost(string $post_public_id): void
+        {
+            $selected_post = $this->networkSession->getSocialvoidLib()->getPostsManager()->getPost(
+                PostSearchMethod::ByPublicId, $post_public_id);
+
+            $this->networkSession->getSocialvoidLib()->getPostsManager()->unlikePost(
+                $this->networkSession->getAuthenticatedUser(), $selected_post
+            );
+        }
+
+        /**
          * Returns the likes given to a certain post
          *
          * @param string $post_public_id
@@ -398,10 +419,7 @@
          */
         public function getLikes(string $post_public_id, int $offset=0, int $limit=100): array
         {
-            $Likes = $this->networkSession->getSocialvoidLib()->getLikesRecordManager()->getLikes(
-                Utilities::getSlaveHash($post_public_id), Utilities::removeSlaveHash($post_public_id),
-                $offset, $limit
-            );
+            $Likes = $this->networkSession->getSocialvoidLib()->getLikesRecordManager()->getLikes($post_public_id, $offset, $limit);
 
             $search_query = [];
             foreach($Likes as $user_id)
@@ -410,27 +428,6 @@
             }
 
             return $this->networkSession->getUsers()->resolveMultiplePeers($search_query);
-        }
-
-        /**
-         * Likes a post, if not already liked
-         *
-         * @param string $post_public_id
-         * @throws CacheException
-         * @throws DatabaseException
-         * @throws InvalidSearchMethodException
-         * @throws PostDeletedException
-         * @throws PostNotFoundException
-         * @throws InvalidSlaveHashException
-         */
-        public function unlikePost(string $post_public_id): void
-        {
-            $selected_post = $this->networkSession->getSocialvoidLib()->getPostsManager()->getPost(
-                PostSearchMethod::ByPublicId, $post_public_id);
-
-            $this->networkSession->getSocialvoidLib()->getPostsManager()->unlikePost(
-                $this->networkSession->getAuthenticatedUser(), $selected_post
-            );
         }
 
         /**
