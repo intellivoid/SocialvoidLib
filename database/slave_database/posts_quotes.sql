@@ -7,29 +7,27 @@ create table posts_quotes
     quoted                 tinyint(1)   null comment 'Indicates the current quote status',
     last_updated_timestamp int          null comment 'The Unix Timestamp for when this record was last updated',
     created_timestamp      int          null comment 'The Unix Timestamp for when this record was created',
-    constraint posts_quotes_id_uindex
+    constraint quotes_id_uindex
         unique (id),
-    constraint posts_quotes_post_id_original_post_id_uindex
+    constraint quotes_post_id_original_post_id_uindex
         unique (post_id, original_post_id),
-    constraint posts_quotes_user_id_post_id_uindex
+    constraint quotes_user_id_post_id_uindex
         unique (user_id, post_id),
-    constraint posts_quotes_posts_public_id_fk
-        foreign key (post_id) references posts (public_id),
-    constraint posts_quotes_posts_public_id_fk_2
-        foreign key (original_post_id) references posts (public_id)
+    constraint quotes_posts_public_id_fk
+        foreign key (post_id) references posts (public_id)
 )
     comment 'Table for housing quotes for posts';
 
-create index posts_quotes_liked_index
+create index quotes_liked_index
     on posts_quotes (quoted);
 
-create index posts_quotes_original_post_id_index
+create index quotes_original_post_id_index
     on posts_quotes (original_post_id);
 
-create index posts_quotes_post_id_index
+create index quotes_post_id_index
     on posts_quotes (post_id);
 
-create index posts_quotes_user_id_index
+create index quotes_user_id_index
     on posts_quotes (user_id);
 
 alter table posts_quotes

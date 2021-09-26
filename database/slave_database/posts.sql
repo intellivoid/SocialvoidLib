@@ -1,5 +1,3 @@
--- Cyclic dependencies found
-
 create table posts
 (
     public_id               varchar(64)   not null comment 'The Unique Public ID for this record',
@@ -8,11 +6,11 @@ create table posts
     properties              blob          null comment 'ZiProto encoded properties of this post',
     session_id              varchar(255)  null comment 'The session ID used to create this post if any',
     poster_user_id          int           null comment 'The User ID that made this post',
-    reply_to_post_id        varchar(64)   null comment 'The ID of the post if this post is a reply to another post',
+    reply_to_post_id        varchar(128)  null comment 'The ID of the post if this post is a reply to another post',
     reply_to_user_id        int           null comment 'The user ID of the original post that this post is replying to',
-    quote_original_post_id  varchar(64)   null comment 'The original post ID if this post is a quote of another post',
+    quote_original_post_id  varchar(128)  null comment 'The original post ID if this post is a quote of another post',
     quote_original_user_id  int           null comment 'The original user of the post of this post is a quote of another post',
-    repost_original_post_id varchar(64)   null comment 'The original post ID of the original post if this post is a repost',
+    repost_original_post_id varchar(128)  null comment 'The original post ID of the original post if this post is a repost',
     repost_original_user_id int           null comment 'The original user ID of the original post if this post is a repost',
     flags                   tinyblob      null comment 'Flags associated with this post',
     is_deleted              tinyint(1)    null comment 'Indicates if the post is currently deleted or not',
@@ -26,13 +24,7 @@ create table posts
     last_updated_timestamp  int           null comment 'The Unix Timestamp for when this record was last updated',
     created_timestamp       int           null comment 'The Unix Timestamp for when this record was created',
     constraint posts_public_id_uindex
-        unique (public_id),
-    constraint posts_posts_public_id_fk
-        foreign key (repost_original_post_id) references posts (public_id),
-    constraint posts_posts_public_id_fk_2
-        foreign key (quote_original_post_id) references posts (public_id),
-    constraint posts_posts_public_id_fk_3
-        foreign key (reply_to_post_id) references posts (public_id)
+        unique (public_id)
 )
     comment 'Posts made by users on the network';
 
