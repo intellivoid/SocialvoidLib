@@ -7,3 +7,4 @@
  - Added method timeline.get_likes
  - Added alternative method for an RPC Server (No BackgroundWorker)
  - Added slave support for `likes`
+ - Refactored table `likes` to `posts_likes`
