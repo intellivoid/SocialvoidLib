@@ -78,6 +78,7 @@
          * @throws InvalidPostTextException
          * @throws InvalidSessionIdentificationException
          * @throws MissingParameterException
+         * @noinspection DuplicatedCode
          */
         private function checkParameters(Request $request)
         {
@@ -160,7 +161,7 @@
                     throw $e;
 
                 // If anything else, suppress the error.
-                throw new InternalServerException('There was an unexpected error while trying to like the requested post', $e);
+                throw new InternalServerException('There was an unexpected error while trying to get the requested post', $e);
             }
 
             $Response = Response::fromRequest($request);
