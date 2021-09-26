@@ -38,7 +38,7 @@
     use Zimage\Exceptions\SizeNotSetException;
     use Zimage\Exceptions\UnsupportedImageTypeException;
 
-    class LikePost implements MethodInterface
+    class GetPost implements MethodInterface
     {
 
         /**
@@ -46,7 +46,7 @@
          */
         public function getMethodName(): string
         {
-            return 'LikePost';
+            return 'GetPost';
         }
 
         /**
@@ -54,7 +54,7 @@
          */
         public function getMethod(): string
         {
-            return 'timeline.like_post';
+            return 'timeline.get_post';
         }
 
         /**
@@ -62,7 +62,7 @@
          */
         public function getDescription(): string
         {
-            return 'Likes an existing post on the timeline';
+            return 'Retrieves an existing post from the timeline';
         }
 
         /**
@@ -150,7 +150,8 @@
 
             try
             {
-                $NetworkSession->getTimeline()->likePost($request->Parameters['post_id']);
+                $Post = $NetworkSession->getTimeline()->getPost($request->Parameters['post_id']);
+                $Peer = $NetworkSession->getUsers()->resolvePeer($Post->PosterUserID);
             }
             catch(Exception $e)
             {
@@ -163,7 +164,9 @@
             }
 
             $Response = Response::fromRequest($request);
-            $Response->ResultData = true;
+            $StandardObject = Post::fromPost($Post);
+            $StandardObject->Peer = Peer::fromUser($Peer);
+            $Response->ResultData = $StandardObject->toArray();
 
             return $Response;
         }
