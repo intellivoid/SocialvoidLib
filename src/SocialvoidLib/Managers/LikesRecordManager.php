@@ -11,10 +11,14 @@
      * must have a written permission from Intellivoid Technologies to do so.
      */
 
+    // TODO: Add method to get all likes from one post
+
     namespace SocialvoidLib\Managers;
 
     use msqg\QueryBuilder;
+    use SocialvoidLib\Classes\Utilities;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
+    use SocialvoidLib\Exceptions\GenericInternal\InvalidSlaveHashException;
     use SocialvoidLib\Exceptions\Internal\LikeRecordNotFoundException;
     use SocialvoidLib\Objects\LikeRecord;
     use SocialvoidLib\SocialvoidLib;
@@ -42,19 +46,21 @@
         /**
          * Creates a like record if one doesn't already exist, or updates an existing one
          *
+         * @param string $slave_server
          * @param int $user_id
          * @param string $post_id
          * @throws DatabaseException
+         * @throws InvalidSlaveHashException
          */
-        public function likeRecord(int $user_id, string $post_id)
+        public function likeRecord(string $slave_server, int $user_id, string $post_id)
         {
             try
             {
-                $record = $this->getRecord($user_id, $post_id);
+                $record = $this->getRecord($slave_server, $user_id, $post_id);
             }
             catch(LikeRecordNotFoundException $e)
             {
-                $this->registerRecord($user_id, $post_id, true);
+                $this->registerRecord($slave_server, $user_id, $post_id, true);
                 return;
             }
 
@@ -65,15 +71,17 @@
         /**
          * Creates a like record if one doesn't already exist, or updates an existing one
          *
+         * @param string $salve_server
          * @param int $user_id
          * @param string $post_id
          * @throws DatabaseException
+         * @throws InvalidSlaveHashException
          */
-        public function unlikeRecord(int $user_id, string $post_id)
+        public function unlikeRecord(string $salve_server, int $user_id, string $post_id)
         {
             try
             {
-                $record = $this->getRecord($user_id, $post_id);
+                $record = $this->getRecord($salve_server, $user_id, $post_id);
             }
             catch(LikeRecordNotFoundException $e)
             {
@@ -88,27 +96,31 @@
         /**
          * Registers a new like record into the database
          *
+         * @param string $slave_server
          * @param int $user_id
          * @param string $post_id
          * @param bool $liked
          * @throws DatabaseException
+         * @throws InvalidSlaveHashException
          */
-        public function registerRecord(int $user_id, string $post_id, bool $liked=True): void
+        public function registerRecord(string $slave_server, int $user_id, string $post_id, bool $liked=True): void
         {
-            $Query = QueryBuilder::insert_into("likes", [
-                "id" => ($user_id . $post_id),
-                "user_id" => $user_id,
-                "post_id" => $post_id,
-                "liked" => (int)$liked,
-                "last_updated_timestamp" => time(),
-                "created_timestamp" => time()
+            $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer($slave_server);
+
+            $Query = QueryBuilder::insert_into('likes', [
+                'id' => ($user_id . $post_id),
+                'user_id' => $user_id,
+                'post_id' => $post_id,
+                'liked' => (int)$liked,
+                'last_updated_timestamp' => time(),
+                'created_timestamp' => time()
             ]);
 
-            $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
+            $QueryResults = $SelectedSlave->getConnection()->query($Query);
             if($QueryResults == false)
             {
-                throw new DatabaseException("There was an error while trying to create a like record",
-                    $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
+                throw new DatabaseException('There was an error while trying to create a like record',
+                    $Query, $SelectedSlave->getConnection()->error, $SelectedSlave->getConnection()
                 );
             }
         }
@@ -116,23 +128,27 @@
         /**
          * Gets an existing record from the database
          *
+         * @param string $slave_server
          * @param int $user_id
          * @param string $post_id
          * @return LikeRecord
          * @throws DatabaseException
+         * @throws InvalidSlaveHashException
          * @throws LikeRecordNotFoundException
          */
-        public function getRecord(int $user_id, string $post_id): LikeRecord
+        public function getRecord(string $slave_server, int $user_id, string $post_id): LikeRecord
         {
-            $Query = QueryBuilder::select("likes", [
-                "id",
-                "user_id",
-                "post_id",
-                "liked",
-                "last_updated_timestamp",
-                "created_timestamp"
-            ], "id", ($user_id . $post_id), null, null, 1);
-            $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
+            $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer($slave_server);
+
+            $Query = QueryBuilder::select('likes', [
+                'id',
+                'user_id',
+                'post_id',
+                'liked',
+                'last_updated_timestamp',
+                'created_timestamp'
+            ], 'id', ($user_id . $post_id), null, null, 1);
+            $QueryResults = $SelectedSlave->getConnection()->query($Query);
 
             if($QueryResults)
             {
@@ -143,13 +159,15 @@
                     throw new LikeRecordNotFoundException();
                 }
 
-                return(LikeRecord::fromArray($Row));
+                $ReturnObject = LikeRecord::fromArray($Row);
+                $ReturnObject->ID = $SelectedSlave->MysqlServerPointer->HashPointer . '-' . $ReturnObject->ID;
+                return $ReturnObject;
             }
             else
             {
                 throw new DatabaseException(
-                    "There was an error while trying retrieve the like record from the network",
-                    $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
+                    'There was an error while trying retrieve the like record from the network',
+                    $Query, $SelectedSlave->getConnection()->error, $SelectedSlave->getConnection()
                 );
             }
         }
@@ -159,20 +177,23 @@
          *
          * @param LikeRecord $likeRecord
          * @throws DatabaseException
+         * @throws InvalidSlaveHashException
          */
         public function updateRecord(LikeRecord $likeRecord): void
         {
-            $Query = QueryBuilder::update("likes", [
-                "liked" => (int)$likeRecord->Liked,
-                "last_updated_timestamp" => time()
-            ], "id", ($likeRecord->UserID . $likeRecord->PostID));
-            $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
+            $Query = QueryBuilder::update('likes', [
+                'liked' => (int)$likeRecord->Liked,
+                'last_updated_timestamp' => time()
+            ], 'id', ($likeRecord->UserID . $likeRecord->PostID));
+
+            $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHashHash($likeRecord->ID));
+            $QueryResults = $SelectedSlave->getConnection()->query($Query);
 
             if($QueryResults == false)
             {
                 throw new DatabaseException(
-                    "There was an error while trying to update the like record",
-                    $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
+                    'There was an error while trying to update the like record',
+                    $Query, $SelectedSlave->getConnection()->error, $SelectedSlave->getConnection()
                 );
             }
         }

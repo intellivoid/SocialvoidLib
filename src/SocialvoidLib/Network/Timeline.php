@@ -20,6 +20,7 @@
     use SocialvoidLib\Exceptions\GenericInternal\CacheException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
+    use SocialvoidLib\Exceptions\GenericInternal\InvalidSlaveHashException;
     use SocialvoidLib\Exceptions\GenericInternal\ServiceJobException;
     use SocialvoidLib\Exceptions\Internal\FollowerDataNotFound;
     use SocialvoidLib\Exceptions\Internal\UserTimelineNotFoundException;
@@ -108,6 +109,7 @@
          * @throws DatabaseException
          * @throws InvalidSearchMethodException
          * @throws UserTimelineNotFoundException
+         * @noinspection PhpUnused
          */
         public function getTimelineState(): TimelineState
         {
@@ -327,6 +329,7 @@
          * @throws CacheException
          * @throws DatabaseException
          * @throws InvalidSearchMethodException
+         * @throws InvalidSlaveHashException
          * @throws PostDeletedException
          * @throws PostNotFoundException
          */
@@ -336,7 +339,7 @@
                 PostSearchMethod::ByPublicId, $post_public_id);
 
             $this->networkSession->getSocialvoidLib()->getPostsManager()->likePost(
-                $this->networkSession->getAuthenticatedUser()->ID, $selected_post
+                $this->networkSession->getAuthenticatedUser(), $selected_post
             );
         }
 
@@ -349,6 +352,7 @@
          * @throws InvalidSearchMethodException
          * @throws PostDeletedException
          * @throws PostNotFoundException
+         * @throws InvalidSlaveHashException
          */
         public function unlikePost(string $post_public_id): void
         {
@@ -356,7 +360,7 @@
                 PostSearchMethod::ByPublicId, $post_public_id);
 
             $this->networkSession->getSocialvoidLib()->getPostsManager()->unlikePost(
-                $this->networkSession->getAuthenticatedUser()->ID, $selected_post
+                $this->networkSession->getAuthenticatedUser(), $selected_post
             );
         }
 

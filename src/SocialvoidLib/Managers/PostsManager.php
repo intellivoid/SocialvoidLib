@@ -29,6 +29,7 @@
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\GenericInternal\DependencyError;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
+    use SocialvoidLib\Exceptions\GenericInternal\InvalidSlaveHashException;
     use SocialvoidLib\Exceptions\GenericInternal\RedisCacheException;
     use SocialvoidLib\Exceptions\GenericInternal\ServiceJobException;
     use SocialvoidLib\Exceptions\Internal\RepostRecordNotFoundException;
@@ -38,6 +39,7 @@
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPostTextException;
     use SocialvoidLib\InputTypes\RegisterCacheInput;
     use SocialvoidLib\Objects\Post;
+    use SocialvoidLib\Objects\User;
     use SocialvoidLib\SocialvoidLib;
     use ZiProto\ZiProto;
 
@@ -297,7 +299,7 @@
         /**
          * Likes an existing post
          *
-         * @param int $user_id
+         * @param User $user
          * @param Post $post
          * @param bool $skip_errors
          * @throws CacheException
@@ -305,9 +307,10 @@
          * @throws InvalidSearchMethodException
          * @throws PostDeletedException
          * @throws PostNotFoundException
+         * @throws InvalidSlaveHashException
          * @noinspection DuplicatedCode
          */
-        public function likePost(int $user_id, Post $post, bool $skip_errors=False): void
+        public function likePost(User $user, Post $post, bool $skip_errors=False): void
         {
             try
             {
@@ -330,11 +333,11 @@
                 }
 
                 // Do not continue if the user already likes this post
-                if(in_array($user_id, $post->Likes))
+                if(in_array($user->ID, $post->Likes))
                     return;
 
-                $this->socialvoidLib->getLikesRecordManager()->likeRecord($user_id, $post->PublicID);
-                $post->Likes[] = $user_id;
+                $this->socialvoidLib->getLikesRecordManager()->likeRecord($user->SlaveServer, $user->ID, $post->PublicID);
+                Converter::addFlag($post->Likes, $user->ID);
                 $this->updatePost($post);
             }
             catch(Exception $e)
@@ -346,17 +349,18 @@
         /**
          * Unlikes an existing post
          *
-         * @param int $user_id
+         * @param User $user
          * @param Post $post
          * @param bool $skip_errors
          * @throws CacheException
          * @throws DatabaseException
          * @throws InvalidSearchMethodException
+         * @throws InvalidSlaveHashException
          * @throws PostDeletedException
          * @throws PostNotFoundException
          * @noinspection DuplicatedCode
          */
-        public function unlikePost(int $user_id, Post $post, bool $skip_errors=False): void
+        public function unlikePost(User $user, Post $post, bool $skip_errors=False): void
         {
             try
             {
@@ -379,11 +383,11 @@
                 }
 
                 // Do not continue if the user never liked this post
-                if(in_array($user_id, $post->Likes) == false)
+                if(in_array($user->ID, $post->Likes) == false)
                     return;
 
-                $this->socialvoidLib->getLikesRecordManager()->unlikeRecord($user_id, $post->PublicID);
-                Converter::removeFlag($post->Likes, $user_id);
+                $this->socialvoidLib->getLikesRecordManager()->unlikeRecord($user->SlaveServer, $user->ID, $post->PublicID);
+                Converter::removeFlag($post->Likes, $user->ID);
                 $this->updatePost($post);
             }
             catch(Exception $e)
@@ -408,6 +412,7 @@
          * @throws PostDeletedException
          * @throws PostNotFoundException
          * @noinspection DuplicatedCode
+         * @noinspection PhpBooleanCanBeSimplifiedInspection
          */
         public function repostPost(int $user_id, Post $post, int $session_id=null, string $priority=PostPriorityLevel::None, array $flags=[]): Post
         {
@@ -517,6 +522,7 @@
          * @throws PostDeletedException
          * @throws PostNotFoundException
          * @noinspection DuplicatedCode
+         * @noinspection PhpBooleanCanBeSimplifiedInspection
          */
         public function quotePost(int $user_id, Post $post, string $text, string $source, int $session_id=null, array $media_content=[], string $priority=PostPriorityLevel::None, array $flags=[]): Post
         {
@@ -623,6 +629,7 @@
          * @throws PostDeletedException
          * @throws PostNotFoundException
          * @noinspection DuplicatedCode
+         * @noinspection PhpBooleanCanBeSimplifiedInspection
          */
         public function replyToPost(int $user_id, Post $post, string $text, string $source, int $session_id=null, array $media_content=[], string $priority=PostPriorityLevel::None, array $flags=[]): Post
         {
