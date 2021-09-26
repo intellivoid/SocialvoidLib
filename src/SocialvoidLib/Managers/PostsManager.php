@@ -14,7 +14,6 @@
 
     use Exception;
     use msqg\QueryBuilder;
-    use React\Promise\Util;
     use SocialvoidLib\Abstracts\Flags\PostFlags;
     use SocialvoidLib\Abstracts\Levels\PostPriorityLevel;
     use SocialvoidLib\Abstracts\SearchMethods\PostSearchMethod;
@@ -42,6 +41,7 @@
     use SocialvoidLib\Objects\Post;
     use SocialvoidLib\Objects\User;
     use SocialvoidLib\SocialvoidLib;
+    use Symfony\Component\Uid\Uuid;
     use ZiProto\ZiProto;
 
     /**
@@ -71,7 +71,7 @@
          * @param User $user
          * @param string $source
          * @param string $text
-         * @param int|null $session_id
+         * @param string|null $session_id
          * @param array $media_content
          * @param string $priority
          * @param array $flags
@@ -94,7 +94,7 @@
             if($textPostResults->valid == false)
                 throw new InvalidPostTextException('The given post text is invalid', $text);
 
-            $PublicID = BaseIdentification::postId($user->ID, $timestamp, $text);
+            $PublicID = Uuid::v1();
             $Properties = new Post\Properties();
 
             // Extract important information from this text

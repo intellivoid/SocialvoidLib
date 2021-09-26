@@ -53,6 +53,7 @@
         /**
          * Returns a Post Base ID
          *
+         * @deprecated Use UUID instead
          * @param int $user_id
          * @param int $timestamp
          * @param string $text

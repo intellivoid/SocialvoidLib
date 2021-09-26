@@ -8,3 +8,4 @@
  - Added alternative method for an RPC Server (No BackgroundWorker)
  - Added slave support for `likes`
  - Refactored table `likes` to `posts_likes`
+ - Post IDs now use UUID v1
