@@ -85,7 +85,7 @@
          * @noinspection DuplicatedCode
          * @noinspection PhpBooleanCanBeSimplifiedInspection
          */
-        public function publishPost(User $user, string $source, string $text, int $session_id=null, array $media_content=[], string $priority=PostPriorityLevel::None, array $flags=[]): Post
+        public function publishPost(User $user, string $source, string $text, string $session_id=null, array $media_content=[], string $priority=PostPriorityLevel::None, array $flags=[]): Post
         {
             $timestamp = time();
 

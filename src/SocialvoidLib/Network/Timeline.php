@@ -77,13 +77,14 @@
          * @throws FollowerDataNotFound
          * @throws InvalidPostTextException
          * @throws InvalidSearchMethodException
+         * @throws InvalidSlaveHashException
          * @throws PostNotFoundException
          * @throws UserTimelineNotFoundException
          */
-        public function postToTimeline(string $text, array $media_content=[], array $flags=[]): Post
+        public function composePost(string $text, array $media_content=[], array $flags=[]): Post
         {
             $PostObject = $this->networkSession->getSocialvoidLib()->getPostsManager()->publishPost(
-                $this->networkSession->getAuthenticatedUser()->ID,
+                $this->networkSession->getAuthenticatedUser(),
                 Converter::getSource($this->networkSession->getActiveSession()),
                 $text, $this->networkSession->getActiveSession()->ID, $media_content,
                 PostPriorityLevel::High, $flags

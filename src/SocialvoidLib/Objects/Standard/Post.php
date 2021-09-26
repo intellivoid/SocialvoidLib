@@ -152,7 +152,7 @@
                 "likes_count" => (is_null($this->LikesCount) ? null : (int)$this->LikesCount),
                 "reposts_count" => (is_null($this->RepostsCount) ? null : (int)$this->RepostsCount),
                 "quotes_count" => (is_null($this->QuotesCount) ? null : (int)$this->QuotesCount),
-                "replies_count" => (is_null($this->RepliesCount) == null ? null : (int)$this->RepliesCount),
+                "replies_count" => (is_null($this->RepliesCount) == null ? 0 : (int)$this->RepliesCount),
                 "posted_timestamp" => ($this->PostedTimestamp),
                 "flags" => $this->Flags,
             ];
@@ -229,10 +229,10 @@
             $StandardPostObject->PostType = Utilities::determinePostType($post);
             $StandardPostObject->Text = $post->Text;
             $StandardPostObject->Source = $post->Source;
-            $StandardPostObject->LikesCount = ($post->Likes == null ? null : count($post->Likes));
-            $StandardPostObject->RepostsCount = ($post->Reposts == null ? null : count($post->Reposts));
-            $StandardPostObject->QuotesCount = ($post->Quotes == null ? null : count($post->Quotes));
-            $StandardPostObject->RepliesCount = ($post->Replies == null ? null : count($post->Replies));
+            $StandardPostObject->LikesCount = ($post->Likes == null ? 0 : count($post->Likes));
+            $StandardPostObject->RepostsCount = ($post->Reposts == null ? 0 : count($post->Reposts));
+            $StandardPostObject->QuotesCount = ($post->Quotes == null ? 0 : count($post->Quotes));
+            $StandardPostObject->RepliesCount = ($post->Replies == null ? 0 : count($post->Replies));
             $StandardPostObject->PostedTimestamp = $post->CreatedTimestamp;
             $StandardPostObject->Flags = $post->Flags;
 

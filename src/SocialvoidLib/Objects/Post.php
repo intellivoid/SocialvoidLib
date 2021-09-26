@@ -66,7 +66,7 @@
         /**
          * The session ID used to make this post
          *
-         * @var int|null
+         * @var string|null
          */
         public $SessionID;
 
@@ -182,14 +182,14 @@
                 foreach($this->MediaContent as $mediaContent)
                     $media_content_results[] = $mediaContent->toArray();
             }
-
+            
             return [
                 //"id" => ($this->ID == null ? null : (int)$this->ID), https://github.com/intellivoid/SocialvoidLib/issues/1
                 "public_id" => $this->PublicID,
                 "text" => $this->Text,
                 "source" => $this->Source,
                 "properties" => ($this->Properties == null ? null : $this->Properties->toArray()),
-                "session_id" => ($this->SessionID == null ? null : (int)$this->SessionID),
+                "session_id" => ($this->SessionID == null ? null : $this->SessionID),
                 "poster_user_id" => $this->PosterUserID,
                 "reply" => ($this->Reply == null ? null : $this->Reply->toArray()),
                 "quote" => ($this->Quote == null ? null : $this->Quote->toArray()),
@@ -202,8 +202,8 @@
                 "quotes" => ($this->Quotes == null ? [] : $this->Quotes),
                 "replies" => ($this->Replies == null ? []: $this->Replies),
                 "media_content" => $media_content_results,
-                "last_updated_timestamp" => ($this->LastUpdatedTimestamp == null ? null : (int)$this->LastUpdatedTimestamp),
-                "created_timestamp" => ($this->CreatedTimestamp == null ? null : (int)$this->CreatedTimestamp)
+                "last_updated_timestamp" => ($this->LastUpdatedTimestamp == null ? null : $this->LastUpdatedTimestamp),
+                "created_timestamp" => ($this->CreatedTimestamp == null ? null : $this->CreatedTimestamp)
             ];
         }
 
@@ -235,7 +235,7 @@
                 $PostObject->Properties = ($data["properties"] == null ? new Properties() : Properties::fromArray($data["properties"]));
 
             if(isset($data["session_id"]))
-                $PostObject->SessionID = ($data["session_id"] == null ? null : (int)$data["session_id"]);
+                $PostObject->SessionID = ($data["session_id"] == null ? null : $data["session_id"]);
 
             if(isset($data["poster_user_id"]))
                 $PostObject->PosterUserID = ($data["poster_user_id"] == null ? null : (int)$data["poster_user_id"]);
@@ -308,7 +308,7 @@
                 "text" => $this->Text,
                 "source" => $this->Source,
                 "properties" => ($this->Properties == null ? null : $this->Properties->toArray()),
-                "session_id" => ($this->SessionID == null ? null : (int)$this->SessionID),
+                "session_id" => ($this->SessionID == null ? null : $this->SessionID),
                 "poster_user_id" => $this->PosterUserID,
                 "reply_to_post_id" => ($this->Reply == null ? null : $this->Reply->ReplyToPostID),
                 "reply_to_user_id" => ($this->Reply == null ? null : $this->Reply->ReplyToUserID),
@@ -324,8 +324,8 @@
                 "quotes" => ($this->Quotes == null ? [] : $this->Quotes),
                 "replies" => ($this->Replies == null ? [] : $this->Replies),
                 "media_content" => $media_content_results,
-                "last_updated_timestamp" => ($this->LastUpdatedTimestamp == null ? null : (int)$this->LastUpdatedTimestamp),
-                "created_timestamp" => ($this->CreatedTimestamp == null ? null : (int)$this->CreatedTimestamp)
+                "last_updated_timestamp" => ($this->LastUpdatedTimestamp == null ? null : $this->LastUpdatedTimestamp),
+                "created_timestamp" => ($this->CreatedTimestamp == null ? null : $this->CreatedTimestamp)
             ];
         }
 
@@ -350,7 +350,7 @@
                 $PostObject->Properties = ($data["properties"] == null ? new Properties() : Properties::fromArray($data["properties"]));
 
             if(isset($data["session_id"]))
-                $PostObject->SessionID = ($data["session_id"] == null ? null : (int)$data["session_id"]);
+                $PostObject->SessionID = ($data["session_id"] == null ? null : $data["session_id"]);
 
             if(isset($data["poster_user_id"]))
                 $PostObject->PosterUserID = ($data["poster_user_id"] == null ? null : (int)$data["poster_user_id"]);

@@ -3,7 +3,6 @@
 
     namespace SocialvoidRPC\Methods\Session;
 
-
     use Exception;
     use KimchiRPC\Exceptions\Server\MissingParameterException;
     use KimchiRPC\Interfaces\MethodInterface;
@@ -14,18 +13,10 @@
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSlaveHashException;
-    use SocialvoidLib\Exceptions\Internal\NoPasswordAuthenticationAvailableException;
-    use SocialvoidLib\Exceptions\Standard\Authentication\AlreadyAuthenticatedException;
-    use SocialvoidLib\Exceptions\Standard\Authentication\AuthenticationFailureException;
-    use SocialvoidLib\Exceptions\Standard\Authentication\AuthenticationNotApplicableException;
     use SocialvoidLib\Exceptions\Standard\Authentication\BadSessionChallengeAnswerException;
-    use SocialvoidLib\Exceptions\Standard\Authentication\IncorrectLoginCredentialsException;
-    use SocialvoidLib\Exceptions\Standard\Authentication\IncorrectTwoFactorAuthenticationCodeException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException;
-    use SocialvoidLib\Exceptions\Standard\Authentication\PrivateAccessTokenRequiredException;
     use SocialvoidLib\Exceptions\Standard\Authentication\SessionExpiredException;
     use SocialvoidLib\Exceptions\Standard\Authentication\SessionNotFoundException;
-    use SocialvoidLib\Exceptions\Standard\Authentication\TwoFactorAuthenticationRequiredException;
     use SocialvoidLib\Exceptions\Standard\Network\DocumentNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
@@ -116,39 +107,32 @@
         /**
          * @param Request $request
          * @return Response
-         * @throws AlreadyAuthenticatedException
-         * @throws AuthenticationFailureException
-         * @throws AuthenticationNotApplicableException
+         * @throws AvatarGeneratorException
+         * @throws AvatarNotFoundException
          * @throws BadSessionChallengeAnswerException
          * @throws CacheException !may
+         * @throws CannotGetOriginalImageException
          * @throws DatabaseException !may
-         * @throws IncorrectLoginCredentialsException
-         * @throws IncorrectTwoFactorAuthenticationCodeException
+         * @throws DocumentNotFoundException
+         * @throws FileNotFoundException
+         * @throws ImageTooSmallException
          * @throws InternalServerException
          * @throws InvalidClientPublicHashException
          * @throws InvalidPasswordException
          * @throws InvalidSearchMethodException !may
          * @throws InvalidSessionIdentificationException
+         * @throws InvalidSlaveHashException
          * @throws InvalidUsernameException
+         * @throws InvalidZimageFileException
          * @throws MissingParameterException
-         * @throws NoPasswordAuthenticationAvailableException !may
+         * @throws NotAuthenticatedException
          * @throws PeerNotFoundException !may
-         * @throws PrivateAccessTokenRequiredException
          * @throws SessionExpiredException
          * @throws SessionNotFoundException !may
-         * @throws TwoFactorAuthenticationRequiredException
-         * @throws InvalidSlaveHashException
-         * @throws NotAuthenticatedException
-         * @throws DocumentNotFoundException
-         * @throws CannotGetOriginalImageException
-         * @throws FileNotFoundException
-         * @throws InvalidZimageFileException
          * @throws SizeNotSetException
-         * @throws UnsupportedImageTypeException
-         * @throws AvatarGeneratorException
-         * @throws AvatarNotFoundException
-         * @throws ImageTooSmallException
          * @throws UnsupportedAvatarGeneratorException
+         * @throws UnsupportedImageTypeException
+         * @noinspection DuplicatedCode
          */
         public function execute(Request $request): Response
         {
@@ -162,6 +146,21 @@
 
             // Start the authentication
             $NetworkSession = new NetworkSession(SocialvoidRPC::$SocialvoidLib);
+
+            try
+            {
+                $NetworkSession->loadSession($SessionIdentification);
+            }
+            catch(Exception $e)
+            {
+                // Allow standard errors
+                if(Validate::isStandardError($e->getCode()))
+                    throw $e;
+
+                // If anything else, suppress the error.
+                throw new InternalServerException('There was an unexpected error while trying to loading your session', $e);
+            }
+
             $otp_code = null;
 
             if(
@@ -175,7 +174,6 @@
             try
             {
                 $NetworkSession->authenticateUser(
-                    $SessionIdentification,
                     $request->Parameters["username"],
                     $request->Parameters["password"],
                     $otp_code // The parameter is null if it isn't included

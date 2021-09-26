@@ -27,5 +27,5 @@
     $MediaContent = [];
     //$MediaContent[] = $NetworkSession->
 
-    $Post = $NetworkSession->getTimeline()->postToTimeline("Amazing!");
+    $Post = $NetworkSession->getTimeline()->composePost("Amazing!");
     print(json_encode($Post->toArray(), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));

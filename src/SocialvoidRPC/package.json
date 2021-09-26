@@ -97,6 +97,10 @@
         },
         {
             "required": true,
+            "file": "Methods/Timeline/ComposePost.php"
+        },
+        {
+            "required": true,
             "file": "SocialvoidRPC.php"
         }
     ],

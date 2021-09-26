@@ -131,6 +131,9 @@
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Session\AuthenticateUser());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Session\Logout());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Session\Register());
+
+            // Timeline methods
+            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\ComposePost());
         }
 
         /**

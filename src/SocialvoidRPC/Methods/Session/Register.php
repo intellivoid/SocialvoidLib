@@ -11,8 +11,10 @@
     use SocialvoidLib\Exceptions\GenericInternal\CacheException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
-    use SocialvoidLib\Exceptions\Standard\Authentication\AlreadyAuthenticatedException;
+    use SocialvoidLib\Exceptions\GenericInternal\InvalidSlaveHashException;
     use SocialvoidLib\Exceptions\Standard\Authentication\BadSessionChallengeAnswerException;
+    use SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException;
+    use SocialvoidLib\Exceptions\Standard\Authentication\SessionExpiredException;
     use SocialvoidLib\Exceptions\Standard\Authentication\SessionNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\DocumentNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
@@ -25,7 +27,6 @@
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPasswordException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidSessionIdentificationException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidUsernameException;
-    use SocialvoidLib\Exceptions\Standard\Validation\UsernameAlreadyExistsException;
     use SocialvoidLib\NetworkSession;
     use SocialvoidLib\Objects\Standard\SessionIdentification;
     use SocialvoidRPC\SocialvoidRPC;
@@ -127,10 +128,15 @@
          * @param Request $request
          * @return Response
          * @throws AgreementRequiredException
-         * @throws AlreadyAuthenticatedException
+         * @throws AvatarGeneratorException
+         * @throws AvatarNotFoundException
          * @throws BadSessionChallengeAnswerException
          * @throws CacheException
+         * @throws CannotGetOriginalImageException
          * @throws DatabaseException
+         * @throws DocumentNotFoundException
+         * @throws FileNotFoundException
+         * @throws ImageTooSmallException
          * @throws InternalServerException
          * @throws InvalidClientPublicHashException
          * @throws InvalidFirstNameException
@@ -140,20 +146,17 @@
          * @throws InvalidSearchMethodException
          * @throws InvalidSessionIdentificationException
          * @throws InvalidUsernameException
+         * @throws InvalidZimageFileException
          * @throws MissingParameterException
          * @throws PeerNotFoundException
          * @throws SessionNotFoundException
-         * @throws UsernameAlreadyExistsException
-         * @throws DocumentNotFoundException
-         * @throws CannotGetOriginalImageException
-         * @throws FileNotFoundException
-         * @throws InvalidZimageFileException
          * @throws SizeNotSetException
-         * @throws UnsupportedImageTypeException
-         * @throws AvatarGeneratorException
-         * @throws AvatarNotFoundException
-         * @throws ImageTooSmallException
          * @throws UnsupportedAvatarGeneratorException
+         * @throws UnsupportedImageTypeException
+         * @throws InvalidSlaveHashException
+         * @throws NotAuthenticatedException
+         * @throws SessionExpiredException
+         * @noinspection DuplicatedCode
          */
         public function execute(Request $request): Response
         {
@@ -167,6 +170,20 @@
 
             // Start the authentication
             $NetworkSession = new NetworkSession(SocialvoidRPC::$SocialvoidLib);
+
+            try
+            {
+                $NetworkSession->loadSession($SessionIdentification);
+            }
+            catch(Exception $e)
+            {
+                // Allow standard errors
+                if(Validate::isStandardError($e->getCode()))
+                    throw $e;
+
+                // If anything else, suppress the error.
+                throw new InternalServerException('There was an unexpected error while trying to loading your session', $e);
+            }
 
             // Verify the terms of service condition
             if($NetworkSession->getTermsOfService()->ID !== $request->Parameters['terms_of_service_id'])
