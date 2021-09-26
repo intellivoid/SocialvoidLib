@@ -1,4 +1,4 @@
-create table quotes
+create table posts_quotes
 (
     id                     varchar(286) not null comment 'The Unique Internal Database ID',
     user_id                int          null comment 'The User ID that quoted this post',
@@ -7,31 +7,31 @@ create table quotes
     quoted                 tinyint(1)   null comment 'Indicates the current quote status',
     last_updated_timestamp int          null comment 'The Unix Timestamp for when this record was last updated',
     created_timestamp      int          null comment 'The Unix Timestamp for when this record was created',
-    constraint quotes_id_uindex
+    constraint posts_quotes_id_uindex
         unique (id),
-    constraint quotes_post_id_original_post_id_uindex
+    constraint posts_quotes_post_id_original_post_id_uindex
         unique (post_id, original_post_id),
-    constraint quotes_user_id_post_id_uindex
+    constraint posts_quotes_user_id_post_id_uindex
         unique (user_id, post_id),
-    constraint quotes_posts_public_id_fk
+    constraint posts_quotes_posts_public_id_fk
         foreign key (post_id) references posts (public_id),
-    constraint quotes_posts_public_id_fk_2
+    constraint posts_quotes_posts_public_id_fk_2
         foreign key (original_post_id) references posts (public_id)
 )
     comment 'Table for housing quotes for posts';
 
-create index quotes_liked_index
-    on quotes (quoted);
+create index posts_quotes_liked_index
+    on posts_quotes (quoted);
 
-create index quotes_original_post_id_index
-    on quotes (original_post_id);
+create index posts_quotes_original_post_id_index
+    on posts_quotes (original_post_id);
 
-create index quotes_post_id_index
-    on quotes (post_id);
+create index posts_quotes_post_id_index
+    on posts_quotes (post_id);
 
-create index quotes_user_id_index
-    on quotes (user_id);
+create index posts_quotes_user_id_index
+    on posts_quotes (user_id);
 
-alter table quotes
+alter table posts_quotes
     add primary key (id);
 
