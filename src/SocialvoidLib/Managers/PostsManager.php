@@ -14,6 +14,7 @@
 
     use Exception;
     use msqg\QueryBuilder;
+    use React\Promise\Util;
     use SocialvoidLib\Abstracts\Flags\PostFlags;
     use SocialvoidLib\Abstracts\Levels\PostPriorityLevel;
     use SocialvoidLib\Abstracts\SearchMethods\PostSearchMethod;
@@ -67,7 +68,7 @@
         /**
          * Publishes a post to the network
          *
-         * @param int $user_id
+         * @param User $user
          * @param string $source
          * @param string $text
          * @param int|null $session_id
@@ -75,26 +76,29 @@
          * @param string $priority
          * @param array $flags
          * @return Post
-         * @throws DatabaseException
-         * @throws InvalidSearchMethodException
-         * @throws PostNotFoundException
-         * @throws InvalidPostTextException
          * @throws CacheException
+         * @throws DatabaseException
+         * @throws InvalidPostTextException
+         * @throws InvalidSearchMethodException
+         * @throws InvalidSlaveHashException
+         * @throws PostNotFoundException
          * @noinspection DuplicatedCode
+         * @noinspection PhpBooleanCanBeSimplifiedInspection
          */
-        public function publishPost(int $user_id, string $source, string $text, int $session_id=null, array $media_content=[], string $priority=PostPriorityLevel::None, array $flags=[]): Post
+        public function publishPost(User $user, string $source, string $text, int $session_id=null, array $media_content=[], string $priority=PostPriorityLevel::None, array $flags=[]): Post
         {
             $timestamp = time();
 
             $textPostParser = new Parser();
             $textPostResults = $textPostParser->parseInput($text);
             if($textPostResults->valid == false)
-                throw new InvalidPostTextException("The given post text is invalid", $text);
+                throw new InvalidPostTextException('The given post text is invalid', $text);
 
-            $PublicID = BaseIdentification::postId($user_id, $timestamp, $text);
+            $PublicID = BaseIdentification::postId($user->ID, $timestamp, $text);
             $Properties = new Post\Properties();
 
             // Extract important information from this text
+            // TODO: Use the new entity extractor method (It works with Markdown!)
             $Extractor = new Extractor($text);
             $Entities = new Post\Entities();
             $Entities->Hashtags = $Extractor->extractHashtags();
@@ -106,36 +110,38 @@
             foreach($media_content as $value)
                 $MediaContentArray[] = $value->toArray();
 
-            $Query = QueryBuilder::insert_into("posts", [
-                "public_id" => $this->socialvoidLib->getDatabase()->real_escape_string($PublicID),
-                "text" => $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($text)),
-                "source" => $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($source)),
-                "session_id" => ($session_id == null ? null : $session_id),
-                "poster_user_id" => $user_id,
-                "properties" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Properties->toArray())),
-                "flags" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($flags)),
-                "is_deleted" => (int)false,
-                "priority_level" => $this->socialvoidLib->getDatabase()->real_escape_string($priority),
-                "entities" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Entities->toArray())),
-                "likes" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
-                "reposts" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
-                "quotes" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
-                "replies" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
-                "media_content" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($MediaContentArray)),
-                "last_updated_timestamp" => $timestamp,
-                "created_timestamp" => $timestamp
+            $Query = QueryBuilder::insert_into('posts', [
+                'public_id' => $this->socialvoidLib->getDatabase()->real_escape_string($PublicID),
+                'text' => $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($text)),
+                'source' => $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($source)),
+                'session_id' => ($session_id == null ? null : $session_id),
+                'poster_user_id' => $user->ID,
+                'properties' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Properties->toArray())),
+                'flags' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($flags)),
+                'is_deleted' => (int)false,
+                'priority_level' => $this->socialvoidLib->getDatabase()->real_escape_string($priority),
+                'entities' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Entities->toArray())),
+                'likes' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
+                'reposts' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
+                'quotes' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
+                'replies' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
+                'media_content' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($MediaContentArray)),
+                'last_updated_timestamp' => $timestamp,
+                'created_timestamp' => $timestamp
             ]);
-            $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
+
+            $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer($user->SlaveServer);
+            $QueryResults = $SelectedSlave->getConnection()->query($Query);
             if($QueryResults)
             {
-                $returnResults = $this->getPost(PostSearchMethod::ByPublicId, $PublicID);
+                $returnResults = $this->getPost(PostSearchMethod::ByPublicId, $SelectedSlave->MysqlServerPointer->HashPointer . '-' . $PublicID);
                 $this->registerPostCacheEntry($returnResults);
                 return $returnResults;
             }
             else
             {
-                throw new DatabaseException("There was an error while trying to create a post",
-                    $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
+                throw new DatabaseException('There was an error while trying to create a post',
+                    $Query, $SelectedSlave->getConnection()->error, $SelectedSlave->getConnection()
                 );
             }
         }
@@ -150,6 +156,7 @@
          * @throws DatabaseException
          * @throws InvalidSearchMethodException
          * @throws PostNotFoundException
+         * @throws InvalidSlaveHashException
          */
         public function getPost(string $search_method, string $value): Post
         {
@@ -162,43 +169,45 @@
 
                 /** @noinspection PhpDeprecationInspection */
                 case PostSearchMethod::ById:
-                    throw new InvalidSearchMethodException("The use of ById is no longer available, use ByPublicId instead (https://github.com/intellivoid/SocialvoidLib/issues/1)", $search_method, $value);
+                    throw new InvalidSearchMethodException('The use of ById is no longer available, use ByPublicId instead (https://github.com/intellivoid/SocialvoidLib/issues/1)', $search_method, $value);
 
                 default:
-                    throw new InvalidSearchMethodException("The given search method is invalid for getPost()", $search_method, $value);
+                    throw new InvalidSearchMethodException('The given search method is invalid for getPost()', $search_method, $value);
             }
 
-            if($this->socialvoidLib->getRedisBasicCacheConfiguration()["Enabled"])
+            if($this->socialvoidLib->getRedisBasicCacheConfiguration()['Enabled'])
             {
                 $CachedPost = $this->getPostCacheEntry($value);
                 if($CachedPost !== null) return $CachedPost;
             }
 
-            $Query = QueryBuilder::select("posts", [
-                "public_id",
-                "text",
-                "source",
-                "properties",
-                "session_id",
-                "poster_user_id",
-                "reply_to_post_id",
-                "reply_to_user_id",
-                "quote_original_post_id",
-                "quote_original_user_id",
-                "repost_original_post_id",
-                "repost_original_user_id",
-                "flags",
-                "priority_level",
-                "entities",
-                "likes",
-                "reposts",
-                "quotes",
-                "replies",
-                "media_content",
-                "last_updated_timestamp",
-                "created_timestamp"
-            ], $search_method, $value, null, null, 1);
-            $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
+            $Query = QueryBuilder::select('posts', [
+                'public_id',
+                'text',
+                'source',
+                'properties',
+                'session_id',
+                'poster_user_id',
+                'reply_to_post_id',
+                'reply_to_user_id',
+                'quote_original_post_id',
+                'quote_original_user_id',
+                'repost_original_post_id',
+                'repost_original_user_id',
+                'flags',
+                'priority_level',
+                'entities',
+                'likes',
+                'reposts',
+                'quotes',
+                'replies',
+                'media_content',
+                'last_updated_timestamp',
+                'created_timestamp'
+            ], $search_method, Utilities::removeSlaveHashHash($value), null, null, 1);
+            
+            $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHashHash($value));
+            $QueryResults = $SelectedSlave->getConnection()->query($Query);
 
             if($QueryResults)
             {
@@ -206,31 +215,33 @@
 
                 if ($Row == False)
                 {
-                    throw new PostNotFoundException("The requested post was not found");
+                    throw new PostNotFoundException('The requested post was not found');
                 }
                 else
                 {
-                    $Row["properties"] = ($Row["properties"] == null ? null : ZiProto::decode($Row["properties"]));
-                    $Row["flags"] = ($Row["flags"] == null ? null : ZiProto::decode($Row["flags"]));
-                    $Row["entities"] = ($Row["entities"] == null ? null : ZiProto::decode($Row["entities"]));
-                    $Row["likes"] = ($Row["likes"] == null ? null : ZiProto::decode($Row["likes"]));
-                    $Row["reposts"] = ($Row["reposts"] == null ? null : ZiProto::decode($Row["reposts"]));
-                    $Row["quotes"] = ($Row["quotes"] == null ? null : ZiProto::decode($Row["quotes"]));
-                    $Row["replies"] = ($Row["replies"] == null ? null : ZiProto::decode($Row["replies"]));
-                    $Row["media_content"] = ($Row["media_content"] == null ? null : ZiProto::decode($Row["media_content"]));
-                    $Row["text"] = ($Row["text"] == null ? null : urldecode($Row["text"]));
-                    $Row["source"] = ($Row["source"] == null ? null : urldecode($Row["source"]));
+                    $Row['properties'] = ($Row['properties'] == null ? null : ZiProto::decode($Row['properties']));
+                    $Row['flags'] = ($Row['flags'] == null ? null : ZiProto::decode($Row['flags']));
+                    $Row['entities'] = ($Row['entities'] == null ? null : ZiProto::decode($Row['entities']));
+                    $Row['likes'] = ($Row['likes'] == null ? null : ZiProto::decode($Row['likes']));
+                    $Row['reposts'] = ($Row['reposts'] == null ? null : ZiProto::decode($Row['reposts']));
+                    $Row['quotes'] = ($Row['quotes'] == null ? null : ZiProto::decode($Row['quotes']));
+                    $Row['replies'] = ($Row['replies'] == null ? null : ZiProto::decode($Row['replies']));
+                    $Row['media_content'] = ($Row['media_content'] == null ? null : ZiProto::decode($Row['media_content']));
+                    $Row['text'] = ($Row['text'] == null ? null : urldecode($Row['text']));
+                    $Row['source'] = ($Row['source'] == null ? null : urldecode($Row['source']));
 
                     $returnResults = Post::fromAlternativeArray($Row);
+                    $returnResults->PublicID = $SelectedSlave->MysqlServerPointer->HashPointer . '-' . $returnResults->PublicID;
                     $this->registerPostCacheEntry($returnResults);
+
                     return $returnResults;
                 }
             }
             else
             {
                 throw new DatabaseException(
-                    "There was an error while trying retrieve an existing post from the network",
-                    $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
+                    'There was an error while trying retrieve an existing post from the network',
+                    $Query, $SelectedSlave->getConnection()->error, $SelectedSlave->getConnection()
                 );
             }
         }
@@ -242,6 +253,8 @@
          * @return Post
          * @throws DatabaseException
          * @throws CacheException
+         * @throws InvalidSlaveHashException
+         * @noinspection PhpBooleanCanBeSimplifiedInspection
          */
         public function updatePost(Post $post): Post
         {
@@ -258,29 +271,31 @@
             
             // TODO: Validate text
             // Probably the most CPU intensive update there is here.
-            $Query = QueryBuilder::update("posts", [
-                "text" => ($post->Text == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($post->Text))),
-                "source" => ($post->Source == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($post->Source))),
-                "properties" => ($post->Properties == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Properties->toArray()))),
-                "poster_user_id" => ($post->PosterUserID == null ? null : $post->PosterUserID),
-                "reply_to_post_id" => ($post->Reply == null || $post->Reply->ReplyToPostID == null ? null : $post->Reply->ReplyToPostID),
-                "reply_to_user_id" => ($post->Reply == null || $post->Reply->ReplyToUserID == null ? null : (int)$post->Reply->ReplyToUserID),
-                "quote_original_post_id" => ($post->Quote == null || $post->Quote->OriginalPostID == null ? null : $post->Quote->OriginalPostID),
-                "quote_original_user_id" => ($post->Quote == null || $post->Quote->OriginalUserID == null ? null : (int)$post->Quote->OriginalUserID),
-                "repost_original_post_id" => ($post->Repost == null || $post->Repost->OriginalPostID == null ? null : $post->Repost->OriginalPostID),
-                "repost_original_user_id" => ($post->Repost == null || $post->Repost->OriginalUserID == null ? null : (int)$post->Repost->OriginalUserID),
-                "flags" => ($post->Flags == null ?  $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])) : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Flags))),
-                "is_deleted" => (Converter::hasFlag($post->Flags, PostFlags::Deleted) ? (int)true : (int)false),
-                "priority_level" => ($post->PriorityLevel == null ? $this->socialvoidLib->getDatabase()->real_escape_string(PostPriorityLevel::None) : $this->socialvoidLib->getDatabase()->real_escape_string($post->PriorityLevel)),
-                "entities" => ($post->Entities == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Entities->toArray()))),
-                "likes" => (is_null($post->Likes) ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Likes))),
-                "reposts" => (is_null($post->Reposts) ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Reposts))),
-                "quotes" => (is_null($post->Quotes) ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Quotes))),
-                "replies" => (is_null($post->Replies) ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Replies))),
-                "media_content" => (is_null($MediaContent) ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($MediaContent))),
-                "last_updated_timestamp" => $post->LastUpdatedTimestamp,
-            ], "public_id", $post->PublicID);
-            $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
+            $Query = QueryBuilder::update('posts', [
+                'text' => ($post->Text == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($post->Text))),
+                'source' => ($post->Source == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($post->Source))),
+                'properties' => ($post->Properties == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Properties->toArray()))),
+                'poster_user_id' => ($post->PosterUserID == null ? null : $post->PosterUserID),
+                'reply_to_post_id' => ($post->Reply == null || $post->Reply->ReplyToPostID == null ? null : $post->Reply->ReplyToPostID),
+                'reply_to_user_id' => ($post->Reply == null || $post->Reply->ReplyToUserID == null ? null : (int)$post->Reply->ReplyToUserID),
+                'quote_original_post_id' => ($post->Quote == null || $post->Quote->OriginalPostID == null ? null : $post->Quote->OriginalPostID),
+                'quote_original_user_id' => ($post->Quote == null || $post->Quote->OriginalUserID == null ? null : (int)$post->Quote->OriginalUserID),
+                'repost_original_post_id' => ($post->Repost == null || $post->Repost->OriginalPostID == null ? null : $post->Repost->OriginalPostID),
+                'repost_original_user_id' => ($post->Repost == null || $post->Repost->OriginalUserID == null ? null : (int)$post->Repost->OriginalUserID),
+                'flags' => ($post->Flags == null ?  $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])) : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Flags))),
+                'is_deleted' => (Converter::hasFlag($post->Flags, PostFlags::Deleted) ? (int)true : (int)false),
+                'priority_level' => ($post->PriorityLevel == null ? $this->socialvoidLib->getDatabase()->real_escape_string(PostPriorityLevel::None) : $this->socialvoidLib->getDatabase()->real_escape_string($post->PriorityLevel)),
+                'entities' => ($post->Entities == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Entities->toArray()))),
+                'likes' => (is_null($post->Likes) ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Likes))),
+                'reposts' => (is_null($post->Reposts) ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Reposts))),
+                'quotes' => (is_null($post->Quotes) ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Quotes))),
+                'replies' => (is_null($post->Replies) ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Replies))),
+                'media_content' => (is_null($MediaContent) ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($MediaContent))),
+                'last_updated_timestamp' => $post->LastUpdatedTimestamp,
+            ], 'public_id', Utilities::removeSlaveHashHash($post->PublicID));
+
+            $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHashHash($post->PublicID));
+            $QueryResults = $SelectedSlave->getConnection()->query($Query);
 
             if($QueryResults)
             {
@@ -290,8 +305,8 @@
             else
             {
                 throw new DatabaseException(
-                    "There was an error while trying to update the post",
-                    $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
+                    'There was an error while trying to update the post',
+                    $Query, $SelectedSlave->getConnection()->error, $SelectedSlave->getConnection()
                 );
             }
         }
@@ -317,7 +332,7 @@
                 // Do not like the post if it's deleted
                 if(Converter::hasFlag($post->Flags, PostFlags::Deleted))
                 {
-                    throw new PostDeletedException("The requested post was deleted");
+                    throw new PostDeletedException('The requested post was deleted');
                 }
 
                 // Like the original post if the requested post is a repost
@@ -328,7 +343,7 @@
                     // Do not repost the post if it's deleted
                     if(Converter::hasFlag($post->Flags, PostFlags::Deleted))
                     {
-                        throw new PostDeletedException("The requested post was deleted");
+                        throw new PostDeletedException('The requested post was deleted');
                     }
                 }
 
@@ -336,7 +351,9 @@
                 if(in_array($user->ID, $post->Likes))
                     return;
 
-                $this->socialvoidLib->getLikesRecordManager()->likeRecord($user->SlaveServer, $user->ID, $post->PublicID);
+                $this->socialvoidLib->getLikesRecordManager()->likeRecord(
+                    Utilities::getSlaveHashHash($post->PublicID), $user->ID, Utilities::removeSlaveHashHash($post->PublicID)
+                );
                 Converter::addFlag($post->Likes, $user->ID);
                 $this->updatePost($post);
             }
@@ -367,7 +384,7 @@
                 // Do not like the post if it's deleted
                 if(Converter::hasFlag($post->Flags, PostFlags::Deleted))
                 {
-                    throw new PostDeletedException("The requested post was deleted");
+                    throw new PostDeletedException('The requested post was deleted');
                 }
 
                 // Like the original post if the requested post is a repost
@@ -378,7 +395,7 @@
                     // Do not repost the post if it's deleted
                     if(Converter::hasFlag($post->Flags, PostFlags::Deleted))
                     {
-                        throw new PostDeletedException("The requested post was deleted");
+                        throw new PostDeletedException('The requested post was deleted');
                     }
                 }
 
@@ -386,7 +403,9 @@
                 if(in_array($user->ID, $post->Likes) == false)
                     return;
 
-                $this->socialvoidLib->getLikesRecordManager()->unlikeRecord($user->SlaveServer, $user->ID, $post->PublicID);
+                $this->socialvoidLib->getLikesRecordManager()->unlikeRecord(
+                    Utilities::getSlaveHashHash($post->PublicID), $user->ID, Utilities::removeSlaveHashHash($post->PublicID)
+                );
                 Converter::removeFlag($post->Likes, $user->ID);
                 $this->updatePost($post);
             }
@@ -411,6 +430,7 @@
          * @throws InvalidSearchMethodException
          * @throws PostDeletedException
          * @throws PostNotFoundException
+         * @throws InvalidSlaveHashException
          * @noinspection DuplicatedCode
          * @noinspection PhpBooleanCanBeSimplifiedInspection
          */
@@ -419,7 +439,7 @@
             // Do not repost the post if it's deleted
             if(Converter::hasFlag($post->Flags, PostFlags::Deleted))
             {
-                throw new PostDeletedException("The requested post was deleted");
+                throw new PostDeletedException('The requested post was deleted');
             }
 
             // Repost the original post if the requested post is a repost
@@ -430,7 +450,7 @@
                 // Do not repost the post if it's deleted
                 if(Converter::hasFlag($post->Flags, PostFlags::Deleted))
                 {
-                    throw new PostDeletedException("The requested post was deleted");
+                    throw new PostDeletedException('The requested post was deleted');
                 }
             }
 
@@ -446,7 +466,7 @@
                         $originalRepostPost = $this->getPost(PostSearchMethod::ByPublicId, $repostRecordState->PostID);
                         // TODO: Add more details to the AlreadyRepostedException exception.
                         if(Converter::hasFlag($originalRepostPost->Flags, PostFlags::Deleted) == false)
-                            throw new AlreadyRepostedException("The requested repost has already been reposted");
+                            throw new AlreadyRepostedException('The requested repost has already been reposted');
                     }
                     catch(PostNotFoundException $e)
                     {
@@ -469,18 +489,18 @@
             $Repost->OriginalPostID = $post->PublicID;
             $Repost->OriginalUserID = $post->PosterUserID;
 
-            $Query = QueryBuilder::insert_into("posts", [
-                "public_id" => $this->socialvoidLib->getDatabase()->real_escape_string($PublicID),
-                "session_id" => ($session_id == null ? null : $session_id),
-                "poster_user_id" => $user_id,
-                "properties" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Properties->toArray())),
-                "repost_original_post_id" => (int)$Repost->OriginalPostID,
-                "repost_original_user_id" => (int)$Repost->OriginalUserID,
-                "flags" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($flags)),
-                "is_deleted" => (int)false,
-                "priority_level" => $this->socialvoidLib->getDatabase()->real_escape_string($priority),
-                "last_updated_timestamp" => $timestamp,
-                "created_timestamp" => $timestamp
+            $Query = QueryBuilder::insert_into('posts', [
+                'public_id' => $this->socialvoidLib->getDatabase()->real_escape_string($PublicID),
+                'session_id' => ($session_id == null ? null : $session_id),
+                'poster_user_id' => $user_id,
+                'properties' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Properties->toArray())),
+                'repost_original_post_id' => (int)$Repost->OriginalPostID,
+                'repost_original_user_id' => (int)$Repost->OriginalUserID,
+                'flags' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($flags)),
+                'is_deleted' => (int)false,
+                'priority_level' => $this->socialvoidLib->getDatabase()->real_escape_string($priority),
+                'last_updated_timestamp' => $timestamp,
+                'created_timestamp' => $timestamp
             ]);
             $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
 
@@ -491,7 +511,7 @@
             }
             else
             {
-                throw new DatabaseException("There was an error while trying to repost a post",
+                throw new DatabaseException('There was an error while trying to repost a post',
                     $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
                 );
             }
@@ -529,7 +549,7 @@
             // Do not repost the post if it's deleted
             if(Converter::hasFlag($post->Flags, PostFlags::Deleted))
             {
-                throw new PostDeletedException("The requested post was deleted");
+                throw new PostDeletedException('The requested post was deleted');
             }
 
             // Quote the original post if the requested post is a repost
@@ -540,7 +560,7 @@
                 // Do not repost the post if it's deleted
                 if(Converter::hasFlag($post->Flags, PostFlags::Deleted))
                 {
-                    throw new PostDeletedException("The requested post was deleted");
+                    throw new PostDeletedException('The requested post was deleted');
                 }
             }
 
@@ -553,7 +573,7 @@
             $textPostParser = new Parser();
             $textPostResults = $textPostParser->parseInput($text);
             if($textPostResults->valid == false)
-                throw new InvalidPostTextException("The given post text is invalid", $text);
+                throw new InvalidPostTextException('The given post text is invalid', $text);
 
             $PublicID = BaseIdentification::postId($user_id, $timestamp, $text);
             $Properties = new Post\Properties();
@@ -570,26 +590,26 @@
             foreach($media_content as $value)
                 $MediaContentArray[] = $value->toArray();
 
-            $Query = QueryBuilder::insert_into("posts", [
-                "public_id" => $this->socialvoidLib->getDatabase()->real_escape_string($PublicID),
-                "text" => $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($text)),
-                "source" => $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($source)),
-                "session_id" => ($session_id == null ? null : $session_id),
-                "poster_user_id" => $user_id,
-                "properties" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Properties->toArray())),
-                "quote_original_post_id" => $Quote->OriginalPostID,
-                "quote_original_user_id" => (int)$Quote->OriginalUserID,
-                "flags" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($flags)),
-                "is_deleted" => (int)false,
-                "priority_level" => $this->socialvoidLib->getDatabase()->real_escape_string($priority),
-                "entities" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Entities->toArray())),
-                "likes" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
-                "reposts" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
-                "quotes" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
-                "replies" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
-                "media_content" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($MediaContentArray)),
-                "last_updated_timestamp" => $timestamp,
-                "created_timestamp" => $timestamp
+            $Query = QueryBuilder::insert_into('posts', [
+                'public_id' => $this->socialvoidLib->getDatabase()->real_escape_string($PublicID),
+                'text' => $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($text)),
+                'source' => $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($source)),
+                'session_id' => ($session_id == null ? null : $session_id),
+                'poster_user_id' => $user_id,
+                'properties' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Properties->toArray())),
+                'quote_original_post_id' => $Quote->OriginalPostID,
+                'quote_original_user_id' => (int)$Quote->OriginalUserID,
+                'flags' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($flags)),
+                'is_deleted' => (int)false,
+                'priority_level' => $this->socialvoidLib->getDatabase()->real_escape_string($priority),
+                'entities' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Entities->toArray())),
+                'likes' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
+                'reposts' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
+                'quotes' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
+                'replies' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
+                'media_content' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($MediaContentArray)),
+                'last_updated_timestamp' => $timestamp,
+                'created_timestamp' => $timestamp
             ]);
             $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
 
@@ -600,7 +620,7 @@
             }
             else
             {
-                throw new DatabaseException("There was an error while trying to repost a post",
+                throw new DatabaseException('There was an error while trying to repost a post',
                     $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
                 );
             }
@@ -636,7 +656,7 @@
             // Do not repost the post if it's deleted
             if(Converter::hasFlag($post->Flags, PostFlags::Deleted))
             {
-                throw new PostDeletedException("The requested post was deleted");
+                throw new PostDeletedException('The requested post was deleted');
             }
 
             // Quote the original post if the requested post is a repost
@@ -647,7 +667,7 @@
                 // Do not repost the post if it's deleted
                 if(Converter::hasFlag($post->Flags, PostFlags::Deleted))
                 {
-                    throw new PostDeletedException("The requested post was deleted");
+                    throw new PostDeletedException('The requested post was deleted');
                 }
             }
 
@@ -660,7 +680,7 @@
             $textPostParser = new Parser();
             $textPostResults = $textPostParser->parseInput($text);
             if($textPostResults->valid == false)
-                throw new InvalidPostTextException("The given post text is invalid", $text);
+                throw new InvalidPostTextException('The given post text is invalid', $text);
 
             $PublicID = BaseIdentification::postId($user_id, $timestamp, $text);
             $Properties = new Post\Properties();
@@ -677,26 +697,26 @@
             foreach($media_content as $value)
                 $MediaContentArray[] = $value->toArray();
 
-            $Query = QueryBuilder::insert_into("posts", [
-                "public_id" => $this->socialvoidLib->getDatabase()->real_escape_string($PublicID),
-                "text" => $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($text)),
-                "source" => $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($source)),
-                "session_id" => ($session_id == null ? null : $session_id),
-                "poster_user_id" => $user_id,
-                "properties" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Properties->toArray())),
-                "reply_to_post_id" => $Reply->ReplyToPostID,
-                "reply_to_user_id" => (int)$Reply->ReplyToUserID,
-                "flags" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($flags)),
-                "is_deleted" => (int)false,
-                "priority_level" => $this->socialvoidLib->getDatabase()->real_escape_string($priority),
-                "entities" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Entities->toArray())),
-                "likes" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
-                "reposts" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
-                "quotes" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
-                "replies" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
-                "media_content" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($MediaContentArray)),
-                "last_updated_timestamp" => $timestamp,
-                "created_timestamp" => $timestamp
+            $Query = QueryBuilder::insert_into('posts', [
+                'public_id' => $this->socialvoidLib->getDatabase()->real_escape_string($PublicID),
+                'text' => $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($text)),
+                'source' => $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($source)),
+                'session_id' => ($session_id == null ? null : $session_id),
+                'poster_user_id' => $user_id,
+                'properties' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Properties->toArray())),
+                'reply_to_post_id' => $Reply->ReplyToPostID,
+                'reply_to_user_id' => (int)$Reply->ReplyToUserID,
+                'flags' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($flags)),
+                'is_deleted' => (int)false,
+                'priority_level' => $this->socialvoidLib->getDatabase()->real_escape_string($priority),
+                'entities' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Entities->toArray())),
+                'likes' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
+                'reposts' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
+                'quotes' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
+                'replies' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
+                'media_content' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($MediaContentArray)),
+                'last_updated_timestamp' => $timestamp,
+                'created_timestamp' => $timestamp
             ]);
             $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
 
@@ -707,7 +727,7 @@
             }
             else
             {
-                throw new DatabaseException("There was an error while trying to repost a post",
+                throw new DatabaseException('There was an error while trying to repost a post',
                     $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
                 );
             }
@@ -736,7 +756,7 @@
          */
         public function getMultiplePosts(array $query, bool $skip_errors=True, int $utilization=100): array
         {
-            if(Utilities::getBoolDefinition("SOCIALVOID_LIB_BACKGROUND_WORKER_ENABLED"))
+            if(Utilities::getBoolDefinition('SOCIALVOID_LIB_BACKGROUND_WORKER_ENABLED'))
             {
                 return $this->socialvoidLib->getServiceJobManager()->getPostJobs()->resolvePosts(
                     $query, $utilization, $skip_errors
@@ -771,7 +791,7 @@
         private function registerPostCacheEntry(Post $post): void
         {
             // TODO: Add check if post cache is enabled
-            if($this->socialvoidLib->getRedisBasicCacheConfiguration()["Enabled"])
+            if($this->socialvoidLib->getRedisBasicCacheConfiguration()['Enabled'])
             {
                 $CacheEntryInput = new RegisterCacheInput();
                 $CacheEntryInput->ObjectType = CacheEntryObjectType::Post;
@@ -782,13 +802,13 @@
                 {
                     $this->socialvoidLib->getBasicRedisCacheManager()->registerCache(
                         $CacheEntryInput,
-                        $this->socialvoidLib->getRedisBasicCacheConfiguration()["PostCacheTTL"],
-                        $this->socialvoidLib->getRedisBasicCacheConfiguration()["PostCacheLimit"]
+                        $this->socialvoidLib->getRedisBasicCacheConfiguration()['PostCacheTTL'],
+                        $this->socialvoidLib->getRedisBasicCacheConfiguration()['PostCacheLimit']
                     );
                 }
                 catch(Exception $e)
                 {
-                    throw new CacheException("There was an error while trying to register the post cache entry", 0, $e);
+                    throw new CacheException('There was an error while trying to register the post cache entry', 0, $e);
                 }
             }
         }
@@ -803,8 +823,8 @@
         private function getPostCacheEntry(string $value): ?Post
         {
             // TODO: Add check if post cache is enabled
-            if($this->socialvoidLib->getRedisBasicCacheConfiguration()["Enabled"] == false)
-                throw new CacheException("BasicRedisCache is not enabled");
+            if($this->socialvoidLib->getRedisBasicCacheConfiguration()['Enabled'] == false)
+                throw new CacheException('BasicRedisCache is not enabled');
 
             try
             {
@@ -817,7 +837,7 @@
             }
             catch (DependencyError | RedisCacheException $e)
             {
-                throw new CacheException("There was an issue while trying to request a post cache entry", 0, $e);
+                throw new CacheException('There was an issue while trying to request a post cache entry', 0, $e);
             }
 
             return Post::fromArray($CacheEntryResults->ObjectData);
