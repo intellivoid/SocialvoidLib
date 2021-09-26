@@ -14,7 +14,9 @@
     namespace SocialvoidLib\Managers;
 
     use msqg\QueryBuilder;
+    use SocialvoidLib\Classes\Utilities;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
+    use SocialvoidLib\Exceptions\GenericInternal\InvalidSlaveHashException;
     use SocialvoidLib\Exceptions\Internal\QuoteRecordNotFoundException;
     use SocialvoidLib\Objects\QuoteRecord;
     use SocialvoidLib\SocialvoidLib;
@@ -46,6 +48,7 @@
          * @param string $original_post_id
          * @param string $post_id
          * @throws DatabaseException
+         * @throws InvalidSlaveHashException
          */
         public function quoteRecord(int $user_id, string $post_id, string $original_post_id)
         {
@@ -58,8 +61,7 @@
                 $this->registerRecord($user_id, $post_id, $original_post_id, true);
                 return;
             }
-
-
+            
             $record->Quoted = true;
             $this->updateRecord($record);
         }
@@ -71,6 +73,7 @@
          * @param string $post_id
          * @param string $original_post_id
          * @throws DatabaseException
+         * @throws InvalidSlaveHashException
          */
         public function unquoteRecord(int $user_id, string $post_id, string $original_post_id)
         {
@@ -96,24 +99,26 @@
          * @param string $original_post_id
          * @param bool $quoted
          * @throws DatabaseException
+         * @throws InvalidSlaveHashException
          */
         public function registerRecord(int $user_id, string $post_id, string $original_post_id, bool $quoted=True): void
         {
-            $Query = QueryBuilder::insert_into("quotes", [
-                "id" => ($post_id . $original_post_id),
-                "user_id" => $user_id,
-                "post_id" => $post_id,
-                "original_post_id" => $original_post_id,
-                "quoted" => (int)$quoted,
-                "last_updated_timestamp" => time(),
-                "created_timestamp" => time()
+            $Query = QueryBuilder::insert_into('posts_quotes', [
+                'id' => (Utilities::removeSlaveHash($post_id) . $original_post_id),
+                'user_id' => $user_id,
+                'post_id' => Utilities::removeSlaveHash($post_id),
+                'original_post_id' => $original_post_id,
+                'quoted' => (int)$quoted,
+                'last_updated_timestamp' => time(),
+                'created_timestamp' => time()
             ]);
 
-            $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
+            $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($post_id));
+            $QueryResults = $SelectedSlave->getConnection()->query($Query);
             if($QueryResults == false)
             {
-                throw new DatabaseException("There was an error while trying to create a quote record",
-                    $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
+                throw new DatabaseException('There was an error while trying to create a quote record',
+                    $Query, $SelectedSlave->getConnection()->error, $SelectedSlave->getConnection()
                 );
             }
         }
@@ -125,20 +130,22 @@
          * @param string $original_post_id
          * @return QuoteRecord
          * @throws DatabaseException
+         * @throws InvalidSlaveHashException
          * @throws QuoteRecordNotFoundException
          */
         public function getRecord(string $post_id, string $original_post_id): QuoteRecord
         {
-            $Query = QueryBuilder::select("quotes", [
-                "id",
-                "user_id",
-                "post_id",
-                "original_post_id",
-                "quoted",
-                "last_updated_timestamp",
-                "created_timestamp"
-            ], "id", ($post_id . $original_post_id), null, null, 1);
-            $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
+            $Query = QueryBuilder::select('posts_quotes', [
+                'id',
+                'user_id',
+                'post_id',
+                'original_post_id',
+                'quoted',
+                'last_updated_timestamp',
+                'created_timestamp'
+            ], 'id', (Utilities::removeSlaveHash($post_id) . $original_post_id), null, null, 1);
+            $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($post_id));
+            $QueryResults = $SelectedSlave->getConnection()->query($Query);
 
             if($QueryResults)
             {
@@ -154,8 +161,8 @@
             else
             {
                 throw new DatabaseException(
-                    "There was an error while trying retrieve the quote record from the network",
-                    $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
+                    'There was an error while trying retrieve the quote record from the network',
+                    $Query, $SelectedSlave->getConnection()->error, $SelectedSlave->getConnection()
                 );
             }
         }
@@ -165,20 +172,22 @@
          *
          * @param QuoteRecord $QuoteRecord
          * @throws DatabaseException
+         * @throws InvalidSlaveHashException
          */
         public function updateRecord(QuoteRecord $QuoteRecord): void
         {
-            $Query = QueryBuilder::update("quotes", [
-                "quoted" => (int)$QuoteRecord->Quoted,
-                "last_updated_timestamp" => time()
-            ], "id", ($QuoteRecord->PostID . $QuoteRecord->OriginalPostID));
-            $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
+            $Query = QueryBuilder::update('posts_quotes', [
+                'quoted' => (int)$QuoteRecord->Quoted,
+                'last_updated_timestamp' => time()
+            ], 'id', (Utilities::removeSlaveHash($QuoteRecord->PostID) . $QuoteRecord->OriginalPostID));
+            $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($QuoteRecord->PostID));
+            $QueryResults = $SelectedSlave->getConnection()->query($Query);
 
             if($QueryResults == false)
             {
                 throw new DatabaseException(
-                    "There was an error while trying to update the quote record",
-                    $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
+                    'There was an error while trying to update the quote record',
+                    $Query, $SelectedSlave->getConnection()->error, $SelectedSlave->getConnection()
                 );
             }
         }

@@ -23,6 +23,8 @@
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPostTextException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidSessionIdentificationException;
     use SocialvoidLib\NetworkSession;
+    use SocialvoidLib\Objects\Standard\Peer;
+    use SocialvoidLib\Objects\Standard\Post;
     use SocialvoidLib\Objects\Standard\SessionIdentification;
     use SocialvoidRPC\SocialvoidRPC;
     use udp2\Exceptions\AvatarGeneratorException;
@@ -35,14 +37,14 @@
     use Zimage\Exceptions\SizeNotSetException;
     use Zimage\Exceptions\UnsupportedImageTypeException;
 
-    class ComposePost implements MethodInterface
+    class QuotePost implements MethodInterface
     {
         /**
          * @inheritDoc
          */
         public function getMethodName(): string
         {
-            return 'ComposePost';
+            return 'QuotePost';
         }
 
         /**
@@ -50,7 +52,7 @@
          */
         public function getMethod(): string
         {
-            return 'timeline.compose_post';
+            return 'timeline.quote_post';
         }
 
         /**
@@ -58,7 +60,7 @@
          */
         public function getDescription(): string
         {
-            return 'Composes a new post to push to the timeline';
+            return 'Composes a new post by quoting an existing post';
         }
 
         /**
@@ -76,6 +78,7 @@
          * @throws InvalidPostTextException
          * @throws InvalidSessionIdentificationException
          * @throws MissingParameterException
+         * @noinspection DuplicatedCode
          */
         private function checkParameters(Request $request)
         {
@@ -83,6 +86,11 @@
                 throw new MissingParameterException("Missing parameter 'session_identification'");
             if(gettype($request->Parameters["session_identification"]) !== "array")
                 throw new InvalidSessionIdentificationException("The parameter 'session_identification' is not a object");
+
+            if(isset($request->Parameters['post_id']) == false)
+                throw new MissingParameterException('Missing parameter \'post_id\'');
+            if(gettype($request->Parameters['post_id']) !== 'string')
+                throw new InvalidPostTextException('The parameter \'post_id\' must be a string');
 
             if(isset($request->Parameters['text']) == false)
                 throw new MissingParameterException('Missing parameter \'text\'');
@@ -148,7 +156,7 @@
 
             try
             {
-                $ComposedPost = $NetworkSession->getTimeline()->composePost($request->Parameters['text']);
+                $ComposedPost = $NetworkSession->getTimeline()->quotePost($request->Parameters['post_id'], $request->Parameters['text']);
                 $StandardObject = $NetworkSession->getTimeline()->getStandardPost($ComposedPost->PublicID);
             }
             catch(Exception $e)

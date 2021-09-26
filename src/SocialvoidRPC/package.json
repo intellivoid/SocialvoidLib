@@ -113,6 +113,10 @@
         },
         {
             "required": true,
+            "file": "Methods/Timeline/QuotePost.php"
+        },
+        {
+            "required": true,
             "file": "SocialvoidRPC.php"
         }
     ],

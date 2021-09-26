@@ -205,7 +205,7 @@
                 'last_updated_timestamp',
                 'created_timestamp'
             ], $search_method, Utilities::removeSlaveHash($value), null, null, 1);
-            
+
             $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($value));
             $QueryResults = $SelectedSlave->getConnection()->query($Query);
 
@@ -522,11 +522,11 @@
         /**
          * Reposts an existing post
          *
-         * @param int $user_id
+         * @param User $user
          * @param Post $post
          * @param string $text
          * @param string $source
-         * @param int|null $session_id
+         * @param string|null $session_id
          * @param array $media_content
          * @param string $priority
          * @param array $flags
@@ -535,14 +535,15 @@
          * @throws DatabaseException
          * @throws InvalidPostTextException
          * @throws InvalidSearchMethodException
+         * @throws InvalidSlaveHashException
          * @throws PostDeletedException
          * @throws PostNotFoundException
          * @noinspection DuplicatedCode
          * @noinspection PhpBooleanCanBeSimplifiedInspection
          */
-        public function quotePost(int $user_id, Post $post, string $text, string $source, int $session_id=null, array $media_content=[], string $priority=PostPriorityLevel::None, array $flags=[]): Post
+        public function quotePost(User $user, Post $post, string $text, string $source, string $session_id=null, array $media_content=[], string $priority=PostPriorityLevel::None, array $flags=[]): Post
         {
-            // Do not repost the post if it's deleted
+            // Do not quote the post if it's deleted
             if(Converter::hasFlag($post->Flags, PostFlags::Deleted))
             {
                 throw new PostDeletedException('The requested post was deleted');
@@ -571,7 +572,7 @@
             if($textPostResults->valid == false)
                 throw new InvalidPostTextException('The given post text is invalid', $text);
 
-            $PublicID = BaseIdentification::postId($user_id, $timestamp, $text);
+            $PublicID = Uuid::v1();
             $Properties = new Post\Properties();
 
             // Extract important information from this text
@@ -591,7 +592,7 @@
                 'text' => $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($text)),
                 'source' => $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($source)),
                 'session_id' => ($session_id == null ? null : $session_id),
-                'poster_user_id' => $user_id,
+                'poster_user_id' => $user->ID,
                 'properties' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Properties->toArray())),
                 'quote_original_post_id' => $Quote->OriginalPostID,
                 'quote_original_user_id' => (int)$Quote->OriginalUserID,
@@ -607,21 +608,23 @@
                 'last_updated_timestamp' => $timestamp,
                 'created_timestamp' => $timestamp
             ]);
-            $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
+
+            $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer($user->SlaveServer);
+            $QueryResults = $SelectedSlave->getConnection()->query($Query);
 
             if($QueryResults)
             {
-                $returnResults = $this->getPost(PostSearchMethod::ByPublicId, $PublicID);
+                $returnResults = $this->getPost(PostSearchMethod::ByPublicId, $SelectedSlave->MysqlServerPointer->HashPointer . '-' . $PublicID);
                 $this->registerPostCacheEntry($returnResults);
             }
             else
             {
                 throw new DatabaseException('There was an error while trying to repost a post',
-                    $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
+                    $Query, $SelectedSlave->getConnection()->error, $SelectedSlave->getConnection()
                 );
             }
 
-            $this->socialvoidLib->getQuotesRecordManager()->quoteRecord($user_id, $returnResults->PublicID, $post->PublicID);
+            $this->socialvoidLib->getQuotesRecordManager()->quoteRecord($user->ID, $returnResults->PublicID, $post->PublicID);
             $post->Quotes[] = $returnResults->PublicID;
             $this->updatePost($post);
 

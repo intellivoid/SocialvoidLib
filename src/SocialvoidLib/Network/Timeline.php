@@ -110,6 +110,8 @@
         }
 
         /**
+         * Retrieves the raw post object from the database
+         *
          * @param string $post_id
          * @return Post
          * @throws CacheException
@@ -127,6 +129,54 @@
             return $this->networkSession->getSocialvoidLib()->getPostsManager()->getPost(
                 PostSearchMethod::ByPublicId, $post_id
             );
+        }
+
+        /**
+         * Retrieves a standard post object while resolving all of it's contents
+         *
+         * @param string $post_id
+         * @return \SocialvoidLib\Objects\Standard\Post
+         * @throws AvatarGeneratorException
+         * @throws AvatarNotFoundException
+         * @throws CacheException
+         * @throws CannotGetOriginalImageException
+         * @throws DatabaseException
+         * @throws DocumentNotFoundException
+         * @throws FileNotFoundException
+         * @throws ImageTooSmallException
+         * @throws InvalidPeerInputException
+         * @throws InvalidSearchMethodException
+         * @throws InvalidSlaveHashException
+         * @throws InvalidZimageFileException
+         * @throws NotAuthenticatedException
+         * @throws PeerNotFoundException
+         * @throws PostNotFoundException
+         * @throws SizeNotSetException
+         * @throws UnsupportedAvatarGeneratorException
+         * @throws UnsupportedImageTypeException
+         */
+        public function getStandardPost(string $post_id): \SocialvoidLib\Objects\Standard\Post
+        {
+            // TODO: Use BackgroundWorker to resolve all IDs at once
+            // TODO: Resolve reposts & replied post
+            if ($this->networkSession->isAuthenticated() == false)
+                throw new NotAuthenticatedException();
+
+            $RawPost = $this->networkSession->getSocialvoidLib()->getPostsManager()->getPost(
+                PostSearchMethod::ByPublicId, $post_id
+            );
+
+            $StandardPost = \SocialvoidLib\Objects\Standard\Post::fromPost($RawPost);
+            $StandardPost->Peer = Peer::fromUser($this->networkSession->getUsers()->resolvePeer($RawPost->PosterUserID));
+            if($RawPost->Quote !== null && $RawPost->Quote->OriginalPostID !== null)
+            {
+                $RawQuotedPost = $this->getPost($RawPost->Quote->OriginalPostID);
+                $StandardQuotedPost = \SocialvoidLib\Objects\Standard\Post::fromPost($RawQuotedPost);
+                $StandardQuotedPost->Peer = Peer::fromUser($this->networkSession->getUsers()->resolvePeer($RawQuotedPost->PosterUserID));
+                $StandardPost->QuotedPost = $StandardQuotedPost;
+            }
+
+            return $StandardPost;
         }
 
         /**
@@ -455,7 +505,7 @@
                 PostSearchMethod::ByPublicId, $post_public_id);
 
             $PostObject = $this->networkSession->getSocialvoidLib()->getPostsManager()->quotePost(
-                $this->networkSession->getAuthenticatedUser()->ID, $selected_post, $text,
+                $this->networkSession->getAuthenticatedUser(), $selected_post, $text,
                 Converter::getSource($this->networkSession->getActiveSession()),
                 $this->networkSession->getActiveSession()->ID, $media_content,
                 PostPriorityLevel::High, $flags

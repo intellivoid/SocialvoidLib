@@ -60,7 +60,7 @@
                 $QuoteObject->OriginalPostID = $data["original_post_id"];
 
             if(isset($data["original_user_id"]))
-                $QuoteObject->OriginalPostID = $data["original_user_id"];
+                $QuoteObject->OriginalUserID = $data["original_user_id"];
 
             return $QuoteObject;
         }

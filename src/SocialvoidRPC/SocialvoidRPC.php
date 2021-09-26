@@ -137,6 +137,7 @@
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\GetLikes());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\GetPost());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\LikePost());
+            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\QuotePost());
         }
 
         /**

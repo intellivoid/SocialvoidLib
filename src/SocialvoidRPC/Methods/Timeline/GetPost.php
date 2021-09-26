@@ -88,9 +88,9 @@
                 throw new InvalidSessionIdentificationException("The parameter 'session_identification' is not a object");
 
             if(isset($request->Parameters['post_id']) == false)
-                throw new MissingParameterException('Missing parameter \'text\'');
+                throw new MissingParameterException('Missing parameter \'post_id\'');
             if(gettype($request->Parameters['post_id']) !== 'string')
-                throw new InvalidPostTextException('The parameter \'text\' must be a string');
+                throw new InvalidPostTextException('The parameter \'post_id\' must be a string');
         }
 
         /**
@@ -151,8 +151,7 @@
 
             try
             {
-                $Post = $NetworkSession->getTimeline()->getPost($request->Parameters['post_id']);
-                $Peer = $NetworkSession->getUsers()->resolvePeer($Post->PosterUserID);
+                $Post = $NetworkSession->getTimeline()->getStandardPost($request->Parameters['post_id']);
             }
             catch(Exception $e)
             {
@@ -165,9 +164,7 @@
             }
 
             $Response = Response::fromRequest($request);
-            $StandardObject = Post::fromPost($Post);
-            $StandardObject->Peer = Peer::fromUser($Peer);
-            $Response->ResultData = $StandardObject->toArray();
+            $Response->ResultData = $Post->toArray();
 
             return $Response;
         }

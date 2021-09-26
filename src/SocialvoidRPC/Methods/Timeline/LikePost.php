@@ -24,8 +24,6 @@
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPostTextException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidSessionIdentificationException;
     use SocialvoidLib\NetworkSession;
-    use SocialvoidLib\Objects\Standard\Peer;
-    use SocialvoidLib\Objects\Standard\Post;
     use SocialvoidLib\Objects\Standard\SessionIdentification;
     use SocialvoidRPC\SocialvoidRPC;
     use udp2\Exceptions\AvatarGeneratorException;
@@ -154,7 +152,6 @@
             }
             catch(Exception $e)
             {
-                throw $e;
                 // Allow standard errors
                 if(Validate::isStandardError($e->getCode()))
                     throw $e;

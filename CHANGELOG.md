@@ -9,3 +9,5 @@
  - Added slave support for `likes`
  - Refactored table `likes` to `posts_likes`
  - Post IDs now use UUID v1
+ - Added method timeline.quote_post
+ - Added internal method for recursively resolving post entities
