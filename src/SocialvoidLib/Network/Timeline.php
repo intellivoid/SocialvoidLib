@@ -380,18 +380,18 @@
          * @return array
          * @throws AvatarGeneratorException
          * @throws AvatarNotFoundException
+         * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
          * @throws CannotGetOriginalImageException
          * @throws DatabaseException
          * @throws DocumentNotFoundException
          * @throws FileNotFoundException
          * @throws ImageTooSmallException
-         * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
          * @throws InvalidZimageFileException
-         * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
+         * @throws ServiceJobException
          * @throws SizeNotSetException
          * @throws UnsupportedAvatarGeneratorException
          * @throws UnsupportedImageTypeException
@@ -403,13 +403,13 @@
                 $offset, $limit
             );
 
-            $results = [];
+            $search_query = [];
             foreach($Likes as $user_id)
             {
-                $results[] = $this->networkSession->getUsers()->resolvePeer($user_id);
+                $search_query[$user_id] = UserSearchMethod::ById;
             }
 
-            return $results;
+            return $this->networkSession->getUsers()->resolveMultiplePeers($search_query);
         }
 
         /**

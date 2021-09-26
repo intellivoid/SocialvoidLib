@@ -16,9 +16,11 @@
     use Exception;
     use SocialvoidLib\Abstracts\SearchMethods\UserSearchMethod;
     use SocialvoidLib\Abstracts\StatusStates\FollowerState;
+    use SocialvoidLib\Exceptions\GenericInternal\BackgroundWorkerNotEnabledException;
     use SocialvoidLib\Exceptions\GenericInternal\CacheException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
+    use SocialvoidLib\Exceptions\GenericInternal\ServiceJobException;
     use SocialvoidLib\Exceptions\Internal\FollowerDataNotFound;
     use SocialvoidLib\Exceptions\Internal\FollowerStateNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException;
@@ -128,6 +130,31 @@
             }
 
             return $peer_result;
+        }
+
+        /**
+         * @param array $peers
+         * @return User[]
+         * @throws AvatarGeneratorException
+         * @throws AvatarNotFoundException
+         * @throws CacheException
+         * @throws CannotGetOriginalImageException
+         * @throws DatabaseException
+         * @throws DocumentNotFoundException
+         * @throws FileNotFoundException
+         * @throws ImageTooSmallException
+         * @throws InvalidSearchMethodException
+         * @throws InvalidZimageFileException
+         * @throws PeerNotFoundException
+         * @throws SizeNotSetException
+         * @throws UnsupportedAvatarGeneratorException
+         * @throws UnsupportedImageTypeException
+         * @throws BackgroundWorkerNotEnabledException
+         * @throws ServiceJobException
+         */
+        public function resolveMultiplePeers(array $peers): array
+        {
+            return $this->networkSession->getSocialvoidLib()->getUserManager()->getMultipleUsers($peers);
         }
 
         /**
