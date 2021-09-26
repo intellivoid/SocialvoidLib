@@ -107,7 +107,7 @@
         {
             $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer($slave_server);
 
-            $Query = QueryBuilder::insert_into('likes', [
+            $Query = QueryBuilder::insert_into('posts_likes', [
                 'id' => ($user_id . $post_id),
                 'user_id' => $user_id,
                 'post_id' => $post_id,
@@ -140,7 +140,7 @@
         {
             $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer($slave_server);
 
-            $Query = QueryBuilder::select('likes', [
+            $Query = QueryBuilder::select('posts_likes', [
                 'id',
                 'user_id',
                 'post_id',
@@ -181,7 +181,7 @@
          */
         public function updateRecord(LikeRecord $likeRecord): void
         {
-            $Query = QueryBuilder::update('likes', [
+            $Query = QueryBuilder::update('posts_likes', [
                 'liked' => (int)$likeRecord->Liked,
                 'last_updated_timestamp' => time()
             ], 'id', ($likeRecord->UserID . $likeRecord->PostID));
