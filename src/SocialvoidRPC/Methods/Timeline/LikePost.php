@@ -154,6 +154,7 @@
             }
             catch(Exception $e)
             {
+                throw $e;
                 // Allow standard errors
                 if(Validate::isStandardError($e->getCode()))
                     throw $e;
