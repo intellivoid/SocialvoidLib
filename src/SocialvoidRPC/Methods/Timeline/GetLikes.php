@@ -3,6 +3,7 @@
     namespace SocialvoidRPC\Methods\Timeline;
 
     use Exception;
+    use KimchiRPC\Exceptions\Server\InvalidParametersException;
     use KimchiRPC\Exceptions\Server\MissingParameterException;
     use KimchiRPC\Interfaces\MethodInterface;
     use KimchiRPC\Objects\Request;
@@ -89,6 +90,26 @@
                 throw new MissingParameterException('Missing parameter \'text\'');
             if(gettype($request->Parameters['post_id']) !== 'string')
                 throw new InvalidPostTextException('The parameter \'text\' must be a string');
+
+            if(isset($request->Parameters['offset']))
+            {
+                $request->Parameters['offset'] = 0;
+            }
+            else
+            {
+                if((int)$request->Parameters['offset'] < 0)
+                    throw new InvalidParametersException('The parameter \'offset\' cannot be less than 0.');
+            }
+
+            if(isset($request->Parameters['limit']))
+            {
+                $request->Parameters['limit'] = 25;
+            }
+            else
+            {
+                if((int)$request->Parameters['limit'] < 1 || (int)$request->Parameters['limit'] > 25)
+                    throw new InvalidParametersException('The parameter \'limit\' cannot be less than 1 or greater than 25');
+            }
         }
 
         /**
@@ -149,7 +170,9 @@
 
             try
             {
-                $Peers = $NetworkSession->getTimeline()->getLikes($request->Parameters['post_id']);
+                $Peers = $NetworkSession->getTimeline()->getLikes(
+                    $request->Parameters['post_id'], (int)$request->Parameters['offset'], (int)$request->Parameters['limit']
+                );
             }
             catch(Exception $e)
             {
