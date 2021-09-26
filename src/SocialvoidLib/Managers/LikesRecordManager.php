@@ -140,7 +140,7 @@
         {
             $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer($slave_server);
             $post_id = $this->socialvoidLib->getDatabase()->real_escape_string($post_id);
-            $Query = "SELECT user_id, FROM `likes` WHERE post_id='$post_id' AND liked=1 LIMIT $offset, $limit";
+            $Query = "SELECT user_id FROM `likes` WHERE post_id='$post_id' AND liked=1 LIMIT $offset, $limit";
             $QueryResults = $SelectedSlave->getConnection()->query($Query);
 
             // Execute and process the query

@@ -375,6 +375,8 @@
          * Returns the likes given to a certain post
          *
          * @param string $post_public_id
+         * @param int $offset
+         * @param int $limit
          * @return array
          * @throws AvatarGeneratorException
          * @throws AvatarNotFoundException
@@ -384,6 +386,7 @@
          * @throws DocumentNotFoundException
          * @throws FileNotFoundException
          * @throws ImageTooSmallException
+         * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
          * @throws InvalidZimageFileException
@@ -392,7 +395,6 @@
          * @throws SizeNotSetException
          * @throws UnsupportedAvatarGeneratorException
          * @throws UnsupportedImageTypeException
-         * @throws InvalidPeerInputException
          */
         public function getLikes(string $post_public_id, int $offset=0, int $limit=100): array
         {
