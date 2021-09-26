@@ -2,9 +2,9 @@ name: PPM Release Socialvoid Daemon
 
 on:
   push:
-    branches: [ master ]
+    branches: [ stable ]
   pull_request:
-    branches: [ master ]
+    branches: [ stable ]
 
 jobs:
   release_daemon:
