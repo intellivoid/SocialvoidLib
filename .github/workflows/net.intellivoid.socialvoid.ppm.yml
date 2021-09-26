@@ -2,9 +2,9 @@ name: PPM Compile Socialvoid Daemon
 
 on:
   push:
-    branches: [ master, dev ]
+    branches: [ master, dev, stable ]
   pull_request:
-    branches: [ master, dev ]
+    branches: [ master, dev, stable ]
 
 jobs:
   build_daemon:
