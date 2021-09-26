@@ -2,7 +2,7 @@
     "package": {
         "package_name": "net.intellivoid.socialvoid_rpc",
         "name": "SocialvoidRPC Server",
-        "version": "1.0.0.0",
+        "version": "1.0.0.1",
         "author": "Zi Xing Narrakas",
         "organization": "Intellivoid",
         "description": "The Socialvoid RPC Server service",
