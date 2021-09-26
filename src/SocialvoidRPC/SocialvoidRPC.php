@@ -152,6 +152,8 @@
          */
         public static function processWakeup()
         {
+            if(self::$RpcServer->isEnableBackgroundWorker() == false)
+                return;
             SocialvoidRPC::setLastWorkerActivity((int)time()); // Set the last activity timestamp
             SocialvoidRPC::processSleepCycle(); // Wake worker if it's sleeping
         }
