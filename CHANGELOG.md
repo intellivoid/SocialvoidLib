@@ -2,3 +2,4 @@
  - Added method timeline.compose_post
  - Added method timeline.like_post
  - Added method timeline.get_post
+ - Added method timeline.get_likes

@@ -77,6 +77,7 @@
          * @throws InvalidPostTextException
          * @throws InvalidSessionIdentificationException
          * @throws MissingParameterException
+         * @throws InvalidParametersException
          * @noinspection DuplicatedCode
          */
         private function checkParameters(Request $request)
