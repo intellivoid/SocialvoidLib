@@ -24,6 +24,7 @@
     use SocialvoidLib\Exceptions\GenericInternal\ServiceJobException;
     use SocialvoidLib\Exceptions\Internal\FollowerDataNotFound;
     use SocialvoidLib\Exceptions\Internal\UserTimelineNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException;
     use SocialvoidLib\Exceptions\Standard\Network\AlreadyRepostedException;
     use SocialvoidLib\Exceptions\Standard\Network\DocumentNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
@@ -65,7 +66,7 @@
         }
 
         /**
-         * Distributes a new post to the timeline and it's users
+         * Distributes a new post to the timeline, and it's users
          *
          * @param string $text
          * @param array $media_content
@@ -78,11 +79,15 @@
          * @throws InvalidPostTextException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
+         * @throws NotAuthenticatedException
          * @throws PostNotFoundException
          * @throws UserTimelineNotFoundException
          */
         public function composePost(string $text, array $media_content=[], array $flags=[]): Post
         {
+            if ($this->networkSession->isAuthenticated() == false)
+                throw new NotAuthenticatedException();
+
             $PostObject = $this->networkSession->getSocialvoidLib()->getPostsManager()->publishPost(
                 $this->networkSession->getAuthenticatedUser(),
                 Converter::getSource($this->networkSession->getActiveSession()),
@@ -102,6 +107,25 @@
             return $PostObject;
         }
 
+        /**
+         * @param string $post_id
+         * @return Post
+         * @throws CacheException
+         * @throws DatabaseException
+         * @throws InvalidSearchMethodException
+         * @throws InvalidSlaveHashException
+         * @throws NotAuthenticatedException
+         * @throws PostNotFoundException
+         */
+        public function getPost(string $post_id): Post
+        {
+            if ($this->networkSession->isAuthenticated() == false)
+                throw new NotAuthenticatedException();
+
+            return $this->networkSession->getSocialvoidLib()->getPostsManager()->getPost(
+                PostSearchMethod::ByPublicId, $post_id
+            );
+        }
 
         /**
          * Returns a timeline roster for basic information
@@ -299,6 +323,7 @@
          * @throws PostDeletedException
          * @throws PostNotFoundException
          * @throws UserTimelineNotFoundException
+         * @throws InvalidSlaveHashException
          */
         public function repostToTimeline(string $post_public_id): Post
         {
@@ -382,6 +407,7 @@
          * @throws PostDeletedException
          * @throws PostNotFoundException
          * @throws UserTimelineNotFoundException
+         * @throws InvalidSlaveHashException
          */
         public function quotePost(string $post_public_id, string $text, array $media_content=[], array $flags=[]): Post
         {
@@ -422,6 +448,7 @@
          * @throws InvalidSearchMethodException
          * @throws PostDeletedException
          * @throws PostNotFoundException
+         * @throws InvalidSlaveHashException
          */
         public function replyToPost(string $post_public_id, string $text, array $media_content=[], array $flags=[]): Post
         {

@@ -3,6 +3,7 @@
     namespace SocialvoidRPC\Methods\Timeline;
 
     use Exception;
+    use KimchiRPC\Exceptions\RequestException;
     use KimchiRPC\Exceptions\Server\MissingParameterException;
     use KimchiRPC\Interfaces\MethodInterface;
     use KimchiRPC\Objects\Request;
@@ -37,14 +38,15 @@
     use Zimage\Exceptions\SizeNotSetException;
     use Zimage\Exceptions\UnsupportedImageTypeException;
 
-    class ComposePost implements MethodInterface
+    class LikePost implements MethodInterface
     {
+
         /**
          * @inheritDoc
          */
         public function getMethodName(): string
         {
-            return 'ComposePost';
+            return 'LikePost';
         }
 
         /**
@@ -52,7 +54,7 @@
          */
         public function getMethod(): string
         {
-            return 'timeline.compose_post';
+            return 'timeline.like_post';
         }
 
         /**
@@ -60,7 +62,7 @@
          */
         public function getDescription(): string
         {
-            return 'Composes a new post to push to the timeline';
+            return 'Likes an existing post on the timeline';
         }
 
         /**
@@ -72,8 +74,6 @@
         }
 
         /**
-         * Checks the parameters for invalid data or missing parameters
-         *
          * @param Request $request
          * @throws InvalidPostTextException
          * @throws InvalidSessionIdentificationException
@@ -86,39 +86,39 @@
             if(gettype($request->Parameters["session_identification"]) !== "array")
                 throw new InvalidSessionIdentificationException("The parameter 'session_identification' is not a object");
 
-            if(isset($request->Parameters['text']) == false)
+            if(isset($request->Parameters['post_id']) == false)
                 throw new MissingParameterException('Missing parameter \'text\'');
-            if(gettype($request->Parameters['text']) !== 'string')
+            if(gettype($request->Parameters['post_id']) !== 'string')
                 throw new InvalidPostTextException('The parameter \'text\' must be a string');
         }
 
         /**
          * @param Request $request
          * @return Response
-         * @throws AvatarGeneratorException
-         * @throws AvatarNotFoundException
-         * @throws BadSessionChallengeAnswerException
-         * @throws CacheException
-         * @throws CannotGetOriginalImageException
-         * @throws DatabaseException
-         * @throws DocumentNotFoundException
-         * @throws FileNotFoundException
-         * @throws ImageTooSmallException
          * @throws InternalServerException
-         * @throws InvalidClientPublicHashException
          * @throws InvalidPostTextException
-         * @throws InvalidSearchMethodException
          * @throws InvalidSessionIdentificationException
-         * @throws InvalidSlaveHashException
-         * @throws InvalidZimageFileException
          * @throws MissingParameterException
+         * @throws CacheException
+         * @throws DatabaseException
+         * @throws InvalidSearchMethodException
+         * @throws InvalidSlaveHashException
+         * @throws BadSessionChallengeAnswerException
          * @throws NotAuthenticatedException
-         * @throws PeerNotFoundException
          * @throws SessionExpiredException
          * @throws SessionNotFoundException
+         * @throws DocumentNotFoundException
+         * @throws PeerNotFoundException
+         * @throws InvalidClientPublicHashException
+         * @throws CannotGetOriginalImageException
+         * @throws FileNotFoundException
+         * @throws InvalidZimageFileException
          * @throws SizeNotSetException
-         * @throws UnsupportedAvatarGeneratorException
          * @throws UnsupportedImageTypeException
+         * @throws AvatarGeneratorException
+         * @throws AvatarNotFoundException
+         * @throws ImageTooSmallException
+         * @throws UnsupportedAvatarGeneratorException
          * @noinspection DuplicatedCode
          */
         public function execute(Request $request): Response
@@ -150,7 +150,8 @@
 
             try
             {
-                $ComposedPost = $NetworkSession->getTimeline()->composePost($request->Parameters['text']);
+                $Post = $NetworkSession->getTimeline()->getPost($request->Parameters['post_id']);
+                $Peer = $NetworkSession->getUsers()->resolvePeer($Post->PosterUserID);
             }
             catch(Exception $e)
             {
@@ -159,13 +160,11 @@
                     throw $e;
 
                 // If anything else, suppress the error.
-                throw new InternalServerException('There was an unexpected error while trying to publish your post', $e);
+                throw new InternalServerException('There was an unexpected error while trying to like the requested post', $e);
             }
 
             $Response = Response::fromRequest($request);
-            $StandardObject = Post::fromPost($ComposedPost);
-            $StandardObject->Peer = Peer::fromUser($NetworkSession->getAuthenticatedUser());
-            $Response->ResultData = $StandardObject->toArray();
+            $Response->ResultData = true;
 
             return $Response;
         }
