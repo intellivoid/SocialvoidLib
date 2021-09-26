@@ -1,5 +1,9 @@
 ### v1.0.0.1 Alpha
+ - Bumped version to 1.0.0.1 in `net.intellivoid.socialvoidlib`
+ - Bumped version to 1.0.0.1 in `net.intellivoid.socialvoid_rpc`
  - Added method timeline.compose_post
  - Added method timeline.like_post
  - Added method timeline.get_post
  - Added method timeline.get_likes
+ - Added alternative method for an RPC Server (No BackgroundWorker)
+ - Added slave support for `likes`
