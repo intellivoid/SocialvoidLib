@@ -235,28 +235,18 @@ namespace SocialvoidLib\Classes;
             // A quoted post may contain media or text and media.
             if($post->Quote !== null && $post->Quote->OriginalPostID !== null)
             {
-                if($post->MediaContent !== null && count($post->MediaContent) > 0)
-                    return PostType::QuoteMediaPost;
-
-                return PostType::QuoteTextPost;
+                return PostType::Quote;
             }
 
             // A reply post may contain media or text and media
             if($post->Reply !== null && $post->Reply->ReplyToPostID !== null)
             {
-                if($post->MediaContent !== null && count($post->MediaContent) > 0)
-                    return PostType::ReplyMediaPost;
-
-                return PostType::ReplyTextPost;
+                return PostType::Reply;
             }
-
-            // A simple post may contain media or text and media
-            if($post->MediaContent !== null && count($post->MediaContent) > 0)
-                return PostType::MediaPost;
 
             // If all checks fail, it's safe to assume this is just a text post
             if($post->Text !== null)
-                return PostType::TextPost;
+                return PostType::Post;
 
             // This post may be included in a new update and the library does not
             // yet have the logic to identify the post
