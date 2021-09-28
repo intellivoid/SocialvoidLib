@@ -166,9 +166,6 @@
             if(strlen($this->PrivateHash) !== 64)
                 throw new InvalidClientPrivateHashException("The client's private hash must be 64 characters in length");
 
-            if( (ctype_xdigit($this->PrivateHash) && strlen($this->PrivateHash) % 2 == 0 && hex2bin($this->PrivateHash)) == false)
-                throw new InvalidClientPrivateHashException("The client's private hash is not a valid hash");
-
             if(Validate::hash($this->PrivateHash) == false)
                 throw new InvalidClientPrivateHashException("The client's private hash is not a valid hash");
 
