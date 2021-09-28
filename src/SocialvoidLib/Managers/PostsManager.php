@@ -632,7 +632,7 @@
         }
 
         /**
-         * @param int $user_id
+         * @param User $user_id
          * @param Post $post
          * @param string $text
          * @param string $source
@@ -645,12 +645,13 @@
          * @throws DatabaseException
          * @throws InvalidPostTextException
          * @throws InvalidSearchMethodException
+         * @throws InvalidSlaveHashException
          * @throws PostDeletedException
          * @throws PostNotFoundException
          * @noinspection DuplicatedCode
          * @noinspection PhpBooleanCanBeSimplifiedInspection
          */
-        public function replyToPost(int $user_id, Post $post, string $text, string $source, int $session_id=null, array $media_content=[], string $priority=PostPriorityLevel::None, array $flags=[]): Post
+        public function replyToPost(User $user, Post $post, string $text, string $source, string $session_id=null, array $media_content=[], string $priority=PostPriorityLevel::None, array $flags=[]): Post
         {
             // Do not repost the post if it's deleted
             if(Converter::hasFlag($post->Flags, PostFlags::Deleted))
@@ -681,7 +682,7 @@
             if($textPostResults->valid == false)
                 throw new InvalidPostTextException('The given post text is invalid', $text);
 
-            $PublicID = BaseIdentification::postId($user_id, $timestamp, $text);
+            $PublicID = Uuid::v1();
             $Properties = new Post\Properties();
 
             // Extract important information from this text
@@ -701,7 +702,7 @@
                 'text' => $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($text)),
                 'source' => $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($source)),
                 'session_id' => ($session_id == null ? null : $session_id),
-                'poster_user_id' => $user_id,
+                'poster_user_id' => $user->ID,
                 'properties' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Properties->toArray())),
                 'reply_to_post_id' => $Reply->ReplyToPostID,
                 'reply_to_user_id' => (int)$Reply->ReplyToUserID,
@@ -717,11 +718,13 @@
                 'last_updated_timestamp' => $timestamp,
                 'created_timestamp' => $timestamp
             ]);
-            $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
+
+            $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer($user->SlaveServer);
+            $QueryResults = $SelectedSlave->getConnection()->query($Query);
 
             if($QueryResults)
             {
-                $returnResults = $this->getPost(PostSearchMethod::ByPublicId, $PublicID);
+                $returnResults = $this->getPost(PostSearchMethod::ByPublicId, $SelectedSlave->MysqlServerPointer->HashPointer . '-' . $PublicID);
                 $this->registerPostCacheEntry($returnResults);
             }
             else
@@ -731,7 +734,7 @@
                 );
             }
 
-            $this->socialvoidLib->getReplyRecordManager()->replyRecord($user_id, $post->PublicID, $returnResults->PublicID);
+            $this->socialvoidLib->getReplyRecordManager()->replyRecord($user->ID, $post->PublicID, $returnResults->PublicID);
             $post->Replies[] = $returnResults->PublicID;
             $this->updatePost($post);
 

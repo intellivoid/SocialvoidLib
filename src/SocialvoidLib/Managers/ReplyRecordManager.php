@@ -14,7 +14,9 @@
     namespace SocialvoidLib\Managers;
 
     use msqg\QueryBuilder;
+    use SocialvoidLib\Classes\Utilities;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
+    use SocialvoidLib\Exceptions\GenericInternal\InvalidSlaveHashException;
     use SocialvoidLib\Exceptions\Internal\ReplyRecordNotFoundException;
     use SocialvoidLib\Objects\ReplyRecord;
     use SocialvoidLib\SocialvoidLib;
@@ -43,9 +45,10 @@
          * Creates a quote record if one doesn't already exist, or updates an existing one
          *
          * @param int $user_id
-         * @param string $reply_post_id
          * @param string $post_id
+         * @param string $reply_post_id
          * @throws DatabaseException
+         * @throws InvalidSlaveHashException
          */
         public function replyRecord(int $user_id, string $post_id, string $reply_post_id)
         {
@@ -71,6 +74,7 @@
          * @param string $post_id
          * @param string $reply_post_id
          * @throws DatabaseException
+         * @throws InvalidSlaveHashException
          */
         public function unreplyRecord(int $user_id, string $post_id, string $reply_post_id)
         {
@@ -96,24 +100,26 @@
          * @param string $reply_post_id
          * @param bool $replied
          * @throws DatabaseException
+         * @throws InvalidSlaveHashException
          */
         public function registerRecord(int $user_id, string $post_id, string $reply_post_id, bool $replied=True): void
         {
-            $Query = QueryBuilder::insert_into("replies", [
-                "id" => ($post_id . $reply_post_id),
-                "user_id" => $user_id,
-                "post_id" => $post_id,
-                "reply_post_id" => $reply_post_id,
-                "replied" => (int)$replied,
-                "last_updated_timestamp" => time(),
-                "created_timestamp" => time()
+            $Query = QueryBuilder::insert_into('posts_replies', [
+                'id' => (Utilities::removeSlaveHash($post_id) . $reply_post_id),
+                'user_id' => $user_id,
+                'post_id' => Utilities::removeSLaveHash($post_id),
+                'reply_post_id' => $reply_post_id,
+                'replied' => (int)$replied,
+                'last_updated_timestamp' => time(),
+                'created_timestamp' => time()
             ]);
 
-            $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
+            $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($post_id));
+            $QueryResults = $SelectedSlave->getConnection()->query($Query);
             if($QueryResults == false)
             {
-                throw new DatabaseException("There was an error while trying to create a reply record",
-                    $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
+                throw new DatabaseException('There was an error while trying to create a reply record',
+                    $Query,$SelectedSlave->getConnection()->error, $SelectedSlave->getConnection()
                 );
             }
         }
@@ -125,20 +131,23 @@
          * @param string $reply_post_id
          * @return ReplyRecord
          * @throws DatabaseException
+         * @throws InvalidSlaveHashException
          * @throws ReplyRecordNotFoundException
          */
         public function getRecord(string $post_id, string $reply_post_id): ReplyRecord
         {
-            $Query = QueryBuilder::select("replies", [
-                "id",
-                "user_id",
-                "post_id",
-                "reply_post_id",
-                "replied",
-                "last_updated_timestamp",
-                "created_timestamp"
-            ], "id", ($post_id . $reply_post_id), null, null, 1);
-            $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
+            $Query = QueryBuilder::select('posts_replies', [
+                'id',
+                'user_id',
+                'post_id',
+                'reply_post_id',
+                'replied',
+                'last_updated_timestamp',
+                'created_timestamp'
+            ], 'id', (Utilities::removeSlaveHash($post_id) . $reply_post_id), null, null, 1);
+
+            $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($post_id));
+            $QueryResults = $SelectedSlave->getConnection()->query($Query);
 
             if($QueryResults)
             {
@@ -154,8 +163,8 @@
             else
             {
                 throw new DatabaseException(
-                    "There was an error while trying retrieve the reply record from the network",
-                    $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
+                    'There was an error while trying retrieve the reply record from the network',
+                    $Query, $SelectedSlave->getConnection()->error, $SelectedSlave->getConnection()
                 );
             }
         }
@@ -165,20 +174,22 @@
          *
          * @param ReplyRecord $replyRecord
          * @throws DatabaseException
+         * @throws InvalidSlaveHashException
          */
         public function updateRecord(ReplyRecord $replyRecord): void
         {
-            $Query = QueryBuilder::update("replies", [
-                "replied" => (int)$replyRecord->Replied,
-                "last_updated_timestamp" => time()
-            ], "id", ($replyRecord->PostID . $replyRecord->ReplyPostID));
-            $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
+            $Query = QueryBuilder::update('posts_replies', [
+                'replied' => (int)$replyRecord->Replied,
+                'last_updated_timestamp' => time()
+            ], 'id', (Utilities::removeSlaveHash($replyRecord->PostID) . $replyRecord->ReplyPostID));
+            $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($replyRecord->PostID));
+            $QueryResults = $SelectedSlave->getConnection()->query($Query);
 
             if($QueryResults == false)
             {
                 throw new DatabaseException(
-                    "There was an error while trying to update the reply record",
-                    $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
+                    'There was an error while trying to update the reply record',
+                    $Query, $SelectedSlave->getConnection()->error, $SelectedSlave->getConnection()
                 );
             }
         }

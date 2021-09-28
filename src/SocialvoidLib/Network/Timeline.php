@@ -154,6 +154,7 @@
          * @throws SizeNotSetException
          * @throws UnsupportedAvatarGeneratorException
          * @throws UnsupportedImageTypeException
+         * @noinspection DuplicatedCode
          */
         public function getStandardPost(string $post_id): \SocialvoidLib\Objects\Standard\Post
         {
@@ -162,21 +163,95 @@
             if ($this->networkSession->isAuthenticated() == false)
                 throw new NotAuthenticatedException();
 
-            $RawPost = $this->networkSession->getSocialvoidLib()->getPostsManager()->getPost(
+            $post = $this->networkSession->getSocialvoidLib()->getPostsManager()->getPost(
                 PostSearchMethod::ByPublicId, $post_id
             );
 
-            $StandardPost = \SocialvoidLib\Objects\Standard\Post::fromPost($RawPost);
-            $StandardPost->Peer = Peer::fromUser($this->networkSession->getUsers()->resolvePeer($RawPost->PosterUserID));
-            if($RawPost->Quote !== null && $RawPost->Quote->OriginalPostID !== null)
+            $SubPosts = [];
+            $UserIDs = [];
+
+            $UserIDs[$post->PosterUserID] = UserSearchMethod::ById;
+
+            if($post->Repost !== null && $post->Repost->OriginalPostID)
+                $SubPosts[$post->Repost->OriginalPostID] = PostSearchMethod::ByPublicId;
+            if($post->Repost !== null && $post->Repost->OriginalUserID)
+                $UserIDs[$post->Repost->OriginalUserID] = UserSearchMethod::ById;
+
+            if($post->Quote !== null && $post->Quote->OriginalPostID)
+                $SubPosts[$post->Quote->OriginalPostID] = PostSearchMethod::ByPublicId;
+            if($post->Quote !== null && $post->Quote->OriginalUserID)
+                $UserIDs[$post->Quote->OriginalUserID] = UserSearchMethod::ById;
+
+            if($post->Reply !== null && $post->Reply->ReplyToPostID)
+                $SubPosts[$post->Reply->ReplyToPostID] = PostSearchMethod::ByPublicId;
+            if($post->Reply !== null && $post->Reply->ReplyToUserID)
+                $UserIDs[(int)$post->Reply->ReplyToUserID] = UserSearchMethod::ById;
+
+
+            $ResolvedSubPosts = $this->networkSession->getSocialvoidLib()->getPostsManager()->getMultiplePosts($SubPosts, false);
+            $ResolvedUsers = $this->networkSession->getSocialvoidLib()->getUserManager()->getMultipleUsers($UserIDs, false);
+
+            // Sort results
+            $SortedPostResolutions = [];
+            $SortedUserResolutions = [];
+
+            foreach($ResolvedSubPosts as $resolvedPost)
+                $SortedPostResolutions[$resolvedPost->PublicID] = $resolvedPost;
+            foreach($ResolvedUsers as $resolvedUser)
+                $SortedUserResolutions[$resolvedUser->ID] = $resolvedUser;
+
+            $stdPost = \SocialvoidLib\Objects\Standard\Post::fromPost($post);
+            $stdPost->Peer = Peer::fromUser($SortedUserResolutions[$post->PosterUserID]);
+
+            // Resolve quoted post
+            if($post->Quote !== null && $post->Quote->OriginalPostID)
             {
-                $RawQuotedPost = $this->getPost($RawPost->Quote->OriginalPostID);
-                $StandardQuotedPost = \SocialvoidLib\Objects\Standard\Post::fromPost($RawQuotedPost);
-                $StandardQuotedPost->Peer = Peer::fromUser($this->networkSession->getUsers()->resolvePeer($RawQuotedPost->PosterUserID));
-                $StandardPost->QuotedPost = $StandardQuotedPost;
+                $stdPost->QuotedPost = \SocialvoidLib\Objects\Standard\Post::fromPost(
+                    $SortedPostResolutions[$post->Quote->OriginalPostID]
+                );
+
+                if($post->Quote->OriginalUserID !== null)
+                {
+                    $stdPost->QuotedPost->Peer = Peer::fromUser(
+                        $SortedUserResolutions[$post->Quote->OriginalUserID]
+                    );
+                }
+
             }
 
-            return $StandardPost;
+            if($post->Repost !== null && $post->Repost->OriginalPostID !== null)
+            {
+                if(Converter::hasFlag($SortedPostResolutions[$post->Repost->OriginalPostID]->Flags, PostFlags::Deleted) == false)
+                {
+
+                    $stdPost->RepostedPost = \SocialvoidLib\Objects\Standard\Post::fromPost(
+                        $SortedPostResolutions[$post->Repost->OriginalPostID]
+                    );
+
+                    if($post->Repost->OriginalUserID !== null)
+                    {
+                        $stdPost->RepostedPost->Peer = Peer::fromUser(
+                            $SortedUserResolutions[$post->Repost->OriginalUserID]
+                        );
+                    }
+                }
+            }
+
+            if($post->Reply !== null && $post->Reply->ReplyToPostID)
+            {
+                $stdPost->ReplyToPost = \SocialvoidLib\Objects\Standard\Post::fromPost(
+                    $SortedPostResolutions[$post->Reply->ReplyToPostID]
+                );
+
+                if($post->Reply->ReplyToUserID !== null)
+                {
+                    $stdPost->ReplyToPost->Peer = Peer::fromUser(
+                        $SortedUserResolutions[$post->Reply->ReplyToUserID]
+                    );
+                }
+            }
+
+            return $stdPost;
         }
 
         /**
@@ -546,7 +621,7 @@
                 PostSearchMethod::ByPublicId, $post_public_id);
 
             $PostObject = $this->networkSession->getSocialvoidLib()->getPostsManager()->replyToPost(
-                $this->networkSession->getAuthenticatedUser()->ID, $selected_post, $text,
+                $this->networkSession->getAuthenticatedUser(), $selected_post, $text,
                 Converter::getSource($this->networkSession->getActiveSession()),
                 $this->networkSession->getActiveSession()->ID, $media_content,
                 PostPriorityLevel::High, $flags

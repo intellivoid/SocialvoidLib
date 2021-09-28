@@ -151,7 +151,8 @@
             $document_object->FileType = $contentResults->FileType;
             $document_object->FileSize = $contentResults->FileSize;
             $document_object->FileName = $contentResults->FileName;
-            $document_object->CreatedTimestamp = $contentResults->CreatedTimestamp;
+            /** @noinspection PhpCastIsUnnecessaryInspection */
+            $document_object->CreatedTimestamp = (int)$contentResults->CreatedTimestamp;
 
             return $document_object;
         }
