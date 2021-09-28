@@ -8,20 +8,20 @@ create table posts_likes
     created_timestamp      int          null comment 'The Unix Timestamp for when this record was created',
     constraint likes_id_uindex
         unique (id),
-    constraint posts_likes_user_id_post_id_uindex
+    constraint likes_user_id_post_id_uindex
         unique (user_id, post_id),
-    constraint posts_likes_posts_public_id_fk
+    constraint likes_posts_public_id_fk
         foreign key (post_id) references posts (public_id)
 )
     comment 'Table for housing likes for posts';
 
-create index posts_likes_liked_index
+create index likes_liked_index
     on posts_likes (liked);
 
-create index posts_likes_post_id_index
+create index likes_post_id_index
     on posts_likes (post_id);
 
-create index posts_likes_user_id_index
+create index likes_user_id_index
     on posts_likes (user_id);
 
 alter table posts_likes

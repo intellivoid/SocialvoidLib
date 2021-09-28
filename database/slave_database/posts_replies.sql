@@ -2,8 +2,8 @@ create table posts_replies
 (
     id                     varchar(286) not null comment 'The Unique Internal Database ID',
     user_id                int          null comment 'The User ID that replied this post',
-    post_id                varchar(64)  null comment 'The Post ID associated with this reply',
-    reply_post_id          varchar(64)  null comment 'The Post ID of the reply',
+    post_id                varchar(126) null comment 'The Post ID associated with this reply',
+    reply_post_id          varchar(126) null comment 'The Post ID of the reply',
     replied                tinyint(1)   null comment 'Indicates the current reply status',
     last_updated_timestamp int          null comment 'The Unix Timestamp for when this record was last updated',
     created_timestamp      int          null comment 'The Unix Timestamp for when this record was created',

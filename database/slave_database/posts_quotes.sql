@@ -2,8 +2,8 @@ create table posts_quotes
 (
     id                     varchar(286) not null comment 'The Unique Internal Database ID',
     user_id                int          null comment 'The User ID that quoted this post',
-    post_id                varchar(64)  null comment 'The Post ID associated with this quote',
-    original_post_id       varchar(64)  null comment 'The original post that the post_id is quoting',
+    post_id                varchar(126) null comment 'The Post ID associated with this quote',
+    original_post_id       varchar(126) null comment 'The original post that the post_id is quoting',
     quoted                 tinyint(1)   null comment 'Indicates the current quote status',
     last_updated_timestamp int          null comment 'The Unix Timestamp for when this record was last updated',
     created_timestamp      int          null comment 'The Unix Timestamp for when this record was created',
