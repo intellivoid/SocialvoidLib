@@ -16,7 +16,6 @@
     use SocialvoidLib\Abstracts\SearchMethods\TimelineSearchMethod;
     use SocialvoidLib\Abstracts\SearchMethods\UserSearchMethod;
     use SocialvoidLib\Classes\Converter;
-    use SocialvoidLib\Classes\Utilities;
     use SocialvoidLib\Exceptions\GenericInternal\BackgroundWorkerNotEnabledException;
     use SocialvoidLib\Exceptions\GenericInternal\CacheException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
@@ -31,7 +30,6 @@
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\PostDeletedException;
     use SocialvoidLib\Exceptions\Standard\Network\PostNotFoundException;
-    use SocialvoidLib\Exceptions\Standard\Validation\InvalidPeerInputException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPostTextException;
     use SocialvoidLib\NetworkSession;
     use SocialvoidLib\Objects\Post;
@@ -138,19 +136,20 @@
          * @return \SocialvoidLib\Objects\Standard\Post
          * @throws AvatarGeneratorException
          * @throws AvatarNotFoundException
+         * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
          * @throws CannotGetOriginalImageException
          * @throws DatabaseException
          * @throws DocumentNotFoundException
          * @throws FileNotFoundException
          * @throws ImageTooSmallException
-         * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
          * @throws InvalidZimageFileException
          * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
          * @throws PostNotFoundException
+         * @throws ServiceJobException
          * @throws SizeNotSetException
          * @throws UnsupportedAvatarGeneratorException
          * @throws UnsupportedImageTypeException
@@ -295,6 +294,7 @@
          * @throws AvatarNotFoundException
          * @throws ImageTooSmallException
          * @throws UnsupportedAvatarGeneratorException
+         * @noinspection DuplicatedCode
          */
         public function retrieveTimeline(int $page_number, bool $recursive=True): array
         {
