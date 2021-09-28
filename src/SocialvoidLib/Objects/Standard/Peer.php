@@ -52,11 +52,6 @@
         public $Name;
 
         /**
-         * @var DisplayPictureSize[]
-         */
-        public $DisplayPictureSizes;
-
-        /**
          * Array of flags associated with this peer
          *
          * @var string[]
@@ -70,16 +65,11 @@
          */
         public function toArray(): array
         {
-            $profilePicturesSizes = [];
-            foreach($this->DisplayPictureSizes as $datum)
-                $profilePicturesSizes[] = $datum->toArray();
-
             return [
                 "id" => $this->ID,
                 "type" => $this->Type,
                 "name" => $this->Name,
                 "username" => $this->Username,
-                "display_picture_sizes" => $profilePicturesSizes,
                 "flags" => $this->Flags
             ];
         }
@@ -109,16 +99,6 @@
                 $PeerObject->Name = $user->Profile->FirstName . ' ' . $user->Profile->LastName;
             }
 
-            foreach($user->DisplayPictureDocument->Files as $item)
-            {
-                $display_size = new DisplayPictureSize();
-                $display_size->Document = Document::fromDocument($user->DisplayPictureDocument, $item->Hash);
-                $split_size = explode('x', strtolower($item->ID));
-                $display_size->Width = (int)$split_size[0];
-                $display_size->Height = (int)$split_size[1];
-                $PeerObject->DisplayPictureSizes[] = $display_size;
-            }
-
             return $PeerObject;
         }
 
@@ -143,12 +123,6 @@
 
             if(isset($data["name"]))
                 $PeerObject->Name = $data['name'];
-
-            if(isset($data['display_picture_sizes']))
-            {
-                foreach($data['display_picture_sizes'] as $display_picture_size)
-                    $PeerObject->DisplayPictureSizes = DisplayPictureSize::fromArray($display_picture_size);
-            }
 
             if(isset($data["flags"]))
                 $PeerObject->Flags = $data["flags"];
