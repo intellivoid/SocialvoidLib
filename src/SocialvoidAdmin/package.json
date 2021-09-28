@@ -41,6 +41,10 @@
         },
         {
             "required": true,
+            "file": "Menus/VersionInformationMenu.php"
+        },
+        {
+            "required": true,
             "file": "SocialvoidAdmin.php"
         }
     ],

@@ -24,6 +24,10 @@
                 ->addAsciiArt(file_get_contents($banner_art_path), AsciiArtItem::POSITION_CENTER)
                 ->addAsciiArt('Copyright (C) 2017-' . date('Y') . ' Intellivoid Technologies, All Rights Reserved', AsciiArtItem::POSITION_CENTER)
                 ->addLineBreak(' ', 2)
+                ->addItem('Version Information', function (CliMenu $menu) {
+                    $version_information_menu = new VersionInformationMenu();
+                    $version_information_menu->open();
+                })
                 ->addItem('Health Status', function (CliMenu $menu) {
                     $health_status_menu = new HealthStatusMenu();
                     $health_status_menu->open();

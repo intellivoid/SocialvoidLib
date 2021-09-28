@@ -3,6 +3,9 @@
     require('ppm');
     import('net.intellivoid.socialvoid_admin');
     import('net.intellivoid.socialvoidlib');
+    import('net.intellivoid.socialvoid_rpc');
+    import('net.intellivoid.socialvoid_service');
+    import('net.intellivoid.socialvoid');
 
     $SocialvoidAdmin = new \SocialvoidAdmin\SocialvoidAdmin();
     $SocialvoidAdmin->startApplication();
