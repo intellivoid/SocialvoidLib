@@ -71,6 +71,7 @@
          */
         public function createSession(SessionClient $sessionClient, string $ip_address): SessionEstablished
         {
+            // TODO: Validate the hashes
             $SessionData = new SessionData();
             $SessionSecurity = new ActiveSession\SessionSecurity();
             $SessionSecurity->ClientPublicHash = $sessionClient->PublicHash;

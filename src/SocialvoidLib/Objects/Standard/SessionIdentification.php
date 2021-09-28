@@ -7,6 +7,7 @@
 
     use SocialvoidLib\Abstracts\RegexPatterns;
     use SocialvoidLib\Classes\Utilities;
+    use SocialvoidLib\Classes\Validate;
     use SocialvoidLib\Exceptions\Standard\Authentication\BadSessionChallengeAnswerException;
     use SocialvoidLib\Exceptions\Standard\Authentication\SessionNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPublicHashException;
@@ -108,7 +109,7 @@
                 throw new InvalidClientPublicHashException("The client's public hash must be a string");
             if(strlen($this->ClientPublicHash) !== 64)
                 throw new InvalidClientPublicHashException("The client's public hash must be 64 characters in length");
-            if(preg_match(RegexPatterns::Alphanumeric, $this->ClientPublicHash))
+            if(Validate::hash($this->ClientPublicHash) == false)
                 throw new InvalidClientPublicHashException("The client's public hash is not a valid hash");
 
             if(gettype($this->ChallengeAnswer) !== "string")
