@@ -121,6 +121,10 @@
         },
         {
             "required": true,
+            "file": "Methods/Timeline/RepostPost.php"
+        },
+        {
+            "required": true,
             "file": "SocialvoidRPC.php"
         }
     ],

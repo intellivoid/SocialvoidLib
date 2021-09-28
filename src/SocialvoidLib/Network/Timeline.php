@@ -222,17 +222,7 @@
             {
                 if(Converter::hasFlag($SortedPostResolutions[$post->Repost->OriginalPostID]->Flags, PostFlags::Deleted) == false)
                 {
-
-                    $stdPost->RepostedPost = \SocialvoidLib\Objects\Standard\Post::fromPost(
-                        $SortedPostResolutions[$post->Repost->OriginalPostID]
-                    );
-
-                    if($post->Repost->OriginalUserID !== null)
-                    {
-                        $stdPost->RepostedPost->Peer = Peer::fromUser(
-                            $SortedUserResolutions[$post->Repost->OriginalUserID]
-                        );
-                    }
+                    $stdPost->RepostedPost = $this->getStandardPost($post->Repost->OriginalPostID);
                 }
             }
 
@@ -276,24 +266,25 @@
          * @param int $page_number
          * @param bool $recursive
          * @return \SocialvoidLib\Objects\Standard\Post[]
+         * @throws AvatarGeneratorException
+         * @throws AvatarNotFoundException
          * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
+         * @throws CannotGetOriginalImageException
          * @throws DatabaseException
+         * @throws DocumentNotFoundException
+         * @throws FileNotFoundException
+         * @throws ImageTooSmallException
          * @throws InvalidSearchMethodException
+         * @throws InvalidSlaveHashException
+         * @throws InvalidZimageFileException
          * @throws PeerNotFoundException
          * @throws PostNotFoundException
          * @throws ServiceJobException
-         * @throws UserTimelineNotFoundException
-         * @throws DocumentNotFoundException
-         * @throws CannotGetOriginalImageException
-         * @throws FileNotFoundException
-         * @throws InvalidZimageFileException
          * @throws SizeNotSetException
-         * @throws UnsupportedImageTypeException
-         * @throws AvatarGeneratorException
-         * @throws AvatarNotFoundException
-         * @throws ImageTooSmallException
          * @throws UnsupportedAvatarGeneratorException
+         * @throws UnsupportedImageTypeException
+         * @throws UserTimelineNotFoundException
          * @noinspection DuplicatedCode
          */
         public function retrieveTimeline(int $page_number, bool $recursive=True): array
@@ -452,13 +443,13 @@
          * @throws UserTimelineNotFoundException
          * @throws InvalidSlaveHashException
          */
-        public function repostToTimeline(string $post_public_id): Post
+        public function repostPost(string $post_public_id): Post
         {
             $selected_post = $this->networkSession->getSocialvoidLib()->getPostsManager()->getPost(
                 PostSearchMethod::ByPublicId, $post_public_id);
 
             $PostObject = $this->networkSession->getSocialvoidLib()->getPostsManager()->repostPost(
-                $this->networkSession->getAuthenticatedUser()->ID,  $selected_post,
+                $this->networkSession->getAuthenticatedUser(),  $selected_post,
                 $this->networkSession->getActiveSession()->ID, PostPriorityLevel::High
             );
 

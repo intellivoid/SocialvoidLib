@@ -21,7 +21,6 @@
     use SocialvoidLib\Classes\Converter;
     use SocialvoidLib\Classes\PostText\Extractor;
     use SocialvoidLib\Classes\PostText\TwitterMethod\Parser;
-    use SocialvoidLib\Classes\Standard\BaseIdentification;
     use SocialvoidLib\Classes\Utilities;
     use SocialvoidLib\Exceptions\GenericInternal\BackgroundWorkerNotEnabledException;
     use SocialvoidLib\Exceptions\GenericInternal\CacheException;
@@ -414,9 +413,9 @@
         /**
          * Reposts an existing post
          *
-         * @param int $user_id
+         * @param User $user
          * @param Post $post
-         * @param int|null $session_id
+         * @param string|null $session_id
          * @param string $priority
          * @param array $flags
          * @return Post
@@ -424,13 +423,13 @@
          * @throws CacheException
          * @throws DatabaseException
          * @throws InvalidSearchMethodException
+         * @throws InvalidSlaveHashException
          * @throws PostDeletedException
          * @throws PostNotFoundException
-         * @throws InvalidSlaveHashException
          * @noinspection DuplicatedCode
          * @noinspection PhpBooleanCanBeSimplifiedInspection
          */
-        public function repostPost(int $user_id, Post $post, int $session_id=null, string $priority=PostPriorityLevel::None, array $flags=[]): Post
+        public function repostPost(User $user, Post $post, string $session_id, string $priority=PostPriorityLevel::None, array $flags=[]): Post
         {
             // Do not repost the post if it's deleted
             if(Converter::hasFlag($post->Flags, PostFlags::Deleted))
@@ -450,17 +449,18 @@
                 }
             }
 
+            $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer($user->SlaveServer);
+
             // Check if the post has already been reposted
             try
             {
-                $repostRecordState = $this->socialvoidLib->getRepostsRecordManager()->getRecord($user_id, $post->PublicID);
+                $repostRecordState = $this->socialvoidLib->getRepostsRecordManager()->getRepostedRecord($user, $post->PublicID);
 
                 if($repostRecordState->PostID !== null)
                 {
                     try
                     {
-                        $originalRepostPost = $this->getPost(PostSearchMethod::ByPublicId, $repostRecordState->PostID);
-                        // TODO: Add more details to the AlreadyRepostedException exception.
+                        $originalRepostPost = $this->getPost(PostSearchMethod::ByPublicId, $SelectedSlave->MysqlServerPointer->HashPointer . '-' . $repostRecordState->PostID);
                         if(Converter::hasFlag($originalRepostPost->Flags, PostFlags::Deleted) == false)
                             throw new AlreadyRepostedException('The requested repost has already been reposted');
                     }
@@ -470,6 +470,7 @@
                         unset($e);
                     }
                 }
+
             }
             catch (RepostRecordNotFoundException $e)
             {
@@ -478,7 +479,7 @@
             }
 
             $timestamp = time();
-            $PublicID = BaseIdentification::postId($user_id, $timestamp, $post->Text);
+            $PublicID = Uuid::v1();
             $Properties = new Post\Properties();
 
             $Repost = new Post\Repost();
@@ -487,10 +488,10 @@
 
             $Query = QueryBuilder::insert_into('posts', [
                 'public_id' => $this->socialvoidLib->getDatabase()->real_escape_string($PublicID),
-                'session_id' => ($session_id == null ? null : $session_id),
-                'poster_user_id' => $user_id,
+                'session_id' => $session_id,
+                'poster_user_id' => $user->ID,
                 'properties' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Properties->toArray())),
-                'repost_original_post_id' => (int)$Repost->OriginalPostID,
+                'repost_original_post_id' => $Repost->OriginalPostID,
                 'repost_original_user_id' => (int)$Repost->OriginalUserID,
                 'flags' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($flags)),
                 'is_deleted' => (int)false,
@@ -498,22 +499,22 @@
                 'last_updated_timestamp' => $timestamp,
                 'created_timestamp' => $timestamp
             ]);
-            $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
+            $QueryResults = $SelectedSlave->getConnection()->query($Query);
 
             if($QueryResults)
             {
-                $returnResults = $this->getPost(PostSearchMethod::ByPublicId, $PublicID);
+                $returnResults = $this->getPost(PostSearchMethod::ByPublicId, $SelectedSlave->MysqlServerPointer->HashPointer . '-' . $PublicID);
                 $this->registerPostCacheEntry($returnResults);
             }
             else
             {
                 throw new DatabaseException('There was an error while trying to repost a post',
-                    $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
+                    $Query, $SelectedSlave->getConnection()->error, $SelectedSlave->getConnection()
                 );
             }
 
-            $this->socialvoidLib->getRepostsRecordManager()->repostRecord($user_id, $returnResults->PublicID, $post->PublicID);
-            $post->Reposts[] = $user_id;
+            $this->socialvoidLib->getRepostsRecordManager()->repostRecord($user, $returnResults->PublicID, $post->PublicID);
+            $post->Reposts[] = $user->ID;
             $this->updatePost($post);
 
             return $returnResults;
@@ -632,11 +633,11 @@
         }
 
         /**
-         * @param User $user_id
+         * @param User $user
          * @param Post $post
          * @param string $text
          * @param string $source
-         * @param int|null $session_id
+         * @param string|null $session_id
          * @param array $media_content
          * @param string $priority
          * @param array $flags
@@ -749,12 +750,13 @@
          * @param bool $skip_errors
          * @param int $utilization
          * @return Post[]
+         * @throws BackgroundWorkerNotEnabledException
+         * @throws CacheException
          * @throws DatabaseException
          * @throws InvalidSearchMethodException
+         * @throws InvalidSlaveHashException
          * @throws PostNotFoundException
-         * @throws BackgroundWorkerNotEnabledException
          * @throws ServiceJobException
-         * @throws CacheException
          */
         public function getMultiplePosts(array $query, bool $skip_errors=True, int $utilization=100): array
         {
