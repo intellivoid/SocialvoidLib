@@ -1,15 +1,21 @@
 ### v1.0.0.1 Alpha
  - Bumped version to 1.0.0.1 in `net.intellivoid.socialvoidlib`
  - Bumped version to 1.0.0.1 in `net.intellivoid.socialvoid_rpc`
+ - Bumped version to 1.0.0.1 in `net.intellivoid.socialvoid_admin`
+ - Added method timeline.repost_post
+ - Added alternative method for an RPC Server (No BackgroundWorker) which uses less resources
+ - Post IDs now use UUID v1
+ - Added internal method for recursively resolving post entities
+ - Removed object DisplayPictureSizes[] from Peer (standard) to reduce response size
+ - Added the ability to delete posts
+ - Improved deleted post structure
+ - Rewrote posts related tables such as `posts.sql`, `posts_likes.sql`, `posts_quotes.sql`, 
+   `posts_replies.sql`, `posts_reposts.sql` to work with slave servers
  - Added method timeline.compose_post
  - Added method timeline.like_post
  - Added method timeline.get_post
  - Added method timeline.get_likes
- - Added alternative method for an RPC Server (No BackgroundWorker)
- - Added slave support for `likes`
- - Refactored table `likes` to `posts_likes`
- - Post IDs now use UUID v1
+ - Added method timeline.delete_post
  - Added method timeline.quote_post
- - Added internal method for recursively resolving post entities
- - Added method timeline.repost_post
- - Removed object DisplayPictureSizes[] from Peer (standard) to reduce response size
+ - Added a version information menu to `net.intellivoid.socialvoid_admin`
+ - Fixed client hash validation bug
