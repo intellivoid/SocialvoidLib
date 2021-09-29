@@ -46,7 +46,7 @@
         /**
          * The peer author of the post
          *
-         * @var Peer
+         * @var Peer|null
          */
         public $Peer;
 
@@ -145,7 +145,7 @@
                 "type" => $this->PostType,
                 "text" => $this->Text,
                 "source" => $this->Source,
-                "peer" => $this->Peer->toArray(),
+                "peer" => ($this->Peer == null ? null : $this->Peer->toArray()),
                 "reply_to_post" => ($this->ReplyToPost == null ? null : $this->ReplyToPost->toArray()),
                 "quoted_post" => ($this->QuotedPost == null ? null : $this->QuotedPost->toArray()),
                 "reposted_post" => ($this->RepostedPost == null ? null :$this->RepostedPost->toArray()),

@@ -10,6 +10,7 @@
 
     namespace SocialvoidLib\Network;
 
+    use BackgroundWorker\Exceptions\ServerNotReachableException;
     use SocialvoidLib\Abstracts\Flags\PostFlags;
     use SocialvoidLib\Abstracts\Levels\PostPriorityLevel;
     use SocialvoidLib\Abstracts\SearchMethods\PostSearchMethod;
@@ -153,6 +154,7 @@
          * @throws SizeNotSetException
          * @throws UnsupportedAvatarGeneratorException
          * @throws UnsupportedImageTypeException
+         * @throws ServerNotReachableException
          * @noinspection DuplicatedCode
          */
         public function getStandardPost(string $post_id): \SocialvoidLib\Objects\Standard\Post
@@ -165,6 +167,9 @@
             $post = $this->networkSession->getSocialvoidLib()->getPostsManager()->getPost(
                 PostSearchMethod::ByPublicId, $post_id
             );
+
+            if(Converter::hasFlag($post->Flags, PostFlags::Deleted))
+                return \SocialvoidLib\Objects\Standard\Post::fromPost($post);
 
             $SubPosts = [];
             $UserIDs = [];
@@ -209,7 +214,7 @@
                     $SortedPostResolutions[$post->Quote->OriginalPostID]
                 );
 
-                if($post->Quote->OriginalUserID !== null)
+                if($post->Quote->OriginalUserID !== null && Converter::hasFlag($SortedPostResolutions[$post->Quote->OriginalPostID]->Flags, PostFlags::Deleted) == false)
                 {
                     $stdPost->QuotedPost->Peer = Peer::fromUser(
                         $SortedUserResolutions[$post->Quote->OriginalUserID]
@@ -232,7 +237,7 @@
                     $SortedPostResolutions[$post->Reply->ReplyToPostID]
                 );
 
-                if($post->Reply->ReplyToUserID !== null)
+                if($post->Reply->ReplyToUserID !== null && Converter::hasFlag($SortedPostResolutions[$post->Reply->ReplyToPostID]->Flags, PostFlags::Deleted) == false)
                 {
                     $stdPost->ReplyToPost->Peer = Peer::fromUser(
                         $SortedUserResolutions[$post->Reply->ReplyToUserID]
@@ -285,6 +290,7 @@
          * @throws UnsupportedAvatarGeneratorException
          * @throws UnsupportedImageTypeException
          * @throws UserTimelineNotFoundException
+         * @throws ServerNotReachableException
          * @noinspection DuplicatedCode
          */
         public function retrieveTimeline(int $page_number, bool $recursive=True): array
