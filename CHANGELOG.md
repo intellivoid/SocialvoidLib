@@ -11,3 +11,5 @@
  - Post IDs now use UUID v1
  - Added method timeline.quote_post
  - Added internal method for recursively resolving post entities
+ - Added method timeline.repost_post
+ - Removed object DisplayPictureSizes[] from Peer (standard) to reduce response size

@@ -4,6 +4,7 @@
     namespace SocialvoidLib\ServiceJobs\Jobs;
 
 
+    use BackgroundWorker\Exceptions\ServerNotReachableException;
     use Exception;
     use GearmanTask;
     use SocialvoidLib\Abstracts\JobPriority;
@@ -44,9 +45,11 @@
          * @param int $utilization
          * @param bool $skip_errors
          * @return Post[]
-         * @throws ServiceJobException
          * @throws BackgroundWorkerNotEnabledException
+         * @throws ServiceJobException
+         * @throws ServerNotReachableException
          * @noinspection DuplicatedCode
+         * @noinspection PhpCastIsUnnecessaryInspection
          */
         public function resolvePosts(array $query, int $utilization=100, bool $skip_errors=False): array
         {
