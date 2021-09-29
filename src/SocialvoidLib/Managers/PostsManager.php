@@ -12,6 +12,7 @@
 
     namespace SocialvoidLib\Managers;
 
+    use BackgroundWorker\Exceptions\ServerNotReachableException;
     use Exception;
     use msqg\QueryBuilder;
     use SocialvoidLib\Abstracts\Flags\PostFlags;
@@ -757,6 +758,7 @@
          * @throws InvalidSlaveHashException
          * @throws PostNotFoundException
          * @throws ServiceJobException
+         * @throws ServerNotReachableException
          */
         public function getMultiplePosts(array $query, bool $skip_errors=True, int $utilization=100): array
         {
