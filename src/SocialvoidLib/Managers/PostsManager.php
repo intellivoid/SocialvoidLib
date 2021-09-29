@@ -744,6 +744,28 @@
         }
 
         /**
+         * Marks a post as deleted, cannot be reverted.
+         *
+         * @param Post $post
+         * @throws CacheException
+         * @throws DatabaseException
+         * @throws InvalidSlaveHashException
+         * @throws PostDeletedException
+         */
+        public function deletePost(Post $post)
+        {
+            // Do not delete the post if it's deleted
+            if(Converter::hasFlag($post->Flags, PostFlags::Deleted))
+            {
+                throw new PostDeletedException('The requested post was deleted');
+            }
+
+            // Add the deleted flag to the post
+            Converter::addFlag($post->Flags, PostFlags::Deleted);
+            $this->updatePost($post);
+        }
+
+        /**
          * Fetches multiple posts from the Database, function is completed faster if
          * BackgroundWorker is enabled
          *

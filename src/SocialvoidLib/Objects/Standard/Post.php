@@ -245,9 +245,11 @@
 
                 $StandardPostObject->PostType = PostType::Deleted;
                 $StandardPostObject->Text = null;
+                $StandardPostObject->Peer = null;
                 $StandardPostObject->Source = null;
-                $StandardPostObject->LikesCount = null;
-                $StandardPostObject->RepostsCount = null;
+                $StandardPostObject->LikesCount = 0;
+                $StandardPostObject->RepostsCount = 0;
+                $StandardPostObject->QuotesCount = 0;
             }
 
             return $StandardPostObject;

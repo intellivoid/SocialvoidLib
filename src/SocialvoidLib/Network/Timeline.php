@@ -626,4 +626,26 @@
 
             return $PostObject;
         }
+
+        /**
+         * Deletes an existing post
+         *
+         * @param string $post_public_id
+         * @return bool
+         * @throws CacheException
+         * @throws DatabaseException
+         * @throws InvalidSearchMethodException
+         * @throws InvalidSlaveHashException
+         * @throws PostDeletedException
+         * @throws PostNotFoundException
+         */
+        public function deletePost(string $post_public_id): bool
+        {
+            $selected_post = $this->networkSession->getSocialvoidLib()->getPostsManager()->getPost(
+                PostSearchMethod::ByPublicId, $post_public_id);
+
+            $this->networkSession->getSocialvoidLib()->getPostsManager()->deletePost($selected_post);
+
+            return true;
+        }
     }

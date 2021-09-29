@@ -101,6 +101,10 @@
         },
         {
             "required": true,
+            "file": "Methods/Timeline/DeletePost.php"
+        },
+        {
+            "required": true,
             "file": "Methods/Timeline/GetLikes.php"
         },
         {
