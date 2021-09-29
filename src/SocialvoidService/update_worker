@@ -92,23 +92,9 @@
 
     while(true)
     {
-        while(
-            @SocialvoidService::getBackgroundWorker()->getWorker()->getGearmanWorker()->work() ||
-            SocialvoidService::getBackgroundWorker()->getWorker()->getGearmanWorker()->returnCode() == GEARMAN_TIMEOUT
-        )
+        SocialvoidService::getBackgroundWorker()->getWorker()->work(false);
+        if(SocialvoidService::getBackgroundWorker()->getWorker()->getGearmanWorker()->returnCode() == GEARMAN_TIMEOUT)
         {
-            if (SocialvoidService::getBackgroundWorker()->getWorker()->getGearmanWorker()->returnCode() == GEARMAN_TIMEOUT)
-            {
-                SocialvoidService::processSleepCycle(); // Go to sleep if there's no activity
-                continue;
-            }
-
-            if (SocialvoidService::getBackgroundWorker()->getWorker()->getGearmanWorker()->returnCode() != GEARMAN_SUCCESS)
-            {
-                SocialvoidService::getLogHandler()->log(EventType::WARNING, "Gearman returned error code " . SocialvoidService::getBackgroundWorker()->getWorker()->getGearmanWorker()->returnCode(), "Update Worker");
-                break;
-            }
+            SocialvoidService::processSleepCycle();
         }
     }
-
-
