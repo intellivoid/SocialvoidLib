@@ -135,4 +135,12 @@
                 urldecode($matches['password'])
             );
         }
+
+        /**
+         * @return EstablishedMySqlConnection[]
+         */
+        public function getMySqlConnections(): array
+        {
+            return $this->MySqlConnections;
+        }
     }
