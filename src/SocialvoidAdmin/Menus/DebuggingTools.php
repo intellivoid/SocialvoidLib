@@ -25,15 +25,15 @@
                 ->setWidth($builder->getTerminal()->getWidth())
                 ->setBackgroundColour('magenta')
                 ->setTitle('Socialvoid Debugging Tools')
-                ->addItem('Truncate Database', function (CliMenu $menu) {
+                ->addItem('Truncate Servers', function (CliMenu $menu) {
                     $result = $menu->askText()
-                        ->setPromptText('Enter "CONFIRM" to truncate all databases')
+                        ->setPromptText('Enter "CONFIRM" to truncate all servers')
                         ->ask();
 
                     if($result->fetch() == "CONFIRM")
                     {
                         $menu->close();
-                        print('Truncating master database...' . PHP_EOL);
+                        print('Truncating master MySQL database...' . PHP_EOL);
 
                         $SocialvoidLib = SocialvoidAdmin::getSocialvoidLib();
                         $Queries = [
@@ -61,7 +61,7 @@
 
                         foreach($SocialvoidLib->getSlaveManager()->getMySqlConnections() as $hash_connection => $connection)
                         {
-                            print('Truncating slave database ' . $hash_connection . '...' . PHP_EOL);
+                            print('Truncating slave MySQL database ' . $hash_connection . '...' . PHP_EOL);
                             $Queries = [
                                 "SET FOREIGN_KEY_CHECKS = 0;",
                                 "TRUNCATE TABLE documents;",
@@ -96,6 +96,38 @@
                     {
                         $menu->confirm('Aborted operation')->display();
                     }
+                })
+                ->addItem('Test Servers', function (CliMenu $menu) {
+                    $menu->close();
+                    print('Testing master MySQL database...');
+
+                    $SocialvoidLib = SocialvoidAdmin::getSocialvoidLib();
+                    $SocialvoidLib->getDatabase();
+                    if($SocialvoidLib->getDatabase()->get_connection_stats() == false)
+                    {
+                        print("FAILED, " . $SocialvoidLib->getDatabase()->connect_error . PHP_EOL);
+                    }
+                    else
+                    {
+                        print("PASSED" . PHP_EOL);
+                    }
+
+                    foreach($SocialvoidLib->getSlaveManager()->getMySqlConnections() as $hash_connection => $connection)
+                    {
+                        print('Testing slave MySQL database ' . $hash_connection . '...');
+                        if($connection->getConnection()->get_connection_stats() == false)
+                        {
+                            print("FAILED, " . $connection->getConnection()->connect_error . PHP_EOL);
+                        }
+                        else
+                        {
+                            print("PASSED" . PHP_EOL);
+                        }
+                    }
+
+                    print("Done! Returning in 5 seconds" . PHP_EOL);
+                    sleep(5);
+                    $menu->open();
                 })
                 ->addItem('Go Back', function (CliMenu $menu) {
                     $main_menu = new MainMenu();
