@@ -736,7 +736,7 @@
                 );
             }
 
-            $this->socialvoidLib->getReplyRecordManager()->replyRecord($user->ID, $post->PublicID, $returnResults->PublicID);
+            $this->socialvoidLib->getReplyRecordManager()->replyRecord($user->ID, $returnResults->PublicID, $post->PublicID);
             $post->Replies[] = $returnResults->PublicID;
             $this->updatePost($post);
 
