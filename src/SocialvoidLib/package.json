@@ -617,10 +617,6 @@
         },
         {
             "required": true,
-            "file": "Interfaces/StandardObjectInterface.php"
-        },
-        {
-            "required": true,
             "file": "Managers/BasicRedisCacheManager.php"
         },
         {
