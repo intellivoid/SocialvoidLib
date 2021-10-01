@@ -263,4 +263,36 @@
 
             return true;
         }
+
+        /**
+         * Updates the user's location
+         *
+         * @param string $location
+         * @return bool
+         * @throws InternalServerException
+         * @throws NotAuthenticatedException
+         */
+        public function updateLocation(string $location): bool
+        {
+            if($this->networkSession->isAuthenticated() == false)
+                throw new NotAuthenticatedException();
+
+            // TODO: Validate location
+
+            $user = $this->networkSession->getAuthenticatedUser();
+            $user->Profile->Location = $location;
+
+            try
+            {
+                $this->networkSession->getSocialvoidLib()->getUserManager()->updateUser($user);
+            }
+            catch(Exception $e)
+            {
+                throw new InternalServerException('There was an error while trying to update the location', $e);
+            }
+
+            $this->networkSession->setAuthenticatedUser($user);
+
+            return true;
+        }
     }
