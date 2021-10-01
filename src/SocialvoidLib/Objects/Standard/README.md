@@ -9,4 +9,4 @@ proprietary objects.
 ## Standard Objects
 
  - [peer](Peer.php)
-   - [peer.profile](Peer/Name.php)
+   - [peer.profile](Profile/Name.php)

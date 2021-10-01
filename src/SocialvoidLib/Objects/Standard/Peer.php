@@ -14,7 +14,7 @@
     namespace SocialvoidLib\Objects\Standard;
 
     use SocialvoidLib\Abstracts\Types\Standard\PeerType;
-    use SocialvoidLib\Objects\Standard\Peer\DisplayPictureSize;
+    use SocialvoidLib\Objects\Standard\Profile\DisplayPictureSize;
     use SocialvoidLib\Objects\User;
 
     /**
@@ -88,7 +88,6 @@
             $PeerObject->Type = PeerType::User; // TODO: This needs to be re-implemented
             $PeerObject->Username = $user->Username;
             $PeerObject->Flags = $user->Flags;
-            $PeerObject->DisplayPictureSizes = [];
 
             if($user->Profile->LastName == null)
             {

@@ -3,7 +3,7 @@
     /** @noinspection PhpUnused */
     /** @noinspection PhpMissingFieldTypeInspection */
 
-    namespace SocialvoidLib\Objects\Standard\Peer;
+    namespace SocialvoidLib\Objects\Standard\Profile;
 
     use SocialvoidLib\Objects\Standard\Document;
 
