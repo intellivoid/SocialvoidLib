@@ -324,4 +324,36 @@
 
             return true;
         }
+
+        /**
+         * Updates the user's url
+         *
+         * @param string $url
+         * @return bool
+         * @throws InternalServerException
+         * @throws NotAuthenticatedException
+         */
+        public function updateUrl(string $url): bool
+        {
+            if($this->networkSession->isAuthenticated() == false)
+                throw new NotAuthenticatedException();
+
+            // TODO: Validate URL
+
+            $user = $this->networkSession->getAuthenticatedUser();
+            $user->Profile->URL = $url;
+
+            try
+            {
+                $this->networkSession->getSocialvoidLib()->getUserManager()->updateUser($user);
+            }
+            catch(Exception $e)
+            {
+                throw new InternalServerException('There was an error while trying to update the URL', $e);
+            }
+
+            $this->networkSession->setAuthenticatedUser($user);
+
+            return true;
+        }
     }
