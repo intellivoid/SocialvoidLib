@@ -113,9 +113,9 @@
                 throw new InvalidClientPublicHashException("The client's public hash is not a valid hash");
 
             if(gettype($this->ChallengeAnswer) !== "string")
-                throw new BadSessionChallengeAnswerException("The client private hash is invalid (-s5)");
+                throw new BadSessionChallengeAnswerException("The session challenge answer must be a string");
             if(strlen($this->ChallengeAnswer) !== 40)
-                throw new BadSessionChallengeAnswerException("The client private hash is invalid (-s6)");
+                throw new BadSessionChallengeAnswerException("The session challenge answer is incorrect");
 
             return true;
         }
