@@ -8,7 +8,6 @@
     use KimchiRPC\KimchiRPC;
     use RuntimeException;
     use SocialvoidLib\SocialvoidLib;
-    use VerboseAdventure\Abstracts\EventType;
     use VerboseAdventure\VerboseAdventure;
 
     /**
