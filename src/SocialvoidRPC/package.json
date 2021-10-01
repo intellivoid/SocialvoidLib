@@ -45,6 +45,10 @@
         },
         {
             "required": true,
+            "file": "Methods/Account/UpdateLocation.php"
+        },
+        {
+            "required": true,
             "file": "Methods/Account/UpdateName.php"
         },
         {

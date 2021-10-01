@@ -35,7 +35,7 @@
     use Zimage\Exceptions\SizeNotSetException;
     use Zimage\Exceptions\UnsupportedImageTypeException;
 
-    class UpdateBiography implements MethodInterface
+    class UpdateLocation implements MethodInterface
     {
 
         /**
@@ -43,7 +43,7 @@
          */
         public function getMethodName(): string
         {
-            return 'UpdateBiography';
+            return 'UpdateLocation';
         }
 
         /**
@@ -51,7 +51,7 @@
          */
         public function getMethod(): string
         {
-            return 'account.update_biography';
+            return 'account.update_location';
         }
 
         /**
@@ -59,7 +59,7 @@
          */
         public function getDescription(): string
         {
-            return 'Updates the users profile biography';
+            return 'Updates the users location';
         }
 
         /**
@@ -85,10 +85,10 @@
             if(gettype($request->Parameters["session_identification"]) !== "array")
                 throw new InvalidSessionIdentificationException("The parameter 'session_identification' is not a object");
 
-            if(isset($request->Parameters["biography"]) == false)
-                throw new MissingParameterException("Missing parameter 'biography'");
-            if(gettype($request->Parameters["biography"]) !== "string")
-                throw new InvalidBiographyException("The 'biography' parameter must be a string", $request->Parameters["biography"]);
+            if(isset($request->Parameters["location"]) == false)
+                throw new MissingParameterException("Missing parameter 'location'");
+            if(gettype($request->Parameters["location"]) !== "string")
+                throw new InvalidBiographyException("The 'location' parameter must be a string", $request->Parameters["location"]);
         }
 
 
@@ -150,7 +150,7 @@
 
             try
             {
-                $NetworkSession->getAccount()->updateBiography($request->Parameters['biography']);
+                $NetworkSession->getAccount()->updateLocation($request->Parameters['location']);
             }
             catch(Exception $e)
             {
@@ -159,7 +159,7 @@
                     throw $e;
 
                 // If anything else, suppress the error.
-                throw new InternalServerException('There was an unexpected error while trying to set a profile picture', $e);
+                throw new InternalServerException('There was an unexpected error while trying to update your profile\'s location', $e);
             }
 
             $Response = Response::fromRequest($request);
