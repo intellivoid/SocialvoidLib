@@ -34,7 +34,7 @@
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPostTextException;
     use SocialvoidLib\NetworkSession;
     use SocialvoidLib\Objects\Post;
-    use SocialvoidLib\Objects\Standard\Profile;
+    use SocialvoidLib\Objects\Standard\Peer;
     use SocialvoidLib\Objects\Standard\TimelineState;
     use udp2\Exceptions\AvatarGeneratorException;
     use udp2\Exceptions\AvatarNotFoundException;

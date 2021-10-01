@@ -35,7 +35,7 @@
     use SocialvoidLib\Network\Users;
     use SocialvoidLib\Objects\ActiveSession;
     use SocialvoidLib\Objects\Standard\HelpDocument;
-    use SocialvoidLib\Objects\Standard\Profile;
+    use SocialvoidLib\Objects\Standard\Peer;
     use SocialvoidLib\Objects\Standard\ServerInformation;
     use SocialvoidLib\Objects\Standard\SessionEstablished;
     use SocialvoidLib\Objects\Standard\SessionIdentification;

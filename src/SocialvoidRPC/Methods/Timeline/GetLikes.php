@@ -24,7 +24,7 @@
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPostTextException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidSessionIdentificationException;
     use SocialvoidLib\NetworkSession;
-    use SocialvoidLib\Objects\Standard\Profile;
+    use SocialvoidLib\Objects\Standard\Peer;
     use SocialvoidLib\Objects\Standard\SessionIdentification;
     use SocialvoidRPC\SocialvoidRPC;
     use udp2\Exceptions\AvatarGeneratorException;
@@ -116,30 +116,31 @@
         /**
          * @param Request $request
          * @return Response
-         * @throws InternalServerException
-         * @throws InvalidPostTextException
-         * @throws InvalidSessionIdentificationException
-         * @throws MissingParameterException
-         * @throws CacheException
-         * @throws DatabaseException
-         * @throws InvalidSearchMethodException
-         * @throws InvalidSlaveHashException
-         * @throws BadSessionChallengeAnswerException
-         * @throws NotAuthenticatedException
-         * @throws SessionExpiredException
-         * @throws SessionNotFoundException
-         * @throws DocumentNotFoundException
-         * @throws PeerNotFoundException
-         * @throws InvalidClientPublicHashException
-         * @throws CannotGetOriginalImageException
-         * @throws FileNotFoundException
-         * @throws InvalidZimageFileException
-         * @throws SizeNotSetException
-         * @throws UnsupportedImageTypeException
          * @throws AvatarGeneratorException
          * @throws AvatarNotFoundException
+         * @throws BadSessionChallengeAnswerException
+         * @throws CacheException
+         * @throws CannotGetOriginalImageException
+         * @throws DatabaseException
+         * @throws DocumentNotFoundException
+         * @throws FileNotFoundException
          * @throws ImageTooSmallException
+         * @throws InternalServerException
+         * @throws InvalidClientPublicHashException
+         * @throws InvalidParametersException
+         * @throws InvalidPostTextException
+         * @throws InvalidSearchMethodException
+         * @throws InvalidSessionIdentificationException
+         * @throws InvalidSlaveHashException
+         * @throws InvalidZimageFileException
+         * @throws MissingParameterException
+         * @throws NotAuthenticatedException
+         * @throws PeerNotFoundException
+         * @throws SessionExpiredException
+         * @throws SessionNotFoundException
+         * @throws SizeNotSetException
          * @throws UnsupportedAvatarGeneratorException
+         * @throws UnsupportedImageTypeException
          * @noinspection DuplicatedCode
          */
         public function execute(Request $request): Response

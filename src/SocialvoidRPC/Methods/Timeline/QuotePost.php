@@ -23,8 +23,6 @@
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPostTextException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidSessionIdentificationException;
     use SocialvoidLib\NetworkSession;
-    use SocialvoidLib\Objects\Standard\Profile;
-    use SocialvoidLib\Objects\Standard\Post;
     use SocialvoidLib\Objects\Standard\SessionIdentification;
     use SocialvoidRPC\SocialvoidRPC;
     use udp2\Exceptions\AvatarGeneratorException;
