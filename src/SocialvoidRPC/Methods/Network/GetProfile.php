@@ -44,7 +44,7 @@
          */
         public function getMethodName(): string
         {
-            return "GetProfile";
+            return 'GetProfile';
         }
 
         /**
@@ -52,7 +52,7 @@
          */
         public function getMethod(): string
         {
-            return "network.get_profile";
+            return 'network.get_profile';
         }
 
         /**
@@ -60,7 +60,7 @@
          */
         public function getDescription(): string
         {
-            return "Returns a profile display of the requested peer";
+            return 'Returns a profile display of the requested peer';
         }
 
         /**
@@ -68,7 +68,7 @@
          */
         public function getVersion(): string
         {
-            return "1.0.0.0";
+            return '1.0.0.0';
         }
 
         /**
@@ -79,15 +79,16 @@
          */
         private function checkParameters(Request $request)
         {
-            if(isset($request->Parameters["session_identification"]) == false)
-                throw new MissingParameterException("Missing parameter 'session_identification'");
-            if(gettype($request->Parameters["session_identification"]) !== "array")
-                throw new InvalidSessionIdentificationException("The parameter 'session_identification' is not a object");
+            if(isset($request->Parameters['session_identification']) == false)
+                throw new MissingParameterException('Missing parameter \'session_identification\'');
+            if(gettype($request->Parameters['session_identification']) !== 'array')
+                throw new InvalidSessionIdentificationException('The parameter \'session_identification\' is not a object');
 
-            if(isset($request->Parameters["peer"]) == false)
-                throw new InvalidPeerInputException("Missing parameter 'peer'");
-            if(gettype($request->Parameters["peer"]) !== "string")
-                throw new InvalidPeerInputException("The parameter 'peer' is not a string");
+            if(isset($request->Parameters['peer']))
+            {
+                if(gettype($request->Parameters['peer']) !== 'string')
+                    throw new InvalidPeerInputException('The parameter \'peer\' is not a string');
+            }
         }
 
         /**
@@ -122,7 +123,7 @@
         {
             $this->checkParameters($request);
 
-            $SessionIdentification = SessionIdentification::fromArray($request->Parameters["session_identification"]);
+            $SessionIdentification = SessionIdentification::fromArray($request->Parameters['session_identification']);
             $SessionIdentification->validate();
 
             // Wake the worker up
@@ -147,7 +148,18 @@
 
             try
             {
-                $resolved_peer = $NetworkSession->getUsers()->resolvePeer($request->Parameters["peer"]);
+                $requested_peer = null;
+
+                if(isset($request->Parameters['peer']))
+                {
+                    $requested_peer = $request->Parameters['peer'];
+                }
+                else
+                {
+                    $requested_peer = $NetworkSession->getAuthenticatedUser()->PublicID;
+                }
+
+                $resolved_peer = $NetworkSession->getUsers()->resolvePeer($requested_peer);
             }
             catch(Exception $e)
             {
@@ -156,7 +168,7 @@
                     throw $e;
 
                 // If anything else, suppress the error.There was an unexpected error while processing the requested peer
-                throw new InternalServerException('', $e);
+                throw new InternalServerException('There was an unexpected error while processing the requested peer', $e);
             }
             
             $Response = Response::fromRequest($request);

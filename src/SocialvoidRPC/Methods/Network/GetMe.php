@@ -151,7 +151,7 @@
                     throw $e;
 
                 // If anything else, suppress the error.
-                throw new InternalServerException("There was an unexpected error", $e);
+                throw new InternalServerException('There was an unexpected error while processing the request', $e);
             }
 
             $Response = Response::fromRequest($request);
