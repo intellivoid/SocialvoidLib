@@ -85,6 +85,12 @@
                 "version": "latest",
                 "source": "symfony@composer/uid",
                 "required": true
+            },
+            {
+                "package": "net.intellivoid.http_stream",
+                "version": "latest",
+                "source": "default@github/intellivoid/HttpStream",
+                "required": true
             }
         ],
         "configuration": {
