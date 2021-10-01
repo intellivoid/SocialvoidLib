@@ -1,5 +1,7 @@
 <?php
 
+    /** @noinspection PhpMissingFieldTypeInspection */
+
     namespace SocialvoidLib\Objects\Standard;
 
     use SocialvoidLib\Abstracts\Types\Standard\DocumentType;
@@ -50,18 +52,11 @@
         public $Flags;
 
         /**
-         * The Unix Timestamp for when this record was created
-         *
-         * @var int
-         */
-        public $CreatedTimestamp;
-
-        /**
          * Returns an array representation of the object
          *
          * @return array
          */
-        public function toArray()
+        public function toArray(): array
         {
             return [
                 'id' => $this->ID,
@@ -69,8 +64,7 @@
                 'file_name' => $this->FileName,
                 'file_size' => $this->FileSize,
                 'file_type' => $this->FileType,
-                'flags' => $this->Flags,
-                'created_timestamp' => $this->CreatedTimestamp
+                'flags' => $this->Flags
             ];
         }
 
@@ -102,9 +96,6 @@
             if(isset($data['flags']))
                 $document_object->Flags = $data['flags'];
 
-            if(isset($data['created_timestamp']))
-                $document_object->CreatedTimestamp = $data['created_timestamp'];
-
             return $document_object;
         }
 
@@ -121,7 +112,6 @@
             $file = $document->getFile($file_hash);
 
             $document_object->ID = $document->ID . '-' . $file_hash;
-            $document_object->CreatedTimestamp = $document->CreatedTimestamp;
             $document_object->Flags = $document->Flags;
 
             if($file !== null)
@@ -151,8 +141,6 @@
             $document_object->FileType = $contentResults->FileType;
             $document_object->FileSize = $contentResults->FileSize;
             $document_object->FileName = $contentResults->FileName;
-            /** @noinspection PhpCastIsUnnecessaryInspection */
-            $document_object->CreatedTimestamp = (int)$contentResults->CreatedTimestamp;
 
             return $document_object;
         }
