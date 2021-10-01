@@ -18,4 +18,4 @@ response = request(
      peer="@netkas"
 )
 
-print(response.data.result)
+print(json.dumps(response.data.result))
