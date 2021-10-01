@@ -73,6 +73,10 @@
         },
         {
             "required": true,
+            "file": "Methods/Network/GetProfile.php"
+        },
+        {
+            "required": true,
             "file": "Methods/Network/ResolvePeer.php"
         },
         {

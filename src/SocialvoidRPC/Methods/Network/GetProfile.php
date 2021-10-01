@@ -23,7 +23,7 @@
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPeerInputException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidSessionIdentificationException;
     use SocialvoidLib\NetworkSession;
-    use SocialvoidLib\Objects\Standard\Peer;
+    use SocialvoidLib\Objects\Standard\Profile;
     use SocialvoidLib\Objects\Standard\SessionIdentification;
     use SocialvoidRPC\SocialvoidRPC;
     use udp2\Exceptions\AvatarGeneratorException;
@@ -36,7 +36,7 @@
     use Zimage\Exceptions\SizeNotSetException;
     use Zimage\Exceptions\UnsupportedImageTypeException;
 
-    class ResolvePeer implements MethodInterface
+    class GetProfile implements MethodInterface
     {
 
         /**
@@ -44,7 +44,7 @@
          */
         public function getMethodName(): string
         {
-            return "ResolvePeer";
+            return "GetProfile";
         }
 
         /**
@@ -52,7 +52,7 @@
          */
         public function getMethod(): string
         {
-            return "network.resolve_peer";
+            return "network.get_profile";
         }
 
         /**
@@ -60,7 +60,7 @@
          */
         public function getDescription(): string
         {
-            return "Resolves a peer from the network";
+            return "Returns a profile display of the requested peer";
         }
 
         /**
@@ -155,12 +155,12 @@
                 if(Validate::isStandardError($e->getCode()))
                     throw $e;
 
-                // If anything else, suppress the error.
-                throw new InternalServerException('There was an unexpected error while processing the requested peer', $e);
+                // If anything else, suppress the error.There was an unexpected error while processing the requested peer
+                throw new InternalServerException('', $e);
             }
             
             $Response = Response::fromRequest($request);
-            $Response->ResultData = Peer::fromUser($resolved_peer)->toArray();
+            $Response->ResultData = Profile::fromUser($resolved_peer)->toArray();
 
             return $Response;
         }
