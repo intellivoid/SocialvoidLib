@@ -33,6 +33,10 @@
         },
         {
             "required": true,
+            "file": "Methods/Account/ClearLocation.php"
+        },
+        {
+            "required": true,
             "file": "Methods/Account/DeleteProfilePicture.php"
         },
         {
