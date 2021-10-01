@@ -37,6 +37,10 @@
         },
         {
             "required": true,
+            "file": "Methods/Account/ClearUrl.php"
+        },
+        {
+            "required": true,
             "file": "Methods/Account/DeleteProfilePicture.php"
         },
         {
