@@ -210,7 +210,7 @@
          * @throws InvalidBiographyException
          * @throws NotAuthenticatedException
          */
-        public function updateBiography(string $biography): bool
+        public function updateProfileBiography(string $biography): bool
         {
             if($this->networkSession->isAuthenticated() == false)
                 throw new NotAuthenticatedException();

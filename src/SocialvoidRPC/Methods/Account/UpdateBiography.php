@@ -150,7 +150,7 @@
 
             try
             {
-                $NetworkSession->getAccount()->updateBiography($request->Parameters['biography']);
+                $NetworkSession->getAccount()->updateProfileBiography($request->Parameters['biography']);
             }
             catch(Exception $e)
             {
