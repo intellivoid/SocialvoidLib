@@ -29,11 +29,11 @@
     "components": [
         {
             "required": true,
-            "file": "Methods/Account/ClearBiography.php"
+            "file": "Methods/Account/ClearLocation.php"
         },
         {
             "required": true,
-            "file": "Methods/Account/ClearLocation.php"
+            "file": "Methods/Account/ClearProfileBiography.php"
         },
         {
             "required": true,

@@ -105,7 +105,7 @@
                 throw new RuntimeException("No RPC Server has been defined");
 
             // Account Methods
-            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Account\ClearBiography());
+            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Account\ClearProfileBiography());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Account\ClearLocation());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Account\ClearUrl());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Account\DeleteProfilePicture());

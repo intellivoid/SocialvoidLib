@@ -35,7 +35,7 @@
     use Zimage\Exceptions\SizeNotSetException;
     use Zimage\Exceptions\UnsupportedImageTypeException;
 
-    class ClearBiography implements MethodInterface
+    class ClearProfileBiography implements MethodInterface
     {
 
         /**
@@ -43,7 +43,7 @@
          */
         public function getMethodName(): string
         {
-            return 'ClearBiography';
+            return 'ClearProfileBiography';
         }
 
         /**
@@ -51,7 +51,7 @@
          */
         public function getMethod(): string
         {
-            return 'account.clear_biography';
+            return 'account.clear_profile_biography';
         }
 
         /**
