@@ -143,7 +143,7 @@
 
             try
             {
-                $NetworkSession->getAccount()->clearLocation();
+                $NetworkSession->getAccount()->clearProfileLocation();
             }
             catch(Exception $e)
             {

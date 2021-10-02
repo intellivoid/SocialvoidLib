@@ -303,7 +303,7 @@
          * @throws InternalServerException
          * @throws NotAuthenticatedException
          */
-        public function clearLocation(): bool
+        public function clearProfileLocation(): bool
         {
             if($this->networkSession->isAuthenticated() == false)
                 throw new NotAuthenticatedException();
