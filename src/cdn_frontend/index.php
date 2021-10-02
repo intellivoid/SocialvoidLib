@@ -3,7 +3,7 @@
     /** @noinspection PhpFullyQualifiedNameUsageInspection */
 
 
-    ini_set('display_errors', 'On');
+    ini_set('display_errors', 'Off');
 
     /**
      * A simple CDN Handler for Socialvoid
