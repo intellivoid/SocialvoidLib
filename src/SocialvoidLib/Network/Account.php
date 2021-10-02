@@ -333,7 +333,7 @@
          * @throws InternalServerException
          * @throws NotAuthenticatedException
          */
-        public function updateUrl(string $url): bool
+        public function updateProfileUrl(string $url): bool
         {
             if($this->networkSession->isAuthenticated() == false)
                 throw new NotAuthenticatedException();

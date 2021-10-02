@@ -150,7 +150,7 @@
 
             try
             {
-                $NetworkSession->getAccount()->updateUrl($request->Parameters['url']);
+                $NetworkSession->getAccount()->updateProfileUrl($request->Parameters['url']);
             }
             catch(Exception $e)
             {
