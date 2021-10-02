@@ -8,10 +8,9 @@
      * must have a written permission from Intellivoid Technologies to do so.
      */
 
-namespace SocialvoidLib\Classes;
+    namespace SocialvoidLib\Classes;
 
     use DOMDocument;
-    use HttpStream\HttpStream;
     use InvalidArgumentException;
     use MarkdownParser\MarkdownParser;
     use SocialvoidLib\Abstracts\JobClass;
@@ -270,6 +269,7 @@ namespace SocialvoidLib\Classes;
          *
          * @param ContentResults $contentResults
          * @param bool $contentLength
+         * @param bool $omit_http_code
          */
         public static function setContentHeaders(ContentResults $contentResults, bool $contentLength=true, bool $omit_http_code=false)
         {
@@ -279,6 +279,22 @@ namespace SocialvoidLib\Classes;
             header('Content-Disposition: attachment; filename="' . $contentResults->FileName . '"');
             if($contentLength)
                 header('Content-Length: ' . $contentResults->FileSize);
+        }
+
+        /**
+         * @param ContentResults $contentResults
+         * @param bool $contentLength
+         * @return array
+         */
+        public static function getContentHeaders(ContentResults $contentResults, bool $contentLength=true): array
+        {
+            $results = [];
+            $results['Content-Type'] = $contentResults->FileMime;
+            $results['Content-Disposition'] = 'attachment; filename="' . $contentResults->FileName . '"';
+            if($contentLength)
+                $results['Content-Length'] = $contentResults->FileSize;
+
+            return $results;
         }
 
         /**

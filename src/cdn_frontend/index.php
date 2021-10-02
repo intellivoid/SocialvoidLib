@@ -2,6 +2,7 @@
 
     /** @noinspection PhpFullyQualifiedNameUsageInspection */
 
+
     ini_set('display_errors', 'On');
 
     /**
@@ -81,7 +82,10 @@
         http_response_code($response['response_code']);
         header('Content-Type: application/json');
         unset($response['response_code']);
-        print(json_encode($response, JSON_UNESCAPED_SLASHES));
+        if($_SERVER['REQUEST_METHOD'] !== 'HEAD')
+        {
+            print(json_encode($response, JSON_UNESCAPED_SLASHES));
+        }
         exit();
     }
 
@@ -96,10 +100,12 @@
             'success' => true,
             'results' => $results,
         ];
-
         http_response_code(200);
         header('Content-Type: application/json');
-        print(json_encode($response, JSON_UNESCAPED_SLASHES));
+        if($_SERVER['REQUEST_METHOD'] !== 'HEAD')
+        {
+            print(json_encode($response, JSON_UNESCAPED_SLASHES));
+        }
         exit();
     }
 
@@ -120,7 +126,10 @@
         http_response_code($response['response_code']);
         header('Content-Type: application/json');
         unset($response['response_code']);
-        print(json_encode($response, JSON_UNESCAPED_SLASHES));
+        if($_SERVER['REQUEST_METHOD'] !== 'HEAD')
+        {
+            print(json_encode($response, JSON_UNESCAPED_SLASHES));
+        }
         exit();
     }
 
@@ -184,10 +193,15 @@
         {
             $content_results = $networkSession->getCloud()->getDocument(getParameter('document'));
             $contentSourceLocation = $networkSession->getCloud()->getDocumentLocation($content_results);
-            if($contentSourceLocation)
+
+            if($contentSourceLocation == null)
             {
                 \SocialvoidLib\Classes\Utilities::setContentHeaders($content_results, $contentLength, true);
-                print($networkSession->getCloud()->getDocumentContents($content_results));
+                if($_SERVER['REQUEST_METHOD'] !== 'HEAD')
+                {
+                    print($networkSession->getCloud()->getDocumentContents($content_results));
+                }
+                return;
             }
 
             switch($content_results->ContentSource)
@@ -200,13 +214,54 @@
                     );
 
                     $headers = $HttpStream->getHttpResponse(true);
+                    $real_headers = \SocialvoidLib\Classes\Utilities::getContentHeaders($content_results);
+
+                    foreach($real_headers as $header_name => $header_value)
+                    {
+                        $headers->ResponseHeaders[$header_name] = $header_value;
+                    }
 
                     try
                     {
-                        $this->prepareStream();
+                        $HttpStream->prepareStream();
                     }
                     catch (RequestRangeNotSatisfiableException $e)
                     {
+                        http_response_code($headers->ResponseCode);
+                        foreach ($headers->ResponseHeaders as $header => $header_value)
+                        {
+                            header("$header: $header_value");
+                        }
+                        unlink($content_location);
+                        return;
+                    }
+
+                    http_response_code($headers->ResponseCode);
+                    foreach ($headers->ResponseHeaders as $header => $header_value)
+                    {
+                        header("$header: $header_value");
+                    }
+
+                    if($_SERVER['REQUEST_METHOD'] !== 'HEAD')
+                    {
+                        ob_implicit_flush(true);
+                        ob_end_flush();
+                        $HttpStream->start_stream();
+                    }
+
+                    unlink($content_location);
+                    break;
+
+                default:
+                    \SocialvoidLib\Classes\Utilities::setContentHeaders($content_results, $contentLength, true);
+                    if($_SERVER['REQUEST_METHOD'] !== 'HEAD')
+                    {
+                        HttpStream::streamToHttp($contentSourceLocation, true);
+                    }
+                    else
+                    {
+                        $HttpStream = new HttpStream($contentSourceLocation, false);
+                        $headers = $HttpStream->getHttpResponse(true);
                         http_response_code($headers->ResponseCode);
                         foreach ($headers as $header => $header_value)
                         {
@@ -214,19 +269,6 @@
                         }
                         return;
                     }
-
-                    http_response_code($headers->ResponseCode);
-                    foreach ($headers as $header => $header_value)
-                    {
-                        header("$header: $header_value");
-                    }
-                    $this->start_stream();
-
-                    break;
-
-                default:
-                    \SocialvoidLib\Classes\Utilities::setContentHeaders($content_results, $contentLength, true);
-                    HttpStream::streamToHttp($contentSourceLocation, true);
             }
 
         }

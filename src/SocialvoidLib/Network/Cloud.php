@@ -207,7 +207,7 @@
 
                         case ContentSource::TelegramCdn:
                             $cdn_content_record = $this->networkSession->getSocialvoidLib()->getTelegramCdnManager()->getUploadRecord($contentResults->ContentIdentifier);
-                            $this->networkSession->getSocialvoidLib()->getTelegramCdnManager()->getDownloadLocation($cdn_content_record);
+                            return $this->networkSession->getSocialvoidLib()->getTelegramCdnManager()->getDownloadLocation($cdn_content_record);
                     }
 
             }
