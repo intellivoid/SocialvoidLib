@@ -136,7 +136,6 @@
          * @throws InvalidSearchMethodException
          * @throws SessionNotFoundException
          * @throws CacheException
-         * @throws InvalidSlaveHashException
          * @noinspection PhpDocMissingThrowsInspection
          */
         public function getSession(string $search_method, string $value): ActiveSession
@@ -169,7 +168,14 @@
             if($slaveHash == null)
                 throw new SessionNotFoundException();
 
-            $SelectedServer = $this->socialvoidLib->getSlaveManager()->getMySqlServer($slaveHash);
+            try
+            {
+                $SelectedServer = $this->socialvoidLib->getSlaveManager()->getMySqlServer($slaveHash);
+            }
+            catch (InvalidSlaveHashException $e)
+            {
+                throw new SessionNotFoundException();
+            }
 
             $Query = QueryBuilder::select("sessions", [
                 "id",
@@ -226,7 +232,6 @@
          * @throws CacheException
          * @throws DatabaseException
          * @throws SessionNotFoundException
-         * @throws InvalidSlaveHashException
          */
         public function updateSession(ActiveSession $activeSession): ActiveSession
         {
@@ -255,7 +260,15 @@
             if($slaveHash == null)
                 throw new SessionNotFoundException();
 
-            $SelectedServer = $this->socialvoidLib->getSlaveManager()->getMySqlServer($slaveHash);
+            try
+            {
+                $SelectedServer = $this->socialvoidLib->getSlaveManager()->getMySqlServer($slaveHash);
+            }
+            catch (InvalidSlaveHashException $e)
+            {
+                throw new SessionNotFoundException();
+            }
+
             $QueryResults = $SelectedServer->getConnection()->query($Query);
 
             if($QueryResults)

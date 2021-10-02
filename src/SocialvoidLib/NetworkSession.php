@@ -164,7 +164,6 @@
          * @throws Exceptions\GenericInternal\CacheException
          * @throws Exceptions\GenericInternal\DatabaseException
          * @throws Exceptions\GenericInternal\InvalidSearchMethodException
-         * @throws Exceptions\GenericInternal\InvalidSlaveHashException
          * @throws Exceptions\Standard\Authentication\BadSessionChallengeAnswerException
          * @throws Exceptions\Standard\Authentication\SessionNotFoundException
          * @throws Exceptions\Standard\Network\DocumentNotFoundException
