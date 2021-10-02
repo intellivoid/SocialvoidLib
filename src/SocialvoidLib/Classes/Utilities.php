@@ -11,6 +11,7 @@
 namespace SocialvoidLib\Classes;
 
     use DOMDocument;
+    use HttpStream\HttpStream;
     use InvalidArgumentException;
     use MarkdownParser\MarkdownParser;
     use SocialvoidLib\Abstracts\JobClass;
@@ -270,14 +271,14 @@ namespace SocialvoidLib\Classes;
          * @param ContentResults $contentResults
          * @param bool $contentLength
          */
-        public static function setContentHeaders(ContentResults $contentResults, bool $contentLength=true)
+        public static function setContentHeaders(ContentResults $contentResults, bool $contentLength=true, bool $omit_http_code=false)
         {
-            http_response_code(200);
+            if($omit_http_code == false)
+                http_response_code(200);
             header('Content-Type: ' . $contentResults->FileMime);
-            header('Content-Disposition: filename="' . $contentResults->FileName . '"');
+            header('Content-Disposition: attachment; filename="' . $contentResults->FileName . '"');
             if($contentLength)
                 header('Content-Length: ' . $contentResults->FileSize);
-            header('X-File-Hash: ' . $contentResults->FileHash);
         }
 
         /**

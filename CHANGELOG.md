@@ -8,7 +8,7 @@
  - Added internal method for recursively resolving post entities
  - Removed object DisplayPictureSizes[] from Peer (standard) to reduce response size
  - Added the ability to delete posts
- - Improved deleted post structure
+ - Updated deleted post structure
  - Rewrote posts related tables such as `posts.sql`, `posts_likes.sql`, `posts_quotes.sql`, 
    `posts_replies.sql`, `posts_reposts.sql` to work with slave servers
  - Added method timeline.compose_post
@@ -19,3 +19,6 @@
  - Added method timeline.quote_post
  - Added a version information menu to `net.intellivoid.socialvoid_admin`
  - Fixed client hash validation bug
+ - Fixed worker monitoring logic to use BackgroundWorker's builtin monitor
+ - Added various debugging tools to `net.intellivoid.socialvoid_admin`
+ - Corrected various casting expressions to enforce the correct return types

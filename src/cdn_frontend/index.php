@@ -1,16 +1,21 @@
 <?php
 
-    ini_set('display_errors', 'Off');
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
+
+    ini_set('display_errors', 'On');
 
     /**
      * A simple CDN Handler for Socialvoid
      */
 
+    use HttpStream\Exceptions\RequestRangeNotSatisfiableException;
+    use HttpStream\HttpStream;
     use SocialvoidLib\Abstracts\ContentSource;
     use SocialvoidLib\Abstracts\Types\Security\DocumentAccessType;
     use SocialvoidLib\InputTypes\DocumentInput;
 
     require('ppm');
+    /** @noinspection PhpUnhandledExceptionInspection */
     import("net.intellivoid.socialvoidlib");
 
     /**
@@ -74,10 +79,9 @@
         }
 
         http_response_code($response['response_code']);
-        //header('Content-Type: application/json');
+        header('Content-Type: application/json');
         unset($response['response_code']);
         print(json_encode($response, JSON_UNESCAPED_SLASHES));
-
         exit();
     }
 
@@ -178,12 +182,57 @@
 
         try
         {
-            $content_results = $networkSession->getCloud()->getDocument($SessionIdentification, getParameter('document'));
-            \SocialvoidLib\Classes\Utilities::setContentHeaders($content_results, $contentLength);
-            print($networkSession->getCloud()->getDocumentContents($content_results));
+            $content_results = $networkSession->getCloud()->getDocument(getParameter('document'));
+            $contentSourceLocation = $networkSession->getCloud()->getDocumentLocation($content_results);
+            if($contentSourceLocation)
+            {
+                \SocialvoidLib\Classes\Utilities::setContentHeaders($content_results, $contentLength, true);
+                print($networkSession->getCloud()->getDocumentContents($content_results));
+            }
+
+            switch($content_results->ContentSource)
+            {
+                case ContentSource::TelegramCdn:
+                    $cdn_content_record = $networkSession->getSocialvoidLib()->getTelegramCdnManager()->getUploadRecord($content_results->ContentIdentifier);
+                    $content_location = $networkSession->getSocialvoidLib()->getTelegramCdnManager()->getDownloadLocation($cdn_content_record);
+                    $HttpStream = new HttpStream($content_location, true, false,
+                        \Defuse\Crypto\Key::loadFromAsciiSafeString($cdn_content_record->EncryptionKey)
+                    );
+
+                    $headers = $HttpStream->getHttpResponse(true);
+
+                    try
+                    {
+                        $this->prepareStream();
+                    }
+                    catch (RequestRangeNotSatisfiableException $e)
+                    {
+                        http_response_code($headers->ResponseCode);
+                        foreach ($headers as $header => $header_value)
+                        {
+                            header("$header: $header_value");
+                        }
+                        return;
+                    }
+
+                    http_response_code($headers->ResponseCode);
+                    foreach ($headers as $header => $header_value)
+                    {
+                        header("$header: $header_value");
+                    }
+                    $this->start_stream();
+
+                    break;
+
+                default:
+                    \SocialvoidLib\Classes\Utilities::setContentHeaders($content_results, $contentLength, true);
+                    HttpStream::streamToHttp($contentSourceLocation, true);
+            }
+
         }
         catch (Exception $e)
         {
+            http_response_code(500);
             returnErrorResponse($e);
         }
     }
@@ -225,14 +274,32 @@
             returnErrorResponse(new \SocialvoidLib\Exceptions\Standard\Server\InternalServerException('There was an error while trying to process the file'));
 
         // Finally, process the file
-        $file_id = $socialvoidlib->getTelegramCdnManager()->uploadContent($TemporaryFile->getFileName());
+        try
+        {
+            $file_id = $socialvoidlib->getTelegramCdnManager()->uploadContent($TemporaryFile->getFileName());
+        }
+        catch (Exception $e)
+        {
+            returnErrorResponse($e);
+            exit();
+        }
 
         $document_input = new DocumentInput();
         $document_input->AccessType = DocumentAccessType::None;
         $document_input->OwnerUserID = $networkSession->getAuthenticatedUser()->ID;
         $document_input->ContentSource = ContentSource::TelegramCdn;
         $document_input->ContentIdentifier = $file_id;
-        $file_object = \SocialvoidLib\Objects\Document\File::fromFile($TemporaryFile->getFileName());
+
+        try
+        {
+            $file_object = \SocialvoidLib\Objects\Document\File::fromFile($TemporaryFile->getFileName());
+        }
+        catch (Exception $e)
+        {
+            returnErrorResponse($e);
+            exit();
+        }
+
         $file_object->Name = $_FILES['document']['name'];
         $document_input->Files = [$file_object];
 

@@ -13,9 +13,12 @@
 
     use Defuse\Crypto\Exception\BadFormatException;
     use Defuse\Crypto\Exception\EnvironmentIsBrokenException;
+    use Defuse\Crypto\Exception\IOException;
     use Defuse\Crypto\Exception\WrongKeyOrModifiedCiphertextException;
     use Exception;
     use Longman\TelegramBot\Exception\TelegramException;
+    use MimeLib\Exceptions\CannotDetectFileTypeException;
+    use MimeLib\Exceptions\FileNotFoundException;
     use msqg\QueryBuilder;
     use SocialvoidLib\Abstracts\Types\CacheEntryObjectType;
     use SocialvoidLib\Classes\Utilities;
@@ -71,9 +74,12 @@
          * @param string $file_path
          * @return string
          * @throws DatabaseException
-         * @throws FileTooLargeException
-         * @throws UploadError
          * @throws EnvironmentIsBrokenException
+         * @throws FileTooLargeException
+         * @throws IOException
+         * @throws UploadError
+         * @throws CannotDetectFileTypeException
+         * @throws FileNotFoundException
          */
         public function uploadContent(string $file_path): string
         {
@@ -87,7 +93,7 @@
 
             // Generate a new one
             $public_id = Utilities::generateTelegramCdnId(hash_file('sha256', $file_path) . $file_path);
-            $upload_result = $this->cdn->uploadFile($file_path);
+            $upload_result = $this->cdn->uploadFileEncrypted($file_path);
 
             $query = QueryBuilder::insert_into('telegram_cdn', [
                 'public_id' => $this->socialvoidLib->getDatabase()->real_escape_string($public_id),
@@ -230,6 +236,7 @@
          * @throws BadFormatException
          * @throws WrongKeyOrModifiedCiphertextException
          * @throws CacheException
+         * @throws IOException
          */
         public function downloadFile(TelegramCdnUploadRecord $telegramCdnUploadRecord): string
         {
@@ -240,7 +247,28 @@
                 $telegramCdnUploadRecord = $this->updateAccessURL($telegramCdnUploadRecord);
             }
 
-            return $this->cdn->decryptFile(EncryptedFile::fromArray($telegramCdnUploadRecord->toArray()), true);
+            return $this->cdn->downloadEncryptedFile(EncryptedFile::fromArray($telegramCdnUploadRecord->toArray()), true);
+        }
+
+        /**
+         * Gets the download location
+         *
+         * @param TelegramCdnUploadRecord $telegramCdnUploadRecord
+         * @return string
+         * @throws CacheException
+         * @throws DatabaseException
+         * @throws TelegramException
+         */
+        public function getDownloadLocation(TelegramCdnUploadRecord $telegramCdnUploadRecord): string
+        {
+            if(
+                $telegramCdnUploadRecord->AccessUrlExpiryTimestamp == null ||
+                time() > $telegramCdnUploadRecord->AccessUrlExpiryTimestamp)
+            {
+                $telegramCdnUploadRecord = $this->updateAccessURL($telegramCdnUploadRecord);
+            }
+
+            return $telegramCdnUploadRecord->AccessUrl;
         }
 
         /**

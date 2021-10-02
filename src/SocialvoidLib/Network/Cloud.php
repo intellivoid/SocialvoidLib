@@ -12,6 +12,7 @@
 
     use Defuse\Crypto\Exception\BadFormatException;
     use Defuse\Crypto\Exception\EnvironmentIsBrokenException;
+    use Defuse\Crypto\Exception\IOException;
     use Defuse\Crypto\Exception\WrongKeyOrModifiedCiphertextException;
     use Longman\TelegramBot\Exception\TelegramException;
     use SocialvoidLib\Abstracts\ContentSource;
@@ -142,20 +143,21 @@
          *
          * @param ContentResults $contentResults
          * @return string|null
-         * @throws CacheException
-         * @throws DatabaseException
+         * @throws AvatarNotFoundException
          * @throws BadFormatException
-         * @throws EnvironmentIsBrokenException
-         * @throws WrongKeyOrModifiedCiphertextException
-         * @throws TelegramException
-         * @throws CdnFileNotFoundException
-         * @throws FileSecurityException
+         * @throws CacheException
          * @throws CannotGetOriginalImageException
+         * @throws CdnFileNotFoundException
+         * @throws DatabaseException
+         * @throws EnvironmentIsBrokenException
          * @throws FileNotFoundException
+         * @throws FileSecurityException
          * @throws InvalidZimageFileException
          * @throws SizeNotSetException
+         * @throws TelegramException
          * @throws UnsupportedImageTypeException
-         * @throws AvatarNotFoundException
+         * @throws WrongKeyOrModifiedCiphertextException
+         * @throws IOException
          */
         public function getDocumentContents(ContentResults $contentResults): ?string
         {
@@ -174,6 +176,38 @@
                         case ContentSource::TelegramCdn:
                             $cdn_content_record = $this->networkSession->getSocialvoidLib()->getTelegramCdnManager()->getUploadRecord($contentResults->ContentIdentifier);
                             return $this->networkSession->getSocialvoidLib()->getTelegramCdnManager()->downloadFile($cdn_content_record);
+                    }
+
+            }
+
+            return null;
+        }
+
+        /**
+         * Gets the document location for streaming purposes
+         *
+         * @param ContentResults $contentResults
+         * @return string|null
+         * @throws CacheException
+         * @throws CdnFileNotFoundException
+         * @throws DatabaseException
+         * @throws TelegramException
+         */
+        public function getDocumentLocation(ContentResults $contentResults): ?string
+        {
+            switch($contentResults->FetchLocationType)
+            {
+                // A custom source requires code to be executed to obtain the resource
+                case FetchLocationType::Custom:
+                    switch($contentResults->ContentSource)
+                    {
+                        // A user profile picture
+                        case ContentSource::UserProfilePicture:
+                            return null;
+
+                        case ContentSource::TelegramCdn:
+                            $cdn_content_record = $this->networkSession->getSocialvoidLib()->getTelegramCdnManager()->getUploadRecord($contentResults->ContentIdentifier);
+                            $this->networkSession->getSocialvoidLib()->getTelegramCdnManager()->getDownloadLocation($cdn_content_record);
                     }
 
             }
