@@ -150,7 +150,7 @@
 
             try
             {
-                $NetworkSession->getAccount()->updateLocation($request->Parameters['location']);
+                $NetworkSession->getAccount()->updateProfileLocation($request->Parameters['location']);
             }
             catch(Exception $e)
             {

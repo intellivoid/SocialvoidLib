@@ -272,7 +272,7 @@
          * @throws InternalServerException
          * @throws NotAuthenticatedException
          */
-        public function updateLocation(string $location): bool
+        public function updateProfileLocation(string $location): bool
         {
             if($this->networkSession->isAuthenticated() == false)
                 throw new NotAuthenticatedException();
