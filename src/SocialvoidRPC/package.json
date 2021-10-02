@@ -49,15 +49,15 @@
         },
         {
             "required": true,
-            "file": "Methods/Account/UpdateBiography.php"
-        },
-        {
-            "required": true,
             "file": "Methods/Account/UpdateLocation.php"
         },
         {
             "required": true,
             "file": "Methods/Account/UpdateName.php"
+        },
+        {
+            "required": true,
+            "file": "Methods/Account/UpdateProfileBiography.php"
         },
         {
             "required": true,
