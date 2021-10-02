@@ -107,7 +107,7 @@
             // Account Methods
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Account\ClearProfileBiography());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Account\ClearLocation());
-            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Account\ClearUrl());
+            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Account\ClearProfileUrl());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Account\DeleteProfilePicture());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Account\SetProfilePicture());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Account\UpdateBiography());
