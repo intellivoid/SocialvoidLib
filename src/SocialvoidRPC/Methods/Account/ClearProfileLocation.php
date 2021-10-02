@@ -35,7 +35,7 @@
     use Zimage\Exceptions\SizeNotSetException;
     use Zimage\Exceptions\UnsupportedImageTypeException;
 
-    class ClearLocation implements MethodInterface
+    class ClearProfileLocation implements MethodInterface
     {
 
         /**
@@ -43,7 +43,7 @@
          */
         public function getMethodName(): string
         {
-            return 'ClearLocation';
+            return 'ClearProfileLocation';
         }
 
         /**
@@ -51,7 +51,7 @@
          */
         public function getMethod(): string
         {
-            return 'account.clear_location';
+            return 'account.clear_profile_location';
         }
 
         /**
