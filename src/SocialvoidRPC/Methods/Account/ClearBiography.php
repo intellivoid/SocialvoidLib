@@ -143,7 +143,7 @@
 
             try
             {
-                $NetworkSession->getAccount()->clearBiography($SessionIdentification);
+                $NetworkSession->getAccount()->clearProfileBiography($SessionIdentification);
             }
             catch(Exception $e)
             {

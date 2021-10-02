@@ -242,7 +242,7 @@
          * @throws InternalServerException
          * @throws NotAuthenticatedException
          */
-        public function clearBiography(): bool
+        public function clearProfileBiography(): bool
         {
             if($this->networkSession->isAuthenticated() == false)
                 throw new NotAuthenticatedException();
