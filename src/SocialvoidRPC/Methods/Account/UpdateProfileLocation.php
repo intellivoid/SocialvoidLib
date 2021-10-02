@@ -35,7 +35,7 @@
     use Zimage\Exceptions\SizeNotSetException;
     use Zimage\Exceptions\UnsupportedImageTypeException;
 
-    class UpdateLocation implements MethodInterface
+    class UpdateProfileLocation implements MethodInterface
     {
 
         /**
@@ -43,7 +43,7 @@
          */
         public function getMethodName(): string
         {
-            return 'UpdateLocation';
+            return 'UpdateProfileLocation';
         }
 
         /**

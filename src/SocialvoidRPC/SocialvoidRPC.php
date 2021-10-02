@@ -111,7 +111,7 @@
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Account\DeleteProfilePicture());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Account\SetProfilePicture());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Account\UpdateProfileBiography());
-            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Account\UpdateLocation());
+            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Account\UpdateProfileLocation());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Account\UpdateProfileName());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Account\UpdateProfileUrl());
 

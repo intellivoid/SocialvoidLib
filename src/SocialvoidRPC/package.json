@@ -49,11 +49,11 @@
         },
         {
             "required": true,
-            "file": "Methods/Account/UpdateLocation.php"
+            "file": "Methods/Account/UpdateProfileBiography.php"
         },
         {
             "required": true,
-            "file": "Methods/Account/UpdateProfileBiography.php"
+            "file": "Methods/Account/UpdateProfileLocation.php"
         },
         {
             "required": true,
