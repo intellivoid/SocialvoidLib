@@ -157,7 +157,7 @@
 
             try
             {
-                $NetworkSession->getAccount()->updateName($request->Parameters['fist_name'], ($request->Parameters['last_name'] ?? null));
+                $NetworkSession->getAccount()->updateProfileName($request->Parameters['fist_name'], ($request->Parameters['last_name'] ?? null));
             }
             catch(Exception $e)
             {

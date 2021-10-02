@@ -172,7 +172,7 @@
          * @throws InvalidLastNameException
          * @throws NotAuthenticatedException
          */
-        public function updateName(string $first_name, ?string $last_name=null): bool
+        public function updateProfileName(string $first_name, ?string $last_name=null): bool
         {
             if($this->networkSession->isAuthenticated() == false)
                 throw new NotAuthenticatedException();
