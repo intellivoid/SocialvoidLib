@@ -53,11 +53,11 @@
         },
         {
             "required": true,
-            "file": "Methods/Account/UpdateName.php"
+            "file": "Methods/Account/UpdateProfileBiography.php"
         },
         {
             "required": true,
-            "file": "Methods/Account/UpdateProfileBiography.php"
+            "file": "Methods/Account/UpdateProfileName.php"
         },
         {
             "required": true,
