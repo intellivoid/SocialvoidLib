@@ -364,7 +364,7 @@
          * @throws InternalServerException
          * @throws NotAuthenticatedException
          */
-        public function clearUrl(): bool
+        public function clearProfileUrl(): bool
         {
             if($this->networkSession->isAuthenticated() == false)
                 throw new NotAuthenticatedException();

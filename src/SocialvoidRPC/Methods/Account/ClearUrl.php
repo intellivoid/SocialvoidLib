@@ -143,7 +143,7 @@
 
             try
             {
-                $NetworkSession->getAccount()->clearUrl();
+                $NetworkSession->getAccount()->clearProfileUrl();
             }
             catch(Exception $e)
             {
