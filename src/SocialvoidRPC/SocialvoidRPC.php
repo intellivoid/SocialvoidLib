@@ -112,7 +112,7 @@
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Account\SetProfilePicture());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Account\UpdateProfileBiography());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Account\UpdateLocation());
-            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Account\UpdateName());
+            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Account\UpdateProfileName());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Account\UpdateProfileUrl());
 
             // Cloud Methods

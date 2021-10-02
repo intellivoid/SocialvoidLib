@@ -36,7 +36,7 @@
     use Zimage\Exceptions\SizeNotSetException;
     use Zimage\Exceptions\UnsupportedImageTypeException;
 
-    class UpdateName implements MethodInterface
+    class UpdateProfileName implements MethodInterface
     {
 
         /**
@@ -44,7 +44,7 @@
          */
         public function getMethodName(): string
         {
-            return 'ChangeName';
+            return 'UpdateProfileName';
         }
 
         /**
@@ -52,7 +52,7 @@
          */
         public function getMethod(): string
         {
-            return 'account.change_name';
+            return 'account.change_profile_name';
         }
 
         /**
