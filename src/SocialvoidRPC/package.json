@@ -61,7 +61,7 @@
         },
         {
             "required": true,
-            "file": "Methods/Account/UpdateUrl.php"
+            "file": "Methods/Account/UpdateProfileUrl.php"
         },
         {
             "required": true,
