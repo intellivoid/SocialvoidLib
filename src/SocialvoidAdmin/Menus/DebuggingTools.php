@@ -88,6 +88,9 @@
                             }
                         }
 
+                        print('Truncating master Redis server...' . PHP_EOL);
+                        $SocialvoidLib->getBasicRedis()->flushAll();
+
                         print("Done! Returning in 5 seconds" . PHP_EOL);
                         sleep(5);
                         $menu->open();
