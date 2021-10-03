@@ -13,6 +13,7 @@
 
     namespace SocialvoidLib\Network;
 
+    use BackgroundWorker\Exceptions\ServerNotReachableException;
     use Exception;
     use SocialvoidLib\Abstracts\SearchMethods\UserSearchMethod;
     use SocialvoidLib\Abstracts\StatusStates\FollowerState;
@@ -151,8 +152,8 @@
          * @throws UnsupportedImageTypeException
          * @throws BackgroundWorkerNotEnabledException
          * @throws ServiceJobException
-         * @throws \BackgroundWorker\Exceptions\ServerNotReachableException
-         * @throws \BackgroundWorker\Exceptions\ServerNotReachableException
+         * @throws ServerNotReachableException
+         * @throws ServerNotReachableException
          */
         public function resolveMultiplePeers(array $peers): array
         {

@@ -13,6 +13,7 @@
 
     namespace SocialvoidLib\Managers;
 
+    use BackgroundWorker\Exceptions\ServerNotReachableException;
     use Exception;
     use msqg\QueryBuilder;
     use SocialvoidLib\Abstracts\ContentSource;
@@ -367,7 +368,7 @@
          * @throws SizeNotSetException
          * @throws UnsupportedAvatarGeneratorException
          * @throws UnsupportedImageTypeException
-         * @throws \BackgroundWorker\Exceptions\ServerNotReachableException
+         * @throws ServerNotReachableException
          */
         public function getMultipleUsers(array $query, bool $skip_errors=True, int $utilization=100): array
         {

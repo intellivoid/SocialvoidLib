@@ -14,6 +14,7 @@
     namespace SocialvoidLib\Managers;
 
 
+    use BackgroundWorker\Exceptions\ServerNotReachableException;
     use Exception;
     use msqg\QueryBuilder;
     use SocialvoidLib\Abstracts\SearchMethods\TimelineSearchMethod;
@@ -247,7 +248,7 @@
          * @throws DatabaseException
          * @throws InvalidSearchMethodException
          * @throws UserTimelineNotFoundException
-         * @throws \BackgroundWorker\Exceptions\ServerNotReachableException
+         * @throws ServerNotReachableException
          */
         public function distributePost(string $post_id, array $followers, int $utilization=100, bool $skip_errors=true): void
         {
@@ -287,7 +288,7 @@
          * @throws DatabaseException
          * @throws InvalidSearchMethodException
          * @throws UserTimelineNotFoundException
-         * @throws \BackgroundWorker\Exceptions\ServerNotReachableException
+         * @throws ServerNotReachableException
          */
         public function removePosts(int $user_id, array $post_ids, bool $skip_errors=true): void
         {

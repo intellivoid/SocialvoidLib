@@ -4,6 +4,7 @@
 
     use Defuse\Crypto\Exception\BadFormatException;
     use Defuse\Crypto\Exception\EnvironmentIsBrokenException;
+    use Defuse\Crypto\Exception\IOException;
     use Defuse\Crypto\Exception\WrongKeyOrModifiedCiphertextException;
     use Exception;
     use Longman\TelegramBot\Exception\TelegramException;
@@ -71,7 +72,7 @@
          * @throws TelegramException
          * @throws UnsupportedImageTypeException
          * @throws WrongKeyOrModifiedCiphertextException
-         * @throws \Defuse\Crypto\Exception\IOException
+         * @throws IOException
          */
         public function setProfilePicture(string $document_id): bool
         {

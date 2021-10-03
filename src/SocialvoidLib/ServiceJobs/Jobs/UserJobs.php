@@ -5,6 +5,7 @@
 
     namespace SocialvoidLib\ServiceJobs\Jobs;
 
+    use BackgroundWorker\Exceptions\ServerNotReachableException;
     use Exception;
     use GearmanTask;
     use SocialvoidLib\Abstracts\JobPriority;
@@ -47,7 +48,7 @@
          * @return User[]
          * @throws BackgroundWorkerNotEnabledException
          * @throws ServiceJobException
-         * @throws \BackgroundWorker\Exceptions\ServerNotReachableException
+         * @throws ServerNotReachableException
          */
         public function resolveUsers(array $query, int $utilization=100, bool $skip_errors=False): array
         {
