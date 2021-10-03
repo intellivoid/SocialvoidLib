@@ -18,6 +18,7 @@
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSlaveHashException;
     use SocialvoidLib\Exceptions\Internal\QuoteRecordNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Network\PostNotFoundException;
     use SocialvoidLib\Objects\QuoteRecord;
     use SocialvoidLib\SocialvoidLib;
 
@@ -45,10 +46,11 @@
          * Creates a quote record if one doesn't already exist, or updates an existing one
          *
          * @param int $user_id
-         * @param string $original_post_id
          * @param string $post_id
+         * @param string $original_post_id
          * @throws DatabaseException
-         * @throws InvalidSlaveHashException
+         * @throws PostNotFoundException
+         * @throws QuoteRecordNotFoundException
          */
         public function quoteRecord(int $user_id, string $post_id, string $original_post_id)
         {
@@ -73,7 +75,8 @@
          * @param string $post_id
          * @param string $original_post_id
          * @throws DatabaseException
-         * @throws InvalidSlaveHashException
+         * @throws PostNotFoundException
+         * @throws QuoteRecordNotFoundException
          */
         public function unquoteRecord(int $user_id, string $post_id, string $original_post_id)
         {
@@ -99,7 +102,7 @@
          * @param string $original_post_id
          * @param bool $quoted
          * @throws DatabaseException
-         * @throws InvalidSlaveHashException
+         * @throws PostNotFoundException
          */
         public function registerRecord(int $user_id, string $post_id, string $original_post_id, bool $quoted=True): void
         {
@@ -113,7 +116,15 @@
                 'created_timestamp' => time()
             ]);
 
-            $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($post_id));
+            try
+            {
+                $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($post_id));
+            }
+            catch (InvalidSlaveHashException $e)
+            {
+                throw new PostNotFoundException();
+            }
+
             $QueryResults = $SelectedSlave->getConnection()->query($Query);
             if($QueryResults == false)
             {
@@ -130,7 +141,7 @@
          * @param string $original_post_id
          * @return QuoteRecord
          * @throws DatabaseException
-         * @throws InvalidSlaveHashException
+         * @throws PostNotFoundException
          * @throws QuoteRecordNotFoundException
          */
         public function getRecord(string $post_id, string $original_post_id): QuoteRecord
@@ -144,7 +155,16 @@
                 'last_updated_timestamp',
                 'created_timestamp'
             ], 'id', (Utilities::removeSlaveHash($post_id) . $original_post_id), null, null, 1);
-            $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($post_id));
+
+            try
+            {
+                $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($post_id));
+            }
+            catch (InvalidSlaveHashException $e)
+            {
+                throw new PostNotFoundException();
+            }
+
             $QueryResults = $SelectedSlave->getConnection()->query($Query);
 
             if($QueryResults)
@@ -172,7 +192,7 @@
          *
          * @param QuoteRecord $QuoteRecord
          * @throws DatabaseException
-         * @throws InvalidSlaveHashException
+         * @throws QuoteRecordNotFoundException
          */
         public function updateRecord(QuoteRecord $QuoteRecord): void
         {
@@ -180,7 +200,16 @@
                 'quoted' => (int)$QuoteRecord->Quoted,
                 'last_updated_timestamp' => time()
             ], 'id', (Utilities::removeSlaveHash($QuoteRecord->PostID) . $QuoteRecord->OriginalPostID));
-            $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($QuoteRecord->PostID));
+
+            try
+            {
+                $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($QuoteRecord->PostID));
+            }
+            catch (InvalidSlaveHashException $e)
+            {
+                throw new QuoteRecordNotFoundException();
+            }
+
             $QueryResults = $SelectedSlave->getConnection()->query($Query);
 
             if($QueryResults == false)
