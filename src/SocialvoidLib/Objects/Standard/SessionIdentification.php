@@ -51,7 +51,7 @@
          * @return bool
          * @throws BadSessionChallengeAnswerException
          */
-        public function validateAnswer(string $client_private_hash, string $challenge, int $discrepancy=1, $currentTimeSlice=null): bool
+        public function validateAnswer(string $client_private_hash, string $challenge, int $discrepancy=5, $currentTimeSlice=null): bool
         {
             if(gettype($client_private_hash) !== "string")
                 throw new BadSessionChallengeAnswerException("The client private hash is invalid (-s1)");
