@@ -575,6 +575,10 @@
         },
         {
             "required": true,
+            "file": "Exceptions/Standard/Validation/InvalidLimitValueException.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/Standard/Validation/InvalidOffsetValueException.php"
         },
         {

@@ -38,6 +38,7 @@
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidFirstNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidHelpDocumentId;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidLastNameException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidLimitValueException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidOffsetValueException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPasswordException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPeerInputException;
@@ -180,6 +181,13 @@
          * @see InvalidOffsetValueException
          */
         const InvalidOffsetValueException = 0x02112;
+
+        /**
+         * Raised when the given limit is invalid
+         *
+         * @see InvalidLimitValueException
+         */
+        const InvalidLimitValueException = 0x02113;
 
         /** 22-Set error codes (Authentication) */
 
