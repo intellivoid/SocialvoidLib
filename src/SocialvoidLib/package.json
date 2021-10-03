@@ -211,10 +211,6 @@
         },
         {
             "required": true,
-            "file": "Abstracts/Types/ImageType.php"
-        },
-        {
-            "required": true,
             "file": "Abstracts/Types/JobType.php"
         },
         {
