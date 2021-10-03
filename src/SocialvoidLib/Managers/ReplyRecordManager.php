@@ -135,6 +135,52 @@
         }
 
         /**
+         * Returns an array of posts IDs that replied to the requested post
+         *
+         * @param string $post_id
+         * @param int $offset
+         * @param int $limit
+         * @return array
+         * @throws DatabaseException
+         * @throws PostNotFoundException
+         * @noinspection DuplicatedCode
+         */
+        public function getReplies(string $post_id, int $offset=0, int $limit=100): array
+        {
+            try
+            {
+                $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($post_id));
+            }
+            catch (InvalidSlaveHashException $e)
+            {
+                throw new PostNotFoundException();
+            }
+
+            $post_id = $this->socialvoidLib->getDatabase()->real_escape_string(Utilities::removeSlaveHash($post_id));
+            $Query = "SELECT post_id FROM `posts_replies` WHERE reply_post_id='$post_id' AND replied=1 LIMIT $offset, $limit";
+            $QueryResults = $SelectedSlave->getConnection()->query($Query);
+
+            // Execute and process the query
+            if($QueryResults == false)
+            {
+                throw new DatabaseException('There was an error while trying to get the quotes from this post',
+                    $Query, $SelectedSlave->getConnection()->error, $SelectedSlave->getConnection()
+                );
+            }
+            else
+            {
+                $ResultsArray = [];
+
+                while($Row = $QueryResults->fetch_assoc())
+                {
+                    $ResultsArray[] = $SelectedSlave->MysqlServerPointer->HashPointer . '-' . $Row['post_id'];
+                }
+            }
+
+            return $ResultsArray;
+        }
+
+        /**
          * Gets an existing record from the database
          *
          * @param string $post_id
