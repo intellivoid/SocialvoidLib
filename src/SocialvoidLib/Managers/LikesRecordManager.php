@@ -20,6 +20,7 @@
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSlaveHashException;
     use SocialvoidLib\Exceptions\Internal\LikeRecordNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Network\PostNotFoundException;
     use SocialvoidLib\Objects\LikeRecord;
     use SocialvoidLib\SocialvoidLib;
 
@@ -49,7 +50,8 @@
          * @param int $user_id
          * @param string $post_id
          * @throws DatabaseException
-         * @throws InvalidSlaveHashException
+         * @throws LikeRecordNotFoundException
+         * @throws PostNotFoundException
          */
         public function likeRecord(int $user_id, string $post_id)
         {
@@ -73,7 +75,8 @@
          * @param int $user_id
          * @param string $post_id
          * @throws DatabaseException
-         * @throws InvalidSlaveHashException
+         * @throws LikeRecordNotFoundException
+         * @throws PostNotFoundException
          */
         public function unlikeRecord(int $user_id, string $post_id)
         {
@@ -98,11 +101,18 @@
          * @param string $post_id
          * @param bool $liked
          * @throws DatabaseException
-         * @throws InvalidSlaveHashException
+         * @throws PostNotFoundException
          */
         public function registerRecord(int $user_id, string $post_id, bool $liked=True): void
         {
-            $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($post_id));
+            try
+            {
+                $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($post_id));
+            }
+            catch (InvalidSlaveHashException $e)
+            {
+                throw new PostNotFoundException();
+            }
 
             $Query = QueryBuilder::insert_into('posts_likes', [
                 'id' => ($user_id . Utilities::removeSlaveHash($post_id)),
@@ -130,12 +140,20 @@
          * @param int $limit
          * @return array
          * @throws DatabaseException
-         * @throws InvalidSlaveHashException
+         * @throws PostNotFoundException
          * @noinspection SqlResolve
          */
         public function getLikes(string $post_id, int $offset=0, int $limit=100): array
         {
-            $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($post_id));
+            try
+            {
+                $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($post_id));
+            }
+            catch (InvalidSlaveHashException $e)
+            {
+                throw new PostNotFoundException();
+            }
+
             $post_id = $this->socialvoidLib->getDatabase()->real_escape_string(Utilities::removeSlaveHash($post_id));
             $Query = "SELECT user_id FROM `posts_likes` WHERE post_id='$post_id' AND liked=1 LIMIT $offset, $limit";
             $QueryResults = $SelectedSlave->getConnection()->query($Query);
@@ -167,12 +185,18 @@
          * @param string $post_id
          * @return LikeRecord
          * @throws DatabaseException
-         * @throws InvalidSlaveHashException
          * @throws LikeRecordNotFoundException
          */
         public function getRecord(int $user_id, string $post_id): LikeRecord
         {
-            $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($post_id));
+            try
+            {
+                $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($post_id));
+            }
+            catch (InvalidSlaveHashException $e)
+            {
+                throw new LikeRecordNotFoundException();
+            }
 
             $Query = QueryBuilder::select('posts_likes', [
                 'id',
@@ -211,7 +235,7 @@
          *
          * @param LikeRecord $likeRecord
          * @throws DatabaseException
-         * @throws InvalidSlaveHashException
+         * @throws LikeRecordNotFoundException
          */
         public function updateRecord(LikeRecord $likeRecord): void
         {
@@ -220,7 +244,15 @@
                 'last_updated_timestamp' => time()
             ], 'id', ($likeRecord->UserID . Utilities::removeSlaveHash($likeRecord->PostID)));
 
-            $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($likeRecord->PostID));
+            try
+            {
+                $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($likeRecord->PostID));
+            }
+            catch (InvalidSlaveHashException $e)
+            {
+                throw new LikeRecordNotFoundException();
+            }
+
             $QueryResults = $SelectedSlave->getConnection()->query($Query);
 
             if($QueryResults == false)
