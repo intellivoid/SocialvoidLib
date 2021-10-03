@@ -151,6 +151,8 @@
          * @throws UnsupportedImageTypeException
          * @throws BackgroundWorkerNotEnabledException
          * @throws ServiceJobException
+         * @throws \BackgroundWorker\Exceptions\ServerNotReachableException
+         * @throws \BackgroundWorker\Exceptions\ServerNotReachableException
          */
         public function resolveMultiplePeers(array $peers): array
         {

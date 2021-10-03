@@ -3,7 +3,6 @@
 
     namespace SocialvoidLib\Managers;
 
-    use mysqli;
     use SocialvoidLib\Exceptions\GenericInternal\DuplicateSlaveNameException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSlaveHashException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidStringFormatException;

@@ -44,6 +44,7 @@
          * @param int $utilization
          * @param bool $skip_errors
          * @throws BackgroundWorkerNotEnabledException
+         * @throws \BackgroundWorker\Exceptions\ServerNotReachableException
          */
         public function distributeTimelinePosts(string $post_id, array $user_ids, int $utilization=100, bool $skip_errors=False): void
         {
@@ -128,6 +129,7 @@
          * @param array $post_ids
          * @param bool $skip_errors
          * @throws BackgroundWorkerNotEnabledException
+         * @throws \BackgroundWorker\Exceptions\ServerNotReachableException
          */
         public function removeTimelinePosts(int $user_id, array $post_ids, bool $skip_errors=False): void
         {

@@ -263,7 +263,6 @@
          * Logs the current user out of the session
          *
          * @throws Exceptions\GenericInternal\CacheException
-         * @throws Exceptions\GenericInternal\InvalidSlaveHashException
          * @throws Exceptions\Standard\Authentication\SessionNotFoundException
          * @throws InternalServerException
          * @throws NotAuthenticatedException
@@ -306,7 +305,6 @@
          * @throws Exceptions\GenericInternal\CacheException
          * @throws Exceptions\GenericInternal\DatabaseException
          * @throws Exceptions\GenericInternal\InvalidSearchMethodException
-         * @throws Exceptions\GenericInternal\InvalidSlaveHashException
          * @throws Exceptions\Internal\NoPasswordAuthenticationAvailableException
          * @throws Exceptions\Standard\Authentication\AuthenticationNotApplicableException
          * @throws Exceptions\Standard\Authentication\IncorrectTwoFactorAuthenticationCodeException
@@ -557,7 +555,6 @@
          *
          * @throws Exceptions\GenericInternal\CacheException
          * @throws Exceptions\GenericInternal\DatabaseException
-         * @throws Exceptions\GenericInternal\InvalidSlaveHashException
          * @throws Exceptions\Standard\Authentication\SessionNotFoundException
          */
         public function updateActiveSession(): void

@@ -46,7 +46,7 @@
         /**
          * Creates a repost record if one doesn't already exist, or updates an existing one
          *
-         * @param int $user_id
+         * @param User $user
          * @param string $post_id
          * @param string $original_post_id
          * @throws DatabaseException

@@ -13,8 +13,6 @@
 
     namespace SocialvoidLib\Objects;
 
-    use udp\Abstracts\ImageType;
-
     /**
      * Class ImageDetails
      * @package SocialvoidLib\Objects

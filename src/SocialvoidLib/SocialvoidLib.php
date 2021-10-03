@@ -212,6 +212,8 @@
          * SocialvoidLib constructor.
          * @throws ConfigurationError
          * @throws DependencyError
+         * @throws Exceptions\GenericInternal\DuplicateSlaveNameException
+         * @throws Exceptions\GenericInternal\InvalidStringFormatException
          */
         public function __construct()
         {

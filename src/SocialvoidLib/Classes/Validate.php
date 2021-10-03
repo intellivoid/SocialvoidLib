@@ -41,6 +41,7 @@ namespace SocialvoidLib\Classes;
          * Validates if the given password is safe or not.
          *
          * @param string $input
+         * @param bool $throw_exception
          * @return bool
          * @throws InvalidPasswordException
          */

@@ -367,6 +367,7 @@
          * @throws SizeNotSetException
          * @throws UnsupportedAvatarGeneratorException
          * @throws UnsupportedImageTypeException
+         * @throws \BackgroundWorker\Exceptions\ServerNotReachableException
          */
         public function getMultipleUsers(array $query, bool $skip_errors=True, int $utilization=100): array
         {

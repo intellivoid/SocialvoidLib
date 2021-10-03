@@ -47,6 +47,7 @@
          * @return User[]
          * @throws BackgroundWorkerNotEnabledException
          * @throws ServiceJobException
+         * @throws \BackgroundWorker\Exceptions\ServerNotReachableException
          */
         public function resolveUsers(array $query, int $utilization=100, bool $skip_errors=False): array
         {

@@ -14,7 +14,6 @@
     namespace SocialvoidLib\Objects\Standard;
 
     use SocialvoidLib\Abstracts\Types\Standard\PeerType;
-    use SocialvoidLib\Objects\Standard\Profile\DisplayPictureSize;
     use SocialvoidLib\Objects\User;
 
     /**

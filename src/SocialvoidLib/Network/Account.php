@@ -51,6 +51,7 @@
         /**
          * @param string $document_id
          * @return bool
+         * @throws AccessDeniedException
          * @throws AvatarNotFoundException
          * @throws BadFormatException
          * @throws CacheException
@@ -70,7 +71,7 @@
          * @throws TelegramException
          * @throws UnsupportedImageTypeException
          * @throws WrongKeyOrModifiedCiphertextException
-         * @throws AccessDeniedException
+         * @throws \Defuse\Crypto\Exception\IOException
          */
         public function setProfilePicture(string $document_id): bool
         {

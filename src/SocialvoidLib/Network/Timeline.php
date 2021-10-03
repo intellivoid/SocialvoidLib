@@ -83,6 +83,8 @@
          * @throws NotAuthenticatedException
          * @throws PostNotFoundException
          * @throws UserTimelineNotFoundException
+         * @throws ServerNotReachableException
+         * @throws ServerNotReachableException
          */
         public function composePost(string $text, array $media_content=[], array $flags=[]): Post
         {
@@ -448,6 +450,8 @@
          * @throws PostNotFoundException
          * @throws UserTimelineNotFoundException
          * @throws InvalidSlaveHashException
+         * @throws ServerNotReachableException
+         * @throws ServerNotReachableException
          */
         public function repostPost(string $post_public_id): Post
         {
@@ -570,6 +574,8 @@
          * @throws PostNotFoundException
          * @throws UserTimelineNotFoundException
          * @throws InvalidSlaveHashException
+         * @throws ServerNotReachableException
+         * @throws ServerNotReachableException
          */
         public function quotePost(string $post_public_id, string $text, array $media_content=[], array $flags=[]): Post
         {
