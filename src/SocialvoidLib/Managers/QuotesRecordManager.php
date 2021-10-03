@@ -95,6 +95,51 @@
         }
 
         /**
+         * Returns an array of Post IDs that quoted the requested post
+         *
+         * @param string $post_id
+         * @param int $offset
+         * @param int $limit
+         * @return array
+         * @throws DatabaseException
+         * @throws PostNotFoundException
+         */
+        public function getQuotes(string $post_id, int $offset=0, int $limit=100): array
+        {
+            try
+            {
+                $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($post_id));
+            }
+            catch (InvalidSlaveHashException $e)
+            {
+                throw new PostNotFoundException();
+            }
+
+            $post_id = $this->socialvoidLib->getDatabase()->real_escape_string(Utilities::removeSlaveHash($post_id));
+            $Query = "SELECT post_id FROM `posts_quotes` WHERE original_post_id='$post_id' AND quoted=1 LIMIT $offset, $limit";
+            $QueryResults = $SelectedSlave->getConnection()->query($Query);
+
+            // Execute and process the query
+            if($QueryResults == false)
+            {
+                throw new DatabaseException('There was an error while trying to get the likes from this post',
+                    $Query, $SelectedSlave->getConnection()->error, $SelectedSlave->getConnection()
+                );
+            }
+            else
+            {
+                $ResultsArray = [];
+
+                while($Row = $QueryResults->fetch_assoc())
+                {
+                    $ResultsArray[] = $SelectedSlave->MysqlServerPointer->HashPointer . '-' . $Row['post_id'];
+                }
+            }
+
+            return $ResultsArray;
+        }
+
+        /**
          * Registers a new quote record into the database
          *
          * @param int $user_id
