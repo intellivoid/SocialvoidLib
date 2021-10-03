@@ -125,11 +125,25 @@
         public $Likes;
 
         /**
+         * The amount of likes this post has
+         * 
+         * @var int
+         */
+        public $LikesCount;
+
+        /**
          * Array of user IDs that reposted this post
          *
          * @var int[]
          */
         public $Reposts;
+
+        /**
+         * The amount of reposts this post has
+         * 
+         * @var int
+         */
+        public $RepostsCount;
 
         /**
          * Array if Post IDs that quoted this post
@@ -139,11 +153,25 @@
         public $Quotes;
 
         /**
+         * The amount of quotes this post has
+         * 
+         * @var int
+         */
+        public $QuotesCount;
+
+        /**
          * Array of Post IDs that replied to this post
          *
          * @var int[]
          */
         public $Replies;
+
+        /**
+         * The amount of replies this post has
+         * 
+         * @var int
+         */
+        public $RepliesCount;
 
         /**
          * The media content associated with this post
@@ -171,6 +199,7 @@
          * Returns an array representation of the object
          *
          * @return array
+         * @noinspection PhpCastIsUnnecessaryInspection
          */
         public function toArray(): array
         {
@@ -184,26 +213,30 @@
             }
             
             return [
-                //"id" => ($this->ID == null ? null : (int)$this->ID), https://github.com/intellivoid/SocialvoidLib/issues/1
-                "public_id" => $this->PublicID,
-                "text" => $this->Text,
-                "source" => $this->Source,
-                "properties" => ($this->Properties == null ? null : $this->Properties->toArray()),
-                "session_id" => ($this->SessionID == null ? null : $this->SessionID),
-                "poster_user_id" => $this->PosterUserID,
-                "reply" => ($this->Reply == null ? null : $this->Reply->toArray()),
-                "quote" => ($this->Quote == null ? null : $this->Quote->toArray()),
-                "repost" => ($this->Repost == null ? null : $this->Repost->toArray()),
-                "flags" => ($this->Flags == null ? [] : $this->Flags),
-                "priority_level" => ($this->Flags == null ? [] : $this->Flags),
-                "entities" => ($this->Entities == null ? null : $this->Entities->toArray()),
-                "likes" => ($this->Likes == null ? [] : $this->Likes),
-                "reposts" => ($this->Reposts == null ? [] : $this->Reposts),
-                "quotes" => ($this->Quotes == null ? [] : $this->Quotes),
-                "replies" => ($this->Replies == null ? []: $this->Replies),
-                "media_content" => $media_content_results,
-                "last_updated_timestamp" => ($this->LastUpdatedTimestamp == null ? null : $this->LastUpdatedTimestamp),
-                "created_timestamp" => ($this->CreatedTimestamp == null ? null : $this->CreatedTimestamp)
+                //'id' => ($this->ID == null ? null : (int)$this->ID), https://github.com/intellivoid/SocialvoidLib/issues/1
+                'public_id' => $this->PublicID,
+                'text' => $this->Text,
+                'source' => $this->Source,
+                'properties' => ($this->Properties == null ? null : $this->Properties->toArray()),
+                'session_id' => ($this->SessionID == null ? null : $this->SessionID),
+                'poster_user_id' => $this->PosterUserID,
+                'reply' => ($this->Reply == null ? null : $this->Reply->toArray()),
+                'quote' => ($this->Quote == null ? null : $this->Quote->toArray()),
+                'repost' => ($this->Repost == null ? null : $this->Repost->toArray()),
+                'flags' => ($this->Flags == null ? [] : $this->Flags),
+                'priority_level' => ($this->Flags == null ? [] : $this->Flags),
+                'entities' => ($this->Entities == null ? null : $this->Entities->toArray()),
+                'likes' => ($this->Likes == null ? [] : $this->Likes),
+                'likes_count' => ($this->LikesCount == null ? 0 : (int)$this->LikesCount),
+                'reposts' => ($this->Reposts == null ? [] : $this->Reposts),
+                'reposts_count' => ($this->RepostsCount == null ? 0 : (int)$this->RepostsCount),
+                'quotes' => ($this->Quotes == null ? [] : $this->Quotes),
+                'quotes_count' => ($this->QuotesCount == null ? 0 : (int)$this->QuotesCount),
+                'replies' => ($this->Replies == null ? []: $this->Replies),
+                'replies_count' => ($this->RepliesCount == null ? 0 : (int)$this->RepliesCount),
+                'media_content' => $media_content_results,
+                'last_updated_timestamp' => ($this->LastUpdatedTimestamp == null ? null : $this->LastUpdatedTimestamp),
+                'created_timestamp' => ($this->CreatedTimestamp == null ? null : $this->CreatedTimestamp)
             ];
         }
 
@@ -219,69 +252,81 @@
             $PostObject = new Post();
 
             // https://github.com/intellivoid/SocialvoidLib/issues/1
-            //if(isset($data["id"]))
-            //    $PostObject->ID = ($data["id"] == null ? null : (int)$data["id"]);
+            //if(isset($data['id']))
+            //    $PostObject->ID = ($data['id'] == null ? null : (int)$data['id']);
 
-            if(isset($data["public_id"]))
-                $PostObject->PublicID = $data["public_id"];
+            if(isset($data['public_id']))
+                $PostObject->PublicID = $data['public_id'];
 
-            if(isset($data["text"]))
-                $PostObject->Text = $data["text"];
+            if(isset($data['text']))
+                $PostObject->Text = $data['text'];
 
-            if(isset($data["source"]))
-                $PostObject->Source = $data["source"];
+            if(isset($data['source']))
+                $PostObject->Source = $data['source'];
 
-            if(isset($data["properties"]))
-                $PostObject->Properties = ($data["properties"] == null ? new Properties() : Properties::fromArray($data["properties"]));
+            if(isset($data['properties']))
+                $PostObject->Properties = ($data['properties'] == null ? new Properties() : Properties::fromArray($data['properties']));
 
-            if(isset($data["session_id"]))
-                $PostObject->SessionID = ($data["session_id"] == null ? null : $data["session_id"]);
+            if(isset($data['session_id']))
+                $PostObject->SessionID = ($data['session_id'] == null ? null : $data['session_id']);
 
-            if(isset($data["poster_user_id"]))
-                $PostObject->PosterUserID = ($data["poster_user_id"] == null ? null : (int)$data["poster_user_id"]);
+            if(isset($data['poster_user_id']))
+                $PostObject->PosterUserID = ($data['poster_user_id'] == null ? null : (int)$data['poster_user_id']);
 
-            if(isset($data["reply"]))
-                $PostObject->Reply = Reply::fromArray($data["reply"]);
+            if(isset($data['reply']))
+                $PostObject->Reply = Reply::fromArray($data['reply']);
 
-            if(isset($data["quote"]))
-                $PostObject->Quote = Quote::fromArray($data["quote"]);
+            if(isset($data['quote']))
+                $PostObject->Quote = Quote::fromArray($data['quote']);
 
-            if(isset($data["repost"]))
-                $PostObject->Repost = Repost::fromArray($data["repost"]);
+            if(isset($data['repost']))
+                $PostObject->Repost = Repost::fromArray($data['repost']);
 
-            if(isset($data["flags"]))
-                $PostObject->Flags = ($data["flags"] == null ? [] : $data["flags"]);
+            if(isset($data['flags']))
+                $PostObject->Flags = ($data['flags'] == null ? [] : $data['flags']);
 
-            if(isset($data["priority_level"]))
-                $PostObject->PriorityLevel = $data["priority_level"];
+            if(isset($data['priority_level']))
+                $PostObject->PriorityLevel = $data['priority_level'];
 
-            if(isset($data["entities"]))
-                $PostObject->Entities = ($data["entities"] !== null ? Entities::fromArray($data["entities"]) : null);
+            if(isset($data['entities']))
+                $PostObject->Entities = ($data['entities'] !== null ? Entities::fromArray($data['entities']) : null);
 
-            if(isset($data["likes"]))
-                $PostObject->Likes = ($data["likes"] == null ? [] : $data["likes"]);
+            if(isset($data['likes']))
+                $PostObject->Likes = ($data['likes'] == null ? [] : $data['likes']);
 
-            if(isset($data["reposts"]))
-                $PostObject->Reposts = ($data["reposts"] == null ? [] : $data["reposts"]);
+            if(isset($data['likes_count']))
+                $PostObject->LikesCount = ($data['likes_count'] == null ? 0 : (int)$data['likes_count']);
 
-            if(isset($data["quotes"]))
-                $PostObject->Quotes = ($data["quotes"] == null ? [] : $data["quotes"]);
+            if(isset($data['reposts']))
+                $PostObject->Reposts = ($data['reposts'] == null ? [] : $data['reposts']);
 
-            if(isset($data["replies"]))
-                $PostObject->Replies = ($data["replies"] == null ? [] : $data["replies"]);
+            if(isset($data['reposts_count']))
+                $PostObject->RepostsCount = ($data['reposts_count'] == null ? 0 : (int)$data['reposts_count']);
 
-            if(isset($data["media_content"]))
+            if(isset($data['quotes']))
+                $PostObject->Quotes = ($data['quotes'] == null ? [] : $data['quotes']);
+
+            if(isset($data['quotes_count']))
+                $PostObject->QuotesCount = ($data['quotes_count'] == null ? 0 : (int)$data['quotes_count']);
+
+            if(isset($data['replies']))
+                $PostObject->Replies = ($data['replies'] == null ? [] : $data['replies']);
+
+            if(isset($data['replies_count']))
+                $PostObject->RepliesCount = ($data['replies_count'] == null ? 0 : (int)$data['replies_count']);
+
+            if(isset($data['media_content']))
             {
                 $PostObject->MediaContent = [];
-                foreach($data["media_content"] as $datum)
+                foreach($data['media_content'] as $datum)
                     $PostObject->MediaContent[] = MediaContent::fromArray($datum);
             }
 
-            if(isset($data["last_updated_timestamp"]))
-                $PostObject->LastUpdatedTimestamp = ($data["last_updated_timestamp"] == null ? null : (int)$data["last_updated_timestamp"]);
+            if(isset($data['last_updated_timestamp']))
+                $PostObject->LastUpdatedTimestamp = ($data['last_updated_timestamp'] == null ? null : (int)$data['last_updated_timestamp']);
 
-            if(isset($data["created_timestamp"]))
-                $PostObject->CreatedTimestamp = ($data["created_timestamp"] == null ? null : (int)$data["created_timestamp"]);
+            if(isset($data['created_timestamp']))
+                $PostObject->CreatedTimestamp = ($data['created_timestamp'] == null ? null : (int)$data['created_timestamp']);
 
             return $PostObject;
         }
@@ -290,6 +335,7 @@
          * Returns an alternative representation of an objects array
          *
          * @return array
+         * @noinspection PhpCastIsUnnecessaryInspection
          */
         public function toArrayAlternative(): array
         {
@@ -303,29 +349,33 @@
             }
 
             return [
-                //"id" => ($this->ID == null ? null : (int)$this->ID),
-                "public_id" => $this->PublicID,
-                "text" => $this->Text,
-                "source" => $this->Source,
-                "properties" => ($this->Properties == null ? null : $this->Properties->toArray()),
-                "session_id" => ($this->SessionID == null ? null : $this->SessionID),
-                "poster_user_id" => $this->PosterUserID,
-                "reply_to_post_id" => ($this->Reply == null ? null : $this->Reply->ReplyToPostID),
-                "reply_to_user_id" => ($this->Reply == null ? null : $this->Reply->ReplyToUserID),
-                "quote_original_post_id" => ($this->Quote == null ? null : $this->Quote->OriginalPostID),
-                "quote_original_user_id" => ($this->Quote == null ? null : $this->Quote->OriginalUserID),
-                "repost_original_post_id" => ($this->Repost == null ? null : $this->Repost->OriginalPostID),
-                "repost_original_user_id" => ($this->Repost == null ? null : $this->Repost->OriginalUserID),
-                "flags" => ($this->Flags == null ? [] : $this->Flags),
-                "priority_level" => ($this->Flags == null ? [] : $this->Flags),
-                "entities" => ($this->Entities == null ? null : $this->Entities->toArray()),
-                "likes" => ($this->Likes == null ? [] : $this->Likes),
-                "reposts" => ($this->Reposts == null ? [] : $this->Reposts),
-                "quotes" => ($this->Quotes == null ? [] : $this->Quotes),
-                "replies" => ($this->Replies == null ? [] : $this->Replies),
-                "media_content" => $media_content_results,
-                "last_updated_timestamp" => ($this->LastUpdatedTimestamp == null ? null : $this->LastUpdatedTimestamp),
-                "created_timestamp" => ($this->CreatedTimestamp == null ? null : $this->CreatedTimestamp)
+                //'id' => ($this->ID == null ? null : (int)$this->ID),
+                'public_id' => $this->PublicID,
+                'text' => $this->Text,
+                'source' => $this->Source,
+                'properties' => ($this->Properties == null ? null : $this->Properties->toArray()),
+                'session_id' => ($this->SessionID == null ? null : $this->SessionID),
+                'poster_user_id' => $this->PosterUserID,
+                'reply_to_post_id' => ($this->Reply == null ? null : $this->Reply->ReplyToPostID),
+                'reply_to_user_id' => ($this->Reply == null ? null : $this->Reply->ReplyToUserID),
+                'quote_original_post_id' => ($this->Quote == null ? null : $this->Quote->OriginalPostID),
+                'quote_original_user_id' => ($this->Quote == null ? null : $this->Quote->OriginalUserID),
+                'repost_original_post_id' => ($this->Repost == null ? null : $this->Repost->OriginalPostID),
+                'repost_original_user_id' => ($this->Repost == null ? null : $this->Repost->OriginalUserID),
+                'flags' => ($this->Flags == null ? [] : $this->Flags),
+                'priority_level' => ($this->Flags == null ? [] : $this->Flags),
+                'entities' => ($this->Entities == null ? null : $this->Entities->toArray()),
+                'likes' => ($this->Likes == null ? [] : $this->Likes),
+                'likes_count' => ($this->LikesCount == null ? 0 : (int)$this->LikesCount),
+                'reposts' => ($this->Reposts == null ? [] : $this->Reposts),
+                'reposts_count' => ($this->RepostsCount == null ? 0 : (int)$this->RepostsCount),
+                'quotes' => ($this->Quotes == null ? [] : $this->Quotes),
+                'quotes_count' => ($this->QuotesCount == null ? 0 : (int)$this->QuotesCount),
+                'replies' => ($this->Replies == null ? [] : $this->Replies),
+                'replies_count' => ($this->RepliesCount == null ? 0 : (int)$this->RepliesCount),
+                'media_content' => $media_content_results,
+                'last_updated_timestamp' => ($this->LastUpdatedTimestamp == null ? null : $this->LastUpdatedTimestamp),
+                'created_timestamp' => ($this->CreatedTimestamp == null ? null : $this->CreatedTimestamp)
             ];
         }
 
@@ -334,102 +384,114 @@
         {
             $PostObject = new Post();
 
-            //if(isset($data["id"]))
-            //    $PostObject->ID = ($data["id"] == null ? null : (int)$data["id"]);
+            //if(isset($data['id']))
+            //    $PostObject->ID = ($data['id'] == null ? null : (int)$data['id']);
 
-            if(isset($data["public_id"]))
-                $PostObject->PublicID = $data["public_id"];
+            if(isset($data['public_id']))
+                $PostObject->PublicID = $data['public_id'];
 
-            if(isset($data["text"]))
-                $PostObject->Text = $data["text"];
+            if(isset($data['text']))
+                $PostObject->Text = $data['text'];
 
-            if(isset($data["source"]))
-                $PostObject->Source = $data["source"];
+            if(isset($data['source']))
+                $PostObject->Source = $data['source'];
 
-            if(isset($data["properties"]))
-                $PostObject->Properties = ($data["properties"] == null ? new Properties() : Properties::fromArray($data["properties"]));
+            if(isset($data['properties']))
+                $PostObject->Properties = ($data['properties'] == null ? new Properties() : Properties::fromArray($data['properties']));
 
-            if(isset($data["session_id"]))
-                $PostObject->SessionID = ($data["session_id"] == null ? null : $data["session_id"]);
+            if(isset($data['session_id']))
+                $PostObject->SessionID = ($data['session_id'] == null ? null : $data['session_id']);
 
-            if(isset($data["poster_user_id"]))
-                $PostObject->PosterUserID = ($data["poster_user_id"] == null ? null : (int)$data["poster_user_id"]);
+            if(isset($data['poster_user_id']))
+                $PostObject->PosterUserID = ($data['poster_user_id'] == null ? null : (int)$data['poster_user_id']);
 
-            if(isset($data["reply_to_post_id"]))
+            if(isset($data['reply_to_post_id']))
             {
                 if($PostObject->Reply == null)
                     $PostObject->Reply = new Reply();
-                $PostObject->Reply->ReplyToPostID = $data["reply_to_post_id"];
+                $PostObject->Reply->ReplyToPostID = $data['reply_to_post_id'];
             }
 
-            if(isset($data["reply_to_user_id"]))
+            if(isset($data['reply_to_user_id']))
             {
                 if($PostObject->Reply == null)
                     $PostObject->Reply = new Reply();
-                $PostObject->Reply->ReplyToUserID = (int)$data["reply_to_user_id"];
+                $PostObject->Reply->ReplyToUserID = (int)$data['reply_to_user_id'];
             }
 
-            if(isset($data["quote_original_post_id"]))
+            if(isset($data['quote_original_post_id']))
             {
                 if($PostObject->Quote == null)
                     $PostObject->Quote = new Quote();
-                $PostObject->Quote->OriginalPostID = $data["quote_original_post_id"];
+                $PostObject->Quote->OriginalPostID = $data['quote_original_post_id'];
             }
 
-            if(isset($data["quote_original_user_id"]))
+            if(isset($data['quote_original_user_id']))
             {
                 if($PostObject->Quote == null)
                     $PostObject->Quote = new Quote();
-                $PostObject->Quote->OriginalUserID = (int)$data["quote_original_user_id"];
+                $PostObject->Quote->OriginalUserID = (int)$data['quote_original_user_id'];
             }
 
-            if(isset($data["repost_original_post_id"]))
+            if(isset($data['repost_original_post_id']))
             {
                 if($PostObject->Repost == null)
                     $PostObject->Repost = new Repost();
-                $PostObject->Repost->OriginalPostID = $data["repost_original_post_id"];
+                $PostObject->Repost->OriginalPostID = $data['repost_original_post_id'];
             }
 
-            if(isset($data["repost_original_user_id"]))
+            if(isset($data['repost_original_user_id']))
             {
                 if($PostObject->Repost == null)
                     $PostObject->Repost = new Quote();
-                $PostObject->Repost->OriginalUserID = (int)$data["repost_original_user_id"];
+                $PostObject->Repost->OriginalUserID = (int)$data['repost_original_user_id'];
             }
 
-            if(isset($data["flags"]))
-                $PostObject->Flags = ($data["flags"] !== null ? [] : $data["flags"]);
+            if(isset($data['flags']))
+                $PostObject->Flags = ($data['flags'] !== null ? [] : $data['flags']);
 
-            if(isset($data["priority_level"]))
-                $PostObject->PriorityLevel = $data["priority_level"];
+            if(isset($data['priority_level']))
+                $PostObject->PriorityLevel = $data['priority_level'];
 
-            if(isset($data["entities"]))
-                $PostObject->Entities = ($data["entities"] !== null ? Entities::fromArray($data["entities"]) : null);
+            if(isset($data['entities']))
+                $PostObject->Entities = ($data['entities'] !== null ? Entities::fromArray($data['entities']) : null);
 
-            if(isset($data["likes"]))
-                $PostObject->Likes = ($data["likes"] == null ? [] : $data["likes"]);
+            if(isset($data['likes']))
+                $PostObject->Likes = ($data['likes'] == null ? [] : $data['likes']);
 
-            if(isset($data["reposts"]))
-                $PostObject->Reposts = ($data["reposts"] == null ? [] : $data["reposts"]);
+            if(isset($data['likes_count']))
+                $PostObject->LikesCount = ($data['likes_count'] == null ? 0 : $data['likes_count']);
 
-            if(isset($data["quotes"]))
-                $PostObject->Quotes = ($data["quotes"] == null ? [] : $data["quotes"]);
+            if(isset($data['reposts']))
+                $PostObject->Reposts = ($data['reposts'] == null ? [] : $data['reposts']);
 
-            if(isset($data["replies"]))
-                $PostObject->Replies = ($data["replies"] == null ? [] : $data["replies"]);
+            if(isset($data['reposts_count']))
+                $PostObject->RepostsCount = ($data['reposts_count'] == null ? 0 : $data['reposts_count']);
 
-            if(isset($data["media_content"]))
+            if(isset($data['quotes']))
+                $PostObject->Quotes = ($data['quotes'] == null ? [] : $data['quotes']);
+
+            if(isset($data['quotes_count']))
+                $PostObject->QuotesCount = ($data['quotes_count'] == null ? 0 : $data['quotes_count']);
+
+            if(isset($data['replies']))
+                $PostObject->Replies = ($data['replies'] == null ? [] : $data['replies']);
+
+            if(isset($data['replies_count']))
+                $PostObject->RepliesCount = ($data['replies_count'] == null ? 0 : $data['replies_count']);
+
+            if(isset($data['media_content']))
             {
                 $PostObject->MediaContent = [];
-                foreach($data["media_content"] as $datum)
+                foreach($data['media_content'] as $datum)
                     $PostObject->MediaContent[] = MediaContent::fromArray($datum);
             }
 
-            if(isset($data["last_updated_timestamp"]))
-                $PostObject->LastUpdatedTimestamp = ($data["last_updated_timestamp"] == null ? null : (int)$data["last_updated_timestamp"]);
+            if(isset($data['last_updated_timestamp']))
+                $PostObject->LastUpdatedTimestamp = ($data['last_updated_timestamp'] == null ? null : (int)$data['last_updated_timestamp']);
 
-            if(isset($data["created_timestamp"]))
-                $PostObject->CreatedTimestamp = ($data["created_timestamp"] == null ? null : (int)$data["created_timestamp"]);
+            if(isset($data['created_timestamp']))
+                $PostObject->CreatedTimestamp = ($data['created_timestamp'] == null ? null : (int)$data['created_timestamp']);
 
             return $PostObject;
         }
