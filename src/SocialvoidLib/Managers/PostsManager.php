@@ -32,6 +32,8 @@
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSlaveHashException;
     use SocialvoidLib\Exceptions\GenericInternal\RedisCacheException;
     use SocialvoidLib\Exceptions\GenericInternal\ServiceJobException;
+    use SocialvoidLib\Exceptions\Internal\QuoteRecordNotFoundException;
+    use SocialvoidLib\Exceptions\Internal\ReplyRecordNotFoundException;
     use SocialvoidLib\Exceptions\Internal\RepostRecordNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\AlreadyRepostedException;
     use SocialvoidLib\Exceptions\Standard\Network\PostDeletedException;
@@ -751,6 +753,10 @@
          * @throws DatabaseException
          * @throws InvalidSlaveHashException
          * @throws PostDeletedException
+         * @throws PostNotFoundException
+         * @throws RepostRecordNotFoundException
+         * @throws QuoteRecordNotFoundException
+         * @throws ReplyRecordNotFoundException
          */
         public function deletePost(Post $post)
         {
@@ -763,6 +769,26 @@
             // Add the deleted flag to the post
             Converter::addFlag($post->Flags, PostFlags::Deleted);
             $this->updatePost($post);
+
+            // Remove this post from its associates
+            if($post->Reply !== null && $post->Reply->ReplyToPostID !== null)
+            {
+                $this->socialvoidLib->getReplyRecordManager()->unreplyRecord(
+                    $post->PosterUserID, $post->Reply->ReplyToPostID, $post->PublicID
+                );
+            }
+            if($post->Quote !== null && $post->Quote->OriginalPostID !== null)
+            {
+                $this->socialvoidLib->getQuotesRecordManager()->unquoteRecord(
+                    $post->PosterUserID, $post->PublicID, $post->Quote->OriginalPostID
+                );
+            }
+            if($post->Repost !== null && $post->Repost->OriginalPostID !== null)
+            {
+                $this->socialvoidLib->getRepostsRecordManager()->unrepostRecord(
+                    $post->PosterUserID, $post->PublicID, $post->Repost->OriginalPostID
+                );
+            }
         }
 
         /**
