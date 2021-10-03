@@ -38,6 +38,7 @@
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidFirstNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidHelpDocumentId;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidLastNameException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidOffsetValueException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPasswordException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPeerInputException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPlatformException;
@@ -172,6 +173,13 @@
          * @see AgreementRequiredException
          */
         const AgreementRequiredException = 0x02111;
+
+        /**
+         * Raised when the given offset is invalid
+         *
+         * @see InvalidOffsetValueException
+         */
+        const InvalidOffsetValueException = 0x02112;
 
         /** 22-Set error codes (Authentication) */
 
