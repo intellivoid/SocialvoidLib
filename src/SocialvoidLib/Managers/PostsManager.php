@@ -32,6 +32,8 @@
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSlaveHashException;
     use SocialvoidLib\Exceptions\GenericInternal\RedisCacheException;
     use SocialvoidLib\Exceptions\GenericInternal\ServiceJobException;
+    use SocialvoidLib\Exceptions\GenericInternal\UserHasInvalidSlaveHashException;
+    use SocialvoidLib\Exceptions\Internal\LikeRecordNotFoundException;
     use SocialvoidLib\Exceptions\Internal\QuoteRecordNotFoundException;
     use SocialvoidLib\Exceptions\Internal\ReplyRecordNotFoundException;
     use SocialvoidLib\Exceptions\Internal\RepostRecordNotFoundException;
@@ -322,9 +324,10 @@
          * @throws CacheException
          * @throws DatabaseException
          * @throws InvalidSearchMethodException
+         * @throws InvalidSlaveHashException
          * @throws PostDeletedException
          * @throws PostNotFoundException
-         * @throws InvalidSlaveHashException
+         * @throws LikeRecordNotFoundException
          * @noinspection DuplicatedCode
          */
         public function likePost(User $user, Post $post, bool $skip_errors=False): void
@@ -375,6 +378,7 @@
          * @throws InvalidSlaveHashException
          * @throws PostDeletedException
          * @throws PostNotFoundException
+         * @throws LikeRecordNotFoundException
          * @noinspection DuplicatedCode
          */
         public function unlikePost(User $user, Post $post, bool $skip_errors=False): void
@@ -429,6 +433,8 @@
          * @throws InvalidSlaveHashException
          * @throws PostDeletedException
          * @throws PostNotFoundException
+         * @throws RepostRecordNotFoundException
+         * @throws UserHasInvalidSlaveHashException
          * @noinspection DuplicatedCode
          * @noinspection PhpBooleanCanBeSimplifiedInspection
          */
@@ -542,6 +548,7 @@
          * @throws InvalidSlaveHashException
          * @throws PostDeletedException
          * @throws PostNotFoundException
+         * @throws QuoteRecordNotFoundException
          * @noinspection DuplicatedCode
          * @noinspection PhpBooleanCanBeSimplifiedInspection
          */
@@ -652,6 +659,7 @@
          * @throws InvalidSlaveHashException
          * @throws PostDeletedException
          * @throws PostNotFoundException
+         * @throws ReplyRecordNotFoundException
          * @noinspection DuplicatedCode
          * @noinspection PhpBooleanCanBeSimplifiedInspection
          */
