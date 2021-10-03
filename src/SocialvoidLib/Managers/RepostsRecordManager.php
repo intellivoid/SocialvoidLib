@@ -17,7 +17,9 @@
     use SocialvoidLib\Classes\Utilities;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSlaveHashException;
+    use SocialvoidLib\Exceptions\GenericInternal\UserHasInvalidSlaveHashException;
     use SocialvoidLib\Exceptions\Internal\RepostRecordNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Network\PostNotFoundException;
     use SocialvoidLib\Objects\RepostRecord;
     use SocialvoidLib\Objects\User;
     use SocialvoidLib\SocialvoidLib;
@@ -50,7 +52,9 @@
          * @param string $post_id
          * @param string $original_post_id
          * @throws DatabaseException
-         * @throws InvalidSlaveHashException
+         * @throws PostNotFoundException
+         * @throws RepostRecordNotFoundException
+         * @throws UserHasInvalidSlaveHashException
          */
         public function repostRecord(User $user, string $post_id, string $original_post_id)
         {
@@ -76,7 +80,8 @@
          * @param string $post_id
          * @param string $original_post_id
          * @throws DatabaseException
-         * @throws InvalidSlaveHashException
+         * @throws PostNotFoundException
+         * @throws RepostRecordNotFoundException
          */
         public function unrepostRecord(int $user_id, string $post_id, string $original_post_id)
         {
@@ -103,7 +108,7 @@
          * @param string $original_post_id
          * @param bool $reposted
          * @throws DatabaseException
-         * @throws InvalidSlaveHashException
+         * @throws PostNotFoundException
          */
         public function registerRecord(int $user_id, string $post_id, string $original_post_id, bool $reposted=True): void
         {
@@ -117,7 +122,15 @@
                 'created_timestamp' => time()
             ]);
 
-            $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($post_id));
+            try
+            {
+                $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($post_id));
+            }
+            catch (InvalidSlaveHashException $e)
+            {
+                throw new PostNotFoundException();
+            }
+
             $QueryResults = $SelectedSlave->getConnection()->query($Query);
             if($QueryResults == false)
             {
@@ -134,7 +147,7 @@
          * @param string $post_id
          * @return RepostRecord
          * @throws DatabaseException
-         * @throws InvalidSlaveHashException
+         * @throws PostNotFoundException
          * @throws RepostRecordNotFoundException
          */
         public function getRecord(int $user_id, string $post_id): RepostRecord
@@ -149,7 +162,15 @@
                 'created_timestamp'
             ], 'id', (Utilities::removeSlaveHash($post_id) . $user_id), null, null, 1);
 
-            $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($post_id));
+            try
+            {
+                $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($post_id));
+            }
+            catch (InvalidSlaveHashException $e)
+            {
+                throw new PostNotFoundException();
+            }
+
             $QueryResults = $SelectedSlave->getConnection()->query($Query);
 
             if($QueryResults)
@@ -179,8 +200,8 @@
          * @param string $original_post_id
          * @return RepostRecord
          * @throws DatabaseException
-         * @throws InvalidSlaveHashException
          * @throws RepostRecordNotFoundException
+         * @throws UserHasInvalidSlaveHashException
          */
         public function getRepostedRecord(User $user, string $original_post_id): RepostRecord
         {
@@ -188,7 +209,16 @@
             $user_id = (int)$user->ID;
             $x_original_post_id = $this->socialvoidLib->getDatabase()->real_escape_string($original_post_id);
             $Query = "SELECT id, user_id, post_id, original_post_id, reposted, last_updated_timestamp, created_timestamp FROM posts_reposts WHERE user_id=$user_id AND original_post_id='$x_original_post_id' LIMIT 1;";
-            $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer($user->SlaveServer);
+
+            try
+            {
+                $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer($user->SlaveServer);
+            }
+            catch (InvalidSlaveHashException $e)
+            {
+                throw new UserHasInvalidSlaveHashException();
+            }
+
             $QueryResults = $SelectedSlave->getConnection()->query($Query);
 
             if($QueryResults)
@@ -216,7 +246,7 @@
          *
          * @param RepostRecord $repostRecord
          * @throws DatabaseException
-         * @throws InvalidSlaveHashException
+         * @throws RepostRecordNotFoundException
          */
         public function updateRecord(RepostRecord $repostRecord): void
         {
@@ -225,7 +255,14 @@
                 'last_updated_timestamp' => time()
             ], 'id', (Utilities::removeSlaveHash($repostRecord->PostID) . $repostRecord->UserID));
 
-            $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($repostRecord->PostID));
+            try
+            {
+                $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($repostRecord->PostID));
+            }
+            catch (InvalidSlaveHashException $e)
+            {
+                throw new RepostRecordNotFoundException();
+            }
             $QueryResults = $SelectedSlave->getConnection()->query($Query);
 
             if($QueryResults == false)

@@ -375,6 +375,10 @@
         },
         {
             "required": true,
+            "file": "Exceptions/GenericInternal/UserHasInvalidSlaveHashException.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/Internal/AlreadyAuthenticatedToNetwork.php"
         },
         {
