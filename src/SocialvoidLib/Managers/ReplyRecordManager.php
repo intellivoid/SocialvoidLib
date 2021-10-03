@@ -18,6 +18,7 @@
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSlaveHashException;
     use SocialvoidLib\Exceptions\Internal\ReplyRecordNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Network\PostNotFoundException;
     use SocialvoidLib\Objects\ReplyRecord;
     use SocialvoidLib\SocialvoidLib;
 
@@ -48,7 +49,8 @@
          * @param string $post_id
          * @param string $reply_post_id
          * @throws DatabaseException
-         * @throws InvalidSlaveHashException
+         * @throws PostNotFoundException
+         * @throws ReplyRecordNotFoundException
          */
         public function replyRecord(int $user_id, string $post_id, string $reply_post_id)
         {
@@ -62,7 +64,6 @@
                 return;
             }
 
-
             $record->Replied = true;
             $this->updateRecord($record);
         }
@@ -74,7 +75,8 @@
          * @param string $post_id
          * @param string $reply_post_id
          * @throws DatabaseException
-         * @throws InvalidSlaveHashException
+         * @throws PostNotFoundException
+         * @throws ReplyRecordNotFoundException
          */
         public function unreplyRecord(int $user_id, string $post_id, string $reply_post_id)
         {
@@ -100,7 +102,7 @@
          * @param string $reply_post_id
          * @param bool $replied
          * @throws DatabaseException
-         * @throws InvalidSlaveHashException
+         * @throws PostNotFoundException
          */
         public function registerRecord(int $user_id, string $post_id, string $reply_post_id, bool $replied=True): void
         {
@@ -114,7 +116,15 @@
                 'created_timestamp' => time()
             ]);
 
-            $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($post_id));
+            try
+            {
+                $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($post_id));
+            }
+            catch (InvalidSlaveHashException $e)
+            {
+                throw new PostNotFoundException();
+            }
+
             $QueryResults = $SelectedSlave->getConnection()->query($Query);
             if($QueryResults == false)
             {
@@ -131,7 +141,7 @@
          * @param string $reply_post_id
          * @return ReplyRecord
          * @throws DatabaseException
-         * @throws InvalidSlaveHashException
+         * @throws PostNotFoundException
          * @throws ReplyRecordNotFoundException
          */
         public function getRecord(string $post_id, string $reply_post_id): ReplyRecord
@@ -146,7 +156,15 @@
                 'created_timestamp'
             ], 'id', (Utilities::removeSlaveHash($post_id) . $reply_post_id), null, null, 1);
 
-            $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($post_id));
+            try
+            {
+                $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($post_id));
+            }
+            catch (InvalidSlaveHashException $e)
+            {
+                throw new PostNotFoundException();
+            }
+
             $QueryResults = $SelectedSlave->getConnection()->query($Query);
 
             if($QueryResults)
@@ -174,7 +192,7 @@
          *
          * @param ReplyRecord $replyRecord
          * @throws DatabaseException
-         * @throws InvalidSlaveHashException
+         * @throws ReplyRecordNotFoundException
          */
         public function updateRecord(ReplyRecord $replyRecord): void
         {
@@ -182,7 +200,16 @@
                 'replied' => (int)$replyRecord->Replied,
                 'last_updated_timestamp' => time()
             ], 'id', (Utilities::removeSlaveHash($replyRecord->PostID) . $replyRecord->ReplyPostID));
-            $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($replyRecord->PostID));
+
+            try
+            {
+                $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($replyRecord->PostID));
+            }
+            catch (InvalidSlaveHashException $e)
+            {
+                throw new ReplyRecordNotFoundException();
+            }
+
             $QueryResults = $SelectedSlave->getConnection()->query($Query);
 
             if($QueryResults == false)
