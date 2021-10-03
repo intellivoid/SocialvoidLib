@@ -303,10 +303,6 @@
         },
         {
             "required": true,
-            "file": "Classes/Security/ImageProcessing.php"
-        },
-        {
-            "required": true,
             "file": "Classes/Standard/BaseIdentification.php"
         },
         {
