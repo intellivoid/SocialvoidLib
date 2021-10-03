@@ -31,3 +31,4 @@
  - Corrected various casting expressions to enforce the correct return types
  - Added standard error InvalidOffsetValue (0x02112)
  - Added standard error InvalidLimitValue (0x02113)
+ - Added missing methods to LikesRecordManager to get records and counts
