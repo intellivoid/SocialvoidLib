@@ -5,7 +5,6 @@
 
     namespace SocialvoidLib\Objects\Standard;
 
-    use SocialvoidLib\Abstracts\RegexPatterns;
     use SocialvoidLib\Classes\Utilities;
     use SocialvoidLib\Classes\Validate;
     use SocialvoidLib\Exceptions\Standard\Authentication\BadSessionChallengeAnswerException;
