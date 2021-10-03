@@ -202,9 +202,13 @@
                 'priority_level',
                 'entities',
                 'likes',
+                'likes_count',
                 'reposts',
+                'reposts_count',
                 'quotes',
+                'quotes_count',
                 'replies',
+                'replies_count',
                 'media_content',
                 'last_updated_timestamp',
                 'created_timestamp'
