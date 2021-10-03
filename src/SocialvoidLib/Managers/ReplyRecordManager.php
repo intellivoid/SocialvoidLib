@@ -157,7 +157,7 @@
             }
 
             $post_id = $this->socialvoidLib->getDatabase()->real_escape_string(Utilities::removeSlaveHash($post_id));
-            $Query = "SELECT post_id FROM `posts_replies` WHERE reply_post_id='$post_id' AND replied=1 LIMIT $offset, $limit";
+            $Query = "SELECT reply_post_id FROM `posts_replies` WHERE post_id='$post_id' AND replied=1 LIMIT $offset, $limit";
             $QueryResults = $SelectedSlave->getConnection()->query($Query);
 
             // Execute and process the query
@@ -173,7 +173,7 @@
 
                 while($Row = $QueryResults->fetch_assoc())
                 {
-                    $ResultsArray[] = $SelectedSlave->MysqlServerPointer->HashPointer . '-' . $Row['post_id'];
+                    $ResultsArray[] = $SelectedSlave->MysqlServerPointer->HashPointer . '-' . $Row['reply_post_id'];
                 }
             }
 
