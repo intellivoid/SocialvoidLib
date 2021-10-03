@@ -17,6 +17,13 @@
  - Added method timeline.get_likes
  - Added method timeline.delete_post
  - Added method timeline.quote_post
+ - Added method account.clear_profile_biography
+ - Added method account.clear_profile_location
+ - Added method account.clear_profile_url
+ - Added method account.update_profile_biography
+ - Added method account.update_location
+ - Added method account.change_profile_name
+ - Added method account.update_profile_url
  - Added a version information menu to `net.intellivoid.socialvoid_admin`
  - Fixed client hash validation bug
  - Fixed worker monitoring logic to use BackgroundWorker's builtin monitor
