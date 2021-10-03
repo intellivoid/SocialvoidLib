@@ -22,3 +22,5 @@
  - Fixed worker monitoring logic to use BackgroundWorker's builtin monitor
  - Added various debugging tools to `net.intellivoid.socialvoid_admin`
  - Corrected various casting expressions to enforce the correct return types
+ - Added standard error InvalidOffsetValue (0x02112)
+ - Added standard error InvalidLimitValue (0x02113)
