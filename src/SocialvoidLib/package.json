@@ -751,10 +751,6 @@
         },
         {
             "required": true,
-            "file": "Objects/ImageDetails.php"
-        },
-        {
-            "required": true,
             "file": "Objects/LikeRecord.php"
         },
         {
