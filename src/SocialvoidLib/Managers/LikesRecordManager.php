@@ -179,6 +179,41 @@
         }
 
         /**
+         * Returns the amount of likes for a post
+         *
+         * @param string $post_id
+         * @return int
+         * @throws DatabaseException
+         * @throws PostNotFoundException
+         * @noinspection DuplicatedCode
+         */
+        public function getLikesCount(string $post_id): int
+        {
+            try
+            {
+                $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($post_id));
+            }
+            catch (InvalidSlaveHashException $e)
+            {
+                throw new PostNotFoundException();
+            }
+
+            $post_id = $this->socialvoidLib->getDatabase()->real_escape_string(Utilities::removeSlaveHash($post_id));
+            $Query = "SELECT COUNT(*) AS total FROM `posts_likes` WHERE post_id='$post_id' AND liked=1";
+            $QueryResults = $SelectedSlave->getConnection()->query($Query);
+
+            // Execute and process the query
+            if($QueryResults == false)
+            {
+                throw new DatabaseException('There was an error while trying to get the likes from this post',
+                    $Query, $SelectedSlave->getConnection()->error, $SelectedSlave->getConnection()
+                );
+            }
+
+            return (int)$QueryResults->fetch_assoc()['total'];
+        }
+
+        /**
          * Gets an existing record from the database
          *
          * @param int $user_id
