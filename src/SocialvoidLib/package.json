@@ -795,6 +795,10 @@
         },
         {
             "required": true,
+            "file": "Objects/Post/TextEntity.php"
+        },
+        {
+            "required": true,
             "file": "Objects/Post.php"
         },
         {

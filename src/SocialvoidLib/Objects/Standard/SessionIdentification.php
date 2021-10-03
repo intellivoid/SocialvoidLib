@@ -57,7 +57,7 @@
                 throw new BadSessionChallengeAnswerException("The client private hash is invalid (-s1)");
             if(strlen($client_private_hash) !== 64)
                 throw new BadSessionChallengeAnswerException("The client private hash is invalid (-s2)");
-            if(preg_match(RegexPatterns::Alphanumeric, $client_private_hash))
+            if(Validate::hash($client_private_hash) == false)
                 throw new BadSessionChallengeAnswerException("The client private hash is invalid (-s3)");
             if($this->ClientPublicHash == $client_private_hash)
                 throw new BadSessionChallengeAnswerException("The client private hash is invalid (-s4)");

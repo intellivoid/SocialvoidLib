@@ -37,6 +37,13 @@
         public $Text;
 
         /**
+         * An array of text entities
+         *
+         * @var TextEntity[]
+         */
+        public $Entities;
+
+        /**
          * The source client of the post
          *
          * @var string
@@ -89,7 +96,7 @@
 
         /**
          * The amount of reposts this post got, this can be null if
-         * the post is is a repost
+         * the post is a repost
          *
          * @var int|null
          */
@@ -140,21 +147,26 @@
          */
         public function toArray(): array
         {
+            $entities = [];
+            foreach($this->Entities as $textEntity)
+                $entities[] = $textEntity->toArray();
+
             return [
-                "id" => $this->ID,
-                "type" => $this->PostType,
-                "text" => $this->Text,
-                "source" => $this->Source,
-                "peer" => ($this->Peer == null ? null : $this->Peer->toArray()),
-                "reply_to_post" => ($this->ReplyToPost == null ? null : $this->ReplyToPost->toArray()),
-                "quoted_post" => ($this->QuotedPost == null ? null : $this->QuotedPost->toArray()),
-                "reposted_post" => ($this->RepostedPost == null ? null :$this->RepostedPost->toArray()),
-                "likes_count" => (is_null($this->LikesCount) ? null : (int)$this->LikesCount),
-                "reposts_count" => (is_null($this->RepostsCount) ? null : (int)$this->RepostsCount),
-                "quotes_count" => (is_null($this->QuotesCount) ? null : (int)$this->QuotesCount),
-                "replies_count" => (is_null($this->RepliesCount) == null ? 0 : (int)$this->RepliesCount),
-                "posted_timestamp" => ($this->PostedTimestamp),
-                "flags" => $this->Flags,
+                'id' => $this->ID,
+                'type' => $this->PostType,
+                'text' => $this->Text,
+                'entities' => $entities,
+                'source' => $this->Source,
+                'peer' => ($this->Peer == null ? null : $this->Peer->toArray()),
+                'reply_to_post' => ($this->ReplyToPost == null ? null : $this->ReplyToPost->toArray()),
+                'quoted_post' => ($this->QuotedPost == null ? null : $this->QuotedPost->toArray()),
+                'reposted_post' => ($this->RepostedPost == null ? null :$this->RepostedPost->toArray()),
+                'likes_count' => (is_null($this->LikesCount) ? null : (int)$this->LikesCount),
+                'reposts_count' => (is_null($this->RepostsCount) ? null : (int)$this->RepostsCount),
+                'quotes_count' => (is_null($this->QuotesCount) ? null : (int)$this->QuotesCount),
+                'replies_count' => (is_null($this->RepliesCount) == null ? 0 : (int)$this->RepliesCount),
+                'posted_timestamp' => ($this->PostedTimestamp),
+                'flags' => $this->Flags,
             ];
         }
 
@@ -168,47 +180,54 @@
         {
             $PostObject = new Post();
 
-            if(isset($data["id"]))
-                $PostObject->ID = $data["id"];
+            if(isset($data['id']))
+                $PostObject->ID = $data['id'];
 
-            if(isset($data["type"]))
-                $PostObject->PostType = $data["type"];
+            if(isset($data['type']))
+                $PostObject->PostType = $data['type'];
 
-            if(isset($data["text"]))
-                $PostObject->Text = $data["text"];
+            if(isset($data['text']))
+                $PostObject->Text = $data['text'];
 
-            if(isset($data["source"]))
-                $PostObject->Source = $data["source"];
+            if(isset($data['entities']))
+            {
+                $PostObject->Entities = [];
+                foreach($data['entities'] as $entity)
+                    $PostObject->Entities[] = TextEntity::fromArray($entity);
+            }
 
-            if(isset($data["peer"]))
-                $PostObject->Peer = ($data["peer"] == null ? null : Peer::fromArray($data["peer"]));
+            if(isset($data['source']))
+                $PostObject->Source = $data['source'];
 
-            if(isset($data["reply_to_post"]))
-                $PostObject->ReplyToPost = ($data["reply_to_post"] == null ? null : Post::fromArray($data["reply_to_post"]));
+            if(isset($data['peer']))
+                $PostObject->Peer = ($data['peer'] == null ? null : Peer::fromArray($data['peer']));
 
-            if(isset($data["quoted_post"]))
-                $PostObject->QuotedPost = ($data["quoted_post"] == null ? null : Post::fromArray($data["quoted_post"]));
+            if(isset($data['reply_to_post']))
+                $PostObject->ReplyToPost = ($data['reply_to_post'] == null ? null : Post::fromArray($data['reply_to_post']));
 
-            if(isset($data["reposted_post"]))
-                $PostObject->RepostedPost = ($data["reposted_post"] == null ? null : Post::fromArray($data["reposted_post"]));
+            if(isset($data['quoted_post']))
+                $PostObject->QuotedPost = ($data['quoted_post'] == null ? null : Post::fromArray($data['quoted_post']));
 
-            if(isset($data["likes_count"]))
-                $PostObject->LikesCount = $data["likes_count"];
+            if(isset($data['reposted_post']))
+                $PostObject->RepostedPost = ($data['reposted_post'] == null ? null : Post::fromArray($data['reposted_post']));
 
-            if(isset($data["reposts_count"]))
-                $PostObject->RepostsCount = $data["reposts_count"];
+            if(isset($data['likes_count']))
+                $PostObject->LikesCount = $data['likes_count'];
 
-            if(isset($data["quotes_count"]))
-                $PostObject->QuotesCount = $data["quotes_count"];
+            if(isset($data['reposts_count']))
+                $PostObject->RepostsCount = $data['reposts_count'];
 
-            if(isset($data["replies_count"]))
-                $PostObject->RepliesCount = $data["replies_count"];
+            if(isset($data['quotes_count']))
+                $PostObject->QuotesCount = $data['quotes_count'];
 
-            if(isset($data["posted_timestamp"]))
-                $PostObject->PostedTimestamp = $data["posted_timestamp"];
+            if(isset($data['replies_count']))
+                $PostObject->RepliesCount = $data['replies_count'];
 
-            if(isset($data["flags"]))
-                $PostObject->Flags = $data["flags"];
+            if(isset($data['posted_timestamp']))
+                $PostObject->PostedTimestamp = $data['posted_timestamp'];
+
+            if(isset($data['flags']))
+                $PostObject->Flags = $data['flags'];
 
             return $PostObject;
         }
@@ -228,6 +247,7 @@
             $StandardPostObject->ID = $post->PublicID;
             $StandardPostObject->PostType = Utilities::determinePostType($post);
             $StandardPostObject->Text = $post->Text;
+            $StandardPostObject->Entities = [];
             $StandardPostObject->Source = $post->Source;
             $StandardPostObject->LikesCount = ($post->Likes == null ? 0 : count($post->Likes));
             $StandardPostObject->RepostsCount = ($post->Reposts == null ? 0 : count($post->Reposts));
@@ -235,6 +255,14 @@
             $StandardPostObject->RepliesCount = ($post->Replies == null ? 0 : count($post->Replies));
             $StandardPostObject->PostedTimestamp = $post->CreatedTimestamp;
             $StandardPostObject->Flags = $post->Flags;
+
+            if($post->TextEntities !== null)
+            {
+                foreach($post->TextEntities as $entity)
+                {
+                    $StandardPostObject->Entities[] = TextEntity::fromArray($entity->toArray());
+                }
+            }
 
             // If the post has been deleted, remove the text, source, likes and reposts.
             // But leave the rest to keep a consistent timeline, eg; when a user

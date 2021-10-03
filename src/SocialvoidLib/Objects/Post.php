@@ -19,6 +19,7 @@
     use SocialvoidLib\Objects\Post\Quote;
     use SocialvoidLib\Objects\Post\Reply;
     use SocialvoidLib\Objects\Post\Repost;
+    use SocialvoidLib\Objects\Post\TextEntity;
 
     /**
      * Class Post
@@ -113,9 +114,9 @@
         public $PriorityLevel;
 
         /**
-         * @var Entities
+         * @var TextEntity[]
          */
-        public $Entities;
+        public $TextEntities;
 
         /**
          * Array of User IDs that liked this post
@@ -204,6 +205,7 @@
         public function toArray(): array
         {
             $media_content_results = null;
+            $text_entities = [];
 
             if($this->MediaContent !== null)
             {
@@ -211,6 +213,13 @@
                 foreach($this->MediaContent as $mediaContent)
                     $media_content_results[] = $mediaContent->toArray();
             }
+
+            if($this->TextEntities !== null)
+            {
+                foreach($this->TextEntities as $textEntity)
+                    $text_entities[] = $textEntity->toArray();
+            }
+
             
             return [
                 //'id' => ($this->ID == null ? null : (int)$this->ID), https://github.com/intellivoid/SocialvoidLib/issues/1
@@ -225,7 +234,7 @@
                 'repost' => ($this->Repost == null ? null : $this->Repost->toArray()),
                 'flags' => ($this->Flags == null ? [] : $this->Flags),
                 'priority_level' => ($this->Flags == null ? [] : $this->Flags),
-                'entities' => ($this->Entities == null ? null : $this->Entities->toArray()),
+                'text_entities' => $text_entities,
                 'likes' => ($this->Likes == null ? [] : $this->Likes),
                 'likes_count' => ($this->LikesCount == null ? 0 : (int)$this->LikesCount),
                 'reposts' => ($this->Reposts == null ? [] : $this->Reposts),
@@ -250,6 +259,7 @@
         public static function fromArray(array $data): Post
         {
             $PostObject = new Post();
+            $PostObject->TextEntities = [];
 
             // https://github.com/intellivoid/SocialvoidLib/issues/1
             //if(isset($data['id']))
@@ -288,8 +298,13 @@
             if(isset($data['priority_level']))
                 $PostObject->PriorityLevel = $data['priority_level'];
 
-            if(isset($data['entities']))
-                $PostObject->Entities = ($data['entities'] !== null ? Entities::fromArray($data['entities']) : null);
+            if(isset($data['text_entities']))
+            {
+                foreach($data['text_entities'] as $textEntity)
+                {
+                    $PostObject->TextEntities[] = TextEntity::fromArray($textEntity);
+                }
+            }
 
             if(isset($data['likes']))
                 $PostObject->Likes = ($data['likes'] == null ? [] : $data['likes']);
@@ -340,6 +355,10 @@
         public function toArrayAlternative(): array
         {
             $media_content_results = null;
+            $text_entities = [];
+
+            foreach($this->TextEntities as $textEntity)
+                $text_entities[] = $textEntity->toArray();
 
             if($this->MediaContent !== null)
             {
@@ -364,7 +383,7 @@
                 'repost_original_user_id' => ($this->Repost == null ? null : $this->Repost->OriginalUserID),
                 'flags' => ($this->Flags == null ? [] : $this->Flags),
                 'priority_level' => ($this->Flags == null ? [] : $this->Flags),
-                'entities' => ($this->Entities == null ? null : $this->Entities->toArray()),
+                'text_entities' => ($this->TextEntities == null ? [] : $text_entities),
                 'likes' => ($this->Likes == null ? [] : $this->Likes),
                 'likes_count' => ($this->LikesCount == null ? 0 : (int)$this->LikesCount),
                 'reposts' => ($this->Reposts == null ? [] : $this->Reposts),
@@ -383,6 +402,7 @@
         public static function fromAlternativeArray(array $data): Post
         {
             $PostObject = new Post();
+            $PostObject->TextEntities = [];
 
             //if(isset($data['id']))
             //    $PostObject->ID = ($data['id'] == null ? null : (int)$data['id']);
@@ -453,8 +473,11 @@
             if(isset($data['priority_level']))
                 $PostObject->PriorityLevel = $data['priority_level'];
 
-            if(isset($data['entities']))
-                $PostObject->Entities = ($data['entities'] !== null ? Entities::fromArray($data['entities']) : null);
+            if(isset($data['text_entities']))
+            {
+                foreach($data['text_entities'] as $entity)
+                    $PostObject->TextEntities[] = TextEntity::fromArray($entity);
+            }
 
             if(isset($data['likes']))
                 $PostObject->Likes = ($data['likes'] == null ? [] : $data['likes']);
