@@ -263,6 +263,7 @@
          * @throws CacheException
          * @throws InvalidSlaveHashException
          * @noinspection PhpBooleanCanBeSimplifiedInspection
+         * @noinspection PhpCastIsUnnecessaryInspection
          */
         public function updatePost(Post $post): Post
         {
@@ -295,9 +296,13 @@
                 'priority_level' => ($post->PriorityLevel == null ? $this->socialvoidLib->getDatabase()->real_escape_string(PostPriorityLevel::None) : $this->socialvoidLib->getDatabase()->real_escape_string($post->PriorityLevel)),
                 'entities' => ($post->Entities == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Entities->toArray()))),
                 'likes' => (is_null($post->Likes) ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Likes))),
+                'likes_count' => ($post->LikesCount == null ? 0 : (int)$post->LikesCount),
                 'reposts' => (is_null($post->Reposts) ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Reposts))),
+                'reposts_count' => ($post->RepostsCount == null ? 0 : (int)$post->RepostsCount),
                 'quotes' => (is_null($post->Quotes) ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Quotes))),
+                'quotes_count' => ($post->QuotesCount == null ? 0 : (int)$post->QuotesCount),
                 'replies' => (is_null($post->Replies) ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Replies))),
+                'replies_count' => ($post->RepliesCount == null ? 0 : (int)$post->RepliesCount),
                 'media_content' => (is_null($MediaContent) ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($MediaContent))),
                 'last_updated_timestamp' => $post->LastUpdatedTimestamp,
             ], 'public_id', Utilities::removeSlaveHash($post->PublicID));
