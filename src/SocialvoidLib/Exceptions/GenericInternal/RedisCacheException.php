@@ -13,10 +13,6 @@
      */
     class RedisCacheException extends Exception
     {
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * RedisCacheException constructor.
@@ -29,6 +25,5 @@
             parent::__construct($message, $code, $previous);
             $this->message = $message;
             $this->code = $code;
-            $this->previous = $previous;
         }
     }

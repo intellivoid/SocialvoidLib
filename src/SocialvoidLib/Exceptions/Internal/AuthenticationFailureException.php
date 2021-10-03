@@ -20,10 +20,6 @@ namespace SocialvoidLib\Exceptions\Internal;
      */
     class AuthenticationFailureException extends Exception
     {
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * AuthenticationFailureException constructor.
@@ -34,6 +30,5 @@ namespace SocialvoidLib\Exceptions\Internal;
         {
             parent::__construct($message, InternalErrorCodes::AuthenticationFailureException, $previous);
             $this->message = $message;
-            $this->previous = $previous;
         }
     }

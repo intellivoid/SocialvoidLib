@@ -14,10 +14,6 @@
      */
     class EntityWithoutAccessException extends Exception
     {
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * @var string
@@ -46,7 +42,6 @@
         {
             parent::__construct($message, InternalErrorCodes::EntityWithoutAccessException, $previous);
             $this->message = $message;
-            $this->previous = $previous;
             $this->entity_type = $entity_type;
             $this->entity_identifier = $entity_identifier;
             $this->data = $data;

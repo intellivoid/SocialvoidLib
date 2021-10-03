@@ -14,10 +14,6 @@
      */
     class AuthenticationFailureException extends Exception
     {
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * AuthenticationFailureException constructor.
@@ -28,6 +24,5 @@
         {
             parent::__construct($message, StandardErrorCodes::AuthenticationFailureException, $previous);
             $this->message = $message;
-            $this->previous = $previous;
         }
     }

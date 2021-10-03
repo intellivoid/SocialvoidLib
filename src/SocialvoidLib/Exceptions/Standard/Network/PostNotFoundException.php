@@ -23,10 +23,6 @@
      */
     class PostNotFoundException extends Exception
     {
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * PostNotFoundException constructor.
@@ -37,6 +33,5 @@
         {
             parent::__construct($message, StandardErrorCodes::PostNotFoundException, $previous);
             $this->message = $message;
-            $this->previous = $previous;
         }
     }

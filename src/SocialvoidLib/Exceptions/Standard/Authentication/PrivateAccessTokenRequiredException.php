@@ -14,10 +14,6 @@
      */
     class PrivateAccessTokenRequiredException extends Exception
     {
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * PrivateAccessTokenRequiredException constructor.
@@ -28,6 +24,5 @@
         {
             parent::__construct($message, StandardErrorCodes::PrivateAccessTokenRequiredException, $previous);
             $this->message = $message;
-            $this->previous = $previous;
         }
     }

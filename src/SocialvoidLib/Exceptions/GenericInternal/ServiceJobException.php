@@ -19,10 +19,6 @@
          */
         private ?ServiceJobQuery $job;
 
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * ServiceJobException constructor.
@@ -35,6 +31,5 @@
             parent::__construct($message, 0, $previous);
             $this->message = $message;
             $this->job = $job;
-            $this->previous = $previous;
         }
     }

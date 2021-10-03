@@ -11,10 +11,6 @@
 
     class InvalidHealthStatusCodeException extends Exception
     {
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * @param string $message
@@ -24,6 +20,5 @@
         {
             parent::__construct($message, InternalErrorCodes::InvalidHealthStatusCodeException, $previous);
             $this->message = $message;
-            $this->previous = $previous;
         }
     }

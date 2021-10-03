@@ -14,10 +14,6 @@
      */
     class InvalidPlatformException extends Exception
     {
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * InvalidPlatformException constructor.
@@ -28,6 +24,5 @@
         {
             parent::__construct($message, StandardErrorCodes::InvalidPlatformException, $previous);
             $this->message = $message;
-            $this->previous = $previous;
         }
     }

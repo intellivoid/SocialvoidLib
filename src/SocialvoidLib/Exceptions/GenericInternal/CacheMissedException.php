@@ -12,10 +12,6 @@
      */
     class CacheMissedException extends Exception
     {
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * CacheMissedException constructor.
@@ -28,6 +24,5 @@
             parent::__construct($message, $code, $previous);
             $this->message = $message;
             $this->code = $code;
-            $this->previous = $previous;
         }
     }

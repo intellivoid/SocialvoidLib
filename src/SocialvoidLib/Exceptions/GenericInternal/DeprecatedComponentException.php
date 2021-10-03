@@ -14,10 +14,6 @@
      */
     class DeprecatedComponentException extends Exception
     {
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * DeprecatedComponentException constructor.
@@ -30,6 +26,5 @@
             parent::__construct($message, $code, $previous);
             $this->message = $message;
             $this->code = $code;
-            $this->previous = $previous;
         }
     }

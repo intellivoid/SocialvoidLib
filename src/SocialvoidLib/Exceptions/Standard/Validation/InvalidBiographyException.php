@@ -26,10 +26,6 @@ namespace SocialvoidLib\Exceptions\Standard\Validation;
          */
         private ?string $biography;
 
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * InvalidBiographyException constructor.
@@ -42,6 +38,5 @@ namespace SocialvoidLib\Exceptions\Standard\Validation;
             parent::__construct($message, StandardErrorCodes::InvalidBiographyException, $previous);
             $this->message = $message;
             $this->biography = $biography;
-            $this->previous = $previous;
         }
     }

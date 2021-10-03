@@ -22,10 +22,6 @@
      */
     class QuoteRecordNotFoundException extends Exception
     {
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * QuoteRecordNotFoundException constructor.
@@ -36,6 +32,5 @@
         {
             parent::__construct($message, InternalErrorCodes::QuoteRecordNotFoundException, $previous);
             $this->message = $message;
-            $this->previous = $previous;
         }
     }

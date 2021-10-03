@@ -26,10 +26,6 @@ namespace SocialvoidLib\Exceptions\Internal;
          */
         private ?UserAuthenticationProperties $userAuthenticationProperties;
 
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * RecoveryCodesAlreadyExistsException constructor.
@@ -42,7 +38,6 @@ namespace SocialvoidLib\Exceptions\Internal;
             parent::__construct($message, InternalErrorCodes::RecoveryCodesAlreadyExistsException, $previous);
             $this->message = $message;
             $this->userAuthenticationProperties = $userAuthenticationProperties;
-            $this->previous = $previous;
         }
 
         /**

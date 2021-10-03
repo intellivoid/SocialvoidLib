@@ -14,10 +14,6 @@
      */
     class InvalidVersionException extends Exception
     {
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * InvalidVersionException constructor.
@@ -28,6 +24,5 @@
         {
             parent::__construct($message, StandardErrorCodes::InvalidVersionException, $previous);
             $this->message = $message;
-            $this->previous = $previous;
         }
     }

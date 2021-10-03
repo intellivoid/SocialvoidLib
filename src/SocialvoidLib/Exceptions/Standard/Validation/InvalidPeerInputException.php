@@ -26,10 +26,6 @@ namespace SocialvoidLib\Exceptions\Standard\Validation;
          */
         private $peer;
 
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * InvalidPeerInputException constructor.
@@ -42,7 +38,6 @@ namespace SocialvoidLib\Exceptions\Standard\Validation;
             parent::__construct($message, StandardErrorCodes::InvalidPeerInputException, $previous);
             $this->message = $message;
             $this->peer = $peer;
-            $this->previous = $previous;
         }
 
         /**

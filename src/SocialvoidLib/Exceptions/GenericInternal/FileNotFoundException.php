@@ -20,10 +20,6 @@
      */
     class FileNotFoundException extends Exception
     {
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * @var string|null
@@ -42,7 +38,6 @@
             parent::__construct($message, $code, $previous);
             $this->message = $message;
             $this->code = $code;
-            $this->previous = $previous;
             $this->filename = $filename;
         }
 

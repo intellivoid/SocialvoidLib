@@ -28,10 +28,6 @@
          */
         private $username;
 
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * InvalidUsernameException constructor.
@@ -45,7 +41,6 @@
 
             $this->message = $message;
             $this->username = $username;
-            $this->previous = $previous;
         }
 
         /**

@@ -30,10 +30,6 @@ namespace SocialvoidLib\Exceptions\GenericInternal;
          */
         private string $value;
 
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * InvalidSearchMethodException constructor.
@@ -48,7 +44,6 @@ namespace SocialvoidLib\Exceptions\GenericInternal;
             $this->message = $message;
             $this->search_method = $search_method;
             $this->value = $value;
-            $this->previous = $previous;
         }
 
         /**

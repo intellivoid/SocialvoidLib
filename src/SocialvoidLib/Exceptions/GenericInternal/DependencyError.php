@@ -20,10 +20,6 @@ namespace SocialvoidLib\Exceptions\GenericInternal;
      */
     class DependencyError extends Exception
     {
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * DependencyError constructor.
@@ -36,6 +32,5 @@ namespace SocialvoidLib\Exceptions\GenericInternal;
             parent::__construct($message, $code, $previous);
             $this->message = $message;
             $this->code = $code;
-            $this->previous = $previous;
         }
     }

@@ -8,10 +8,6 @@ namespace SocialvoidLib\Exceptions\Standard\Validation;
 
     class FileTooLargeException extends Exception
     {
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * @param string $message
@@ -21,6 +17,5 @@ namespace SocialvoidLib\Exceptions\Standard\Validation;
         {
             parent::__construct($message, StandardErrorCodes::FileTooLargeException, $previous);
             $this->message = $message;
-            $this->previous = $previous;
         }
     }

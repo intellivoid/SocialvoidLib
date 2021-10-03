@@ -36,10 +36,6 @@ namespace SocialvoidLib\Exceptions\GenericInternal;
          */
         private ?mysqli $mysqli;
 
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * DatabaseException constructor.
@@ -56,7 +52,6 @@ namespace SocialvoidLib\Exceptions\GenericInternal;
             $this->query = $query;
             $this->database_error = $database_error;
             $this->mysqli = $mysqli;
-            $this->previous = $previous;
         }
 
         /**

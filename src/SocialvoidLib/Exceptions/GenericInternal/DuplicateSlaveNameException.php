@@ -9,10 +9,6 @@
 
     class DuplicateSlaveNameException extends Exception
     {
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * @param string $message
@@ -24,6 +20,5 @@
             parent::__construct($message, $code, $previous);
             $this->message = $message;
             $this->code = $code;
-            $this->previous = $previous;
         }
     }

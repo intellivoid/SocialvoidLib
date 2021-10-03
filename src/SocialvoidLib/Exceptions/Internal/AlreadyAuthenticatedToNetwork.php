@@ -27,10 +27,6 @@ namespace SocialvoidLib\Exceptions\Internal;
          */
         private ?NetworkSession $network;
 
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * AlreadyAuthenticatedToNetwork constructor.
@@ -43,7 +39,6 @@ namespace SocialvoidLib\Exceptions\Internal;
             parent::__construct($message, InternalErrorCodes::AlreadyAuthenticatedToNetwork, $previous);
             $this->message = $message;
             $this->network = $network;
-            $this->previous = $previous;
         }
 
         /**

@@ -23,10 +23,6 @@
      */
     class NoTwoFactorAuthenticationAvailableException extends Exception
     {
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * NoTwoFactorAuthenticationAvailableException constructor.
@@ -37,6 +33,5 @@
         {
             parent::__construct($message, InternalErrorCodes::NoTwoFactorAuthenticationAvailableException, $previous);
             $this->message = $message;
-            $this->previous = $previous;
         }
     }

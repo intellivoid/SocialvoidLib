@@ -22,10 +22,6 @@
      */
     class UserTimelineNotFoundException extends Exception
     {
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * UserTimelineNotFoundException constructor.
@@ -36,6 +32,5 @@
         {
             parent::__construct($message, InternalErrorCodes::UserTimelineNotFoundException, $previous);
             $this->message = $message;
-            $this->previous = $previous;
         }
     }

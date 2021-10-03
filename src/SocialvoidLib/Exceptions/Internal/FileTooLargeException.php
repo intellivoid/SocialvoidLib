@@ -21,10 +21,6 @@
      */
     class FileTooLargeException extends Exception
     {
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * FileTooLargeException constructor.
@@ -35,6 +31,5 @@
         {
             parent::__construct($message, InternalErrorCodes::FileTooLargeException, $previous);
             $this->message = $message;
-            $this->previous = $previous;
         }
     }

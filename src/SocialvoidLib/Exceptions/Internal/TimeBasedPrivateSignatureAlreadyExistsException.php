@@ -27,10 +27,6 @@ namespace SocialvoidLib\Exceptions\Internal;
          */
         private ?UserAuthenticationProperties $userAuthenticationProperties;
 
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * TimeBasedPrivateSignatureAlreadyExistsException constructor.
@@ -43,6 +39,5 @@ namespace SocialvoidLib\Exceptions\Internal;
             parent::__construct($message, InternalErrorCodes::TimeBasedPrivateSignatureAlreadyExistsException, $previous);
             $this->message = $message;
             $this->userAuthenticationProperties = $userAuthenticationProperties;
-            $this->previous = $previous;
         }
     }

@@ -538,6 +538,7 @@
          * @throws InvalidSlaveHashException
          * @throws InvalidZimageFileException
          * @throws PeerNotFoundException
+         * @throws ServerNotReachableException
          * @throws ServiceJobException
          * @throws SizeNotSetException
          * @throws UnsupportedAvatarGeneratorException

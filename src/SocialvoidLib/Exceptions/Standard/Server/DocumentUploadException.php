@@ -8,10 +8,6 @@
 
     class DocumentUploadException extends Exception
     {
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * @param string $message
@@ -21,6 +17,5 @@
         {
             parent::__construct($message, StandardErrorCodes::DocumentUploadException, $previous);
             $this->message = $message;
-            $this->previous = $previous;
         }
     }

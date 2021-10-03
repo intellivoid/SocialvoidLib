@@ -31,10 +31,6 @@ namespace SocialvoidLib\Exceptions\Standard\Network;
          */
         private ?string $search_value;
 
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * PeerNotFoundException constructor.
@@ -49,7 +45,6 @@ namespace SocialvoidLib\Exceptions\Standard\Network;
             $this->message = $message;
             $this->search_by = $search_by;
             $this->search_value = $search_value;
-            $this->previous = $previous;
         }
 
         /**

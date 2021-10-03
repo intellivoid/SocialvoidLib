@@ -21,10 +21,6 @@
      */
     class FileUploadException extends Exception
     {
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * FileUploadException constructor.
@@ -35,6 +31,5 @@
         {
             parent::__construct($message, StandardErrorCodes::FileUploadErrorException, $previous);
             $this->message = $message;
-            $this->previous = $previous;
         }
     }

@@ -21,10 +21,6 @@ namespace SocialvoidLib\Exceptions\Internal;
      */
     class FollowerDataNotFound extends Exception
     {
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * FollowerDataNotFound constructor.
@@ -35,6 +31,5 @@ namespace SocialvoidLib\Exceptions\Internal;
         {
             parent::__construct($message, InternalErrorCodes::FollowerDataNotFound, $previous);
             $this->message = $message;
-            $this->previous = $previous;
         }
     }

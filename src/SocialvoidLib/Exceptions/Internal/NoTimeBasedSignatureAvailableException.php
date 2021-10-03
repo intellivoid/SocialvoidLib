@@ -23,10 +23,6 @@ namespace SocialvoidLib\Exceptions\Internal;
     class NoTimeBasedSignatureAvailableException extends Exception
     {
         /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
-        /**
          * @var UserAuthenticationProperties|null
          */
         private ?UserAuthenticationProperties $userAuthenticationProperties;
@@ -41,7 +37,6 @@ namespace SocialvoidLib\Exceptions\Internal;
         {
             parent::__construct($message, InternalErrorCodes::NoTimeBasedSignatureAvailableException, $previous);
             $this->message = $message;
-            $this->previous = $previous;
             $this->userAuthenticationProperties = $userAuthenticationProperties;
         }
 

@@ -21,10 +21,6 @@
      */
     class RepostRecordNotFoundException extends Exception
     {
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * RepostRecordNotFoundException constructor.
@@ -35,6 +31,5 @@
         {
             parent::__construct($message, InternalErrorCodes::RepostRecordNotFoundException, $previous);
             $this->message = $message;
-            $this->previous = $previous;
         }
     }

@@ -26,10 +26,6 @@ namespace SocialvoidLib\Exceptions\Standard\Validation;
          */
         private ?string $text;
 
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * InvalidPostTextException constructor.
@@ -42,6 +38,5 @@ namespace SocialvoidLib\Exceptions\Standard\Validation;
             parent::__construct($message, StandardErrorCodes::InvalidPostTextException, $previous);
             $this->message = $message;
             $this->text = $text;
-            $this->previous = $previous;
         }
     }

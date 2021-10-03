@@ -21,10 +21,6 @@ namespace SocialvoidLib\Exceptions\Standard\Authentication;
      */
     class IncorrectTwoFactorAuthenticationCodeException extends Exception
     {
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * IncorrectTwoFactorAuthenticationCodeException constructor.
@@ -35,6 +31,5 @@ namespace SocialvoidLib\Exceptions\Standard\Authentication;
         {
             parent::__construct($message, StandardErrorCodes::IncorrectTwoFactorAuthenticationCodeException, $previous);
             $this->message = $message;
-            $this->previous = $previous;
         }
     }

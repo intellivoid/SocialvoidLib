@@ -8,10 +8,6 @@
 
     class InvalidFileForProfilePictureException extends Exception
     {
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * @param string $message
@@ -21,6 +17,5 @@
         {
             parent::__construct($message, StandardErrorCodes::InvalidFileForProfilePictureException, $previous);
             $this->message = $message;
-            $this->previous = $previous;
         }
     }

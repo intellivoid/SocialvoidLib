@@ -21,10 +21,6 @@ namespace SocialvoidLib\Exceptions\Standard\Authentication;
      */
     class NotAuthenticatedException extends Exception
     {
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * NotAuthenticatedException constructor.
@@ -35,6 +31,5 @@ namespace SocialvoidLib\Exceptions\Standard\Authentication;
         {
             parent::__construct($message, StandardErrorCodes::NotAuthenticatedException, $previous);
             $this->message = $message;
-            $this->previous = $previous;
         }
     }

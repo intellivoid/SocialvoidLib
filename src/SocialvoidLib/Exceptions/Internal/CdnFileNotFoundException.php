@@ -21,10 +21,6 @@
      */
     class CdnFileNotFoundException extends Exception
     {
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * @var string|null
@@ -41,7 +37,6 @@
         {
             parent::__construct($message, InternalErrorCodes::CdnFileNotFoundException, $previous);
             $this->message = $message;
-            $this->previous = $previous;
             $this->public_id = $public_id;
         }
 

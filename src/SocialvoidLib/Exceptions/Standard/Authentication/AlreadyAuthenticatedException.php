@@ -14,10 +14,6 @@
      */
     class AlreadyAuthenticatedException extends Exception
     {
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * AlreadyAuthenticatedException constructor.
@@ -28,6 +24,5 @@
         {
             parent::__construct($message, StandardErrorCodes::AlreadyAuthenticatedException, $previous);
             $this->message = $message;
-            $this->previous = $previous;
         }
     }

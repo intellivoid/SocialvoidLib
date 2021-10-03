@@ -14,10 +14,6 @@
      */
     class SessionExpiredException extends Exception
     {
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * SessionExpiredException constructor.
@@ -28,6 +24,5 @@
         {
             parent::__construct($message, StandardErrorCodes::SessionExpiredException, $previous);
             $this->message = $message;
-            $this->previous = $previous;
         }
     }

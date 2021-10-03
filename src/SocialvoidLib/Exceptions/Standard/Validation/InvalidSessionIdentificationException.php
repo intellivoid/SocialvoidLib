@@ -14,10 +14,6 @@
      */
     class InvalidSessionIdentificationException extends Exception
     {
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * InvalidSessionIdentificationException constructor.
@@ -28,6 +24,5 @@
         {
             parent::__construct($message, StandardErrorCodes::InvalidSessionIdentificationException, $previous);
             $this->message = $message;
-            $this->previous = $previous;
         }
     }

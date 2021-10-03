@@ -21,10 +21,6 @@
      */
     class ReplyRecordNotFoundException extends Exception
     {
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * ReplyRecordNotFoundException constructor.
@@ -35,6 +31,5 @@
         {
             parent::__construct($message, InternalErrorCodes::ReplyRecordNotFoundException, $previous);
             $this->message = $message;
-            $this->previous = $previous;
         }
     }

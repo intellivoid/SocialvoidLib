@@ -26,10 +26,6 @@ namespace SocialvoidLib\Exceptions\Standard\Validation;
          */
         private string $password;
 
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * InvalidPasswordException constructor.
@@ -42,7 +38,6 @@ namespace SocialvoidLib\Exceptions\Standard\Validation;
             parent::__construct($message, StandardErrorCodes::InvalidPasswordException, $previous);
             $this->message = $message;
             $this->password = $password;
-            $this->previous = $previous;
         }
 
         /**

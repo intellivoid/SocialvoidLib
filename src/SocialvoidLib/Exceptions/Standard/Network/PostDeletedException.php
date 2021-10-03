@@ -37,6 +37,5 @@
         {
             parent::__construct($message, StandardErrorCodes::PostDeletedException, $previous);
             $this->message = $message;
-            $this->previous = $previous;
         }
     }

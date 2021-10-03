@@ -14,10 +14,6 @@
      */
     class InvalidClientPrivateHashException extends Exception
     {
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * InvalidClientPrivateHash constructor.
@@ -28,6 +24,5 @@
         {
             parent::__construct($message, StandardErrorCodes::InvalidClientPrivateHashException, $previous);
             $this->message = $message;
-            $this->previous = $previous;
         }
     }

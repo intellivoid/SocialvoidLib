@@ -26,10 +26,6 @@ namespace SocialvoidLib\Exceptions\Standard\Validation;
          */
         private ?string $first_name;
 
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * InvalidFirstNameException constructor.
@@ -42,6 +38,5 @@ namespace SocialvoidLib\Exceptions\Standard\Validation;
             parent::__construct($message, StandardErrorCodes::InvalidFirstNameException, $previous);
             $this->message = $message;
             $this->first_name = $first_name;
-            $this->previous = $previous;
         }
     }

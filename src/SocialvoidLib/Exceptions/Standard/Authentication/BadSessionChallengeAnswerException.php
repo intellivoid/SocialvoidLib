@@ -14,10 +14,6 @@
      */
     class BadSessionChallengeAnswerException extends Exception
     {
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * BadSessionChallengeAnswerException constructor.
@@ -28,6 +24,5 @@
         {
             parent::__construct($message, StandardErrorCodes::BadSessionChallengeAnswerException, $previous);
             $this->message = $message;
-            $this->previous = $previous;
         }
     }

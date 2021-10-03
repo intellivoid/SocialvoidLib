@@ -23,10 +23,6 @@
      */
     class AuthenticationNotApplicableException extends Exception
     {
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * AuthenticationNotApplicableException constructor.
@@ -37,6 +33,5 @@
         {
             parent::__construct($message, StandardErrorCodes::AuthenticationNotApplicableException, $previous);
             $this->message = $message;
-            $this->previous = $previous;
         }
     }

@@ -14,10 +14,6 @@
      */
     class TwoFactorAuthenticationRequiredException extends Exception
     {
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * TwoFactorAuthenticationRequiredException constructor.
@@ -28,6 +24,5 @@
         {
             parent::__construct($message, StandardErrorCodes::TwoFactorAuthenticationRequiredException, $previous);
             $this->message = $message;
-            $this->previous = $previous;
         }
     }

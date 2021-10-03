@@ -10,10 +10,6 @@
 
     class AgreementRequiredException extends Exception
     {
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * @param string $message
@@ -23,6 +19,5 @@
         {
             parent::__construct($message, StandardErrorCodes::AgreementRequiredException, $previous);
             $this->message = $message;
-            $this->previous = $previous;
         }
     }

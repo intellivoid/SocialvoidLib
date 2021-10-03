@@ -10,10 +10,6 @@
 
     class InvalidHelpDocumentId extends Exception
     {
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * @param string $message
@@ -23,6 +19,5 @@
         {
             parent::__construct($message, StandardErrorCodes::InvalidHelpDocumentId, $previous);
             $this->message = $message;
-            $this->previous = $previous;
         }
     }

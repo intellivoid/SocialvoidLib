@@ -14,10 +14,6 @@
      */
     class InternalServerException extends Exception
     {
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * InternalServerException constructor.
@@ -28,6 +24,5 @@
         {
             parent::__construct($message, StandardErrorCodes::InternalServerError, $previous);
             $this->message = $message;
-            $this->previous = $previous;
         }
     }

@@ -23,10 +23,6 @@
      */
     class AlreadyRepostedException extends Exception
     {
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * AlreadyRepostedException constructor.
@@ -37,6 +33,5 @@
         {
             parent::__construct($message, StandardErrorCodes::AlreadyRepostedException, $previous);
             $this->message = $message;
-            $this->previous = $previous;
         }
     }

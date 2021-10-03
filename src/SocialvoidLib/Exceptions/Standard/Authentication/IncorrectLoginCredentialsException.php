@@ -23,10 +23,6 @@
      */
     class IncorrectLoginCredentialsException extends Exception
     {
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * IncorrectPasswordException constructor.
@@ -37,6 +33,5 @@
         {
             parent::__construct($message, StandardErrorCodes::IncorrectLoginCredentialsException, $previous);
             $this->message = $message;
-            $this->previous = $previous;
         }
     }

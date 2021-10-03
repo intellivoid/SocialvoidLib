@@ -26,10 +26,6 @@ namespace SocialvoidLib\Exceptions\Standard\Validation;
          */
         private string $username;
 
-        /**
-         * @var Throwable|null
-         */
-        private ?Throwable $previous;
 
         /**
          * UsernameAlreadyExistsException constructor.
@@ -42,7 +38,6 @@ namespace SocialvoidLib\Exceptions\Standard\Validation;
             parent::__construct($message, StandardErrorCodes::UsernameAlreadyExistsException, $previous);
             $this->message = $message;
             $this->username = $username;
-            $this->previous = $previous;
         }
 
         /**
