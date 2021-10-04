@@ -16,6 +16,7 @@
     use SocialvoidLib\Abstracts\SearchMethods\PostSearchMethod;
     use SocialvoidLib\Abstracts\SearchMethods\TimelineSearchMethod;
     use SocialvoidLib\Abstracts\SearchMethods\UserSearchMethod;
+    use SocialvoidLib\Abstracts\Types\Standard\TextEntityType;
     use SocialvoidLib\Classes\Converter;
     use SocialvoidLib\Exceptions\GenericInternal\BackgroundWorkerNotEnabledException;
     use SocialvoidLib\Exceptions\GenericInternal\CacheException;
@@ -177,6 +178,7 @@
             $UserIDs = [];
 
             $UserIDs[$post->PosterUserID] = UserSearchMethod::ById;
+            $MentionUserIDs = [];
 
             if($post->Repost !== null && $post->Repost->OriginalPostID)
                 $SubPosts[$post->Repost->OriginalPostID] = PostSearchMethod::ByPublicId;
@@ -193,9 +195,16 @@
             if($post->Reply !== null && $post->Reply->ReplyToUserID)
                 $UserIDs[(int)$post->Reply->ReplyToUserID] = UserSearchMethod::ById;
 
+            foreach($post->TextEntities as $textEntity)
+            {
+                if($textEntity->Type == TextEntityType::Mention)
+                    $MentionUserIDs[$textEntity->Value] = UserSearchMethod::ByUsername;
+            }
+
 
             $ResolvedSubPosts = $this->networkSession->getSocialvoidLib()->getPostsManager()->getMultiplePosts($SubPosts, false);
             $ResolvedUsers = $this->networkSession->getSocialvoidLib()->getUserManager()->getMultipleUsers($UserIDs, false);
+            $ResolvedMentionedUsers = $this->networkSession->getSocialvoidLib()->getUserManager()->getMultipleUsers($MentionUserIDs, true);
 
             // Sort results
             $SortedPostResolutions = [];
@@ -245,6 +254,11 @@
                         $SortedUserResolutions[$post->Reply->ReplyToUserID]
                     );
                 }
+            }
+
+            foreach($ResolvedMentionedUsers as $user)
+            {
+                $stdPost->MentionedPeers[] = Peer::fromUser($user);
             }
 
             return $stdPost;

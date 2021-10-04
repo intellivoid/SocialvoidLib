@@ -58,6 +58,13 @@
         public $Entities;
 
         /**
+         * An array of resolved mentions
+         *
+         * @var Peer[]
+         */
+        public $MentionedPeers;
+
+        /**
          * The post that this post is replying to
          *
          * @var Post|null
@@ -151,6 +158,12 @@
             foreach($this->Entities as $textEntity)
                 $entities[] = $textEntity->toArray();
 
+            $mentions = null;
+
+            if($this->MentionedPeers !== null)
+                foreach($this->MentionedPeers as $mentionedPeer)
+                    $mentions[] = $mentionedPeer->toArray();
+
             return [
                 'id' => $this->ID,
                 'type' => $this->PostType,
@@ -158,6 +171,7 @@
                 'source' => $this->Source,
                 'text' => $this->Text,
                 'entities' => $entities,
+                'mentioned_peers' => $mentions,
                 'reply_to_post' => ($this->ReplyToPost == null ? null : $this->ReplyToPost->toArray()),
                 'quoted_post' => ($this->QuotedPost == null ? null : $this->QuotedPost->toArray()),
                 'reposted_post' => ($this->RepostedPost == null ? null :$this->RepostedPost->toArray()),
@@ -196,6 +210,13 @@
                 $PostObject->Text = $data['text'];
 
             if(isset($data['entities']))
+            {
+                $PostObject->Entities = [];
+                foreach($data['entities'] as $entity)
+                    $PostObject->Entities[] = TextEntity::fromArray($entity);
+            }
+
+            if(isset($data['mentioned_peers']))
             {
                 $PostObject->Entities = [];
                 foreach($data['entities'] as $entity)
@@ -248,6 +269,7 @@
             $StandardPostObject->PostType = Utilities::determinePostType($post);
             $StandardPostObject->Text = $post->Text;
             $StandardPostObject->Entities = [];
+            $StandardPostObject->MentionedPeers = [];
             $StandardPostObject->Source = $post->Source;
             $StandardPostObject->LikesCount = ($post->Likes == null ? 0 : count($post->Likes));
             $StandardPostObject->RepostsCount = ($post->Reposts == null ? 0 : count($post->Reposts));
@@ -275,8 +297,13 @@
                 $StandardPostObject->Text = null;
                 $StandardPostObject->Peer = null;
                 $StandardPostObject->Source = null;
+                $StandardPostObject->MentionedPeers = null;
                 $StandardPostObject->LikesCount = 0;
+                $StandardPostObject->RepliesCount = 0;
+                $StandardPostObject->ReplyToPost = null;
+                $StandardPostObject->RepostedPost = null;
                 $StandardPostObject->RepostsCount = 0;
+                $StandardPostObject->QuotedPost = null;
                 $StandardPostObject->QuotesCount = 0;
             }
 
