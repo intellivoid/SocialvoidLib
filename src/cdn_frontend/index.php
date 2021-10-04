@@ -25,13 +25,30 @@
      * @param string $name
      * @return string|null
      */
-    function getParameter(string $name): ?string
+    function getParameter(string $name)
     {
         if(isset($_GET[$name]))
             return $_GET[$name];
 
         if(isset($_POST[$name]))
             return $_POST[$name];
+
+        $entityBody = file_get_contents('php://input');
+        if($entityBody !== false || $entityBody !== null)
+        {
+            $entityBodyDecoded = json_decode($entityBody, true);
+            if($entityBodyDecoded !== false && isset($entityBodyDecoded[$name]))
+            {
+                switch(gettype(isset($entityBodyDecoded[$name])))
+                {
+                    case 'string':
+                    case 'integer':
+                    case 'boolean':
+                        return $entityBodyDecoded[$name];
+                }
+            }
+
+        }
 
         return null;
     }
