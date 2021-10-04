@@ -30,6 +30,20 @@
         public $PostType;
 
         /**
+         * The peer author of the post
+         *
+         * @var Peer|null
+         */
+        public $Peer;
+
+        /**
+         * The source client of the post
+         *
+         * @var string
+         */
+        public $Source;
+
+        /**
          * The text of the post, this can be null for reposts
          *
          * @var string|null
@@ -42,20 +56,6 @@
          * @var TextEntity[]
          */
         public $Entities;
-
-        /**
-         * The source client of the post
-         *
-         * @var string
-         */
-        public $Source;
-
-        /**
-         * The peer author of the post
-         *
-         * @var Peer|null
-         */
-        public $Peer;
 
         /**
          * The post that this post is replying to
@@ -154,10 +154,10 @@
             return [
                 'id' => $this->ID,
                 'type' => $this->PostType,
+                'peer' => ($this->Peer == null ? null : $this->Peer->toArray()),
+                'source' => $this->Source,
                 'text' => $this->Text,
                 'entities' => $entities,
-                'source' => $this->Source,
-                'peer' => ($this->Peer == null ? null : $this->Peer->toArray()),
                 'reply_to_post' => ($this->ReplyToPost == null ? null : $this->ReplyToPost->toArray()),
                 'quoted_post' => ($this->QuotedPost == null ? null : $this->QuotedPost->toArray()),
                 'reposted_post' => ($this->RepostedPost == null ? null :$this->RepostedPost->toArray()),
@@ -186,6 +186,12 @@
             if(isset($data['type']))
                 $PostObject->PostType = $data['type'];
 
+            if(isset($data['peer']))
+                $PostObject->Peer = ($data['peer'] == null ? null : Peer::fromArray($data['peer']));
+
+            if(isset($data['source']))
+                $PostObject->Source = $data['source'];
+
             if(isset($data['text']))
                 $PostObject->Text = $data['text'];
 
@@ -195,12 +201,6 @@
                 foreach($data['entities'] as $entity)
                     $PostObject->Entities[] = TextEntity::fromArray($entity);
             }
-
-            if(isset($data['source']))
-                $PostObject->Source = $data['source'];
-
-            if(isset($data['peer']))
-                $PostObject->Peer = ($data['peer'] == null ? null : Peer::fromArray($data['peer']));
 
             if(isset($data['reply_to_post']))
                 $PostObject->ReplyToPost = ($data['reply_to_post'] == null ? null : Post::fromArray($data['reply_to_post']));
