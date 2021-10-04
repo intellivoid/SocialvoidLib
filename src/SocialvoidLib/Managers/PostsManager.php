@@ -267,11 +267,14 @@
          */
         public function updatePost(Post $post): Post
         {
-            $MediaContent = null;
+            $MediaContent = [];
+            $TextEntities = [];
+
+            foreach($post->TextEntities as $textEntity)
+                $TextEntities[] = $textEntity->toArray();
 
             if($post->MediaContent !== null)
             {
-                $MediaContent = [];
                 foreach($post->MediaContent as $mediaContent)
                     $MediaContent[] = $mediaContent->toArray();
             }
@@ -294,7 +297,7 @@
                 'flags' => ($post->Flags == null ?  $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])) : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Flags))),
                 'is_deleted' => (Converter::hasFlag($post->Flags, PostFlags::Deleted) ? (int)true : (int)false),
                 'priority_level' => ($post->PriorityLevel == null ? $this->socialvoidLib->getDatabase()->real_escape_string(PostPriorityLevel::None) : $this->socialvoidLib->getDatabase()->real_escape_string($post->PriorityLevel)),
-                'entities' => ($post->Entities == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Entities->toArray()))),
+                'entities' => ($post->TextEntities == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($TextEntities))),
                 'likes' => (is_null($post->Likes) ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Likes))),
                 'likes_count' => ($post->LikesCount == null ? 0 : (int)$post->LikesCount),
                 'reposts' => (is_null($post->Reposts) ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Reposts))),
