@@ -11,7 +11,6 @@
     use SocialvoidLib\Exceptions\GenericInternal\CacheException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
-    use SocialvoidLib\Exceptions\GenericInternal\InvalidSlaveHashException;
     use SocialvoidLib\Exceptions\Standard\Authentication\BadSessionChallengeAnswerException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException;
     use SocialvoidLib\Exceptions\Standard\Authentication\SessionExpiredException;
@@ -107,7 +106,6 @@
          * @throws InvalidPostTextException
          * @throws InvalidSearchMethodException
          * @throws InvalidSessionIdentificationException
-         * @throws InvalidSlaveHashException
          * @throws InvalidZimageFileException
          * @throws MissingParameterException
          * @throws NotAuthenticatedException

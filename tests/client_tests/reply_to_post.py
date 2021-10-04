@@ -15,8 +15,8 @@ response = request(
         "client_public_hash": client_info["public_hash"],
         "challenge_answer": answer_challenge(client_info["private_hash"], session_info["challenge"])
      },
-     post_id="e3c158bfc9495b94f7f768662b1cea58-9dd16ed2-1ef7-11ec-9a44-adbca69d60b4",
-     text="This is a reply to a quoted post"
+     post_id="35714fd511b6064908da4ed77c12f587-789a1a44-251c-11ec-aec0-113646ee4b39",
+     text="This is a reply to a post #ReplyMoment #EatMyAss"
 )
 
 print(json.dumps(response.data.result))
