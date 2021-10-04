@@ -15,6 +15,7 @@
     use MarkdownParser\MarkdownParser;
     use SocialvoidLib\Abstracts\JobClass;
     use SocialvoidLib\Abstracts\Modes\Standard\ParseMode;
+    use SocialvoidLib\Abstracts\Options\ParseOptions;
     use SocialvoidLib\Abstracts\RegexPatterns;
     use SocialvoidLib\Abstracts\Types\JobType;
     use SocialvoidLib\Abstracts\Types\Standard\PostType;
@@ -670,6 +671,7 @@
          * @param string $input
          * @param string $parse_mode
          * @return array
+         * @noinspection DuplicatedCode
          */
         public static function extractTextEntities(string $input, string $parse_mode=ParseMode::Markdown): array
         {
@@ -743,6 +745,109 @@
             }
 
             return self::sortTextEntities($results);
+        }
+
+        /**
+         * A tool for extracting named entities from the given input
+         *
+         * @param string $input
+         * @param array|ParseOptions|ParseOptions[] $options
+         * @return TextEntity[]
+         * @noinspection DuplicatedCode
+         * @noinspection PhpRedundantOptionalArgumentInspection
+         */
+        public static function extractEntities(string $input, array $options): array
+        {
+            $entities = [];
+            $parsed_text = $input;
+            if(in_array(ParseOptions::Markdown, $options))
+            {
+                /** @var TextEntity[] $entities */
+                $entities = array_merge($entities, self::extractStylizedEntities($input, ParseMode::Markdown));
+                $parsed_text =  self::extractTextWithoutEntities($parsed_text, ParseMode::Markdown);
+            }
+
+            if(in_array(ParseOptions::HTML, $options))
+            {
+                /** @var TextEntity[] $results */
+                $entities = array_merge($entities, self::extractStylizedEntities($input, ParseMode::HTML));
+                $parsed_text =  self::extractTextWithoutEntities($parsed_text, ParseMode::HTML);
+            }
+
+            // Extract other entities such as mentions and URLs
+            $extractor = new Extractor($parsed_text);
+
+            // Hashtags
+            if(in_array(ParseOptions::Hashtags, $options))
+            {
+                $offset = null;
+                foreach($extractor->extractHashtags() as $hashtag)
+                {
+                    $detected_offset = strpos($parsed_text, $hashtag, $offset) -1;
+                    $length = self::mbStringLength($hashtag) +1;
+
+                    $entities[] = TextEntity::fromArray([
+                        'type' => TextEntityType::Hashtag,
+                        'offset' => $detected_offset,
+                        'length' => $length,
+                        'value' => $hashtag
+                    ]);
+
+                    $offset = $detected_offset + $length;
+                }
+            }
+
+            if(in_array(ParseOptions::Mentions, $options))
+            {
+                // Mentions
+                $offset = null;
+                foreach($extractor->extractMentionedUsernames() as $mention)
+                {
+                    $detected_offset = strpos($parsed_text, $mention, $offset) -1;
+                    $length = self::mbStringLength($mention) +1;
+
+                    $entities[] = TextEntity::fromArray([
+                        'type' => TextEntityType::Mention,
+                        'offset' => $detected_offset,
+                        'length' => $length,
+                        'value' => $mention
+                    ]);
+
+                    $offset = $detected_offset + $length;
+                }
+            }
+
+            if(in_array(ParseOptions::URLs, $options))
+            {
+                // URLs
+                $offset = null;
+                foreach($extractor->extractURLs() as $url)
+                {
+                    $detected_offset = strpos($parsed_text, $url, $offset);
+                    $length = self::mbStringLength($url);
+
+                    $skip = false;
+                    foreach($entities as $entity)
+                    {
+                        if($entity->Type == TextEntityType::Url && $entity->Value == $url)
+                            $skip = true;
+                    }
+
+                    if($skip == false)
+                    {
+                        $entities[] = TextEntity::fromArray([
+                            'type' => TextEntityType::Url,
+                            'offset' => $detected_offset,
+                            'length' => $length,
+                            'value' => $url
+                        ]);
+                    }
+
+                    $offset = $detected_offset + $length;
+                }
+            }
+
+            return self::sortTextEntities($entities);
         }
 
         /**

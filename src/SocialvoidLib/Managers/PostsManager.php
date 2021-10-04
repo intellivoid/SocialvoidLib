@@ -17,10 +17,10 @@
     use msqg\QueryBuilder;
     use SocialvoidLib\Abstracts\Flags\PostFlags;
     use SocialvoidLib\Abstracts\Levels\PostPriorityLevel;
+    use SocialvoidLib\Abstracts\Options\ParseOptions;
     use SocialvoidLib\Abstracts\SearchMethods\PostSearchMethod;
     use SocialvoidLib\Abstracts\Types\CacheEntryObjectType;
     use SocialvoidLib\Classes\Converter;
-    use SocialvoidLib\Classes\PostText\Extractor;
     use SocialvoidLib\Classes\PostText\TwitterMethod\Parser;
     use SocialvoidLib\Classes\Utilities;
     use SocialvoidLib\Exceptions\GenericInternal\BackgroundWorkerNotEnabledException;
@@ -102,17 +102,20 @@
             $Properties = new Post\Properties();
 
             // Extract important information from this text
-            // TODO: Use the new entity extractor method (It works with Markdown!)
-            $Extractor = new Extractor($text);
-            $Entities = new Post\Entities();
-            $Entities->Hashtags = $Extractor->extractHashtags();
-            $Entities->UserMentions = $Extractor->extractMentionedUsernames();
-            $Entities->Urls = $Extractor->extractURLs();
+            $Entities = Utilities::extractEntities($text, [
+                ParseOptions::Hashtags,
+                ParseOptions::URLs,
+                ParseOptions::Mentions
+            ]);
 
             $MediaContentArray = [];
             /** @var Post\MediaContent $value */
             foreach($media_content as $value)
                 $MediaContentArray[] = $value->toArray();
+
+            $EntitiesArray = [];
+            foreach($Entities as $textEntity)
+                $EntitiesArray[] = $textEntity->toArray();
 
             $Query = QueryBuilder::insert_into('posts', [
                 'public_id' => $this->socialvoidLib->getDatabase()->real_escape_string($PublicID),
@@ -124,7 +127,7 @@
                 'flags' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($flags)),
                 'is_deleted' => (int)false,
                 'priority_level' => $this->socialvoidLib->getDatabase()->real_escape_string($priority),
-                'entities' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Entities->toArray())),
+                'text_entities' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($EntitiesArray)),
                 'likes' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
                 'reposts' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
                 'quotes' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
@@ -200,7 +203,7 @@
                 'repost_original_user_id',
                 'flags',
                 'priority_level',
-                'entities',
+                'text_entities',
                 'likes',
                 'likes_count',
                 'reposts',
@@ -229,7 +232,7 @@
                 {
                     $Row['properties'] = ($Row['properties'] == null ? null : ZiProto::decode($Row['properties']));
                     $Row['flags'] = ($Row['flags'] == null ? null : ZiProto::decode($Row['flags']));
-                    $Row['entities'] = ($Row['entities'] == null ? null : ZiProto::decode($Row['entities']));
+                    $Row['text_entities'] = ($Row['text_entities'] == null ? null : ZiProto::decode($Row['text_entities']));
                     $Row['likes'] = ($Row['likes'] == null ? null : ZiProto::decode($Row['likes']));
                     $Row['reposts'] = ($Row['reposts'] == null ? null : ZiProto::decode($Row['reposts']));
                     $Row['quotes'] = ($Row['quotes'] == null ? null : ZiProto::decode($Row['quotes']));
@@ -297,7 +300,7 @@
                 'flags' => ($post->Flags == null ?  $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])) : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Flags))),
                 'is_deleted' => (Converter::hasFlag($post->Flags, PostFlags::Deleted) ? (int)true : (int)false),
                 'priority_level' => ($post->PriorityLevel == null ? $this->socialvoidLib->getDatabase()->real_escape_string(PostPriorityLevel::None) : $this->socialvoidLib->getDatabase()->real_escape_string($post->PriorityLevel)),
-                'entities' => ($post->TextEntities == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($TextEntities))),
+                'text_entities' => ($post->TextEntities == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($TextEntities))),
                 'likes' => (is_null($post->Likes) ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Likes))),
                 'likes_count' => ($post->LikesCount == null ? 0 : (int)$post->LikesCount),
                 'reposts' => (is_null($post->Reposts) ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Reposts))),
@@ -599,11 +602,15 @@
             $Properties = new Post\Properties();
 
             // Extract important information from this text
-            $Extractor = new Extractor($text);
-            $Entities = new Post\Entities();
-            $Entities->Hashtags = $Extractor->extractHashtags();
-            $Entities->UserMentions = $Extractor->extractMentionedUsernames();
-            $Entities->Urls = $Extractor->extractURLs();
+            $Entities = Utilities::extractEntities($text, [
+                ParseOptions::Hashtags,
+                ParseOptions::URLs,
+                ParseOptions::Mentions
+            ]);
+
+            $EntitiesArray = [];
+            foreach($Entities as $textEntity)
+                $EntitiesArray[] = $textEntity->toArray();
 
             $MediaContentArray = [];
             /** @var Post\MediaContent $value */
@@ -622,7 +629,7 @@
                 'flags' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($flags)),
                 'is_deleted' => (int)false,
                 'priority_level' => $this->socialvoidLib->getDatabase()->real_escape_string($priority),
-                'entities' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Entities->toArray())),
+                'text_entities' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($EntitiesArray)),
                 'likes' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
                 'reposts' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
                 'quotes' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
@@ -710,11 +717,15 @@
             $Properties = new Post\Properties();
 
             // Extract important information from this text
-            $Extractor = new Extractor($text);
-            $Entities = new Post\Entities();
-            $Entities->Hashtags = $Extractor->extractHashtags();
-            $Entities->UserMentions = $Extractor->extractMentionedUsernames();
-            $Entities->Urls = $Extractor->extractURLs();
+            $Entities = Utilities::extractEntities($text, [
+                ParseOptions::Hashtags,
+                ParseOptions::URLs,
+                ParseOptions::Mentions
+            ]);
+
+            $EntitiesArray = [];
+            foreach($Entities as $textEntity)
+                $EntitiesArray[] = $textEntity->toArray();
 
             $MediaContentArray = [];
             /** @var Post\MediaContent $value */
@@ -733,7 +744,7 @@
                 'flags' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($flags)),
                 'is_deleted' => (int)false,
                 'priority_level' => $this->socialvoidLib->getDatabase()->real_escape_string($priority),
-                'entities' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Entities->toArray())),
+                'text_entities' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($EntitiesArray)),
                 'likes' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
                 'reposts' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
                 'quotes' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),

@@ -13,13 +13,12 @@
 
     namespace SocialvoidLib\Objects;
 
-    use SocialvoidLib\Objects\Post\Entities;
     use SocialvoidLib\Objects\Post\MediaContent;
     use SocialvoidLib\Objects\Post\Properties;
     use SocialvoidLib\Objects\Post\Quote;
     use SocialvoidLib\Objects\Post\Reply;
     use SocialvoidLib\Objects\Post\Repost;
-    use SocialvoidLib\Objects\Post\TextEntity;
+    use SocialvoidLib\Objects\Standard\TextEntity;
 
     /**
      * Class Post

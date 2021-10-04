@@ -147,6 +147,10 @@
         },
         {
             "required": true,
+            "file": "Abstracts/Options/ParseOptions.php"
+        },
+        {
+            "required": true,
             "file": "Abstracts/RegexPatterns.php"
         },
         {
