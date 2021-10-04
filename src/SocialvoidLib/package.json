@@ -775,10 +775,6 @@
         },
         {
             "required": true,
-            "file": "Objects/Post/Entities.php"
-        },
-        {
-            "required": true,
             "file": "Objects/Post/MediaContent.php"
         },
         {
@@ -796,10 +792,6 @@
         {
             "required": true,
             "file": "Objects/Post/Repost.php"
-        },
-        {
-            "required": true,
-            "file": "Objects/Post/TextEntity.php"
         },
         {
             "required": true,
