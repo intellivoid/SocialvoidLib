@@ -236,10 +236,10 @@
         public function updateSession(ActiveSession $activeSession): ActiveSession
         {
             $activeSession->LastActiveTimestamp = time();
-            $activeSession->ExpiresTimestamp = time() + (int)$this->socialvoidLib->getNetworkConfiguration()['UnauthorizedSessionTTL'];
+            $activeSession->ExpiresTimestamp = time() + (int)$this->socialvoidLib->getMainConfiguration()['UnauthorizedSessionTTL'];
 
             if($activeSession->Authenticated && $activeSession->UserID !== null)
-                $activeSession->ExpiresTimestamp = time() + (int)$this->socialvoidLib->getNetworkConfiguration()['AuthorizedSessionTTL'];
+                $activeSession->ExpiresTimestamp = time() + (int)$this->socialvoidLib->getMainConfiguration()['AuthorizedSessionTTL'];
 
             $Query = QueryBuilder::update("sessions", [
                 "flags" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($activeSession->Flags)),

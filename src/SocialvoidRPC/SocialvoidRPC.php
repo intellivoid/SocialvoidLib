@@ -140,6 +140,7 @@
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\ComposePost());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\DeletePost());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\GetPostLikes());
+            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\LikePost());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\GetPost());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\UnlikePost());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\QuotePost());

@@ -268,6 +268,8 @@
                 $stdPost->MentionedPeers[] = Peer::fromUser($user);
             }
 
+            $stdPost->addUserFlags($post, $this->networkSession->getAuthenticatedUser()->ID);
+
             return $stdPost;
         }
 
