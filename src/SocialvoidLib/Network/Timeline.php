@@ -591,19 +591,6 @@
         }
 
         /**
-         * Returns the amount of likes for a given post
-         *
-         * @param string $post_public_id
-         * @return int
-         * @throws DatabaseException
-         * @throws PostNotFoundException
-         */
-        public function getLikesCount(string $post_public_id): int
-        {
-            return $this->networkSession->getSocialvoidLib()->getLikesRecordManager()->getLikesCount($post_public_id);
-        }
-
-        /**
          * Distributes a new post to the timeline, and it's users
          *
          * @param string $post_public_id
