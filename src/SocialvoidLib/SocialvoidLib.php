@@ -65,11 +65,6 @@
         /**
          * @var mixed
          */
-        private $NetworkConfiguration;
-
-        /**
-         * @var mixed
-         */
         private $DataStorageConfiguration;
 
         /**
@@ -162,11 +157,6 @@
         /**
          * @var mixed
          */
-        private $EngineConfiguration;
-
-        /**
-         * @var mixed
-         */
         private $RedisBasicCacheConfiguration;
 
         /**
@@ -209,6 +199,11 @@
         private $SlaveManager;
 
         /**
+         * @var mixed
+         */
+        private $MainConfiguration;
+
+        /**
          * SocialvoidLib constructor.
          * @throws ConfigurationError
          * @throws DependencyError
@@ -220,6 +215,17 @@
             // Advanced Configuration Manager
             $this->acm = new acm2('SocialvoidLib');
 
+            // Network Schema Configuration
+            $MainSchema = new Schema();
+            $MainSchema->setName('Main');
+            $MainSchema->setDefinition("MainDomain", "socialvoid.cc");
+            $MainSchema->setDefinition("NetworkName", "Socialvoid");
+            $MainSchema->setDefinition("UnauthorizedSessionTTL", 600);
+            $MainSchema->setDefinition("AuthorizedSessionTTL", 259200);
+            $MainSchema->setDefinition("TimelineChunkSize", 20);
+            $MainSchema->setDefinition("TimelineMaxSize", 3200);
+            $this->acm->defineSchema($MainSchema);
+
             // Database Schema Configuration
             $DatabaseSchema = new Schema();
             $DatabaseSchema->setName('Database');
@@ -229,15 +235,6 @@
             $DatabaseSchema->setDefinition("Password", "");
             $DatabaseSchema->setDefinition("Name", 'socialvoid');
             $this->acm->defineSchema($DatabaseSchema);
-
-            // Network Schema Configuration
-            $NetworkSchema = new Schema();
-            $NetworkSchema->setName('Network');
-            $NetworkSchema->setDefinition("Domain", "socialvoid.cc");
-            $NetworkSchema->setDefinition("Name", "Socialvoid");
-            $NetworkSchema->setDefinition("UnauthorizedSessionTTL", 600);
-            $NetworkSchema->setDefinition("AuthorizedSessionTTL", 259200);
-            $this->acm->defineSchema($NetworkSchema);
 
             // Slave Servers Schema Configuration
             $SlaveServerSchema = new Schema();
@@ -269,14 +266,6 @@
             $ServiceEngineSchema->setDefinition("HeavyWorkers", 5);
             $ServiceEngineSchema->setDefinition("DisplayOutput", true);
             $this->acm->defineSchema($ServiceEngineSchema);
-
-            // Engine Schema Configuration
-            $EngineSchema = new Schema();
-            $EngineSchema->setName('Engine');
-            $EngineSchema->setDefinition("MaxPeerResolveCacheCount", 20);
-            $EngineSchema->setDefinition("TimelineMaxSize", 3200);
-            $EngineSchema->setDefinition("TimelineChunkSize", 20);
-            $this->acm->defineSchema($EngineSchema);
 
             // CDN Schema Configuration
             $CdnSchema = new Schema();
@@ -329,11 +318,10 @@
 
             try
             {
+                $this->MainConfiguration = $this->acm->getConfiguration("Main");
                 $this->DatabaseConfiguration = $this->acm->getConfiguration("Database");
-                $this->NetworkConfiguration = $this->acm->getConfiguration("Network");
                 $this->DataStorageConfiguration = $this->acm->getConfiguration("DataStorage");
                 $this->ServiceEngineConfiguration = $this->acm->getConfiguration("ServiceEngine");
-                $this->EngineConfiguration = $this->acm->getConfiguration("Engine");
                 $this->RedisBasicCacheConfiguration = $this->acm->getConfiguration("RedisBasicCache");
                 $this->CdnConfiguration = $this->acm->getConfiguration("CDN");
                 $this->RpcServerConfiguration = $this->acm->getConfiguration("RpcServer");
@@ -347,9 +335,8 @@
             $this->SlaveManager = new SlaveManager($this);
 
             // Initialize constants
-            self::defineLibConstant("SOCIALVOID_LIB_MAX_PEER_RESOLVE_CACHE_COUNT", $this->getEngineConfiguration()["MaxPeerResolveCacheCount"]);
-            self::defineLibConstant("SOCIALVOID_LIB_TIMELINE_MAX_SIZE", $this->getEngineConfiguration()["TimelineMaxSize"]);
-            self::defineLibConstant("SOCIALVOID_LIB_TIMELINE_CHUNK_SIZE", $this->getEngineConfiguration()["TimelineChunkSize"]);
+            self::defineLibConstant("SOCIALVOID_LIB_TIMELINE_MAX_SIZE", $this->getMainConfiguration()["TimelineMaxSize"]);
+            self::defineLibConstant("SOCIALVOID_LIB_TIMELINE_CHUNK_SIZE", $this->getMainConfiguration()["TimelineChunkSize"]);
 
             self::defineLibConstant("SOCIALVOID_LIB_BACKGROUND_WORKER_ENABLED", (bool)$this->getServiceEngineConfiguration()["EnableBackgroundWorker"]);
             self::defineLibConstant("SOCIALVOID_LIB_BACKGROUND_QUERY_WORKERS", (int)$this->getServiceEngineConfiguration()["QueryWorkers"]);
@@ -358,8 +345,8 @@
 
             self::defineLibConstant("SOCIALVOID_LIB_BASIC_CACHE_ENABLED", (bool)$this->getRedisBasicCacheConfiguration()["Enabled"]);
 
-            self::defineLibConstant("SOCIALVOID_LIB_NETWORK_DOMAIN", $this->getNetworkConfiguration()["Domain"]);
-            self::defineLibConstant("SOCIALVOID_LIB_NETWORK_NAME", $this->getNetworkConfiguration()["Name"]);
+            self::defineLibConstant("SOCIALVOID_LIB_NETWORK_DOMAIN", $this->getMainConfiguration()["MainDomain"]);
+            self::defineLibConstant("SOCIALVOID_LIB_NETWORK_NAME", $this->getMainConfiguration()["NetworkName"]);
 
             // Initialize UDP
             try
@@ -456,14 +443,6 @@
         public function getDataStorageConfiguration()
         {
             return $this->DataStorageConfiguration;
-        }
-
-        /**
-         * @return mixed
-         */
-        public function getNetworkConfiguration()
-        {
-            return $this->NetworkConfiguration;
         }
 
         /**
@@ -632,14 +611,6 @@
         /**
          * @return mixed
          */
-        public function getEngineConfiguration()
-        {
-            return $this->EngineConfiguration;
-        }
-
-        /**
-         * @return mixed
-         */
         public function getRedisBasicCacheConfiguration()
         {
             return $this->RedisBasicCacheConfiguration;
@@ -792,5 +763,13 @@
         public function getSlaveServerConfiguration()
         {
             return $this->SlaveServerConfiguration;
+        }
+
+        /**
+         * @return mixed
+         */
+        public function getMainConfiguration()
+        {
+            return $this->MainConfiguration;
         }
     }
