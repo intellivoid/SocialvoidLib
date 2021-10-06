@@ -12,7 +12,7 @@
     use SocialvoidAdmin\SocialvoidAdmin;
     use SocialvoidLib\Abstracts\StatusStates\HealthStatusCode;
 
-    class DebuggingTools implements MenuInterface
+    class ConfigurationEditorMenu implements MenuInterface
     {
         /**
          * @var CliMenu
@@ -24,7 +24,7 @@
             $this->menu = ($builder = new CliMenuBuilder)
                 ->setWidth($builder->getTerminal()->getWidth())
                 ->setBackgroundColour('magenta')
-                ->setTitle('Socialvoid Debugging Tools')
+                ->setTitle('Configuration Editor')
                 ->addItem('Truncate Servers', function (CliMenu $menu) {
                     $result = $menu->askText()
                         ->setPromptText('Enter "CONFIRM" to truncate all servers')

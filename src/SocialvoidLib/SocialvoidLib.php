@@ -218,22 +218,23 @@
             // Network Schema Configuration
             $MainSchema = new Schema();
             $MainSchema->setName('Main');
-            $MainSchema->setDefinition("MainDomain", "socialvoid.cc");
-            $MainSchema->setDefinition("NetworkName", "Socialvoid");
-            $MainSchema->setDefinition("UnauthorizedSessionTTL", 600);
-            $MainSchema->setDefinition("AuthorizedSessionTTL", 259200);
-            $MainSchema->setDefinition("TimelineChunkSize", 20);
-            $MainSchema->setDefinition("TimelineMaxSize", 3200);
+            $MainSchema->setDefinition('MainDomain', 'socialvoid.cc');
+            $MainSchema->setDefinition('NetworkName', 'Socialvoid');
+            $MainSchema->setDefinition('UnauthorizedSessionTTL', 600);
+            $MainSchema->setDefinition('AuthorizedSessionTTL', 259200);
+            $MainSchema->setDefinition('TimelineChunkSize', 20);
+            $MainSchema->setDefinition('TimelineMaxSize', 3200);
+            $MainSchema->setDefinition('TimelineMaxSize', 3200);
             $this->acm->defineSchema($MainSchema);
 
             // Database Schema Configuration
             $DatabaseSchema = new Schema();
             $DatabaseSchema->setName('Database');
-            $DatabaseSchema->setDefinition("Host", "127.0.0.1");
-            $DatabaseSchema->setDefinition("Port", "3306");
-            $DatabaseSchema->setDefinition("Username", "root");
-            $DatabaseSchema->setDefinition("Password", "");
-            $DatabaseSchema->setDefinition("Name", 'socialvoid');
+            $DatabaseSchema->setDefinition('Host', '127.0.0.1');
+            $DatabaseSchema->setDefinition('Port', '3306');
+            $DatabaseSchema->setDefinition('Username', 'root');
+            $DatabaseSchema->setDefinition('Password', '');
+            $DatabaseSchema->setDefinition('Name', 'socialvoid');
             $this->acm->defineSchema($DatabaseSchema);
 
             // Slave Servers Schema Configuration
@@ -247,70 +248,70 @@
             // RPC Schema Configuration
             $RpcSchema = new Schema();
             $RpcSchema->setName('RpcServer');
-            $RpcSchema->setDefinition("EnableBackgroundWorker", True);
-            $RpcSchema->setDefinition("Workers", 100);
-            $RpcSchema->setDefinition("GearmanHost", "127.0.0.1");
-            $RpcSchema->setDefinition("GearmanPort", 4730);
-            $RpcSchema->setDefinition("ServerName", "Socialvoid RPC");
-            $RpcSchema->setDefinition("MaxRequests", 20);
+            $RpcSchema->setDefinition('EnableBackgroundWorker', True);
+            $RpcSchema->setDefinition('Workers', 100);
+            $RpcSchema->setDefinition('GearmanHost', '127.0.0.1');
+            $RpcSchema->setDefinition('GearmanPort', 4730);
+            $RpcSchema->setDefinition('ServerName', 'Socialvoid RPC');
+            $RpcSchema->setDefinition('MaxRequests', 20);
             $this->acm->defineSchema($RpcSchema);
 
             // Service Engine Schema Configuration
             $ServiceEngineSchema = new Schema();
             $ServiceEngineSchema->setName('ServiceEngine');
-            $ServiceEngineSchema->setDefinition("EnableBackgroundWorker", True);
-            $ServiceEngineSchema->setDefinition("GearmanHost", "127.0.0.1");
-            $ServiceEngineSchema->setDefinition("GearmanPort", 4730);
-            $ServiceEngineSchema->setDefinition("QueryWorkers", 30);
-            $ServiceEngineSchema->setDefinition("UpdateWorkers", 20);
-            $ServiceEngineSchema->setDefinition("HeavyWorkers", 5);
-            $ServiceEngineSchema->setDefinition("DisplayOutput", true);
+            $ServiceEngineSchema->setDefinition('EnableBackgroundWorker', True);
+            $ServiceEngineSchema->setDefinition('GearmanHost', '127.0.0.1');
+            $ServiceEngineSchema->setDefinition('GearmanPort', 4730);
+            $ServiceEngineSchema->setDefinition('QueryWorkers', 30);
+            $ServiceEngineSchema->setDefinition('UpdateWorkers', 20);
+            $ServiceEngineSchema->setDefinition('HeavyWorkers', 5);
+            $ServiceEngineSchema->setDefinition('DisplayOutput', true);
             $this->acm->defineSchema($ServiceEngineSchema);
 
             // CDN Schema Configuration
             $CdnSchema = new Schema();
             $CdnSchema->setName('CDN');
-            $CdnSchema->setDefinition("CdnEndpoint", "https://cdn.socialvoid.cc");
-            $CdnSchema->setDefinition("MaxFileUploadSize", 26214400); // 25 MB
-            $CdnSchema->setDefinition("TelegramCdnEnabled", True);
-            $CdnSchema->setDefinition("TelegramCdnEnabled", True);
-            $CdnSchema->setDefinition("TelegramBotToken", "<BOT TOKEN>");
-            $CdnSchema->setDefinition("TelegramChannels", []);
+            $CdnSchema->setDefinition('CdnEndpoint', 'https://cdn.socialvoid.cc');
+            $CdnSchema->setDefinition('MaxFileUploadSize', 26214400); // 25 MB
+            $CdnSchema->setDefinition('TelegramCdnEnabled', True);
+            $CdnSchema->setDefinition('TelegramCdnEnabled', True);
+            $CdnSchema->setDefinition('TelegramBotToken', '<BOT TOKEN>');
+            $CdnSchema->setDefinition('TelegramChannels', []);
             $this->acm->defineSchema($CdnSchema);
 
             // Redis Basic Cache (Entity resolve cache)
             $RedisBasicCacheSchema = new Schema();
             $RedisBasicCacheSchema->setName('RedisBasicCache');
-            $RedisBasicCacheSchema->setDefinition("Enabled", True);
-            $RedisBasicCacheSchema->setDefinition("UseAuthentication", True);
-            $RedisBasicCacheSchema->setDefinition("UseCompression", True);
-            $RedisBasicCacheSchema->setDefinition("CompressionLevel", 9);
-            $RedisBasicCacheSchema->setDefinition("PeerCacheEnabled", True);
-            $RedisBasicCacheSchema->setDefinition("PeerCacheTTL", 500);
-            $RedisBasicCacheSchema->setDefinition("PeerCacheLimit", 1000);
-            $RedisBasicCacheSchema->setDefinition("PostCacheEnabled", True);
-            $RedisBasicCacheSchema->setDefinition("PostCacheTTL", 300);
-            $RedisBasicCacheSchema->setDefinition("PostCacheLimit", 1000);
-            $RedisBasicCacheSchema->setDefinition("SessionCacheEnabled", True);
-            $RedisBasicCacheSchema->setDefinition("SessionCacheTTL", 300);
-            $RedisBasicCacheSchema->setDefinition("SessionCacheLimit", 1000);
-            $RedisBasicCacheSchema->setDefinition("DocumentCacheEnabled", True);
-            $RedisBasicCacheSchema->setDefinition("DocumentCacheTTL", 300);
-            $RedisBasicCacheSchema->setDefinition("DocumentCacheLimit", 1000);
-            $RedisBasicCacheSchema->setDefinition("TelegramCdnCacheEnabled", True);
-            $RedisBasicCacheSchema->setDefinition("TelegramCdnCacheTTL", 300);
-            $RedisBasicCacheSchema->setDefinition("TelegramCdnCacheLimit", 1000);
-            $RedisBasicCacheSchema->setDefinition("RedisHost", "127.0.0.1");
-            $RedisBasicCacheSchema->setDefinition("RedisPort", 6379);
-            $RedisBasicCacheSchema->setDefinition("Password", "admin");
+            $RedisBasicCacheSchema->setDefinition('Enabled', True);
+            $RedisBasicCacheSchema->setDefinition('UseAuthentication', True);
+            $RedisBasicCacheSchema->setDefinition('UseCompression', True);
+            $RedisBasicCacheSchema->setDefinition('CompressionLevel', 9);
+            $RedisBasicCacheSchema->setDefinition('PeerCacheEnabled', True);
+            $RedisBasicCacheSchema->setDefinition('PeerCacheTTL', 500);
+            $RedisBasicCacheSchema->setDefinition('PeerCacheLimit', 1000);
+            $RedisBasicCacheSchema->setDefinition('PostCacheEnabled', True);
+            $RedisBasicCacheSchema->setDefinition('PostCacheTTL', 300);
+            $RedisBasicCacheSchema->setDefinition('PostCacheLimit', 1000);
+            $RedisBasicCacheSchema->setDefinition('SessionCacheEnabled', True);
+            $RedisBasicCacheSchema->setDefinition('SessionCacheTTL', 300);
+            $RedisBasicCacheSchema->setDefinition('SessionCacheLimit', 1000);
+            $RedisBasicCacheSchema->setDefinition('DocumentCacheEnabled', True);
+            $RedisBasicCacheSchema->setDefinition('DocumentCacheTTL', 300);
+            $RedisBasicCacheSchema->setDefinition('DocumentCacheLimit', 1000);
+            $RedisBasicCacheSchema->setDefinition('TelegramCdnCacheEnabled', True);
+            $RedisBasicCacheSchema->setDefinition('TelegramCdnCacheTTL', 300);
+            $RedisBasicCacheSchema->setDefinition('TelegramCdnCacheLimit', 1000);
+            $RedisBasicCacheSchema->setDefinition('RedisHost', '127.0.0.1');
+            $RedisBasicCacheSchema->setDefinition('RedisPort', 6379);
+            $RedisBasicCacheSchema->setDefinition('Password', 'admin');
             $this->acm->defineSchema($RedisBasicCacheSchema);
 
             // Data storage Schema Configuration
             $DataStorageSchema = new Schema();
             $DataStorageSchema->setName('DataStorage');
-            $DataStorageSchema->setDefinition("UserAvatarsLocation", "/var/socialvoid/avatars");
-            $DataStorageSchema->setDefinition("LegalDocumentsLocation", "/var/socialvoid/legal");
-            $DataStorageSchema->setDefinition("WorkingLocation", "/var/socialvoid/lib");
+            $DataStorageSchema->setDefinition('UserAvatarsLocation', '/var/socialvoid/avatars');
+            $DataStorageSchema->setDefinition('LegalDocumentsLocation', '/var/socialvoid/legal');
+            $DataStorageSchema->setDefinition('WorkingLocation', '/var/socialvoid/lib');
             $this->acm->defineSchema($DataStorageSchema);
 
             // Save any changes
@@ -318,35 +319,35 @@
 
             try
             {
-                $this->MainConfiguration = $this->acm->getConfiguration("Main");
-                $this->DatabaseConfiguration = $this->acm->getConfiguration("Database");
-                $this->DataStorageConfiguration = $this->acm->getConfiguration("DataStorage");
-                $this->ServiceEngineConfiguration = $this->acm->getConfiguration("ServiceEngine");
-                $this->RedisBasicCacheConfiguration = $this->acm->getConfiguration("RedisBasicCache");
-                $this->CdnConfiguration = $this->acm->getConfiguration("CDN");
-                $this->RpcServerConfiguration = $this->acm->getConfiguration("RpcServer");
+                $this->MainConfiguration = $this->acm->getConfiguration('Main');
+                $this->DatabaseConfiguration = $this->acm->getConfiguration('Database');
+                $this->DataStorageConfiguration = $this->acm->getConfiguration('DataStorage');
+                $this->ServiceEngineConfiguration = $this->acm->getConfiguration('ServiceEngine');
+                $this->RedisBasicCacheConfiguration = $this->acm->getConfiguration('RedisBasicCache');
+                $this->CdnConfiguration = $this->acm->getConfiguration('CDN');
+                $this->RpcServerConfiguration = $this->acm->getConfiguration('RpcServer');
                 $this->SlaveServerConfiguration = $this->acm->getConfiguration('SlaveServers');
             }
             catch(Exception $e)
             {
-                throw new ConfigurationError("There was an error while trying to load ACM", 0, $e);
+                throw new ConfigurationError('There was an error while trying to load ACM', 0, $e);
             }
 
             $this->SlaveManager = new SlaveManager($this);
 
             // Initialize constants
-            self::defineLibConstant("SOCIALVOID_LIB_TIMELINE_MAX_SIZE", $this->getMainConfiguration()["TimelineMaxSize"]);
-            self::defineLibConstant("SOCIALVOID_LIB_TIMELINE_CHUNK_SIZE", $this->getMainConfiguration()["TimelineChunkSize"]);
+            self::defineLibConstant('SOCIALVOID_LIB_TIMELINE_MAX_SIZE', $this->getMainConfiguration()['TimelineMaxSize']);
+            self::defineLibConstant('SOCIALVOID_LIB_TIMELINE_CHUNK_SIZE', $this->getMainConfiguration()['TimelineChunkSize']);
 
-            self::defineLibConstant("SOCIALVOID_LIB_BACKGROUND_WORKER_ENABLED", (bool)$this->getServiceEngineConfiguration()["EnableBackgroundWorker"]);
-            self::defineLibConstant("SOCIALVOID_LIB_BACKGROUND_QUERY_WORKERS", (int)$this->getServiceEngineConfiguration()["QueryWorkers"]);
-            self::defineLibConstant("SOCIALVOID_LIB_BACKGROUND_UPDATE_WORKERS", (int)$this->getServiceEngineConfiguration()["UpdateWorkers"]);
-            self::defineLibConstant("SOCIALVOID_LIB_BACKGROUND_HEAVY_WORKERS", (int)$this->getServiceEngineConfiguration()["HeavyWorkers"]);
+            self::defineLibConstant('SOCIALVOID_LIB_BACKGROUND_WORKER_ENABLED', (bool)$this->getServiceEngineConfiguration()['EnableBackgroundWorker']);
+            self::defineLibConstant('SOCIALVOID_LIB_BACKGROUND_QUERY_WORKERS', (int)$this->getServiceEngineConfiguration()['QueryWorkers']);
+            self::defineLibConstant('SOCIALVOID_LIB_BACKGROUND_UPDATE_WORKERS', (int)$this->getServiceEngineConfiguration()['UpdateWorkers']);
+            self::defineLibConstant('SOCIALVOID_LIB_BACKGROUND_HEAVY_WORKERS', (int)$this->getServiceEngineConfiguration()['HeavyWorkers']);
 
-            self::defineLibConstant("SOCIALVOID_LIB_BASIC_CACHE_ENABLED", (bool)$this->getRedisBasicCacheConfiguration()["Enabled"]);
+            self::defineLibConstant('SOCIALVOID_LIB_BASIC_CACHE_ENABLED', (bool)$this->getRedisBasicCacheConfiguration()['Enabled']);
 
-            self::defineLibConstant("SOCIALVOID_LIB_NETWORK_DOMAIN", $this->getMainConfiguration()["MainDomain"]);
-            self::defineLibConstant("SOCIALVOID_LIB_NETWORK_NAME", $this->getMainConfiguration()["NetworkName"]);
+            self::defineLibConstant('SOCIALVOID_LIB_NETWORK_DOMAIN', $this->getMainConfiguration()['MainDomain']);
+            self::defineLibConstant('SOCIALVOID_LIB_NETWORK_NAME', $this->getMainConfiguration()['NetworkName']);
 
             // Initialize UDP
             try
@@ -356,11 +357,11 @@
             }
             catch(Exception $e)
             {
-                throw new DependencyError("There was an error while trying to initialize UDP", 0, $e);
+                throw new DependencyError('There was an error while trying to initialize UDP', 0, $e);
             }
 
-            if($this->getServiceEngineConfiguration()["EnableBackgroundWorker"] && function_exists("gearman_version") == false)
-                throw new DependencyError("ServiceEngine has BackgroundWorker enabled but the gearman extension (php-gearman) is not installed.");
+            if($this->getServiceEngineConfiguration()['EnableBackgroundWorker'] && function_exists('gearman_version') == false)
+                throw new DependencyError('ServiceEngine has BackgroundWorker enabled but the gearman extension (php-gearman) is not installed.');
         }
 
         /**
@@ -421,11 +422,11 @@
             }
 
             $this->database = new mysqli(
-                $this->DatabaseConfiguration["Host"],
-                $this->DatabaseConfiguration["Username"],
-                $this->DatabaseConfiguration["Password"],
-                $this->DatabaseConfiguration["Name"],
-                $this->DatabaseConfiguration["Port"]
+                $this->DatabaseConfiguration['Host'],
+                $this->DatabaseConfiguration['Username'],
+                $this->DatabaseConfiguration['Password'],
+                $this->DatabaseConfiguration['Name'],
+                $this->DatabaseConfiguration['Port']
             );
         }
 
@@ -529,8 +530,8 @@
          */
         public function getBackgroundWorker(): BackgroundWorker
         {
-            if((bool)$this->getServiceEngineConfiguration()["EnableBackgroundWorker"] == false)
-                throw new BackgroundWorkerNotEnabledException("BackgroundWorker is not enabled for this build");
+            if((bool)$this->getServiceEngineConfiguration()['EnableBackgroundWorker'] == false)
+                throw new BackgroundWorkerNotEnabledException('BackgroundWorker is not enabled for this build');
 
             if($this->BackgroundWorker == null)
                 $this->BackgroundWorker = new BackgroundWorker();
@@ -538,8 +539,8 @@
             if($this->BackgroundWorkerInitialized == false)
             {
                 $this->BackgroundWorker->getClient()->addServer(
-                    $this->getServiceEngineConfiguration()["GearmanHost"],
-                    (int)$this->getServiceEngineConfiguration()["GearmanPort"]
+                    $this->getServiceEngineConfiguration()['GearmanHost'],
+                    (int)$this->getServiceEngineConfiguration()['GearmanPort']
                 );
 
                 $this->BackgroundWorkerInitialized = true;
@@ -627,39 +628,39 @@
             if($this->BasicRedis !== null && $this->BasicRedis->isConnected())
                 return;
 
-            if($this->getRedisBasicCacheConfiguration()["Enabled"] == false)
-                throw new RedisCacheException("RedisBasicCache is not enabled");
+            if($this->getRedisBasicCacheConfiguration()['Enabled'] == false)
+                throw new RedisCacheException('RedisBasicCache is not enabled');
 
-            if(class_exists("Redis") == false)
-                throw new DependencyError("RedisBasicCache is enabled but the Redis Extension (php-redis) is not installed");
+            if(class_exists('Redis') == false)
+                throw new DependencyError('RedisBasicCache is enabled but the Redis Extension (php-redis) is not installed');
 
             if($this->BasicRedis == null)
                 $this->BasicRedis = new Redis();
 
             if($this->BasicRedis->isConnected() == false)
             {
-                if($this->getRedisBasicCacheConfiguration()["UseCompression"])
+                if($this->getRedisBasicCacheConfiguration()['UseCompression'])
                 {
                     if (
-                        (int)$this->getRedisBasicCacheConfiguration()["CompressionLevel"] < -1 ||
-                        (int)$this->getRedisBasicCacheConfiguration()["CompressionLevel"] > 9
+                        (int)$this->getRedisBasicCacheConfiguration()['CompressionLevel'] < -1 ||
+                        (int)$this->getRedisBasicCacheConfiguration()['CompressionLevel'] > 9
                     )
-                        throw new RedisCacheException("Compression is enabled but the compression level must be a value between -1 & 9");
+                        throw new RedisCacheException('Compression is enabled but the compression level must be a value between -1 & 9');
 
-                    if (function_exists("gzcompress") == false)
+                    if (function_exists('gzcompress') == false)
                     {
-                        throw new DependencyError("RedisBasiCache uses compression but the compression extension (zlib & php-zip) is not installed");
+                        throw new DependencyError('RedisBasiCache uses compression but the compression extension (zlib & php-zip) is not installed');
                     }
                 }
 
                 $this->BasicRedis->connect(
-                    $this->getRedisBasicCacheConfiguration()["RedisHost"],
-                    $this->getRedisBasicCacheConfiguration()["RedisPort"]
+                    $this->getRedisBasicCacheConfiguration()['RedisHost'],
+                    $this->getRedisBasicCacheConfiguration()['RedisPort']
                 );
 
-                if($this->getRedisBasicCacheConfiguration()["UseAuthentication"])
+                if($this->getRedisBasicCacheConfiguration()['UseAuthentication'])
                 {
-                    $this->BasicRedis->auth($this->getRedisBasicCacheConfiguration()["Password"]);
+                    $this->BasicRedis->auth($this->getRedisBasicCacheConfiguration()['Password']);
                 }
             }
         }

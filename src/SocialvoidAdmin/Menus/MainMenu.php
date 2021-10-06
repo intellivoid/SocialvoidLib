@@ -33,7 +33,7 @@
                     $health_status_menu->open();
                 })
                 ->addItem('Debugging Tools', function (CliMenu $menu) {
-                    $debugging_menu = new DebuggingTools();
+                    $debugging_menu = new ConfigurationEditorMenu();
                     $debugging_menu->open();
                 })
                 ->build();

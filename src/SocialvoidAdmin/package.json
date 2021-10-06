@@ -33,6 +33,10 @@
         },
         {
             "required": true,
+            "file": "Menus/ConfigurationEditorMenu.php"
+        },
+        {
+            "required": true,
             "file": "Menus/DebuggingTools.php"
         },
         {
