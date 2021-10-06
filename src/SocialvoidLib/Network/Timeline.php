@@ -24,7 +24,12 @@
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSlaveHashException;
     use SocialvoidLib\Exceptions\GenericInternal\ServiceJobException;
+    use SocialvoidLib\Exceptions\GenericInternal\UserHasInvalidSlaveHashException;
     use SocialvoidLib\Exceptions\Internal\FollowerDataNotFound;
+    use SocialvoidLib\Exceptions\Internal\LikeRecordNotFoundException;
+    use SocialvoidLib\Exceptions\Internal\QuoteRecordNotFoundException;
+    use SocialvoidLib\Exceptions\Internal\ReplyRecordNotFoundException;
+    use SocialvoidLib\Exceptions\Internal\RepostRecordNotFoundException;
     use SocialvoidLib\Exceptions\Internal\UserTimelineNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException;
     use SocialvoidLib\Exceptions\Standard\Network\AlreadyRepostedException;
@@ -32,6 +37,8 @@
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\PostDeletedException;
     use SocialvoidLib\Exceptions\Standard\Network\PostNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidLimitValueException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidOffsetValueException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPostTextException;
     use SocialvoidLib\NetworkSession;
     use SocialvoidLib\Objects\Post;
@@ -460,12 +467,13 @@
          * @throws DatabaseException
          * @throws FollowerDataNotFound
          * @throws InvalidSearchMethodException
+         * @throws InvalidSlaveHashException
          * @throws PostDeletedException
          * @throws PostNotFoundException
+         * @throws ServerNotReachableException
          * @throws UserTimelineNotFoundException
-         * @throws InvalidSlaveHashException
-         * @throws ServerNotReachableException
-         * @throws ServerNotReachableException
+         * @throws UserHasInvalidSlaveHashException
+         * @throws RepostRecordNotFoundException
          */
         public function repostPost(string $post_public_id): Post
         {
@@ -500,6 +508,7 @@
          * @throws InvalidSlaveHashException
          * @throws PostDeletedException
          * @throws PostNotFoundException
+         * @throws LikeRecordNotFoundException
          */
         public function likePost(string $post_public_id): void
         {
@@ -518,9 +527,10 @@
          * @throws CacheException
          * @throws DatabaseException
          * @throws InvalidSearchMethodException
+         * @throws InvalidSlaveHashException
          * @throws PostDeletedException
          * @throws PostNotFoundException
-         * @throws InvalidSlaveHashException
+         * @throws LikeRecordNotFoundException
          */
         public function unlikePost(string $post_public_id): void
         {
@@ -548,18 +558,27 @@
          * @throws DocumentNotFoundException
          * @throws FileNotFoundException
          * @throws ImageTooSmallException
+         * @throws InvalidLimitValueException
+         * @throws InvalidOffsetValueException
          * @throws InvalidSearchMethodException
-         * @throws InvalidSlaveHashException
          * @throws InvalidZimageFileException
          * @throws PeerNotFoundException
+         * @throws PostNotFoundException
          * @throws ServerNotReachableException
          * @throws ServiceJobException
          * @throws SizeNotSetException
          * @throws UnsupportedAvatarGeneratorException
          * @throws UnsupportedImageTypeException
          */
-        public function getLikes(string $post_public_id, int $offset=0, int $limit=100): array
+        public function getLikes(string $post_public_id, int $offset=0, int $limit=20): array
         {
+            if($offset < 0)
+                throw new InvalidOffsetValueException('The offset value cannot be a negative value');
+            if($limit < 1)
+                throw new InvalidLimitValueException('The limit value must be a value greater than 0');
+            if($limit > 20)
+                throw new InvalidLimitValueException('The limit value cannot exceed 20');
+
             $Likes = $this->networkSession->getSocialvoidLib()->getLikesRecordManager()->getLikes($post_public_id, $offset, $limit);
 
             $search_query = [];
@@ -569,6 +588,19 @@
             }
 
             return $this->networkSession->getUsers()->resolveMultiplePeers($search_query);
+        }
+
+        /**
+         * Returns the amount of likes for a given post
+         *
+         * @param string $post_public_id
+         * @return int
+         * @throws DatabaseException
+         * @throws PostNotFoundException
+         */
+        public function getLikesCount(string $post_public_id): int
+        {
+            return $this->networkSession->getSocialvoidLib()->getLikesRecordManager()->getLikesCount($post_public_id);
         }
 
         /**
@@ -585,12 +617,12 @@
          * @throws FollowerDataNotFound
          * @throws InvalidPostTextException
          * @throws InvalidSearchMethodException
+         * @throws InvalidSlaveHashException
          * @throws PostDeletedException
          * @throws PostNotFoundException
+         * @throws ServerNotReachableException
          * @throws UserTimelineNotFoundException
-         * @throws InvalidSlaveHashException
-         * @throws ServerNotReachableException
-         * @throws ServerNotReachableException
+         * @throws QuoteRecordNotFoundException
          */
         public function quotePost(string $post_public_id, string $text, array $media_content=[], array $flags=[]): Post
         {
@@ -629,9 +661,10 @@
          * @throws FollowerDataNotFound
          * @throws InvalidPostTextException
          * @throws InvalidSearchMethodException
+         * @throws InvalidSlaveHashException
          * @throws PostDeletedException
          * @throws PostNotFoundException
-         * @throws InvalidSlaveHashException
+         * @throws ReplyRecordNotFoundException
          */
         public function replyToPost(string $post_public_id, string $text, array $media_content=[], array $flags=[]): Post
         {
@@ -665,6 +698,9 @@
          * @throws InvalidSlaveHashException
          * @throws PostDeletedException
          * @throws PostNotFoundException
+         * @throws QuoteRecordNotFoundException
+         * @throws ReplyRecordNotFoundException
+         * @throws RepostRecordNotFoundException
          */
         public function deletePost(string $post_public_id): bool
         {
