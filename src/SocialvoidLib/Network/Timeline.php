@@ -576,8 +576,8 @@
                 throw new InvalidOffsetValueException('The offset value cannot be a negative value');
             if($limit < 1)
                 throw new InvalidLimitValueException('The limit value must be a value greater than 0');
-            if($limit > 20)
-                throw new InvalidLimitValueException('The limit value cannot exceed 20');
+            if($limit > 25)
+                throw new InvalidLimitValueException('The limit value cannot exceed 25');
 
             $Likes = $this->networkSession->getSocialvoidLib()->getLikesRecordManager()->getLikes($post_public_id, $offset, $limit);
 

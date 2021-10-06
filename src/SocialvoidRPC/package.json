@@ -125,11 +125,11 @@
         },
         {
             "required": true,
-            "file": "Methods/Timeline/GetLikes.php"
+            "file": "Methods/Timeline/GetPost.php"
         },
         {
             "required": true,
-            "file": "Methods/Timeline/GetPost.php"
+            "file": "Methods/Timeline/GetPostLikes.php"
         },
         {
             "required": true,

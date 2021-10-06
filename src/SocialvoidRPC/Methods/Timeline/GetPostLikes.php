@@ -37,7 +37,7 @@
     use Zimage\Exceptions\SizeNotSetException;
     use Zimage\Exceptions\UnsupportedImageTypeException;
 
-    class GetLikes implements MethodInterface
+    class GetPostLikes implements MethodInterface
     {
 
         /**
@@ -45,7 +45,7 @@
          */
         public function getMethodName(): string
         {
-            return 'GetLikes';
+            return 'GetPostLikes';
         }
 
         /**
@@ -53,7 +53,7 @@
          */
         public function getMethod(): string
         {
-            return 'timeline.get_likes';
+            return 'timeline.get_post_likes';
         }
 
         /**
@@ -77,7 +77,6 @@
          * @throws InvalidPostTextException
          * @throws InvalidSessionIdentificationException
          * @throws MissingParameterException
-         * @throws InvalidParametersException
          * @noinspection DuplicatedCode
          */
         private function checkParameters(Request $request)
@@ -96,20 +95,10 @@
             {
                 $request->Parameters['offset'] = 0;
             }
-            else
-            {
-                if((int)$request->Parameters['offset'] < 0)
-                    throw new InvalidParametersException('The parameter \'offset\' cannot be less than 0.');
-            }
 
             if(isset($request->Parameters['limit']))
             {
                 $request->Parameters['limit'] = 25;
-            }
-            else
-            {
-                if((int)$request->Parameters['limit'] < 1 || (int)$request->Parameters['limit'] > 25)
-                    throw new InvalidParametersException('The parameter \'limit\' cannot be less than 1 or greater than 25');
             }
         }
 
@@ -127,11 +116,9 @@
          * @throws ImageTooSmallException
          * @throws InternalServerException
          * @throws InvalidClientPublicHashException
-         * @throws InvalidParametersException
          * @throws InvalidPostTextException
          * @throws InvalidSearchMethodException
          * @throws InvalidSessionIdentificationException
-         * @throws InvalidSlaveHashException
          * @throws InvalidZimageFileException
          * @throws MissingParameterException
          * @throws NotAuthenticatedException
