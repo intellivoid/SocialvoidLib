@@ -12,7 +12,7 @@
     use SocialvoidAdmin\Menus\MainMenu;
     use SocialvoidAdmin\SocialvoidAdmin;
 
-    class MasterMySqlDatabase implements MenuInterface
+    class RpcServer implements MenuInterface
     {
         /**
          * @var CliMenu
@@ -21,16 +21,16 @@
 
         public function __construct()
         {
-            $DatabaseConfiguration = SocialvoidAdmin::getSocialvoidLib()->getDatabaseConfiguration();
+            $RpcServerConfiguration = SocialvoidAdmin::getSocialvoidLib()->getRpcServerConfiguration();
 
             $builder = new CliMenuBuilder();
             $builder->setWidth($builder->getTerminal()->getWidth());
             $builder->setBackgroundColour('magenta');
-            $builder->setTitle('Master MySQL Database Configuration');
+            $builder->setTitle('RPC Server Configuration');
 
             $supported_values = ['string', 'integer', 'boolean', 'double'];
 
-            foreach($DatabaseConfiguration as $config_name => $value)
+            foreach($RpcServerConfiguration as $config_name => $value)
             {
                 if(in_array(gettype($value), $supported_values) == false)
                     continue;
@@ -42,7 +42,7 @@
                         ->setPlaceholderText($value)
                         ->ask();
 
-                    if($result->fetch() == (string)$value || $result->fetch() == 'CANCEL')
+                    if($result->fetch() == $value || $result->fetch() == 'CANCEL')
                     {
                         $menu->confirm('No changes has been made.')->display();
                     }
@@ -52,19 +52,19 @@
                         {
                             case 'integer':
                                 SocialvoidAdmin::getSocialvoidLib()->getAcm()->updateConfigurationValue(
-                                    'MasterMySqlDatabase', $config_name, (int)$result->fetch()
+                                    'RpcServer', $config_name, (int)$result->fetch()
                                 );
                                 break;
 
                             case 'boolean':
                                 SocialvoidAdmin::getSocialvoidLib()->getAcm()->updateConfigurationValue(
-                                    'MasterMySqlDatabase', $config_name, (boolean)$result->fetch()
+                                    'RpcServer', $config_name, (boolean)$result->fetch()
                                 );
                                 break;
 
                             case 'double':
                                 SocialvoidAdmin::getSocialvoidLib()->getAcm()->updateConfigurationValue(
-                                    'MasterMySqlDatabase', $config_name, (double)$result->fetch()
+                                    'RpcServer', $config_name, (double)$result->fetch()
                                 );
                                 break;
 
@@ -72,7 +72,7 @@
                             default:
                                 /** @noinspection PhpCastIsUnnecessaryInspection */
                                 SocialvoidAdmin::getSocialvoidLib()->getAcm()->updateConfigurationValue(
-                                    'MasterMySqlDatabase', $config_name, (string)$result->fetch()
+                                    'RpcServer', $config_name, (string)$result->fetch()
                                 );
                         }
 
@@ -80,7 +80,7 @@
                         $menu->confirm('Changes applied successfully')->display();
                     }
 
-                    $new_menu = new MasterMySqlDatabase();
+                    $new_menu = new RpcServer();
                     $new_menu->open();
                 });
             }

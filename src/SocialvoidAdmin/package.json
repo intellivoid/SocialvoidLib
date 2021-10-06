@@ -41,6 +41,10 @@
         },
         {
             "required": true,
+            "file": "Menus/ConfigurationEditors/RpcServer.php"
+        },
+        {
+            "required": true,
             "file": "Menus/DebuggingTools.php"
         },
         {

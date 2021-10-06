@@ -10,6 +10,7 @@
     use PhpSchool\CliMenu\MenuItem\AsciiArtItem;
     use SocialvoidAdmin\Interfaces\MenuInterface;
     use SocialvoidAdmin\Menus\ConfigurationEditors\MasterMySqlDatabase;
+    use SocialvoidAdmin\Menus\ConfigurationEditors\RpcServer;
     use SocialvoidAdmin\SocialvoidAdmin;
     use SocialvoidLib\Abstracts\StatusStates\HealthStatusCode;
 
@@ -28,6 +29,10 @@
                 ->setTitle('Configuration Editor')
                 ->addItem('Master MySQL Database', function (CliMenu $menu) {
                     $new_menu = new MasterMySqlDatabase();
+                    $new_menu->open();
+                })
+                ->addItem('RPC Server', function (CliMenu $menu) {
+                    $new_menu = new RpcServer();
                     $new_menu->open();
                 })
                 ->addItem('Go Back', function (CliMenu $menu) {
