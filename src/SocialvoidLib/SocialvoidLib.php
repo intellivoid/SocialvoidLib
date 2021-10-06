@@ -222,14 +222,14 @@
             $MainSchema->setDefinition('NetworkName', 'Socialvoid');
             $MainSchema->setDefinition('UnauthorizedSessionTTL', 600);
             $MainSchema->setDefinition('AuthorizedSessionTTL', 259200);
-            $MainSchema->setDefinition('TimelineChunkSize', 20);
+            $MainSchema->setDefinition('TimelineChunkSize', 20);x``
             $MainSchema->setDefinition('TimelineMaxSize', 3200);
             $MainSchema->setDefinition('TimelineMaxSize', 3200);
             $this->acm->defineSchema($MainSchema);
 
             // Database Schema Configuration
             $DatabaseSchema = new Schema();
-            $DatabaseSchema->setName('Database');
+            $DatabaseSchema->setName('MasterMySqlDatabase');
             $DatabaseSchema->setDefinition('Host', '127.0.0.1');
             $DatabaseSchema->setDefinition('Port', '3306');
             $DatabaseSchema->setDefinition('Username', 'root');
@@ -320,7 +320,7 @@
             try
             {
                 $this->MainConfiguration = $this->acm->getConfiguration('Main');
-                $this->DatabaseConfiguration = $this->acm->getConfiguration('Database');
+                $this->DatabaseConfiguration = $this->acm->getConfiguration('MasterMySqlDatabase');
                 $this->DataStorageConfiguration = $this->acm->getConfiguration('DataStorage');
                 $this->ServiceEngineConfiguration = $this->acm->getConfiguration('ServiceEngine');
                 $this->RedisBasicCacheConfiguration = $this->acm->getConfiguration('RedisBasicCache');
