@@ -316,22 +316,7 @@
 
             // Save any changes
             $this->acm->updateConfiguration();
-
-            try
-            {
-                $this->MainConfiguration = $this->acm->getConfiguration('Main');
-                $this->DatabaseConfiguration = $this->acm->getConfiguration('MasterMySqlDatabase');
-                $this->DataStorageConfiguration = $this->acm->getConfiguration('DataStorage');
-                $this->ServiceEngineConfiguration = $this->acm->getConfiguration('ServiceEngine');
-                $this->RedisBasicCacheConfiguration = $this->acm->getConfiguration('RedisBasicCache');
-                $this->CdnConfiguration = $this->acm->getConfiguration('CDN');
-                $this->RpcServerConfiguration = $this->acm->getConfiguration('RpcServer');
-                $this->SlaveServerConfiguration = $this->acm->getConfiguration('SlaveServers');
-            }
-            catch(Exception $e)
-            {
-                throw new ConfigurationError('There was an error while trying to load ACM', 0, $e);
-            }
+            $this->reloadConfiguration();
 
             $this->SlaveManager = new SlaveManager($this);
 
@@ -362,6 +347,31 @@
 
             if($this->getServiceEngineConfiguration()['EnableBackgroundWorker'] && function_exists('gearman_version') == false)
                 throw new DependencyError('ServiceEngine has BackgroundWorker enabled but the gearman extension (php-gearman) is not installed.');
+        }
+
+        /**
+         * Reloads the configuration
+         *
+         * @throws ConfigurationError
+         */
+        public function reloadConfiguration()
+        {
+            try
+            {
+                $this->acm->reloadConfiguration();
+                $this->MainConfiguration = $this->acm->getConfiguration('Main');
+                $this->DatabaseConfiguration = $this->acm->getConfiguration('MasterMySqlDatabase');
+                $this->DataStorageConfiguration = $this->acm->getConfiguration('DataStorage');
+                $this->ServiceEngineConfiguration = $this->acm->getConfiguration('ServiceEngine');
+                $this->RedisBasicCacheConfiguration = $this->acm->getConfiguration('RedisBasicCache');
+                $this->CdnConfiguration = $this->acm->getConfiguration('CDN');
+                $this->RpcServerConfiguration = $this->acm->getConfiguration('RpcServer');
+                $this->SlaveServerConfiguration = $this->acm->getConfiguration('SlaveServers');
+            }
+            catch(Exception $e)
+            {
+                throw new ConfigurationError('There was an error while trying to load ACM', 0, $e);
+            }
         }
 
         /**
