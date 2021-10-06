@@ -570,7 +570,7 @@
          * @throws UnsupportedAvatarGeneratorException
          * @throws UnsupportedImageTypeException
          */
-        public function getLikes(string $post_public_id, int $offset=0, int $limit=20): array
+        public function getPostLikes(string $post_public_id, int $offset=0, int $limit=20): array
         {
             if($offset < 0)
                 throw new InvalidOffsetValueException('The offset value cannot be a negative value');
