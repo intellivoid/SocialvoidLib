@@ -222,7 +222,7 @@
             $MainSchema->setDefinition('NetworkName', 'Socialvoid');
             $MainSchema->setDefinition('UnauthorizedSessionTTL', 600);
             $MainSchema->setDefinition('AuthorizedSessionTTL', 259200);
-            $MainSchema->setDefinition('TimelineChunkSize', 20);x``
+            $MainSchema->setDefinition('TimelineChunkSize', 20);
             $MainSchema->setDefinition('TimelineMaxSize', 3200);
             $MainSchema->setDefinition('TimelineMaxSize', 3200);
             $this->acm->defineSchema($MainSchema);
