@@ -65,6 +65,7 @@
     try
     {
         SocialvoidService::$BackgroundWorker = new BackgroundWorker();
+        SocialvoidService::$BackgroundWorker->getWorker()->setAutoRestart(true);
         SocialvoidService::$BackgroundWorker->getWorker()->addServer(
             SocialvoidService::getSocialvoidLib()->getServiceEngineConfiguration()["GearmanHost"],
             (int)SocialvoidService::getSocialvoidLib()->getServiceEngineConfiguration()["GearmanPort"]
@@ -79,7 +80,7 @@
     /** START Define the functions  */
 
     // Search Queries
-    SocialvoidService::getBackgroundWorker()->getWorker()->getGearmanWorker()->addFunction("update", function(GearmanJob $job){
+    SocialvoidService::getBackgroundWorker()->getWorker()->addFunction("update", function(GearmanJob $job){
         SocialvoidService::processWakeup();
         return ZiProto::encode(SocialvoidService::getSocialvoidLib()->getServiceJobManager()->getServiceJobHandler()->handle($job)->toArray());
     });
@@ -88,7 +89,7 @@
     /** END Define the functions  */
 
     // Set the timeout to 5 seconds
-    SocialvoidService::getBackgroundWorker()->getWorker()->getGearmanWorker()->setTimeout(500);
+    SocialvoidService::getBackgroundWorker()->getWorker()->setTimeout(500);
 
     while(true)
     {

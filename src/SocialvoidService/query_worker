@@ -79,7 +79,7 @@
     /** START Define the functions  */
 
     // Search Queries
-    SocialvoidService::getBackgroundWorker()->getWorker()->getGearmanWorker()->addFunction("query", function(GearmanJob $job){
+    SocialvoidService::getBackgroundWorker()->getWorker()->addFunction("query", function(GearmanJob $job){
         SocialvoidService::processWakeup();
         return ZiProto::encode(SocialvoidService::getSocialvoidLib()->getServiceJobManager()->getServiceJobHandler()->handle($job)->toArray());
     });
@@ -88,7 +88,7 @@
     /** END Define the functions  */
 
     // Set the timeout to 5 seconds
-    SocialvoidService::getBackgroundWorker()->getWorker()->getGearmanWorker()->setTimeout(500);
+    SocialvoidService::getBackgroundWorker()->getWorker()->setTimeout(500);
     while(true)
     {
         SocialvoidService::getBackgroundWorker()->getWorker()->work(false);
