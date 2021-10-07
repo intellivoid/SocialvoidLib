@@ -34,7 +34,7 @@
         /**
          * The peer is awaiting an approval to follow the target peer
          */
-        const AwaitingApproval = r3;
+        const AwaitingApproval = 3;
 
         /**
          * Both peers are following each other
