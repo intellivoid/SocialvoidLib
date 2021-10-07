@@ -17,18 +17,22 @@ namespace SocialvoidLib\Abstracts\StatusStates;
     abstract class FollowerState
     {
         /**
-         * The user is currently following the other user and can see posts even if the other
-         * user is private.
+         * There is no relationship between the two peers
          */
-        const Following = "FOLLOWING";
+        const None = 0;
 
         /**
-         * The target user is currently private and needs to approve the following request
+         * The peer is current following the target peer
          */
-        const AwaitingApproval = "AWAITING_APPROVAL";
+        const Following = 1;
 
         /**
-         * The current user unfollowed the target user
+         * The peer is awaiting an approval to follow the target peer
          */
-        const Unfollowed = "UNFOLLOWED";
+        const AwaitingApproval = 2;
+
+        /**
+         * The peer blocked the target peer
+         */
+        const Blocked = 3;
     }
