@@ -92,7 +92,7 @@
         {
             $user_id = (int)$user->ID;
             $target_user_id = (int)$target_user->ID;
-            $Query = "DELETE FROM `peer_relations` WHERE user_id=$user_id AND target_user_id=$target_user_id";
+            $Query = "DELETE FROM `peer_relations` WHERE user_id=$user_id AND target_user_id=$target_user_id LIMIT 1";
 
             $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
             if($QueryResults == false)
@@ -116,7 +116,7 @@
         {
             $user_id = (int)$user->ID;
             $target_user_id = (int)$target_user->ID;
-            $Query = "SELECT state FROM `peer_relations` WHERE user_id=$user_id AND target_user_id=$target_user_id";
+            $Query = "SELECT state FROM `peer_relations` WHERE user_id=$user_id AND target_user_id=$target_user_id LIMIT 1";
             $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
 
             if($QueryResults)
@@ -156,7 +156,7 @@
             $state = (int)$state;
             $user_id = (int)$user->ID;
             $target_user_id = (int)$target_user->ID;
-            $Query = "UPDATE `peer_relations` SET state=$state WHERE user_id=$user_id AND target_user_id=$target_user_id";
+            $Query = "UPDATE `peer_relations` SET state=$state WHERE user_id=$user_id AND target_user_id=$target_user_id LIMIT 1";
             $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
 
             if($QueryResults == false)
