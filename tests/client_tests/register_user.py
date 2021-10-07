@@ -22,7 +22,7 @@ response = request(
      terms_of_service_id=tos_id,
      terms_of_service_agree=True,
 
-     username="netkas",
+     username="netkas_alt2",
      password="SuperSimplePassword123",
      first_name="Zi",
      last_name="Xing"

@@ -87,6 +87,7 @@
                 throw new FileTooLargeException('The file size cannot be larger than 8MB');
 
             $TmpFile = new TmpFile($this->networkSession->getCloud()->getDocumentContents($requested_document));
+            $TmpFile->delete = false;
             $image_size = @getimagesize($TmpFile->getFileName());
             if($image_size == false)
                 throw new InvalidFileForProfilePictureException('The given file is not a supported image file for a profile picture');

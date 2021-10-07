@@ -10,7 +10,9 @@
 
     namespace SocialvoidLib\Classes;
 
+    use SocialvoidLib\Abstracts\StatusStates\RelationState;
     use SocialvoidLib\Abstracts\Types\Standard\DocumentType;
+    use SocialvoidLib\Abstracts\Types\Standard\RelationshipType;
     use SocialvoidLib\Objects\ActiveSession;
     use SocialvoidLib\Objects\Document\File;
     use Zimage\Zimage;
@@ -147,5 +149,40 @@
 
 
             return $document_files;
+        }
+
+        /**
+         * Converts an internal relationship state to a standard value
+         *
+         * @param int $input
+         * @return string
+         */
+        public static function InternalRelationshipToStandard(int $input): string
+        {
+            switch($input)
+            {
+
+                case RelationState::Following:
+                    return RelationshipType::Following;
+
+                case RelationState::FollowsYou:
+                    return RelationshipType::FollowsYou;
+
+                case RelationState::AwaitingApproval:
+                    return RelationshipType::AwaitingApproval;
+
+                case RelationState::MutuallyFollowing:
+                    return RelationshipType::MutuallyFollowing;
+
+                case RelationState::Blocked:
+                    return RelationshipType::Blocked;
+
+                case RelationState::BlockedYou:
+                    return RelationshipType::BlockedYou;
+
+                case RelationState::None:
+                default:
+                    return RelationshipType::None;
+            }
         }
     }

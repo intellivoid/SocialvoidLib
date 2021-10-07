@@ -31,8 +31,7 @@
     use SocialvoidLib\Exceptions\GenericInternal\RedisCacheException;
     use SocialvoidLib\Managers\BasicRedisCacheManager;
     use SocialvoidLib\Managers\DocumentsManager;
-    use SocialvoidLib\Managers\FollowerDataManager;
-    use SocialvoidLib\Managers\FollowerStateManager;
+    use SocialvoidLib\Managers\RelationStateManager;
     use SocialvoidLib\Managers\LikesRecordManager;
     use SocialvoidLib\Managers\PostsManager;
     use SocialvoidLib\Managers\QuotesRecordManager;
@@ -83,19 +82,14 @@
         private $UserManager;
 
         /**
-         * @var FollowerStateManager|null
+         * @var RelationStateManager|null
          */
-        private $FollowerStateManager;
+        private $RelationStateManager;
 
         /**
          * @var SessionManager|null
          */
         private $SessionManager;
-
-        /**
-         * @var FollowerDataManager|null
-         */
-        private $FollowerDataManager;
 
         /**
          * @var mixed
@@ -476,13 +470,13 @@
         }
 
         /**
-         * @return FollowerStateManager
+         * @return RelationStateManager
          */
-        public function getFollowerStateManager(): FollowerStateManager
+        public function getRelationStateManager(): RelationStateManager
         {
-            if($this->FollowerStateManager == null)
-                $this->FollowerStateManager = new FollowerStateManager($this);
-            return $this->FollowerStateManager;
+            if($this->RelationStateManager == null)
+                $this->RelationStateManager = new RelationStateManager($this);
+            return $this->RelationStateManager;
         }
 
         /**
@@ -493,16 +487,6 @@
             if($this->SessionManager == null)
                 $this->SessionManager = new SessionManager($this);
             return $this->SessionManager;
-        }
-
-        /**
-         * @return FollowerDataManager
-         */
-        public function getFollowerDataManager(): FollowerDataManager
-        {
-            if($this->FollowerDataManager == null)
-                $this->FollowerDataManager = new FollowerDataManager($this);
-            return $this->FollowerDataManager;
         }
 
         /**

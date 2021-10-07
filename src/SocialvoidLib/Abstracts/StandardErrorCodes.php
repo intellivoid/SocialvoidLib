@@ -21,6 +21,7 @@
     use SocialvoidLib\Exceptions\Standard\Authentication\TwoFactorAuthenticationRequiredException;
     use SocialvoidLib\Exceptions\Standard\Network\AccessDeniedException;
     use SocialvoidLib\Exceptions\Standard\Network\AlreadyRepostedException;
+    use SocialvoidLib\Exceptions\Standard\Network\BlockedByPeerException;
     use SocialvoidLib\Exceptions\Standard\Network\DocumentNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\FileUploadException;
     use SocialvoidLib\Exceptions\Standard\Network\PostDeletedException;
@@ -317,6 +318,18 @@
          * @see AccessDeniedException
          */
         const AccessDeniedException = 0x03106;
+
+        /**
+         * Raised when attempting to interact with a peer that blocked you
+         *
+         * @see BlockedByPeerException
+         */
+        const BlockedByPeerException = 0x03107;
+
+        /**
+         * @see BlockedByPeerException
+         */
+        const BlockedPeerException = 0x03108;
 
 
         /** 40-Set error codes (Server) */

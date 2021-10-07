@@ -140,7 +140,7 @@
                 "public_id" => $this->socialvoidLib->getDatabase()->real_escape_string($public_id),
                 "username" => $this->socialvoidLib->getDatabase()->real_escape_string($username),
                 "username_safe" => $this->socialvoidLib->getDatabase()->real_escape_string(strtolower($username)),
-                "network" => $this->socialvoidLib->getDatabase()->real_escape_string($this->socialvoidLib->getMainConfigurationc()["Domain"]),
+                "network" => $this->socialvoidLib->getDatabase()->real_escape_string($this->socialvoidLib->getMainConfiguration()["MainDomain"]),
                 "status" => $this->socialvoidLib->getDatabase()->real_escape_string(UserStatus::Active),
                 "status_change_timestamp" => 0,
                 "properties" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($UserProperties->toArray())),

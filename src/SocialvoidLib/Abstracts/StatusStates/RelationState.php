@@ -8,13 +8,13 @@
      * must have a written permission from Intellivoid Technologies to do so.
      */
 
-namespace SocialvoidLib\Abstracts\StatusStates;
+    namespace SocialvoidLib\Abstracts\StatusStates;
 
     /**
      * Class FollowerState
      * @package SocialvoidLib\Abstracts\StatusStates
      */
-    abstract class FollowerState
+    abstract class RelationState
     {
         /**
          * There is no relationship between the two peers
@@ -27,12 +27,27 @@ namespace SocialvoidLib\Abstracts\StatusStates;
         const Following = 1;
 
         /**
-         * The peer is awaiting an approval to follow the target peer
+         * The peer is followed by the target user
          */
-        const AwaitingApproval = 2;
+        const FollowsYou = 2;
 
         /**
-         * The peer blocked the target peer
+         * The peer is awaiting an approval to follow the target peer
          */
-        const Blocked = 3;
+        const AwaitingApproval = 3;
+
+        /**
+         * Both peers are following each other
+         */
+        const MutuallyFollowing = 4;
+
+        /**
+         * The peer has blocked the target peer (Only the target peer will see this)
+         */
+        const Blocked = 5;
+
+        /**
+         * The target peer blocked the peer
+         */
+        const BlockedYou = 6;
     }

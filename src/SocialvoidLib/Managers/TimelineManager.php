@@ -25,6 +25,7 @@
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
     use SocialvoidLib\Exceptions\Internal\UserTimelineNotFoundException;
     use SocialvoidLib\Objects\Timeline;
+    use SocialvoidLib\Objects\User;
     use SocialvoidLib\SocialvoidLib;
     use ZiProto\ZiProto;
 
@@ -57,7 +58,7 @@
          * @throws InvalidSearchMethodException
          * @throws UserTimelineNotFoundException
          */
-        public function retrieveTimeline(int $user_id): Timeline
+        public function retrieveTimeline(User $user): Timeline
         {
             try
             {
@@ -92,12 +93,12 @@
                     break;
 
                 default:
-                    throw new InvalidSearchMethodException("The search method is not applicable to getTimelineState()", $search_method, $value);
+                    throw new InvalidSearchMethodException('The search method is not applicable to getTimelineState()', $search_method, $value);
             }
 
-            $Query = QueryBuilder::select("user_timelines", [
-                "new_posts",
-                "last_updated_timestamp",
+            $Query = QueryBuilder::select('user_timelines', [
+                'new_posts',
+                'last_updated_timestamp',
             ], $search_method, $value);
             $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
 
@@ -112,8 +113,8 @@
                 else
                 {
                     $TimelineState = new \SocialvoidLib\Objects\Standard\TimelineState();
-                    $TimelineState->TimelinePostsCount = (int)$Row["new_posts"];
-                    $TimelineState->TimelineLastUpdated = (int)$Row["last_updated_timestamp"];
+                    $TimelineState->TimelinePostsCount = (int)$Row['new_posts'];
+                    $TimelineState->TimelineLastUpdated = (int)$Row['last_updated_timestamp'];
 
                     return $TimelineState;
                 }
@@ -121,7 +122,7 @@
             else
             {
                 throw new DatabaseException(
-                    "There was an error while trying retrieve the user timeline state from the network",
+                    'There was an error while trying retrieve the user timeline state from the network',
                     $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
                 );
             }
@@ -135,19 +136,19 @@
          */
         public function createTimeline(int $user_id): void
         {
-            $Query = QueryBuilder::insert_into("user_timelines", [
-                "user_id" => (int)$user_id,
-                "state" => $this->socialvoidLib->getDatabase()->real_escape_string(TimelineState::Available),
-                "post_chunks" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
-                "new_posts" => 0,
-                "last_updated_timestamp" => (int)time(),
-                "created_timestamp" => (int)time()
+            $Query = QueryBuilder::insert_into('user_timelines', [
+                'user_id' => (int)$user_id,
+                'state' => $this->socialvoidLib->getDatabase()->real_escape_string(TimelineState::Available),
+                'post_chunks' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
+                'new_posts' => 0,
+                'last_updated_timestamp' => (int)time(),
+                'created_timestamp' => (int)time()
             ]);
 
             $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
             if($QueryResults == false)
             {
-                throw new DatabaseException("There was an error while trying to create user timeline",
+                throw new DatabaseException('There was an error while trying to create user timeline',
                     $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
                 );
             }
@@ -162,31 +163,20 @@
          * @throws DatabaseException
          * @throws InvalidSearchMethodException
          * @throws UserTimelineNotFoundException
+         * @noinspection PhpCastIsUnnecessaryInspection
          */
-        public function getTimeline(string $search_method, string $value): Timeline
+        public function getTimeline(User $user): Timeline
         {
-            switch($search_method)
-            {
-                case TimelineSearchMethod::ByUserId:
-                case TimelineSearchMethod::ById:
-                    $search_method = $this->socialvoidLib->getDatabase()->real_escape_string($search_method);
-                    $value = (int)$value;
-                    break;
-
-                default:
-                    throw new InvalidSearchMethodException("The search method is not applicable to getTimeline()", $search_method, $value);
-            }
-
-            $Query = QueryBuilder::select("user_timelines", [
-                "id",
-                "user_id",
-                "state",
-                "post_chunks",
-                "new_posts",
-                "last_updated_timestamp",
-                "created_timestamp"
-            ], $search_method, $value);
-            $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
+            $Query = QueryBuilder::select('user_timelines', [
+                'user_id',
+                'state',
+                'post_chunks',
+                'new_posts',
+                'last_updated_timestamp',
+                'created_timestamp'
+            ], 'user_id', (int)$user->ID);
+            $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer($user->SlaveServer);
+            $QueryResults = $SelectedSlave->getConnection()->query($Query);
 
             if($QueryResults)
             {
@@ -198,15 +188,15 @@
                 }
                 else
                 {
-                    $Row["post_chunks"] = ZiProto::decode($Row["post_chunks"]);
+                    $Row['post_chunks'] = ZiProto::decode($Row['post_chunks']);
                     return(Timeline::fromArray($Row));
                 }
             }
             else
             {
                 throw new DatabaseException(
-                    "There was an error while trying retrieve the user timeline from the network",
-                    $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
+                    'There was an error while trying retrieve the user timeline from the network',
+                    $Query, $SelectedSlave->getConnection()->error, $this->socialvoidLib->getDatabase()
                 );
             }
         }
@@ -219,19 +209,19 @@
          */
         public function updateTimeline(Timeline $timeline): void
         {
-            $Query = QueryBuilder::update("user_timelines", [
-                "state" => $this->socialvoidLib->getDatabase()->real_escape_string($timeline->State),
-                "post_chunks" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($timeline->PostChunks)),
-                "new_posts" => (int)$timeline->NewPosts,
-                "last_updated_timestamp" => (int)time()
-            ], "id", (int)$timeline->ID);
+            $Query = QueryBuilder::update('user_timelines', [
+                'state' => $this->socialvoidLib->getDatabase()->real_escape_string($timeline->State),
+                'post_chunks' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($timeline->PostChunks)),
+                'new_posts' => (int)$timeline->NewPosts,
+                'last_updated_timestamp' => (int)time()
+            ], 'id', (int)$timeline->ID);
 
             $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
 
             if($QueryResults == false)
             {
                 throw new DatabaseException(
-                    "There was an error while trying to update the session",
+                    'There was an error while trying to update the session',
                     $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
                 );
             }
@@ -253,7 +243,7 @@
         public function distributePost(string $post_id, array $followers, int $utilization=100, bool $skip_errors=true): void
         {
             // If background worker is enabled, split the query into multiple workers to speed up the process
-            if(Utilities::getBoolDefinition("SOCIALVOID_LIB_BACKGROUND_WORKER_ENABLED"))
+            if(Utilities::getBoolDefinition('SOCIALVOID_LIB_BACKGROUND_WORKER_ENABLED'))
             {
                 $this->socialvoidLib->getServiceJobManager()->getTimelineJobs()->distributeTimelinePosts(
                     $post_id, $followers, $utilization, $skip_errors
@@ -292,7 +282,7 @@
          */
         public function removePosts(int $user_id, array $post_ids, bool $skip_errors=true): void
         {
-            if(Utilities::getBoolDefinition("SOCIALVOID_LIB_BACKGROUND_WORKER_ENABLED"))
+            if(Utilities::getBoolDefinition('SOCIALVOID_LIB_BACKGROUND_WORKER_ENABLED'))
             {
                 $this->socialvoidLib->getServiceJobManager()->getTimelineJobs()->removeTimelinePosts(
                     $user_id, $post_ids, $skip_errors

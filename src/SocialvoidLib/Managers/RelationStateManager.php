@@ -13,20 +13,16 @@
     namespace SocialvoidLib\Managers;
 
     use msqg\QueryBuilder;
-    use SocialvoidLib\Abstracts\StatusStates\FollowerState;
-    use SocialvoidLib\Abstracts\StatusStates\UserPrivacyState;
+    use SocialvoidLib\Abstracts\StatusStates\RelationState;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
-    use SocialvoidLib\Exceptions\Internal\FollowerStateNotFoundException;
-    use SocialvoidLib\Objects\Follower;
     use SocialvoidLib\Objects\User;
     use SocialvoidLib\SocialvoidLib;
-    use ZiProto\ZiProto;
 
     /**
      * Class FollowerStateManager
      * @package SocialvoidLib\Managers
      */
-    class FollowerStateManager
+    class RelationStateManager
     {
         /**
          * @var SocialvoidLib
@@ -43,40 +39,65 @@
         }
 
         /**
-         * Registers a following state into the database
+         * Registers a relation state into the database, drops it if none.
          *
-         * @param int $user_id
+         * @param User $user
          * @param User $target_user
-         * @return FollowerState|string
+         * @param int $state
          * @throws DatabaseException
+         * @noinspection PhpCastIsUnnecessaryInspection
          */
-        public function registerFollowingState(int $user_id, User $target_user): string
+        public function registerState(User $user, User $target_user, int $state)
         {
-            $FollowerState = FollowerState::Following;
-
-            if($target_user->PrivacyState == UserPrivacyState::Private)
+            // Drop the state if it's none
+            if($state == RelationState::None)
             {
-                $FollowerState = FollowerState::AwaitingApproval;
+                $this->dropState($user, $target_user);
+                return;
             }
 
-            $Query = QueryBuilder::insert_into("follower_states", [
-                "id" => (double)((int)$user_id . (int)$target_user->ID),
-                "user_id" => (int)$user_id,
-                "target_user_id" => (int)$target_user->ID,
-                "state" => $this->socialvoidLib->getDatabase()->real_escape_string($FollowerState),
-                "flags" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
-                "last_updated_timestamp" => (int)time(),
-                "created_timestamp" => (int)time()
+            // Update the state if it already exists
+            if($this->getState($user, $target_user) !== RelationState::None)
+            {
+                $this->updateState($user, $target_user, $state);
+                return;
+            }
+
+            $Query = QueryBuilder::insert_into('peer_relations', [
+                'user_id' => (int)$user->ID,
+                'target_user_id' => (int)$target_user->ID,
+                'state' => (int)$state,
+                'last_updated_timestamp' => (int)time(),
+                'created_timestamp' => (int)time()
             ]);
-            $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
 
-            if($QueryResults)
+            $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
+            if($QueryResults == false)
             {
-                return $FollowerState;
+                throw new DatabaseException('There was an error while trying to register the following state',
+                    $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
+                );
             }
-            else
+        }
+
+        /**
+         * Drops an existing relation state from the database
+         *
+         * @param User $user
+         * @param User $target_user
+         * @throws DatabaseException
+         * @noinspection PhpCastIsUnnecessaryInspection
+         */
+        public function dropState(User $user, User $target_user)
+        {
+            $user_id = (int)$user->ID;
+            $target_user_id = (int)$target_user->ID;
+            $Query = "DELETE FROM `peer_relations` WHERE user_id=$user_id AND target_user_id=$target_user_id";
+
+            $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
+            if($QueryResults == false)
             {
-                throw new DatabaseException("There was an error while trying to register the following state",
+                throw new DatabaseException('There was an error while trying to drop the relation state',
                     $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
                 );
             }
@@ -85,23 +106,17 @@
         /**
          * Gets an existing following state from the database
          *
-         * @param int $user_id
-         * @param int $target_user_id
-         * @return Follower
+         * @param User $user
+         * @param User $target_user
+         * @return int|RelationState
          * @throws DatabaseException
-         * @throws FollowerStateNotFoundException
+         * @noinspection PhpCastIsUnnecessaryInspection
          */
-        public function getFollowingState(int $user_id, int $target_user_id): Follower
+        public function getState(User $user, User $target_user): int
         {
-            $Query = QueryBuilder::select("follower_states", [
-                "id",
-                "user_id",
-                "target_user_id",
-                "state",
-                "flags",
-                "last_updated_timestamp",
-                "created_timestamp"
-            ], "id", (double)((int)$user_id . (int)$target_user_id), null, null, 1);
+            $user_id = (int)$user->ID;
+            $target_user_id = (int)$target_user->ID;
+            $Query = "SELECT state FROM `peer_relations` WHERE user_id=$user_id AND target_user_id=$target_user_id";
             $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
 
             if($QueryResults)
@@ -110,19 +125,17 @@
 
                 if ($Row == False)
                 {
-                    throw new FollowerStateNotFoundException();
+                    return RelationState::None;
                 }
                 else
                 {
-                    $Row["flags"] = ZiProto::decode($Row["flags"]);
-
-                    return(Follower::fromArray($Row));
+                    return (int)$Row['state'];
                 }
             }
             else
             {
                 throw new DatabaseException(
-                    "There was an error while trying retrieve the following state",
+                    'There was an error while trying retrieve the following state',
                     $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
                 );
             }
@@ -131,28 +144,25 @@
         /**
          * Updates an existing following state
          *
-         * @param Follower $follower
-         * @return Follower
+         * @param User $user
+         * @param User $target_user
+         * @param int $state
+         * @return void
          * @throws DatabaseException
+         * @noinspection PhpCastIsUnnecessaryInspection
          */
-        public function updateFollowingState(Follower $follower): Follower
+        public function updateState(User $user, User $target_user, int $state)
         {
-            $Query = QueryBuilder::update("follower_states", [
-                "state" => $this->socialvoidLib->getDatabase()->real_escape_string($follower->State),
-                "flags" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($follower->Flags)),
-                "last_updated_timestamp" => (int)time()
-            ], "id",  (double)((int)$follower->UserID . (int)$follower->TargetUserID));
-
+            $state = (int)$state;
+            $user_id = (int)$user->ID;
+            $target_user_id = (int)$target_user->ID;
+            $Query = "UPDATE `peer_relations` SET state=$state WHERE user_id=$user_id AND target_user_id=$target_user_id";
             $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
 
-            if($QueryResults)
-            {
-                return $follower;
-            }
-            else
+            if($QueryResults == false)
             {
                 throw new DatabaseException(
-                    "There was an error while trying to update the following state",
+                    'There was an error while trying to update the relation state',
                     $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
                 );
             }

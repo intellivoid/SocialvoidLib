@@ -14,22 +14,21 @@
     namespace SocialvoidLib\Network;
 
     use BackgroundWorker\Exceptions\ServerNotReachableException;
-    use Exception;
     use SocialvoidLib\Abstracts\SearchMethods\UserSearchMethod;
-    use SocialvoidLib\Abstracts\StatusStates\FollowerState;
+    use SocialvoidLib\Abstracts\StatusStates\RelationState;
+    use SocialvoidLib\Abstracts\StatusStates\UserPrivacyState;
     use SocialvoidLib\Exceptions\GenericInternal\BackgroundWorkerNotEnabledException;
     use SocialvoidLib\Exceptions\GenericInternal\CacheException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
     use SocialvoidLib\Exceptions\GenericInternal\ServiceJobException;
-    use SocialvoidLib\Exceptions\Internal\FollowerDataNotFound;
-    use SocialvoidLib\Exceptions\Internal\FollowerStateNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException;
+    use SocialvoidLib\Exceptions\Standard\Network\BlockedByPeerException;
+    use SocialvoidLib\Exceptions\Standard\Network\BlockedPeerException;
     use SocialvoidLib\Exceptions\Standard\Network\DocumentNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPeerInputException;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\NetworkSession;
-    use SocialvoidLib\Objects\FollowerData;
     use SocialvoidLib\Objects\User;
     use udp2\Exceptions\AvatarGeneratorException;
     use udp2\Exceptions\AvatarNotFoundException;
@@ -88,6 +87,9 @@
         {
             if($this->networkSession->isAuthenticated() == false)
                 throw new NotAuthenticatedException();
+
+            if(gettype($peer) == 'object' && get_class($peer) == 'SocialvoidLib\Objects\User')
+                return $peer; // No need to resolve an already constructed object!
 
             // Probably an ID
             if((ctype_digit($peer) && $resolve_internally) || (is_int($peer) && $resolve_internally))
@@ -161,18 +163,65 @@
         }
 
         /**
+         * @throws UnsupportedAvatarGeneratorException
+         * @throws CannotGetOriginalImageException
+         * @throws InvalidSearchMethodException
+         * @throws PeerNotFoundException
+         * @throws AvatarNotFoundException
+         * @throws NotAuthenticatedException
+         * @throws AvatarGeneratorException
+         * @throws SizeNotSetException
+         * @throws DocumentNotFoundException
+         * @throws ImageTooSmallException
+         * @throws InvalidZimageFileException
+         * @throws InvalidPeerInputException
+         * @throws UnsupportedImageTypeException
+         * @throws CacheException
+         * @throws DatabaseException
+         * @throws FileNotFoundException
+         */
+        public function resolveRelation($peer): int
+        {
+            $target_peer = $this->resolvePeer($peer);
+
+            $current_relation = $this->networkSession->getSocialvoidLib()->getRelationStateManager()->getState(
+                $this->networkSession->getAuthenticatedUser(), $target_peer
+            );
+            $reverse_relation = $this->networkSession->getSocialvoidLib()->getRelationStateManager()->getState(
+                $target_peer, $this->networkSession->getAuthenticatedUser()
+            );
+
+            if($current_relation == RelationState::None && $reverse_relation == RelationState::None)
+                return RelationState::None;
+
+            if($current_relation == RelationState::Blocked)
+                return RelationState::Blocked;
+
+            if($reverse_relation == RelationState::Blocked)
+                return RelationState::BlockedYou;
+
+            if($current_relation == RelationState::Following && $reverse_relation == RelationState::Following)
+                return RelationState::MutuallyFollowing;
+
+            if($reverse_relation == RelationState::Following)
+                return RelationState::FollowsYou;
+
+            return $current_relation;
+        }
+
+        /**
          * Follows another peer on the network
          *
          * @param $peer
-         * @return string
+         * @return int
          * @throws AvatarGeneratorException
          * @throws AvatarNotFoundException
+         * @throws BlockedByPeerException
          * @throws CacheException
          * @throws CannotGetOriginalImageException
          * @throws DatabaseException
          * @throws DocumentNotFoundException
          * @throws FileNotFoundException
-         * @throws FollowerDataNotFound
          * @throws ImageTooSmallException
          * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
@@ -182,71 +231,55 @@
          * @throws SizeNotSetException
          * @throws UnsupportedAvatarGeneratorException
          * @throws UnsupportedImageTypeException
+         * @throws BlockedPeerException
          */
-        public function followPeer($peer): string
+        public function followPeer($peer): int
         {
             if($this->networkSession->isAuthenticated() == false)
                 throw new NotAuthenticatedException();
 
             // TODO: Update the timeline upon a follow event
             // Resolve the Peer ID
-            $peer_id = $this->resolvePeer($peer)->ID;
+            $target_peer = $this->resolvePeer($peer);
+            $relationship = $this->resolveRelation($target_peer);
 
-            try
+            if($relationship == RelationState::BlockedYou)
+                throw new BlockedByPeerException();
+            if($relationship == RelationState::Blocked)
+                throw new BlockedPeerException();
+            if($relationship == RelationState::Following || $relationship == RelationState::MutuallyFollowing)
+                return $relationship;
+
+            if($target_peer->PrivacyState == UserPrivacyState::Private)
             {
-                $FollowerState = $this->networkSession->getSocialvoidLib()->getFollowerStateManager()->getFollowingState(
-                    $this->networkSession->getAuthenticatedUser()->ID, $peer_id
+                $this->networkSession->getSocialvoidLib()->getRelationStateManager()->registerState(
+                    $this->networkSession->getAuthenticatedUser(), $target_peer, RelationState::AwaitingApproval
                 );
 
-                return $FollowerState->State;
-            }
-            catch(FollowerStateNotFoundException $e)
-            {
-                unset($e);
+                return RelationState::AwaitingApproval;
             }
 
-            $TargetPeer = $this->resolvePeer($peer_id);
-
-            $FollowerState = $this->networkSession->getSocialvoidLib()->getFollowerStateManager()->registerFollowingState(
-                $this->networkSession->getAuthenticatedUser()->ID, $TargetPeer
+            $this->networkSession->getSocialvoidLib()->getRelationStateManager()->registerState(
+                $this->networkSession->getAuthenticatedUser(), $target_peer, RelationState::Following
             );
 
-            if($FollowerState == FollowerState::Following)
-            {
-                // This user is following x
-                $SelfFollowerData = $this->networkSession->getSocialvoidLib()->getFollowerDataManager()->resolveRecord(
-                    $this->networkSession->getAuthenticatedUser()->ID
-                );
-                $SelfFollowerData->addFollowing($peer_id);
-                $this->networkSession->getSocialvoidLib()->getFollowerDataManager()->updateRecord($SelfFollowerData);
-
-                // This user got a following x
-                $TargetFollowerData = $this->networkSession->getSocialvoidLib()->getFollowerDataManager()->resolveRecord(
-                    $peer_id
-                );
-                $TargetFollowerData->addFollower($this->networkSession->getAuthenticatedUser()->ID);
-                $this->networkSession->getSocialvoidLib()->getFollowerDataManager()->updateRecord($TargetFollowerData);
-
-            }
-            
-            return $FollowerState;
+            return RelationState::Following;
         }
 
-        // TODO: Add the ability to get follower and following data by IDs only rather than the whole user object
-
         /**
-         * Gets following data of a peer
+         * Unfollows the requested peer
          *
          * @param $peer
-         * @return FollowerData
+         * @return int
          * @throws AvatarGeneratorException
          * @throws AvatarNotFoundException
+         * @throws BlockedByPeerException
+         * @throws BlockedPeerException
          * @throws CacheException
          * @throws CannotGetOriginalImageException
          * @throws DatabaseException
          * @throws DocumentNotFoundException
          * @throws FileNotFoundException
-         * @throws FollowerDataNotFound
          * @throws ImageTooSmallException
          * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
@@ -257,192 +290,27 @@
          * @throws UnsupportedAvatarGeneratorException
          * @throws UnsupportedImageTypeException
          */
-        public function getFollowerData($peer): FollowerData
+        public function unfollowPeer($peer): int
         {
             if($this->networkSession->isAuthenticated() == false)
                 throw new NotAuthenticatedException();
 
+            // TODO: Update the timeline upon a follow event
             // Resolve the Peer ID
-            $peer_id = $this->resolvePeer($peer)->ID;
+            $target_peer = $this->resolvePeer($peer);
+            $relationship = $this->resolveRelation($target_peer);
 
-            return $this->networkSession->getSocialvoidLib()->getFollowerDataManager()->resolveRecord($peer_id);
-        }
+            if($relationship == RelationState::BlockedYou)
+                throw new BlockedByPeerException();
+            if($relationship == RelationState::Blocked)
+                throw new BlockedPeerException();
+            if($relationship == RelationState::None)
+                return $relationship;
 
-        /**
-         * Gets a list of users that are following this peer
-         *
-         * @param $peer
-         * @param int $offset
-         * @param int $limit
-         * @return array
-         * @throws AvatarGeneratorException
-         * @throws AvatarNotFoundException
-         * @throws CacheException
-         * @throws CannotGetOriginalImageException
-         * @throws DatabaseException
-         * @throws DocumentNotFoundException
-         * @throws FileNotFoundException
-         * @throws FollowerDataNotFound
-         * @throws ImageTooSmallException
-         * @throws InvalidPeerInputException
-         * @throws InvalidSearchMethodException
-         * @throws InvalidZimageFileException
-         * @throws NotAuthenticatedException
-         * @throws PeerNotFoundException
-         * @throws SizeNotSetException
-         * @throws UnsupportedAvatarGeneratorException
-         * @throws UnsupportedImageTypeException
-         */
-        public function getFollowers($peer, int $offset=0, int $limit=100): array
-        {
-            if($this->networkSession->isAuthenticated() == false)
-                throw new NotAuthenticatedException();
+            $this->networkSession->getSocialvoidLib()->getRelationStateManager()->registerState(
+                $this->networkSession->getAuthenticatedUser(), $target_peer, RelationState::None
+            );
 
-            $Results = [];
-            $CurrentIteration = 0;
-            $FollowerData = $this->getFollowerData($peer);
-
-            foreach($FollowerData->FollowersIDs as $followersID)
-            {
-                if($CurrentIteration >= $offset)
-                {
-                    try
-                    {
-                        $Results[] = $this->resolvePeer($followersID);
-                    }
-                    catch(Exception $e)
-                    {
-                        unset($e);
-                    }
-                }
-
-                if(count($Results) >= $limit)
-                    break;
-
-                $CurrentIteration += 1;
-            }
-
-            return $Results;
-        }
-
-        /**
-         * Returns an array of followers via IDs
-         *
-         * @param $peer
-         * @return array
-         * @throws AvatarGeneratorException
-         * @throws AvatarNotFoundException
-         * @throws CacheException
-         * @throws CannotGetOriginalImageException
-         * @throws DatabaseException
-         * @throws DocumentNotFoundException
-         * @throws FileNotFoundException
-         * @throws FollowerDataNotFound
-         * @throws ImageTooSmallException
-         * @throws InvalidPeerInputException
-         * @throws InvalidSearchMethodException
-         * @throws InvalidZimageFileException
-         * @throws NotAuthenticatedException
-         * @throws PeerNotFoundException
-         * @throws SizeNotSetException
-         * @throws UnsupportedAvatarGeneratorException
-         * @throws UnsupportedImageTypeException
-         */
-        public function getFollowerIDs($peer): array
-        {
-            if($this->networkSession->isAuthenticated() == false)
-                throw new NotAuthenticatedException();
-
-            $FollowerData = $this->getFollowerData($peer);
-            return $FollowerData->FollowersIDs;
-        }
-
-        /**
-         * Gets a list of users that the peer is following
-         *
-         * @param $peer
-         * @param int $offset
-         * @param int $limit
-         * @return array
-         * @throws AvatarGeneratorException
-         * @throws AvatarNotFoundException
-         * @throws CacheException
-         * @throws CannotGetOriginalImageException
-         * @throws DatabaseException
-         * @throws DocumentNotFoundException
-         * @throws FileNotFoundException
-         * @throws FollowerDataNotFound
-         * @throws ImageTooSmallException
-         * @throws InvalidPeerInputException
-         * @throws InvalidSearchMethodException
-         * @throws InvalidZimageFileException
-         * @throws NotAuthenticatedException
-         * @throws PeerNotFoundException
-         * @throws SizeNotSetException
-         * @throws UnsupportedAvatarGeneratorException
-         * @throws UnsupportedImageTypeException
-         */
-        public function getFollowing($peer, int $offset=0, int $limit=100): array
-        {
-            if($this->networkSession->isAuthenticated() == false)
-                throw new NotAuthenticatedException();
-
-            $Results = [];
-            $CurrentIteration = 0;
-            $FollowerData = $this->getFollowerData($peer);
-
-            foreach($FollowerData->FollowingIDs as $followingsID)
-            {
-                if($CurrentIteration >= $offset)
-                {
-                    try
-                    {
-                        $Results[] = $this->resolvePeer($followingsID);
-                    }
-                    catch(Exception $e)
-                    {
-                        unset($e);
-                    }
-                }
-
-                if(count($Results) >= $limit)
-                    break;
-
-                $CurrentIteration += 1;
-            }
-
-            return $Results;
-        }
-
-        /**
-         * Returns an array of following via IDs
-         *
-         * @param $peer
-         * @return array
-         * @throws AvatarGeneratorException
-         * @throws AvatarNotFoundException
-         * @throws CacheException
-         * @throws CannotGetOriginalImageException
-         * @throws DatabaseException
-         * @throws DocumentNotFoundException
-         * @throws FileNotFoundException
-         * @throws FollowerDataNotFound
-         * @throws ImageTooSmallException
-         * @throws InvalidPeerInputException
-         * @throws InvalidSearchMethodException
-         * @throws InvalidZimageFileException
-         * @throws NotAuthenticatedException
-         * @throws PeerNotFoundException
-         * @throws SizeNotSetException
-         * @throws UnsupportedAvatarGeneratorException
-         * @throws UnsupportedImageTypeException
-         */
-        public function getFollowingIDs($peer): array
-        {
-            if($this->networkSession->isAuthenticated() == false)
-                throw new NotAuthenticatedException();
-
-            $FollowerData = $this->getFollowerData($peer);
-            return $FollowerData->FollowingIDs;
+            return RelationState::None;
         }
     }

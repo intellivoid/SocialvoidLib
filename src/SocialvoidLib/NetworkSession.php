@@ -508,7 +508,7 @@
         {
             $ServerInformation = new ServerInformation();
 
-            $ServerInformation->NetworkName = $this->socialvoidLib->getMainConfiguration()['Name'];
+            $ServerInformation->NetworkName = $this->socialvoidLib->getMainConfiguration()['NetworkName'];
             $ServerInformation->CdnServer = $this->socialvoidLib->getCdnConfiguration()['CdnEndpoint'];
             $ServerInformation->UploadMaxFileSize = $this->socialvoidLib->getCdnConfiguration()['MaxFileUploadSize'];
             $ServerInformation->UnauthorizedSessionTTL = (int)$this->socialvoidLib->getMainConfiguration()['UnauthorizedSessionTTL'];

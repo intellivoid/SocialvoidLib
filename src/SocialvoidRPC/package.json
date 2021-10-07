@@ -85,6 +85,10 @@
         },
         {
             "required": true,
+            "file": "Methods/Network/FollowPeer.php"
+        },
+        {
+            "required": true,
             "file": "Methods/Network/GetMe.php"
         },
         {
@@ -94,6 +98,10 @@
         {
             "required": true,
             "file": "Methods/Network/ResolvePeer.php"
+        },
+        {
+            "required": true,
+            "file": "Methods/Network/UnfollowPeer.php"
         },
         {
             "required": true,

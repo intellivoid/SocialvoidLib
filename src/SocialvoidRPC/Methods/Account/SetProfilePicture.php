@@ -93,8 +93,8 @@
             $parsed_id = explode('-', $request->Parameters['document']);
 
             // Validate the document ID
-            if(count($parsed_id) !== 2 ||  strlen($parsed_id[0]) !== 64 || strlen($parsed_id[1]) !== 8)
-                throw new DocumentNotFoundException('The requested document was not found in the network');
+            //if(count($parsed_id) !== 2 ||  strlen($parsed_id[0]) !== 64 || strlen($parsed_id[1]) !== 8)
+            //    throw new DocumentNotFoundException('The requested document was not found in the network');
         }
 
         /**

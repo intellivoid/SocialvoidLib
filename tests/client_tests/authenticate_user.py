@@ -17,7 +17,7 @@ response = request(
         "challenge_answer": answer_challenge(client_info["private_hash"], session_info["challenge"])
      },
 
-     username="netkas",
+     username="netkas_alt2",
      password="SuperSimplePassword123"
 )
 

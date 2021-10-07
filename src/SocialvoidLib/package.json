@@ -183,11 +183,11 @@
         },
         {
             "required": true,
-            "file": "Abstracts/StatusStates/FollowerState.php"
+            "file": "Abstracts/StatusStates/HealthStatusCode.php"
         },
         {
             "required": true,
-            "file": "Abstracts/StatusStates/HealthStatusCode.php"
+            "file": "Abstracts/StatusStates/RelationState.php"
         },
         {
             "required": true,
@@ -240,6 +240,10 @@
         {
             "required": true,
             "file": "Abstracts/Types/Standard/PostType.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/Types/Standard/RelationshipType.php"
         },
         {
             "required": true,
@@ -511,6 +515,14 @@
         },
         {
             "required": true,
+            "file": "Exceptions/Standard/Network/BlockedByPeerException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Network/BlockedPeerException.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/Standard/Network/DocumentNotFoundException.php"
         },
         {
@@ -639,14 +651,6 @@
         },
         {
             "required": true,
-            "file": "Managers/FollowerDataManager.php"
-        },
-        {
-            "required": true,
-            "file": "Managers/FollowerStateManager.php"
-        },
-        {
-            "required": true,
             "file": "Managers/LikesRecordManager.php"
         },
         {
@@ -656,6 +660,10 @@
         {
             "required": true,
             "file": "Managers/QuotesRecordManager.php"
+        },
+        {
+            "required": true,
+            "file": "Managers/RelationStateManager.php"
         },
         {
             "required": true,
@@ -756,10 +764,6 @@
         {
             "required": true,
             "file": "Objects/FileValidationResults.php"
-        },
-        {
-            "required": true,
-            "file": "Objects/Follower.php"
         },
         {
             "required": true,

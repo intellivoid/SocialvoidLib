@@ -12,7 +12,7 @@ with open(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', 'ses
 cdn_endpoint = request(client_info["endpoint"], "help.get_server_information").data.result['cdn_server']
 
 response = request(
-    client_info["endpoint"], "network.get_profile",
+    client_info["endpoint"], "network.get_me",
      session_identification={
         "session_id": session_info["id"],
         "client_public_hash": client_info["public_hash"],
