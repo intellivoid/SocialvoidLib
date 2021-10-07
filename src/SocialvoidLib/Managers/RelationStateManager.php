@@ -14,6 +14,7 @@
 
     use msqg\QueryBuilder;
     use SocialvoidLib\Abstracts\StatusStates\RelationState;
+    use SocialvoidLib\Abstracts\Types\Standard\RelationshipType;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Objects\User;
     use SocialvoidLib\SocialvoidLib;
@@ -166,5 +167,59 @@
                     $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
                 );
             }
+        }
+
+        /**
+         * Returns the number of followers that this peer has
+         *
+         * @param User $user
+         * @return int
+         * @throws DatabaseException
+         * @noinspection PhpCastIsUnnecessaryInspection
+         */
+        public function getFollowersCount(User $user): int
+        {
+            $user_id = (int)$user->ID;
+            $state = (int)RelationState::Following;
+            $Query = "SELECT COUNT(*) AS total FROM `peer_relations` WHERE target_user_id='$user_id' AND state=$state";
+
+            $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
+
+            // Execute and process the query
+            if($QueryResults == false)
+            {
+                throw new DatabaseException('There was an error while trying to get the followers count from this user',
+                    $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
+                );
+            }
+
+            return (int)$QueryResults->fetch_assoc()['total'];
+        }
+
+        /**
+         * Returns the number of peers that this peer is following
+         *
+         * @param User $user
+         * @return int
+         * @throws DatabaseException
+         * @noinspection PhpCastIsUnnecessaryInspection
+         */
+        public function getFollowingCount(User $user): int
+        {
+            $user_id = (int)$user->ID;
+            $state = (int)RelationState::Following;
+            $Query = "SELECT COUNT(*) AS total FROM `peer_relations` WHERE user_id='$user_id' AND state=$state";
+
+            $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
+
+            // Execute and process the query
+            if($QueryResults == false)
+            {
+                throw new DatabaseException('There was an error while trying to get the followers count from this user',
+                    $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
+                );
+            }
+
+            return (int)$QueryResults->fetch_assoc()['total'];
         }
     }
