@@ -1,6 +1,6 @@
 {
-  "endpoint_alt": "http://socialvoid.qlg1.com:5601/",
-  "endpoint": "http://127.0.0.1:5001/",
+  "endpoint": "http://socialvoid.qlg1.com:5601/",
+  "endpoint_alt": "http://127.0.0.1:5001/",
   "public_hash": "e480e2c183c017aedabc7eb7ccdb998d9d6ca5c5f50e446926f32f7a73cf2ee9",
   "private_hash": "53bff3e23ad179998d39228646f70e5b8ac1ad24c04950e39be45ca7e4044b0f",
   "platform": "Linux",
