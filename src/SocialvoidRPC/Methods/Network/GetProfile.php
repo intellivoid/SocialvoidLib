@@ -159,7 +159,10 @@
                     $requested_peer = $NetworkSession->getAuthenticatedUser()->PublicID;
                 }
 
-                $resolved_peer = $NetworkSession->getUsers()->resolvePeer($requested_peer);
+                $Response = Response::fromRequest($request);
+                $Response->ResultData = $NetworkSession->getUsers()->getProfile($requested_peer);
+
+                return $Response;
             }
             catch(Exception $e)
             {
@@ -170,10 +173,5 @@
                 // If anything else, suppress the error.There was an unexpected error while processing the requested peer
                 throw new InternalServerException('There was an unexpected error while processing the requested peer', $e);
             }
-            
-            $Response = Response::fromRequest($request);
-            $Response->ResultData = Profile::fromUser($resolved_peer)->toArray();
-
-            return $Response;
         }
     }
