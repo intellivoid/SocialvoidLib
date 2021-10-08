@@ -236,6 +236,46 @@
         }
 
         /**
+         * Returns an array of user IDs that this peer follows
+         *
+         * @param User $user
+         * @param int $limit
+         * @param int $offset
+         * @return array
+         * @throws DatabaseException
+         * @noinspection PhpCastIsUnnecessaryInspection
+         */
+        public function getFollowing(User $user, int $limit=100, int $offset=0): array
+        {
+            $user_id = (int)$user->ID;
+            $state = (int)RelationState::Following;
+            $limit = (int)$limit;
+            $offset = (int)$offset;
+
+            $Query = "SELECT target_user_id FROM `peer_relations` WHERE user_id='$user_id' AND state=$state LIMIT $offset, $limit";
+            $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
+
+            // Execute and process the query
+            if($QueryResults == false)
+            {
+                throw new DatabaseException('There was an error while trying to get the following data from the requested peer',
+                    $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
+                );
+            }
+            else
+            {
+                $ResultsArray = [];
+
+                while($Row = $QueryResults->fetch_assoc())
+                {
+                    $ResultsArray[] = $Row['user_id'];
+                }
+            }
+
+            return $ResultsArray;
+        }
+
+        /**
          * Returns the number of peers that this peer is following
          *
          * @param User $user
