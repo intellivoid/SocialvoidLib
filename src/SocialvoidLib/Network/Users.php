@@ -342,7 +342,6 @@
             if($this->networkSession->isAuthenticated() == false)
                 throw new NotAuthenticatedException();
 
-            // TODO: Update the timeline upon a follow event
             // Resolve the Peer ID
             $target_peer = $this->resolvePeer($peer);
 
