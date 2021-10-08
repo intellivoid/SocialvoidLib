@@ -13,18 +13,18 @@
 
     namespace SocialvoidLib\Managers;
 
-
     use BackgroundWorker\Exceptions\ServerNotReachableException;
     use Exception;
     use msqg\QueryBuilder;
     use SocialvoidLib\Abstracts\SearchMethods\TimelineSearchMethod;
-    use SocialvoidLib\Abstracts\StatusStates\TimelineState;
     use SocialvoidLib\Classes\Utilities;
     use SocialvoidLib\Exceptions\GenericInternal\BackgroundWorkerNotEnabledException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSlaveHashException;
+    use SocialvoidLib\Exceptions\GenericInternal\UserHasInvalidSlaveHashException;
     use SocialvoidLib\Exceptions\Internal\UserTimelineNotFoundException;
+    use SocialvoidLib\Objects\Standard\TimelineState;
     use SocialvoidLib\Objects\Timeline;
     use SocialvoidLib\Objects\User;
     use SocialvoidLib\SocialvoidLib;
@@ -56,21 +56,22 @@
          * @param User $user
          * @return Timeline
          * @throws DatabaseException
-         * @throws UserTimelineNotFoundException
          * @throws InvalidSlaveHashException
+         * @throws UserHasInvalidSlaveHashException
+         * @throws UserTimelineNotFoundException
          */
         public function retrieveTimeline(User $user): Timeline
         {
             try
             {
-                return $this->getTimeline(TimelineSearchMethod::ByUserId, $user_id);
+                return $this->getTimeline($user);
             }
             catch(UserTimelineNotFoundException $e)
             {
-                $this->createTimeline($user_id);
+                $this->createTimeline($user);
             }
 
-            return $this->getTimeline(TimelineSearchMethod::ByUserId, $user_id);
+            return $this->getTimeline($user);
         }
 
         /**
@@ -78,12 +79,12 @@
          *
          * @param string $search_method
          * @param string $value
-         * @return \SocialvoidLib\Objects\Standard\TimelineState
+         * @return TimelineState
          * @throws DatabaseException
          * @throws InvalidSearchMethodException
          * @throws UserTimelineNotFoundException
          */
-        public function getTimelineState(string $search_method, string $value): \SocialvoidLib\Objects\Standard\TimelineState
+        public function getTimelineState(string $search_method, string $value): TimelineState
         {
             switch($search_method)
             {
@@ -113,7 +114,7 @@
                 }
                 else
                 {
-                    $TimelineState = new \SocialvoidLib\Objects\Standard\TimelineState();
+                    $TimelineState = new TimelineState();
                     $TimelineState->TimelinePostsCount = (int)$Row['new_posts'];
                     $TimelineState->TimelineLastUpdated = (int)$Row['last_updated_timestamp'];
 
@@ -132,25 +133,35 @@
         /**
          * Creates a new timeline for a user
          *
-         * @param int $user_id
+         * @param User $user
          * @throws DatabaseException
+         * @throws UserHasInvalidSlaveHashException
+         * @noinspection PhpCastIsUnnecessaryInspection
          */
-        public function createTimeline(int $user_id): void
+        public function createTimeline(User $user): void
         {
             $Query = QueryBuilder::insert_into('user_timelines', [
-                'user_id' => (int)$user_id,
-                'state' => $this->socialvoidLib->getDatabase()->real_escape_string(TimelineState::Available),
+                'user_id' => (int)$user->ID,
                 'post_chunks' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
                 'new_posts' => 0,
                 'last_updated_timestamp' => (int)time(),
                 'created_timestamp' => (int)time()
             ]);
 
-            $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
+            try
+            {
+                $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer($user->SlaveServer);
+            }
+            catch (InvalidSlaveHashException $e)
+            {
+                throw new UserHasInvalidSlaveHashException();
+            }
+
+            $QueryResults = $SelectedSlave->getConnection()->query($Query);
             if($QueryResults == false)
             {
                 throw new DatabaseException('There was an error while trying to create user timeline',
-                    $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
+                    $Query, $SelectedSlave->getConnection()->error, $SelectedSlave->getConnection()
                 );
             }
         }
@@ -169,7 +180,6 @@
         {
             $Query = QueryBuilder::select('user_timelines', [
                 'user_id',
-                'state',
                 'post_chunks',
                 'new_posts',
                 'last_updated_timestamp',
@@ -189,7 +199,10 @@
                 else
                 {
                     $Row['post_chunks'] = ZiProto::decode($Row['post_chunks']);
-                    return(Timeline::fromArray($Row));
+                    $timeline = Timeline::fromArray($Row);
+                    $timeline->SlaveHash = $SelectedSlave->MysqlServerPointer->HashPointer;
+
+                    return $timeline;
                 }
             }
             else
@@ -206,23 +219,33 @@
          *
          * @param Timeline $timeline
          * @throws DatabaseException
+         * @throws UserTimelineNotFoundException
+         * @noinspection PhpCastIsUnnecessaryInspection
          */
         public function updateTimeline(Timeline $timeline): void
         {
             $Query = QueryBuilder::update('user_timelines', [
-                'state' => $this->socialvoidLib->getDatabase()->real_escape_string($timeline->State),
                 'post_chunks' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($timeline->PostChunks)),
                 'new_posts' => (int)$timeline->NewPosts,
                 'last_updated_timestamp' => (int)time()
-            ], 'id', (int)$timeline->ID);
+            ], 'user_id', (int)$timeline->UserID);
 
-            $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
+            try
+            {
+                $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer($timeline->SlaveHash);
+            }
+            catch (InvalidSlaveHashException $e)
+            {
+                throw new UserTimelineNotFoundException();
+            }
+
+            $QueryResults = $SelectedSlave->getConnection()->query($Query);
 
             if($QueryResults == false)
             {
                 throw new DatabaseException(
-                    'There was an error while trying to update the session',
-                    $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
+                    'There was an error while trying to update the timeline',
+                    $Query, $SelectedSlave->getConnection()->error, $SelectedSlave->getConnection()
                 );
             }
         }
@@ -236,9 +259,10 @@
          * @param bool $skip_errors
          * @throws BackgroundWorkerNotEnabledException
          * @throws DatabaseException
-         * @throws ServerNotReachableException
-         * @throws UserTimelineNotFoundException
          * @throws InvalidSlaveHashException
+         * @throws ServerNotReachableException
+         * @throws UserHasInvalidSlaveHashException
+         * @throws UserTimelineNotFoundException
          */
         public function distributePost(string $post_id, array $followers, int $utilization=100, bool $skip_errors=true): void
         {
@@ -271,28 +295,29 @@
         /**
          * Removes multiple posts from a timeline and reconstructs the chunks
          *
-         * @param int $user_id
+         * @param User $user
          * @param array $post_ids
          * @param bool $skip_errors
          * @throws BackgroundWorkerNotEnabledException
          * @throws DatabaseException
-         * @throws ServerNotReachableException
-         * @throws UserTimelineNotFoundException
          * @throws InvalidSlaveHashException
+         * @throws ServerNotReachableException
+         * @throws UserHasInvalidSlaveHashException
+         * @throws UserTimelineNotFoundException
          */
-        public function removePosts(int $user_id, array $post_ids, bool $skip_errors=true): void
+        public function removePosts(User $user, array $post_ids, bool $skip_errors=true): void
         {
             if(Utilities::getBoolDefinition('SOCIALVOID_LIB_BACKGROUND_WORKER_ENABLED'))
             {
                 $this->socialvoidLib->getServiceJobManager()->getTimelineJobs()->removeTimelinePosts(
-                    $user_id, $post_ids, $skip_errors
+                    $user, $post_ids, $skip_errors
                 );
             }
             else
             {
                 try
                 {
-                    $timeline = $this->retrieveTimeline($user_id);
+                    $timeline = $this->retrieveTimeline($user);
 
                     foreach($post_ids as $id)
                     {

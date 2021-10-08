@@ -12,6 +12,7 @@
     use SocialvoidLib\Classes\Utilities;
     use SocialvoidLib\Exceptions\GenericInternal\BackgroundWorkerNotEnabledException;
     use SocialvoidLib\Exceptions\GenericInternal\ServiceJobException;
+    use SocialvoidLib\Objects\User;
     use SocialvoidLib\ServiceJobs\ServiceJobQuery;
     use SocialvoidLib\ServiceJobs\ServiceJobResults;
     use SocialvoidLib\SocialvoidLib;
@@ -132,14 +133,14 @@
          * @throws BackgroundWorkerNotEnabledException
          * @throws ServerNotReachableException
          */
-        public function removeTimelinePosts(int $user_id, array $post_ids, bool $skip_errors=False): void
+        public function removeTimelinePosts(User $user, array $post_ids, bool $skip_errors=False): void
         {
             $ServiceJobQuery = new ServiceJobQuery();
             $ServiceJobQuery->setJobType(JobType::RemoveTimelinePosts);
             $ServiceJobQuery->setJobPriority(JobPriority::Normal);
             $ServiceJobQuery->setJobData([
                 0x000 => $skip_errors,
-                0x001 => $user_id,
+                0x001 => $user->toArray(),
                 0x002 => $post_ids
             ]);
             $ServiceJobQuery->generateJobID();
@@ -168,7 +169,7 @@
             try
             {
                 $Timeline = $this->socialvoidLib->getTimelineManager()->retrieveTimeline(
-                    $serviceJobQuery->getJobData()[0x001]
+                    User::fromArray($serviceJobQuery->getJobData()[0x001])
                 );
 
             }
@@ -182,7 +183,7 @@
 
                 // Set the error anyways for troubleshooting purposes
                 $ServiceJobResults->setJobError(new ServiceJobException(
-                    "There was an error while trying to retrieve the timeline '" . $serviceJobQuery->getJobData()[0x001] . "'",
+                    "There was an error while trying to retrieve the timeline",
                     $serviceJobQuery, $e
                 ));
 
@@ -210,7 +211,7 @@
 
                 // Set the error anyways for troubleshooting purposes
                 $ServiceJobResults->setJobError(new ServiceJobException(
-                    "There was an error while trying to update the timeline '" . $serviceJobQuery->getJobData()[0x001] . "'",
+                    "There was an error while trying to update the timeline",
                     $serviceJobQuery, $e
                 ));
 

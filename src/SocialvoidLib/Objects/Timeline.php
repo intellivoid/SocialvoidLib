@@ -14,7 +14,6 @@
 
     namespace SocialvoidLib\Objects;
 
-    use SocialvoidLib\Abstracts\StatusStates\TimelineState;
     use SocialvoidLib\Classes\Utilities;
 
     /**
@@ -24,25 +23,11 @@
     class Timeline
     {
         /**
-         * The Unique Internal Database ID
-         *
-         * @var int
-         */
-        public $ID;
-
-        /**
          * The Unique User ID
          *
          * @var int
          */
         public $UserID;
-
-        /**
-         * The current state of the timeline
-         *
-         * @var string|TimelineState
-         */
-        public $State;
 
         /**
          * Array of chunks for the timeline representation
@@ -58,6 +43,13 @@
          */
         public $NewPosts;
 
+        /**
+         * The slave hash that this object is stored at
+         * 
+         * @var string
+         */
+        public $SlaveHash;
+        
         /**
          * Unix Timestamp for when this record was last updated
          *
@@ -80,8 +72,8 @@
         public function addPost(string $post_id)
         {
             $this->PostChunks = Utilities::addToChunk($post_id, $this->PostChunks,
-                Utilities::getIntDefinition("SOCIALVOID_LIB_TIMELINE_MAX_SIZE", 3200),
-                Utilities::getIntDefinition("SOCIALVOID_LIB_TIMELINE_CHUNK_SIZE", 20)
+                Utilities::getIntDefinition('SOCIALVOID_LIB_TIMELINE_MAX_SIZE', 3200),
+                Utilities::getIntDefinition('SOCIALVOID_LIB_TIMELINE_CHUNK_SIZE', 20)
             );
             $this->NewPosts += 1;
         }
@@ -94,7 +86,7 @@
         public function removePost(string $post_id)
         {
             $this->PostChunks = Utilities::removeFromChunk($post_id, $this->PostChunks,
-                Utilities::getIntDefinition("SOCIALVOID_LIB_TIMELINE_CHUNK_SIZE", 20));
+                Utilities::getIntDefinition('SOCIALVOID_LIB_TIMELINE_CHUNK_SIZE', 20));
         }
 
         /**
@@ -104,7 +96,7 @@
         {
             $this->PostChunks = Utilities::splitToChunks(
                 Utilities::rebuildFromChunks($this->PostChunks),
-                Utilities::getIntDefinition("SOCIALVOID_LIB_TIMELINE_CHUNK_SIZE", 20)
+                Utilities::getIntDefinition('SOCIALVOID_LIB_TIMELINE_CHUNK_SIZE', 20)
             );
         }
 
@@ -126,13 +118,12 @@
         public function toArray(): array
         {
             return [
-                "id" => $this->ID,
-                "user_id" => $this->UserID,
-                "state" => $this->State,
-                "post_chunks" => $this->PostChunks,
-                "new_posts" => $this->NewPosts,
-                "last_updated_timestamp" => $this->LastUpdatedTimestamp,
-                "created_timestamp" => $this->CreatedTimestamp
+                'user_id' => $this->UserID,
+                'post_chunks' => $this->PostChunks,
+                'new_posts' => $this->NewPosts,
+                'slave_hash' => $this->SlaveHash,
+                'last_updated_timestamp' => $this->LastUpdatedTimestamp,
+                'created_timestamp' => $this->CreatedTimestamp
             ];
         }
 
@@ -145,27 +136,24 @@
         public static function fromArray(array $data): Timeline
         {
             $TimelineObject = new Timeline();
+            
+            if(isset($data['user_id']))
+                $TimelineObject->UserID = (int)$data['user_id'];
 
-            if(isset($data["id"]))
-                $TimelineObject->ID = (int)$data["id"];
+            if(isset($data['post_chunks']))
+                $TimelineObject->PostChunks = $data['post_chunks'];
 
-            if(isset($data["user_id"]))
-                $TimelineObject->UserID = (int)$data["user_id"];
+            if(isset($data['new_posts']))
+                $TimelineObject->NewPosts = (int)$data['new_posts'];
 
-            if(isset($data["state"]))
-                $TimelineObject->State = $data["state"];
+            if(isset($data['slave_hash']))
+                $TimelineObject->SlaveHash = $data['slave_hash'];
+            
+            if(isset($data['last_updated_timestamp']))
+                $TimelineObject->LastUpdatedTimestamp = (int)$data['last_updated_timestamp'];
 
-            if(isset($data["post_chunks"]))
-                $TimelineObject->PostChunks = $data["post_chunks"];
-
-            if(isset($data["new_posts"]))
-                $TimelineObject->NewPosts = (int)$data["new_posts"];
-
-            if(isset($data["last_updated_timestamp"]))
-                $TimelineObject->LastUpdatedTimestamp = (int)$data["last_updated_timestamp"];
-
-            if(isset($data["created_timestamp"]))
-                $TimelineObject->CreatedTimestamp = (int)$data["created_timestamp"];
+            if(isset($data['created_timestamp']))
+                $TimelineObject->CreatedTimestamp = (int)$data['created_timestamp'];
 
             $TimelineObject->rebuildChunks();
             return $TimelineObject;
