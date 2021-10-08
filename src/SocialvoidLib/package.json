@@ -351,6 +351,10 @@
         },
         {
             "required": true,
+            "file": "Exceptions/GenericInternal/DisplayPictureException.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/GenericInternal/DuplicateSlaveNameException.php"
         },
         {

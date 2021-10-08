@@ -32,6 +32,7 @@
     use SocialvoidLib\Exceptions\GenericInternal\CacheMissedException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\GenericInternal\DependencyError;
+    use SocialvoidLib\Exceptions\GenericInternal\DisplayPictureException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
     use SocialvoidLib\Exceptions\GenericInternal\RedisCacheException;
     use SocialvoidLib\Exceptions\GenericInternal\ServiceJobException;
@@ -48,15 +49,6 @@
     use SocialvoidLib\SocialvoidLib;
     use udp2\Abstracts\ColorScheme;
     use udp2\Abstracts\DefaultAvatarType;
-    use udp2\Exceptions\AvatarGeneratorException;
-    use udp2\Exceptions\AvatarNotFoundException;
-    use udp2\Exceptions\ImageTooSmallException;
-    use udp2\Exceptions\UnsupportedAvatarGeneratorException;
-    use Zimage\Exceptions\CannotGetOriginalImageException;
-    use Zimage\Exceptions\FileNotFoundException;
-    use Zimage\Exceptions\InvalidZimageFileException;
-    use Zimage\Exceptions\SizeNotSetException;
-    use Zimage\Exceptions\UnsupportedImageTypeException;
     use Zimage\Zimage;
     use ZiProto\ZiProto;
 
@@ -88,23 +80,15 @@
          * @param string $first_name
          * @param string|null $last_name
          * @return User
-         * @throws AvatarGeneratorException
-         * @throws AvatarNotFoundException
          * @throws CacheException
-         * @throws CannotGetOriginalImageException
          * @throws DatabaseException
+         * @throws DisplayPictureException
          * @throws DocumentNotFoundException
-         * @throws FileNotFoundException
-         * @throws ImageTooSmallException
          * @throws InvalidFirstNameException
          * @throws InvalidLastNameException
          * @throws InvalidSearchMethodException
          * @throws InvalidUsernameException
-         * @throws InvalidZimageFileException
          * @throws PeerNotFoundException
-         * @throws SizeNotSetException
-         * @throws UnsupportedAvatarGeneratorException
-         * @throws UnsupportedImageTypeException
          * @throws UsernameAlreadyExistsException
          */
         public function registerUser(string $username, string $first_name, string $last_name=null): User
@@ -179,20 +163,12 @@
          * @param string $search_method
          * @param string|int $value
          * @return User
-         * @throws AvatarGeneratorException
-         * @throws AvatarNotFoundException
          * @throws CacheException
-         * @throws CannotGetOriginalImageException
          * @throws DatabaseException
+         * @throws DisplayPictureException
          * @throws DocumentNotFoundException
-         * @throws FileNotFoundException
-         * @throws ImageTooSmallException
          * @throws InvalidSearchMethodException
-         * @throws InvalidZimageFileException
          * @throws PeerNotFoundException
-         * @throws SizeNotSetException
-         * @throws UnsupportedAvatarGeneratorException
-         * @throws UnsupportedImageTypeException
          */
         public function getUser(string $search_method, $value): User
         {
@@ -352,23 +328,15 @@
          * @param bool $skip_errors
          * @param int $utilization
          * @return User[]
-         * @throws AvatarGeneratorException
-         * @throws AvatarNotFoundException
          * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
-         * @throws CannotGetOriginalImageException
          * @throws DatabaseException
+         * @throws DisplayPictureException
          * @throws DocumentNotFoundException
-         * @throws FileNotFoundException
-         * @throws ImageTooSmallException
          * @throws InvalidSearchMethodException
-         * @throws InvalidZimageFileException
          * @throws PeerNotFoundException
-         * @throws ServiceJobException
-         * @throws SizeNotSetException
-         * @throws UnsupportedAvatarGeneratorException
-         * @throws UnsupportedImageTypeException
          * @throws ServerNotReachableException
+         * @throws ServiceJobException
          */
         public function getMultipleUsers(array $query, bool $skip_errors=True, int $utilization=100): array
         {
@@ -462,36 +430,44 @@
          *
          * @param User $user
          * @return Document
-         * @throws AvatarGeneratorException
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DisplayPictureException
          * @throws DocumentNotFoundException
-         * @throws ImageTooSmallException
-         * @throws UnsupportedAvatarGeneratorException
-         * @throws CannotGetOriginalImageException
-         * @throws FileNotFoundException
-         * @throws InvalidZimageFileException
-         * @throws SizeNotSetException
-         * @throws UnsupportedImageTypeException
-         * @throws AvatarNotFoundException
          */
         public function getDefaultDisplayPictureDocument(User &$user): Document
         {
             if($user->Properties->DefaultProfilePictureDocumentID == null)
             {
-                $this->socialvoidLib->getUserDisplayPictureManager()->generateAvatar(
-                    $user->PublicID . '_default', $user->getDisplayName(),
-                    DefaultAvatarType::InitialsBase, ColorScheme::Dark
-                );
+                try
+                {
 
-                $avatar_zimage = $this->socialvoidLib->getUserDisplayPictureManager()->getAvatar($user->PublicID . "_default");
+                    $this->socialvoidLib->getUserDisplayPictureManager()->generateAvatar(
+                        $user->PublicID . '_default', $user->getDisplayName(),
+                        DefaultAvatarType::InitialsBase, ColorScheme::Dark
+                    );
+
+                    $avatar_zimage = $this->socialvoidLib->getUserDisplayPictureManager()->getAvatar($user->PublicID . "_default");
+                }
+                catch(Exception $e)
+                {
+                    throw new DisplayPictureException('There was an error while trying to process the default profile picture', 0, $e);
+                }
 
                 $document_input = new DocumentInput();
                 $document_input->AccessType = DocumentAccessType::Public;
                 $document_input->OwnerUserID = $user->ID;
                 $document_input->ContentSource = ContentSource::UserProfilePicture;
                 $document_input->ContentIdentifier = $user->PublicID . "_default";
-                $document_input->Files = Converter::zimageToFiles($avatar_zimage, $user->PublicID . "_default");
+
+                try
+                {
+                    $document_input->Files = Converter::zimageToFiles($avatar_zimage, $user->PublicID . "_default");
+                }
+                catch(Exception $e)
+                {
+                    throw new DisplayPictureException('There was an error while trying to convert a Zimage to a file', 0, $e);
+                }
 
                 $user->Properties->DefaultProfilePictureDocumentID = $this->socialvoidLib->getDocumentsManager()->createDocument($document_input);
                 $user->DisplayPictureDocument = $this->socialvoidLib->getDocumentsManager()->getDocument($user->Properties->DefaultProfilePictureDocumentID);
@@ -516,17 +492,9 @@
          *
          * @param User $user
          * @return Document
-         * @throws AvatarGeneratorException
-         * @throws AvatarNotFoundException
          * @throws CacheException
-         * @throws CannotGetOriginalImageException
          * @throws DatabaseException
-         * @throws ImageTooSmallException
-         * @throws InvalidZimageFileException
-         * @throws SizeNotSetException
-         * @throws UnsupportedAvatarGeneratorException
-         * @throws UnsupportedImageTypeException
-         * @throws FileNotFoundException
+         * @throws DisplayPictureException
          * @throws DocumentNotFoundException
          */
         public function getDisplayPictureDocument(User &$user): Document
@@ -549,30 +517,37 @@
          *
          * @param User $user
          * @param string $filePath
-         * @throws AvatarGeneratorException
-         * @throws AvatarNotFoundException
          * @throws CacheException
-         * @throws CannotGetOriginalImageException
          * @throws DatabaseException
-         * @throws ImageTooSmallException
-         * @throws InvalidZimageFileException
-         * @throws SizeNotSetException
-         * @throws UnsupportedAvatarGeneratorException
-         * @throws UnsupportedImageTypeException
-         * @throws FileNotFoundException
          * @throws DocumentNotFoundException
+         * @throws DisplayPictureException
          */
         public function setDisplayPicture(User &$user, string $filePath)
         {
-            $this->socialvoidLib->getUserDisplayPictureManager()->applyAvatar($filePath, $user->PublicID);
-            $avatar_zimage = $this->socialvoidLib->getUserDisplayPictureManager()->getAvatar($user->PublicID);
+            try
+            {
+                $this->socialvoidLib->getUserDisplayPictureManager()->applyAvatar($filePath, $user->PublicID);
+                $avatar_zimage = $this->socialvoidLib->getUserDisplayPictureManager()->getAvatar($user->PublicID);
+            }
+            catch(Exception $e)
+            {
+                throw new DisplayPictureException('There was an error while trying to apply the display picture', 0, $e);
+            }
 
             $document_input = new DocumentInput();
             $document_input->AccessType = DocumentAccessType::Public;
             $document_input->OwnerUserID = $user->ID;
             $document_input->ContentSource = ContentSource::UserProfilePicture;
             $document_input->ContentIdentifier = $user->PublicID;
-            $document_input->Files = Converter::zimageToFiles($avatar_zimage, $user->PublicID);
+
+            try
+            {
+                $document_input->Files = Converter::zimageToFiles($avatar_zimage, $user->PublicID);
+            }
+            catch(Exception $e)
+            {
+                throw new DisplayPictureException('There was an error while trying convert a zimage to a file', 0, $e);
+            }
 
             $new_document_id = $this->socialvoidLib->getDocumentsManager()->createDocument($document_input);
 
@@ -599,19 +574,11 @@
          * Deletes the users profile picture if it exists
          *
          * @param User $user
-         * @throws AvatarGeneratorException
-         * @throws AvatarNotFoundException
          * @throws CacheException
-         * @throws CannotGetOriginalImageException
          * @throws DatabaseException
+         * @throws DisplayPictureException
          * @throws DocumentNotFoundException
-         * @throws ImageTooSmallException
-         * @throws InvalidZimageFileException
-         * @throws SizeNotSetException
-         * @throws UnsupportedAvatarGeneratorException
-         * @throws UnsupportedImageTypeException
-         * @throws FileNotFoundException
-         */
+         \*/
         public function deleteDisplayPicture(User &$user)
         {
             if($user->Properties->ProfilePictureDocumentID !== null)
@@ -630,21 +597,17 @@
          *
          * @param User $user
          * @return Zimage
-         * @throws AvatarGeneratorException
-         * @throws AvatarNotFoundException
-         * @throws CacheException
-         * @throws CannotGetOriginalImageException
-         * @throws DatabaseException
-         * @throws DocumentNotFoundException
-         * @throws ImageTooSmallException
-         * @throws InvalidZimageFileException
-         * @throws SizeNotSetException
-         * @throws UnsupportedAvatarGeneratorException
-         * @throws UnsupportedImageTypeException
-         * @throws FileNotFoundException
+         * @throws DisplayPictureException
          */
         public function getDisplayPicture(User &$user): Zimage
         {
-            return $this->socialvoidLib->getUserDisplayPictureManager()->getAvatar($this->getDisplayPictureDocument($user)->ContentIdentifier);
+            try
+            {
+                return $this->socialvoidLib->getUserDisplayPictureManager()->getAvatar($this->getDisplayPictureDocument($user)->ContentIdentifier);
+            }
+            catch(Exception $e)
+            {
+                throw new DisplayPictureException('There was an error while trying get a existing Zimage file', 0, $e);
+            }
         }
     }

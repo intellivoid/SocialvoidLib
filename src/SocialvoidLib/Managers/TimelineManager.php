@@ -23,6 +23,7 @@
     use SocialvoidLib\Exceptions\GenericInternal\BackgroundWorkerNotEnabledException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
+    use SocialvoidLib\Exceptions\GenericInternal\InvalidSlaveHashException;
     use SocialvoidLib\Exceptions\Internal\UserTimelineNotFoundException;
     use SocialvoidLib\Objects\Timeline;
     use SocialvoidLib\Objects\User;
@@ -52,11 +53,11 @@
         /**
          * Retrieves an existing timeline, creates one if it doesn't exist
          *
-         * @param int $user_id
+         * @param User $user
          * @return Timeline
          * @throws DatabaseException
-         * @throws InvalidSearchMethodException
          * @throws UserTimelineNotFoundException
+         * @throws InvalidSlaveHashException
          */
         public function retrieveTimeline(User $user): Timeline
         {
@@ -157,12 +158,11 @@
         /**
          * Returns an existing timeline from the database
          *
-         * @param string $search_method
-         * @param string $value
+         * @param User $user
          * @return Timeline
          * @throws DatabaseException
-         * @throws InvalidSearchMethodException
          * @throws UserTimelineNotFoundException
+         * @throws InvalidSlaveHashException
          * @noinspection PhpCastIsUnnecessaryInspection
          */
         public function getTimeline(User $user): Timeline
@@ -236,9 +236,9 @@
          * @param bool $skip_errors
          * @throws BackgroundWorkerNotEnabledException
          * @throws DatabaseException
-         * @throws InvalidSearchMethodException
-         * @throws UserTimelineNotFoundException
          * @throws ServerNotReachableException
+         * @throws UserTimelineNotFoundException
+         * @throws InvalidSlaveHashException
          */
         public function distributePost(string $post_id, array $followers, int $utilization=100, bool $skip_errors=true): void
         {
@@ -276,9 +276,9 @@
          * @param bool $skip_errors
          * @throws BackgroundWorkerNotEnabledException
          * @throws DatabaseException
-         * @throws InvalidSearchMethodException
-         * @throws UserTimelineNotFoundException
          * @throws ServerNotReachableException
+         * @throws UserTimelineNotFoundException
+         * @throws InvalidSlaveHashException
          */
         public function removePosts(int $user_id, array $post_ids, bool $skip_errors=true): void
         {

@@ -40,15 +40,6 @@
     use SocialvoidLib\Objects\Standard\SessionEstablished;
     use SocialvoidLib\Objects\Standard\SessionIdentification;
     use SocialvoidLib\Objects\User;
-    use udp2\Exceptions\AvatarGeneratorException;
-    use udp2\Exceptions\AvatarNotFoundException;
-    use udp2\Exceptions\ImageTooSmallException;
-    use udp2\Exceptions\UnsupportedAvatarGeneratorException;
-    use Zimage\Exceptions\CannotGetOriginalImageException;
-    use Zimage\Exceptions\FileNotFoundException;
-    use Zimage\Exceptions\InvalidZimageFileException;
-    use Zimage\Exceptions\SizeNotSetException;
-    use Zimage\Exceptions\UnsupportedImageTypeException;
 
     /**
      * Class Network
@@ -158,26 +149,18 @@
          * Loads a session from a session identification
          *
          * @param SessionIdentification $sessionIdentification
-         * @throws AvatarGeneratorException
-         * @throws AvatarNotFoundException
-         * @throws CannotGetOriginalImageException
          * @throws Exceptions\GenericInternal\CacheException
          * @throws Exceptions\GenericInternal\DatabaseException
+         * @throws Exceptions\GenericInternal\DisplayPictureException
          * @throws Exceptions\GenericInternal\InvalidSearchMethodException
          * @throws Exceptions\Standard\Authentication\BadSessionChallengeAnswerException
          * @throws Exceptions\Standard\Authentication\SessionNotFoundException
          * @throws Exceptions\Standard\Network\DocumentNotFoundException
          * @throws Exceptions\Standard\Validation\InvalidClientPublicHashException
-         * @throws FileNotFoundException
-         * @throws ImageTooSmallException
          * @throws InternalServerException
-         * @throws InvalidZimageFileException
          * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
          * @throws SessionExpiredException
-         * @throws SizeNotSetException
-         * @throws UnsupportedAvatarGeneratorException
-         * @throws UnsupportedImageTypeException
          */
         public function loadSession(SessionIdentification $sessionIdentification)
         {
@@ -228,21 +211,13 @@
         /**
          * Loads the authenticated peer into the network session
          *
-         * @throws AvatarGeneratorException
-         * @throws AvatarNotFoundException
-         * @throws CannotGetOriginalImageException
          * @throws Exceptions\GenericInternal\CacheException
          * @throws Exceptions\GenericInternal\DatabaseException
+         * @throws Exceptions\GenericInternal\DisplayPictureException
          * @throws Exceptions\GenericInternal\InvalidSearchMethodException
          * @throws Exceptions\Standard\Network\DocumentNotFoundException
-         * @throws FileNotFoundException
-         * @throws ImageTooSmallException
-         * @throws InvalidZimageFileException
          * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
-         * @throws SizeNotSetException
-         * @throws UnsupportedAvatarGeneratorException
-         * @throws UnsupportedImageTypeException
          */
         public function loadAuthenticatedPeer()
         {
@@ -299,11 +274,9 @@
          * @return bool
          * @throws AlreadyAuthenticatedException
          * @throws AuthenticationFailureException
-         * @throws AvatarGeneratorException
-         * @throws AvatarNotFoundException
-         * @throws CannotGetOriginalImageException
          * @throws Exceptions\GenericInternal\CacheException
          * @throws Exceptions\GenericInternal\DatabaseException
+         * @throws Exceptions\GenericInternal\DisplayPictureException
          * @throws Exceptions\GenericInternal\InvalidSearchMethodException
          * @throws Exceptions\Internal\NoPasswordAuthenticationAvailableException
          * @throws Exceptions\Standard\Authentication\AuthenticationNotApplicableException
@@ -312,16 +285,10 @@
          * @throws Exceptions\Standard\Authentication\SessionNotFoundException
          * @throws Exceptions\Standard\Authentication\TwoFactorAuthenticationRequiredException
          * @throws Exceptions\Standard\Network\DocumentNotFoundException
-         * @throws FileNotFoundException
-         * @throws ImageTooSmallException
          * @throws IncorrectLoginCredentialsException
          * @throws InternalServerException
          * @throws InvalidPasswordException
-         * @throws InvalidZimageFileException
          * @throws PeerNotFoundException
-         * @throws SizeNotSetException
-         * @throws UnsupportedAvatarGeneratorException
-         * @throws UnsupportedImageTypeException
          */
         public function authenticateUser(string $username, string $password, ?string $otp=null): bool
         {
@@ -392,26 +359,18 @@
          * @param string|null $last_name
          * @return Peer
          * @throws AlreadyAuthenticatedException
-         * @throws AvatarGeneratorException
-         * @throws AvatarNotFoundException
-         * @throws CannotGetOriginalImageException
          * @throws Exceptions\GenericInternal\CacheException
          * @throws Exceptions\GenericInternal\DatabaseException
+         * @throws Exceptions\GenericInternal\DisplayPictureException
          * @throws Exceptions\GenericInternal\InvalidSearchMethodException
          * @throws Exceptions\Standard\Network\DocumentNotFoundException
          * @throws Exceptions\Standard\Validation\InvalidFirstNameException
          * @throws Exceptions\Standard\Validation\InvalidLastNameException
          * @throws Exceptions\Standard\Validation\InvalidUsernameException
          * @throws Exceptions\Standard\Validation\UsernameAlreadyExistsException
-         * @throws FileNotFoundException
-         * @throws ImageTooSmallException
          * @throws InternalServerException
          * @throws InvalidPasswordException
-         * @throws InvalidZimageFileException
          * @throws PeerNotFoundException
-         * @throws SizeNotSetException
-         * @throws UnsupportedAvatarGeneratorException
-         * @throws UnsupportedImageTypeException
          */
         public function registerUser(string $username, string $password, string $first_name, ?string $last_name=null): Peer
         {

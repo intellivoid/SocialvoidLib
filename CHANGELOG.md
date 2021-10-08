@@ -32,3 +32,6 @@
  - Added standard error InvalidOffsetValue (0x02112)
  - Added standard error InvalidLimitValue (0x02113)
  - Added missing methods to LikesRecordManager to get records and counts
+ - Refactored Reposts, Quotes, Replies and Likes managers to use slave tables and be more efficient in data storage
+ - Rewrote FollowersData and FollowersState to be Peer Relations, this cannot be scaled and must be stored on the master
+   database, but the methods has been rewritten to be more straightforward and allow for "Blocking" features (Not yet implemented)

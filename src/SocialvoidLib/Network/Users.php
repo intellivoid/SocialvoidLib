@@ -20,6 +20,7 @@
     use SocialvoidLib\Exceptions\GenericInternal\BackgroundWorkerNotEnabledException;
     use SocialvoidLib\Exceptions\GenericInternal\CacheException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
+    use SocialvoidLib\Exceptions\GenericInternal\DisplayPictureException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
     use SocialvoidLib\Exceptions\GenericInternal\ServiceJobException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException;
@@ -31,15 +32,6 @@
     use SocialvoidLib\NetworkSession;
     use SocialvoidLib\Objects\Standard\Profile;
     use SocialvoidLib\Objects\User;
-    use udp2\Exceptions\AvatarGeneratorException;
-    use udp2\Exceptions\AvatarNotFoundException;
-    use udp2\Exceptions\ImageTooSmallException;
-    use udp2\Exceptions\UnsupportedAvatarGeneratorException;
-    use Zimage\Exceptions\CannotGetOriginalImageException;
-    use Zimage\Exceptions\FileNotFoundException;
-    use Zimage\Exceptions\InvalidZimageFileException;
-    use Zimage\Exceptions\SizeNotSetException;
-    use Zimage\Exceptions\UnsupportedImageTypeException;
 
     /**
      * Class Users
@@ -67,22 +59,14 @@
          * @param $peer
          * @param bool $resolve_internally
          * @return User
-         * @throws AvatarGeneratorException
-         * @throws AvatarNotFoundException
          * @throws CacheException
-         * @throws CannotGetOriginalImageException
          * @throws DatabaseException
          * @throws DocumentNotFoundException
-         * @throws FileNotFoundException
-         * @throws ImageTooSmallException
          * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
-         * @throws InvalidZimageFileException
          * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
-         * @throws SizeNotSetException
-         * @throws UnsupportedAvatarGeneratorException
-         * @throws UnsupportedImageTypeException
+         * @throws DisplayPictureException
          */
         public function resolvePeer($peer, bool $resolve_internally=True): User
         {
@@ -139,24 +123,15 @@
         /**
          * @param array $peers
          * @return User[]
-         * @throws AvatarGeneratorException
-         * @throws AvatarNotFoundException
+         * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
-         * @throws CannotGetOriginalImageException
          * @throws DatabaseException
          * @throws DocumentNotFoundException
-         * @throws FileNotFoundException
-         * @throws ImageTooSmallException
          * @throws InvalidSearchMethodException
-         * @throws InvalidZimageFileException
          * @throws PeerNotFoundException
-         * @throws SizeNotSetException
-         * @throws UnsupportedAvatarGeneratorException
-         * @throws UnsupportedImageTypeException
-         * @throws BackgroundWorkerNotEnabledException
+         * @throws ServerNotReachableException
          * @throws ServiceJobException
-         * @throws ServerNotReachableException
-         * @throws ServerNotReachableException
+         * @throws DisplayPictureException
          */
         public function resolveMultiplePeers(array $peers): array
         {
@@ -164,22 +139,16 @@
         }
 
         /**
-         * @throws UnsupportedAvatarGeneratorException
-         * @throws CannotGetOriginalImageException
-         * @throws InvalidSearchMethodException
-         * @throws PeerNotFoundException
-         * @throws AvatarNotFoundException
-         * @throws NotAuthenticatedException
-         * @throws AvatarGeneratorException
-         * @throws SizeNotSetException
-         * @throws DocumentNotFoundException
-         * @throws ImageTooSmallException
-         * @throws InvalidZimageFileException
-         * @throws InvalidPeerInputException
-         * @throws UnsupportedImageTypeException
+         * @param $peer
+         * @return int
          * @throws CacheException
          * @throws DatabaseException
-         * @throws FileNotFoundException
+         * @throws DocumentNotFoundException
+         * @throws InvalidPeerInputException
+         * @throws InvalidSearchMethodException
+         * @throws NotAuthenticatedException
+         * @throws PeerNotFoundException
+         * @throws DisplayPictureException
          */
         public function resolveRelation($peer): int
         {
@@ -215,24 +184,16 @@
          *
          * @param $peer
          * @return int
-         * @throws AvatarGeneratorException
-         * @throws AvatarNotFoundException
          * @throws BlockedByPeerException
+         * @throws BlockedPeerException
          * @throws CacheException
-         * @throws CannotGetOriginalImageException
          * @throws DatabaseException
          * @throws DocumentNotFoundException
-         * @throws FileNotFoundException
-         * @throws ImageTooSmallException
          * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
-         * @throws InvalidZimageFileException
          * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
-         * @throws SizeNotSetException
-         * @throws UnsupportedAvatarGeneratorException
-         * @throws UnsupportedImageTypeException
-         * @throws BlockedPeerException
+         * @throws DisplayPictureException
          */
         public function followPeer($peer): int
         {
@@ -272,24 +233,16 @@
          *
          * @param $peer
          * @return int
-         * @throws AvatarGeneratorException
-         * @throws AvatarNotFoundException
          * @throws BlockedByPeerException
          * @throws BlockedPeerException
          * @throws CacheException
-         * @throws CannotGetOriginalImageException
          * @throws DatabaseException
          * @throws DocumentNotFoundException
-         * @throws FileNotFoundException
-         * @throws ImageTooSmallException
          * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
-         * @throws InvalidZimageFileException
          * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
-         * @throws SizeNotSetException
-         * @throws UnsupportedAvatarGeneratorException
-         * @throws UnsupportedImageTypeException
+         * @throws DisplayPictureException
          */
         public function unfollowPeer($peer): int
         {
@@ -320,22 +273,14 @@
          *
          * @param $peer
          * @return Profile
-         * @throws AvatarGeneratorException
-         * @throws AvatarNotFoundException
          * @throws CacheException
-         * @throws CannotGetOriginalImageException
          * @throws DatabaseException
          * @throws DocumentNotFoundException
-         * @throws FileNotFoundException
-         * @throws ImageTooSmallException
          * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
-         * @throws InvalidZimageFileException
          * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
-         * @throws SizeNotSetException
-         * @throws UnsupportedAvatarGeneratorException
-         * @throws UnsupportedImageTypeException
+         * @throws DisplayPictureException
          */
         public function getProfile($peer): Profile
         {
@@ -359,25 +304,17 @@
          * @param int $limit
          * @param int $offset
          * @return User[]
-         * @throws AvatarGeneratorException
-         * @throws AvatarNotFoundException
          * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
-         * @throws CannotGetOriginalImageException
          * @throws DatabaseException
          * @throws DocumentNotFoundException
-         * @throws FileNotFoundException
-         * @throws ImageTooSmallException
          * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
-         * @throws InvalidZimageFileException
          * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
          * @throws ServerNotReachableException
          * @throws ServiceJobException
-         * @throws SizeNotSetException
-         * @throws UnsupportedAvatarGeneratorException
-         * @throws UnsupportedImageTypeException
+         * @throws DisplayPictureException
          */
         public function getFollowers($peer, int $limit, int $offset): array
         {
@@ -403,25 +340,17 @@
          * @param int $limit
          * @param int $offset
          * @return User[]
-         * @throws AvatarGeneratorException
-         * @throws AvatarNotFoundException
          * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
-         * @throws CannotGetOriginalImageException
          * @throws DatabaseException
          * @throws DocumentNotFoundException
-         * @throws FileNotFoundException
-         * @throws ImageTooSmallException
          * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
-         * @throws InvalidZimageFileException
          * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
          * @throws ServerNotReachableException
          * @throws ServiceJobException
-         * @throws SizeNotSetException
-         * @throws UnsupportedAvatarGeneratorException
-         * @throws UnsupportedImageTypeException
+         * @throws DisplayPictureException
          */
         public function getFollowing($peer, int $limit, int $offset): array
         {

@@ -21,11 +21,11 @@
     use SocialvoidLib\Exceptions\GenericInternal\BackgroundWorkerNotEnabledException;
     use SocialvoidLib\Exceptions\GenericInternal\CacheException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
+    use SocialvoidLib\Exceptions\GenericInternal\DisplayPictureException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSlaveHashException;
     use SocialvoidLib\Exceptions\GenericInternal\ServiceJobException;
     use SocialvoidLib\Exceptions\GenericInternal\UserHasInvalidSlaveHashException;
-    use SocialvoidLib\Exceptions\Internal\FollowerDataNotFound;
     use SocialvoidLib\Exceptions\Internal\LikeRecordNotFoundException;
     use SocialvoidLib\Exceptions\Internal\QuoteRecordNotFoundException;
     use SocialvoidLib\Exceptions\Internal\ReplyRecordNotFoundException;
@@ -84,15 +84,13 @@
          * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
          * @throws DatabaseException
-         * @throws FollowerDataNotFound
          * @throws InvalidPostTextException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
          * @throws NotAuthenticatedException
          * @throws PostNotFoundException
+         * @throws ServerNotReachableException
          * @throws UserTimelineNotFoundException
-         * @throws ServerNotReachableException
-         * @throws ServerNotReachableException
          */
         public function composePost(string $text, array $media_content=[], array $flags=[]): Post
         {
@@ -160,11 +158,12 @@
          * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
          * @throws PostNotFoundException
+         * @throws ServerNotReachableException
          * @throws ServiceJobException
          * @throws SizeNotSetException
          * @throws UnsupportedAvatarGeneratorException
          * @throws UnsupportedImageTypeException
-         * @throws ServerNotReachableException
+         * @throws DisplayPictureException
          * @noinspection DuplicatedCode
          */
         public function getStandardPost(string $post_id): \SocialvoidLib\Objects\Standard\Post
@@ -310,12 +309,13 @@
          * @throws InvalidZimageFileException
          * @throws PeerNotFoundException
          * @throws PostNotFoundException
+         * @throws ServerNotReachableException
          * @throws ServiceJobException
          * @throws SizeNotSetException
          * @throws UnsupportedAvatarGeneratorException
          * @throws UnsupportedImageTypeException
          * @throws UserTimelineNotFoundException
-         * @throws ServerNotReachableException
+         * @throws DisplayPictureException
          * @noinspection DuplicatedCode
          */
         public function retrieveTimeline(int $page_number, bool $recursive=True): array
@@ -467,15 +467,14 @@
          * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
          * @throws DatabaseException
-         * @throws FollowerDataNotFound
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
          * @throws PostDeletedException
          * @throws PostNotFoundException
-         * @throws ServerNotReachableException
-         * @throws UserTimelineNotFoundException
-         * @throws UserHasInvalidSlaveHashException
          * @throws RepostRecordNotFoundException
+         * @throws ServerNotReachableException
+         * @throws UserHasInvalidSlaveHashException
+         * @throws UserTimelineNotFoundException
          */
         public function repostPost(string $post_public_id): Post
         {
@@ -551,26 +550,18 @@
          * @param int $offset
          * @param int $limit
          * @return array
-         * @throws AvatarGeneratorException
-         * @throws AvatarNotFoundException
          * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
-         * @throws CannotGetOriginalImageException
          * @throws DatabaseException
          * @throws DocumentNotFoundException
-         * @throws FileNotFoundException
-         * @throws ImageTooSmallException
          * @throws InvalidLimitValueException
          * @throws InvalidOffsetValueException
          * @throws InvalidSearchMethodException
-         * @throws InvalidZimageFileException
          * @throws PeerNotFoundException
          * @throws PostNotFoundException
          * @throws ServerNotReachableException
          * @throws ServiceJobException
-         * @throws SizeNotSetException
-         * @throws UnsupportedAvatarGeneratorException
-         * @throws UnsupportedImageTypeException
+         * @throws DisplayPictureException
          */
         public function getPostLikes(string $post_public_id, int $offset=0, int $limit=20): array
         {
@@ -603,15 +594,14 @@
          * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
          * @throws DatabaseException
-         * @throws FollowerDataNotFound
          * @throws InvalidPostTextException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
          * @throws PostDeletedException
          * @throws PostNotFoundException
+         * @throws QuoteRecordNotFoundException
          * @throws ServerNotReachableException
          * @throws UserTimelineNotFoundException
-         * @throws QuoteRecordNotFoundException
          */
         public function quotePost(string $post_public_id, string $text, array $media_content=[], array $flags=[]): Post
         {
@@ -647,7 +637,6 @@
          * @return Post
          * @throws CacheException
          * @throws DatabaseException
-         * @throws FollowerDataNotFound
          * @throws InvalidPostTextException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
