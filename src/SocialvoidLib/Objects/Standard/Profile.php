@@ -52,6 +52,20 @@
         public $URL;
 
         /**
+         * The amount of followers that the user has
+         *
+         * @var int
+         */
+        public $FollowersCount = 0;
+
+        /**
+         * The amount of users that this user is following
+         *
+         * @var int
+         */
+        public $FollowingCount = 0;
+
+        /**
          * An array of display picture sizes for this user
          *
          * @var DisplayPictureSize[]
@@ -67,6 +81,7 @@
          * Returns an array representation of the object
          *
          * @return array
+         * @noinspection PhpCastIsUnnecessaryInspection
          */
         public function toArray(): array
         {
@@ -81,6 +96,8 @@
                 'biography' => $this->Biography,
                 'location' => $this->Location,
                 'url' => $this->URL,
+                'followers_count' => (int)$this->FollowingCount,
+                'following_count' => (int)$this->FollowingCount,
                 'display_picture_sizes' =>  $displayPicturesSizes
             ];
         }
@@ -112,6 +129,12 @@
 
             if(isset($data['url']))
                 $ProfileObject->URL = $data['url'];
+
+            if(isset($data['followers_count']))
+                $ProfileObject->FollowersCount = (int)$data['followers_count'];
+
+            if(isset($data['following_count']))
+                $ProfileObject->FollowingCount = (int)$data['following_count'];
 
             if(isset($data['display_picture_sizes']))
             {

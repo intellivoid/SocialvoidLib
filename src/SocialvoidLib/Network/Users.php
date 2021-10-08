@@ -29,6 +29,7 @@
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPeerInputException;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\NetworkSession;
+    use SocialvoidLib\Objects\Standard\Profile;
     use SocialvoidLib\Objects\User;
     use udp2\Exceptions\AvatarGeneratorException;
     use udp2\Exceptions\AvatarNotFoundException;
@@ -312,6 +313,18 @@
             );
 
             return RelationState::None;
+        }
+
+        public function getProfile($peer): Profile
+        {
+            if($this->networkSession->isAuthenticated() == false)
+                throw new NotAuthenticatedException();
+
+            // TODO: Update the timeline upon a follow event
+            // Resolve the Peer ID
+            $target_peer = $this->resolvePeer($peer);
+
+            $stdProfile = Profile::fromUser($target_peer);
         }
 
     }
