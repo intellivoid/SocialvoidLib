@@ -14,7 +14,6 @@
 
     use msqg\QueryBuilder;
     use SocialvoidLib\Abstracts\StatusStates\RelationState;
-    use SocialvoidLib\Abstracts\Types\Standard\RelationshipType;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Objects\User;
     use SocialvoidLib\SocialvoidLib;
@@ -197,6 +196,46 @@
         }
 
         /**
+         * Returns an array of User IDs that currently follows the requested peer
+         *
+         * @param User $user
+         * @param int $limit
+         * @param int $offset
+         * @return array|int
+         * @throws DatabaseException
+         * @noinspection PhpCastIsUnnecessaryInspection
+         */
+        public function getFollowers(User $user, int $limit=100, int $offset=0): array
+        {
+            $user_id = (int)$user->ID;
+            $state = (int)RelationState::Following;
+            $limit = (int)$limit;
+            $offset = (int)$offset;
+
+            $Query = "SELECT user_id FROM `peer_relations` WHERE target_user_id='$user_id' AND state=$state LIMIT $offset, $limit";
+
+            $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
+            // Execute and process the query
+            if($QueryResults == false)
+            {
+                throw new DatabaseException('There was an error while trying to get the followers from the requested peer',
+                    $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
+                );
+            }
+            else
+            {
+                $ResultsArray = [];
+
+                while($Row = $QueryResults->fetch_assoc())
+                {
+                    $ResultsArray[] = $Row['user_id'];
+                }
+            }
+
+            return $ResultsArray;
+        }
+
+        /**
          * Returns the number of peers that this peer is following
          *
          * @param User $user
@@ -222,4 +261,5 @@
 
             return (int)$QueryResults->fetch_assoc()['total'];
         }
+
     }
