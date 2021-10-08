@@ -93,6 +93,10 @@
         },
         {
             "required": true,
+            "file": "Methods/Network/GetFollowing.php"
+        },
+        {
+            "required": true,
             "file": "Methods/Network/GetMe.php"
         },
         {
