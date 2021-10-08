@@ -315,6 +315,28 @@
             return RelationState::None;
         }
 
+        /**
+         * Returns a standard profile object of the requested peer
+         *
+         * @param $peer
+         * @return Profile
+         * @throws AvatarGeneratorException
+         * @throws AvatarNotFoundException
+         * @throws CacheException
+         * @throws CannotGetOriginalImageException
+         * @throws DatabaseException
+         * @throws DocumentNotFoundException
+         * @throws FileNotFoundException
+         * @throws ImageTooSmallException
+         * @throws InvalidPeerInputException
+         * @throws InvalidSearchMethodException
+         * @throws InvalidZimageFileException
+         * @throws NotAuthenticatedException
+         * @throws PeerNotFoundException
+         * @throws SizeNotSetException
+         * @throws UnsupportedAvatarGeneratorException
+         * @throws UnsupportedImageTypeException
+         */
         public function getProfile($peer): Profile
         {
             if($this->networkSession->isAuthenticated() == false)
@@ -325,6 +347,10 @@
             $target_peer = $this->resolvePeer($peer);
 
             $stdProfile = Profile::fromUser($target_peer);
+            $stdProfile->FollowersCount = $this->networkSession->getSocialvoidLib()->getRelationStateManager()->getFollowersCount($target_peer);
+            $stdProfile->FollowingCount = $this->networkSession->getSocialvoidLib()->getRelationStateManager()->getFollowingCount($target_peer);
+
+            return $stdProfile;
         }
 
     }

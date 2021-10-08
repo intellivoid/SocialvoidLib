@@ -96,7 +96,7 @@
                 'biography' => $this->Biography,
                 'location' => $this->Location,
                 'url' => $this->URL,
-                'followers_count' => (int)$this->FollowingCount,
+                'followers_count' => (int)$this->FollowersCount,
                 'following_count' => (int)$this->FollowingCount,
                 'display_picture_sizes' =>  $displayPicturesSizes
             ];
