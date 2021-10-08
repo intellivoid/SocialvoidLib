@@ -126,6 +126,7 @@
 
             // Network Methods
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Network\FollowPeer());
+            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Network\GetFollowers());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Network\GetMe());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Network\GetProfile());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Network\ResolvePeer());

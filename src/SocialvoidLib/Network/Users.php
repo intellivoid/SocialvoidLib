@@ -358,7 +358,7 @@
          * @param $peer
          * @param int $limit
          * @param int $offset
-         * @return array
+         * @return User[]
          * @throws AvatarGeneratorException
          * @throws AvatarNotFoundException
          * @throws CacheException
@@ -399,7 +399,7 @@
          * @param $peer
          * @param int $limit
          * @param int $offset
-         * @return array
+         * @return User[]
          * @throws AvatarGeneratorException
          * @throws AvatarNotFoundException
          * @throws CacheException
