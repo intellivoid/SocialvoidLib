@@ -48,9 +48,10 @@
          * @throws BackgroundWorkerNotEnabledException
          * @throws ServerNotReachableException
          */
-        public function distributeTimelinePosts(string $post_id, array $user_ids, int $utilization=100, bool $skip_errors=False): void
+        public function distributeTimelinePosts(User $user, string $post_id, int $utilization=100, bool $skip_errors=False): void
         {
             $ServiceJobQueries = [];
+            $FollowersCount = $this->socialvoidLib->getRelationStateManager()->getFollowersCount($user);
 
             foreach(Utilities::splitJobWeight(
                 $user_ids, Utilities::getIntDefinition("SOCIALVOID_LIB_BACKGROUND_UPDATE_WORKERS"), false, $utilization) as $chunk)

@@ -264,13 +264,13 @@
          * @throws UserHasInvalidSlaveHashException
          * @throws UserTimelineNotFoundException
          */
-        public function distributePost(string $post_id, array $followers, int $utilization=100, bool $skip_errors=true): void
+        public function distributePost(User $user, string $post_id, int $utilization=100, bool $skip_errors=true): void
         {
             // If background worker is enabled, split the query into multiple workers to speed up the process
             if(Utilities::getBoolDefinition('SOCIALVOID_LIB_BACKGROUND_WORKER_ENABLED'))
             {
                 $this->socialvoidLib->getServiceJobManager()->getTimelineJobs()->distributeTimelinePosts(
-                    $post_id, $followers, $utilization, $skip_errors
+                    $user, $post_id, $utilization, $skip_errors
                 );
             }
             else

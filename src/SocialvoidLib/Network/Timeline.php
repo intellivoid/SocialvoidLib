@@ -44,10 +44,6 @@
     use SocialvoidLib\Objects\Post;
     use SocialvoidLib\Objects\Standard\Peer;
     use SocialvoidLib\Objects\Standard\TimelineState;
-    use udp2\Exceptions\AvatarGeneratorException;
-    use udp2\Exceptions\AvatarNotFoundException;
-    use udp2\Exceptions\ImageTooSmallException;
-    use udp2\Exceptions\UnsupportedAvatarGeneratorException;
     use Zimage\Exceptions\CannotGetOriginalImageException;
     use Zimage\Exceptions\FileNotFoundException;
     use Zimage\Exceptions\InvalidZimageFileException;
@@ -90,6 +86,7 @@
          * @throws NotAuthenticatedException
          * @throws PostNotFoundException
          * @throws ServerNotReachableException
+         * @throws UserHasInvalidSlaveHashException
          * @throws UserTimelineNotFoundException
          */
         public function composePost(string $text, array $media_content=[], array $flags=[]): Post
@@ -104,11 +101,6 @@
                 PostPriorityLevel::High, $flags
             );
 
-            $FollowerData = $this->networkSession->getSocialvoidLib()->getFollowerDataManager()->resolveRecord(
-                $this->networkSession->getAuthenticatedUser()->ID
-            );
-
-            $FollowerData->FollowersIDs[] = $this->networkSession->getAuthenticatedUser()->ID;
             $this->networkSession->getSocialvoidLib()->getTimelineManager()->distributePost(
                 $PostObject->PublicID, $FollowerData->FollowersIDs, 100, true
             );
@@ -143,15 +135,12 @@
          *
          * @param string $post_id
          * @return \SocialvoidLib\Objects\Standard\Post
-         * @throws AvatarGeneratorException
-         * @throws AvatarNotFoundException
          * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
          * @throws CannotGetOriginalImageException
          * @throws DatabaseException
          * @throws DocumentNotFoundException
          * @throws FileNotFoundException
-         * @throws ImageTooSmallException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
          * @throws InvalidZimageFileException
@@ -161,7 +150,6 @@
          * @throws ServerNotReachableException
          * @throws ServiceJobException
          * @throws SizeNotSetException
-         * @throws UnsupportedAvatarGeneratorException
          * @throws UnsupportedImageTypeException
          * @throws DisplayPictureException
          * @noinspection DuplicatedCode
@@ -295,15 +283,13 @@
          * @param int $page_number
          * @param bool $recursive
          * @return \SocialvoidLib\Objects\Standard\Post[]
-         * @throws AvatarGeneratorException
-         * @throws AvatarNotFoundException
          * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
          * @throws CannotGetOriginalImageException
          * @throws DatabaseException
+         * @throws DisplayPictureException
          * @throws DocumentNotFoundException
          * @throws FileNotFoundException
-         * @throws ImageTooSmallException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
          * @throws InvalidZimageFileException
@@ -312,10 +298,9 @@
          * @throws ServerNotReachableException
          * @throws ServiceJobException
          * @throws SizeNotSetException
-         * @throws UnsupportedAvatarGeneratorException
          * @throws UnsupportedImageTypeException
+         * @throws UserHasInvalidSlaveHashException
          * @throws UserTimelineNotFoundException
-         * @throws DisplayPictureException
          * @noinspection DuplicatedCode
          */
         public function retrieveTimeline(int $page_number, bool $recursive=True): array
@@ -601,6 +586,7 @@
          * @throws PostNotFoundException
          * @throws QuoteRecordNotFoundException
          * @throws ServerNotReachableException
+         * @throws UserHasInvalidSlaveHashException
          * @throws UserTimelineNotFoundException
          */
         public function quotePost(string $post_public_id, string $text, array $media_content=[], array $flags=[]): Post

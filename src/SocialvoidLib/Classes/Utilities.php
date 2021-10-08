@@ -197,6 +197,34 @@
         }
 
         /**
+         * Calculates the job weight distribution amount
+         *
+         * @param int $workload
+         * @param int $workers_available
+         * @param bool $preserve_keys
+         * @param int $utilization
+         * @return int
+         */
+        public static function calculateSplitJobWeight(int $workload, int $workers_available, bool $preserve_keys=false, int $utilization=50): int
+        {
+            // Return the same data if the amount of data cannot be split to more than one worker
+            if($workload == 1)
+                return $workload;
+
+            // Auto-correct the utilization value to prevent negative calculations (1-100)
+            if($utilization > 100) $utilization = 100;
+            if($utilization < 1) $utilization = 1;
+
+            // Determines the amount of workers to be used by the utilization percentage
+            $workers_available = (int)($workers_available * $utilization) / 100;
+
+            $chunks_count = (int)round($workload / $workers_available);
+            if($chunks_count == 0) $chunks_count = 1;
+            return $chunks_count;
+        }
+
+
+        /**
          * Determines what class the job goes to
          *
          * @param string $job_type
