@@ -11,7 +11,9 @@
     /** @noinspection PhpUndefinedClassInspection */
     /** @noinspection DuplicatedCode */
 
-    use ppm\ppm;
+use KimchiRPC\Abstracts\ServerMode;
+use KimchiRPC\KimchiRPC;
+use ppm\ppm;
     use SocialvoidLib\SocialvoidLib;
     use SocialvoidRPC\SocialvoidRPC;
     use VerboseAdventure\Abstracts\EventType;
@@ -56,8 +58,8 @@
     SocialvoidRPC::$SocialvoidLib = new SocialvoidLib();
     
     // Initialize the RPC worker
-    SocialvoidRPC::$RpcServer = new \KimchiRPC\KimchiRPC("Socialvoid RPC");
-    SocialvoidRPC::$RpcServer->setServerMode(\KimchiRPC\Abstracts\ServerMode::Worker);
+    SocialvoidRPC::$RpcServer = new KimchiRPC("Socialvoid RPC");
+    SocialvoidRPC::$RpcServer->setServerMode(ServerMode::Worker);
     SocialvoidRPC::$RpcServer->getBackgroundWorker()->getWorker()->addServer(
         SocialvoidRPC::$SocialvoidLib->getRpcServerConfiguration()["GearmanHost"],
         (int)SocialvoidRPC::$SocialvoidLib->getRpcServerConfiguration()["GearmanPort"],

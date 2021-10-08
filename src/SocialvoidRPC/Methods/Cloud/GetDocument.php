@@ -10,8 +10,8 @@
     use SocialvoidLib\Classes\Validate;
     use SocialvoidLib\Exceptions\GenericInternal\CacheException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
+    use SocialvoidLib\Exceptions\GenericInternal\DisplayPictureException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
-    use SocialvoidLib\Exceptions\GenericInternal\InvalidSlaveHashException;
     use SocialvoidLib\Exceptions\Standard\Authentication\BadSessionChallengeAnswerException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException;
     use SocialvoidLib\Exceptions\Standard\Authentication\SessionExpiredException;
@@ -26,15 +26,6 @@
     use SocialvoidLib\Objects\Standard\Document;
     use SocialvoidLib\Objects\Standard\SessionIdentification;
     use SocialvoidRPC\SocialvoidRPC;
-    use udp2\Exceptions\AvatarGeneratorException;
-    use udp2\Exceptions\AvatarNotFoundException;
-    use udp2\Exceptions\ImageTooSmallException;
-    use udp2\Exceptions\UnsupportedAvatarGeneratorException;
-    use Zimage\Exceptions\CannotGetOriginalImageException;
-    use Zimage\Exceptions\FileNotFoundException;
-    use Zimage\Exceptions\InvalidZimageFileException;
-    use Zimage\Exceptions\SizeNotSetException;
-    use Zimage\Exceptions\UnsupportedImageTypeException;
 
     class GetDocument implements MethodInterface
     {
@@ -115,16 +106,7 @@
          * @throws PeerNotFoundException
          * @throws SessionExpiredException
          * @throws SessionNotFoundException
-         * @throws InvalidSlaveHashException
-         * @throws CannotGetOriginalImageException
-         * @throws FileNotFoundException
-         * @throws InvalidZimageFileException
-         * @throws SizeNotSetException
-         * @throws UnsupportedImageTypeException
-         * @throws AvatarGeneratorException
-         * @throws AvatarNotFoundException
-         * @throws ImageTooSmallException
-         * @throws UnsupportedAvatarGeneratorException
+         * @throws DisplayPictureException
          * @noinspection DuplicatedCode
          */
         public function execute(Request $request): Response

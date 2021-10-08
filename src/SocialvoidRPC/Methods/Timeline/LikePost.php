@@ -3,7 +3,6 @@
     namespace SocialvoidRPC\Methods\Timeline;
 
     use Exception;
-    use KimchiRPC\Exceptions\RequestException;
     use KimchiRPC\Exceptions\Server\MissingParameterException;
     use KimchiRPC\Interfaces\MethodInterface;
     use KimchiRPC\Objects\Request;
@@ -11,8 +10,8 @@
     use SocialvoidLib\Classes\Validate;
     use SocialvoidLib\Exceptions\GenericInternal\CacheException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
+    use SocialvoidLib\Exceptions\GenericInternal\DisplayPictureException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
-    use SocialvoidLib\Exceptions\GenericInternal\InvalidSlaveHashException;
     use SocialvoidLib\Exceptions\Standard\Authentication\BadSessionChallengeAnswerException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException;
     use SocialvoidLib\Exceptions\Standard\Authentication\SessionExpiredException;
@@ -26,15 +25,6 @@
     use SocialvoidLib\NetworkSession;
     use SocialvoidLib\Objects\Standard\SessionIdentification;
     use SocialvoidRPC\SocialvoidRPC;
-    use udp2\Exceptions\AvatarGeneratorException;
-    use udp2\Exceptions\AvatarNotFoundException;
-    use udp2\Exceptions\ImageTooSmallException;
-    use udp2\Exceptions\UnsupportedAvatarGeneratorException;
-    use Zimage\Exceptions\CannotGetOriginalImageException;
-    use Zimage\Exceptions\FileNotFoundException;
-    use Zimage\Exceptions\InvalidZimageFileException;
-    use Zimage\Exceptions\SizeNotSetException;
-    use Zimage\Exceptions\UnsupportedImageTypeException;
 
     class LikePost implements MethodInterface
     {
@@ -93,30 +83,21 @@
         /**
          * @param Request $request
          * @return Response
-         * @throws InternalServerException
-         * @throws InvalidPostTextException
-         * @throws InvalidSessionIdentificationException
-         * @throws MissingParameterException
+         * @throws BadSessionChallengeAnswerException
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DocumentNotFoundException
+         * @throws InternalServerException
+         * @throws InvalidClientPublicHashException
+         * @throws InvalidPostTextException
          * @throws InvalidSearchMethodException
-         * @throws InvalidSlaveHashException
-         * @throws BadSessionChallengeAnswerException
+         * @throws InvalidSessionIdentificationException
+         * @throws MissingParameterException
          * @throws NotAuthenticatedException
+         * @throws PeerNotFoundException
          * @throws SessionExpiredException
          * @throws SessionNotFoundException
-         * @throws DocumentNotFoundException
-         * @throws PeerNotFoundException
-         * @throws InvalidClientPublicHashException
-         * @throws CannotGetOriginalImageException
-         * @throws FileNotFoundException
-         * @throws InvalidZimageFileException
-         * @throws SizeNotSetException
-         * @throws UnsupportedImageTypeException
-         * @throws AvatarGeneratorException
-         * @throws AvatarNotFoundException
-         * @throws ImageTooSmallException
-         * @throws UnsupportedAvatarGeneratorException
+         * @throws DisplayPictureException
          * @noinspection DuplicatedCode
          */
         public function execute(Request $request): Response

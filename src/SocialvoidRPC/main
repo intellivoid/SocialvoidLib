@@ -10,7 +10,8 @@
 
     /** @noinspection DuplicatedCode */
 
-    use KimchiRPC\KimchiRPC;
+use KimchiRPC\Abstracts\ServerMode;
+use KimchiRPC\KimchiRPC;
     use ppm\ppm;
 use SocialvoidLib\Abstracts\StatusStates\HealthStatusCode;
 use SocialvoidLib\SocialvoidLib;
@@ -56,7 +57,7 @@ use SocialvoidLib\SocialvoidLib;
         SocialvoidRPC::$SocialvoidLib = new SocialvoidLib();
         SocialvoidRPC::$SocialvoidLib->getHealthMonitoring()->sync(SERVICE_NAME, HealthStatusCode::Starting);
         SocialvoidRPC::$RpcServer = new KimchiRPC("Socialvoid RPC");
-        SocialvoidRPC::$RpcServer->setServerMode(\KimchiRPC\Abstracts\ServerMode::Service);
+        SocialvoidRPC::$RpcServer->setServerMode(ServerMode::Service);
         SocialvoidRPC::$RpcServer->getBackgroundWorker()->getSupervisor()->setDisplayOutput(SocialvoidRPC::$RpcServer->getServerName(), true);
         SocialvoidRPC::$RpcServer->getBackgroundWorker()->getSupervisor()->addServer(
             SocialvoidRPC::getSocialvoidLib()->getRpcServerConfiguration()["GearmanHost"],
