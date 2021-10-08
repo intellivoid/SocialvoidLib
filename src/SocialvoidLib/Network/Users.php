@@ -361,6 +361,7 @@
          * @return User[]
          * @throws AvatarGeneratorException
          * @throws AvatarNotFoundException
+         * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
          * @throws CannotGetOriginalImageException
          * @throws DatabaseException
@@ -372,6 +373,8 @@
          * @throws InvalidZimageFileException
          * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
+         * @throws ServerNotReachableException
+         * @throws ServiceJobException
          * @throws SizeNotSetException
          * @throws UnsupportedAvatarGeneratorException
          * @throws UnsupportedImageTypeException
@@ -390,7 +393,7 @@
                 $followers[$user_id] = UserSearchMethod::ById;
             }
 
-            return $followers;
+            return $this->resolveMultiplePeers($followers);
         }
 
         /**
@@ -402,6 +405,7 @@
          * @return User[]
          * @throws AvatarGeneratorException
          * @throws AvatarNotFoundException
+         * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
          * @throws CannotGetOriginalImageException
          * @throws DatabaseException
@@ -413,6 +417,8 @@
          * @throws InvalidZimageFileException
          * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
+         * @throws ServerNotReachableException
+         * @throws ServiceJobException
          * @throws SizeNotSetException
          * @throws UnsupportedAvatarGeneratorException
          * @throws UnsupportedImageTypeException
@@ -431,6 +437,6 @@
                 $following[$user_id] = UserSearchMethod::ById;
             }
 
-            return $following;
+            return $this->resolveMultiplePeers($following);
         }
     }

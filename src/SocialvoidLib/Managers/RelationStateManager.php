@@ -268,7 +268,7 @@
 
                 while($Row = $QueryResults->fetch_assoc())
                 {
-                    $ResultsArray[] = $Row['user_id'];
+                    $ResultsArray[] = $Row['target_user_id'];
                 }
             }
 
