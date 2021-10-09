@@ -547,6 +547,10 @@
         },
         {
             "required": true,
+            "file": "Exceptions/Standard/Network/SelfInteractionNotPermittedException.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/Standard/Server/DocumentUploadException.php"
         },
         {

@@ -133,19 +133,19 @@
         },
         {
             "required": true,
-            "file": "Methods/Timeline/ComposePost.php"
+            "file": "Methods/Timeline/Compose.php"
         },
         {
             "required": true,
-            "file": "Methods/Timeline/DeletePost.php"
+            "file": "Methods/Timeline/Delete.php"
+        },
+        {
+            "required": true,
+            "file": "Methods/Timeline/GetLikes.php"
         },
         {
             "required": true,
             "file": "Methods/Timeline/GetPost.php"
-        },
-        {
-            "required": true,
-            "file": "Methods/Timeline/GetPostLikes.php"
         },
         {
             "required": true,
