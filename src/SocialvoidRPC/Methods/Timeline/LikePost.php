@@ -129,7 +129,7 @@
 
             try
             {
-                $NetworkSession->getTimeline()->likePost($request->Parameters['post_id']);
+                $NetworkSession->getTimeline()->like($request->Parameters['post_id']);
             }
             catch(Exception $e)
             {

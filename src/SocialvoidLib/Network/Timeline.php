@@ -404,7 +404,7 @@
          * @throws PostNotFoundException
          * @throws LikeRecordNotFoundException
          */
-        public function likePost(string $post_public_id): void
+        public function like(string $post_public_id): void
         {
             $selected_post = $this->networkSession->getSocialvoidLib()->getPostsManager()->getPost(
                 PostSearchMethod::ByPublicId, $post_public_id);
