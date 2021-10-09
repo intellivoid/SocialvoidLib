@@ -476,6 +476,8 @@
             $ServerInformation->RetrieveRepostsMaxLimit = (int)$this->socialvoidLib->getMainConfiguration()['RetrieveRepostsMaxLimit'];
             $ServerInformation->RetrieveRepliesMaxLimit = (int)$this->socialvoidLib->getMainConfiguration()['RetrieveRepliesMaxLimit'];
             $ServerInformation->RetrieveQuotesMaxLimit = (int)$this->socialvoidLib->getMainConfiguration()['RetrieveQuotesMaxLimit'];
+            $ServerInformation->RetrieveFollowersMaxLimit = (int)$this->socialvoidLib->getMainConfiguration()['RetrieveFollowersMixLimit'];
+            $ServerInformation->RetrieveFollowingMaxLimit = (int)$this->socialvoidLib->getMainConfiguration()['RetrieveFollowingMixLimit'];
 
             return $ServerInformation;
         }
