@@ -141,7 +141,7 @@
 
             try
             {
-                $Peers = $NetworkSession->getTimeline()->getPostLikes(
+                $Peers = $NetworkSession->getTimeline()->getLikes(
                     $request->Parameters['post_id'], (int)$request->Parameters['offset'], (int)$request->Parameters['limit']
                 );
             }
