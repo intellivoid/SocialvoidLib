@@ -149,6 +149,10 @@
         },
         {
             "required": true,
+            "file": "Methods/Timeline/GetReplies.php"
+        },
+        {
+            "required": true,
             "file": "Methods/Timeline/Like.php"
         },
         {
