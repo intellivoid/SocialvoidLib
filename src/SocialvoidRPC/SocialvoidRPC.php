@@ -134,9 +134,9 @@
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Network\UnfollowPeer());
 
             // Session methods
+            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Session\AuthenticateUser());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Session\CreateSession());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Session\GetSession());
-            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Session\AuthenticateUser());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Session\Logout());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Session\Register());
 
@@ -144,13 +144,13 @@
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\Compose());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\Delete());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\GetLikes());
-            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\Like());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\GetPost());
-            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\Unlike());
+            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\Like());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\Quote());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\Reply());
-            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\RetrieveFeed());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\Repost());
+            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\RetrieveFeed());
+            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\Unlike());
         }
 
         /**
