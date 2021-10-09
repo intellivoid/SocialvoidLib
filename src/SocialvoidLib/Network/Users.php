@@ -28,6 +28,8 @@
     use SocialvoidLib\Exceptions\Standard\Network\BlockedPeerException;
     use SocialvoidLib\Exceptions\Standard\Network\DocumentNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\SelfInteractionNotPermittedException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidLimitValueException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidOffsetValueException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPeerInputException;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\NetworkSession;
@@ -313,20 +315,30 @@
          * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DisplayPictureException
          * @throws DocumentNotFoundException
+         * @throws InvalidLimitValueException
+         * @throws InvalidOffsetValueException
          * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
          * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
          * @throws ServerNotReachableException
          * @throws ServiceJobException
-         * @throws DisplayPictureException
          * @noinspection DuplicatedCode
          */
         public function getFollowers($peer, int $limit, int $offset): array
         {
             if($this->networkSession->isAuthenticated() == false)
                 throw new NotAuthenticatedException();
+
+            if($offset < 0)
+                throw new InvalidOffsetValueException('The offset value cannot be a negative value');
+            if($limit < 1)
+                throw new InvalidLimitValueException('The limit value must be a value greater than 0');
+            if($limit > (int)$this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveFollowersMixLimit'])
+                throw new InvalidLimitValueException('The limit value cannot exceed ' . $this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveFollowersMixLimit']);
+
 
             // Resolve the Peer ID
             $target_peer = $this->resolvePeer($peer);
