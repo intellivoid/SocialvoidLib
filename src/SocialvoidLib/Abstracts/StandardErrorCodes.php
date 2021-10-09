@@ -22,11 +22,13 @@
     use SocialvoidLib\Exceptions\Standard\Network\AccessDeniedException;
     use SocialvoidLib\Exceptions\Standard\Network\AlreadyRepostedException;
     use SocialvoidLib\Exceptions\Standard\Network\BlockedByPeerException;
+    use SocialvoidLib\Exceptions\Standard\Network\BlockedPeerException;
     use SocialvoidLib\Exceptions\Standard\Network\DocumentNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\FileUploadException;
     use SocialvoidLib\Exceptions\Standard\Network\PostDeletedException;
     use SocialvoidLib\Exceptions\Standard\Network\PostNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Network\SelfInteractionNotPermittedException;
     use SocialvoidLib\Exceptions\Standard\Server\DocumentUploadException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
     use SocialvoidLib\Exceptions\Standard\Validation\AgreementRequiredException;
@@ -327,9 +329,18 @@
         const BlockedByPeerException = 0x03107;
 
         /**
-         * @see BlockedByPeerException
+         * Raised when attempting to interact with a peer that you blocked
+         *
+         * @see BlockedPeerException
          */
         const BlockedPeerException = 0x03108;
+
+        /**
+         * Raised when attempting to execute a method on the authenticated peer (self interaction)
+         *
+         * @see SelfInteractionNotPermittedException
+         */
+        const SelfInteractionNotPermittedException = 0x03109;
 
 
         /** 40-Set error codes (Server) */

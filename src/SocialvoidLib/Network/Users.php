@@ -27,6 +27,7 @@
     use SocialvoidLib\Exceptions\Standard\Network\BlockedByPeerException;
     use SocialvoidLib\Exceptions\Standard\Network\BlockedPeerException;
     use SocialvoidLib\Exceptions\Standard\Network\DocumentNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Network\SelfInteractionNotPermittedException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPeerInputException;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\NetworkSession;
@@ -188,12 +189,13 @@
          * @throws BlockedPeerException
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DisplayPictureException
          * @throws DocumentNotFoundException
          * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
          * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
-         * @throws DisplayPictureException
+         * @throws SelfInteractionNotPermittedException
          */
         public function followPeer($peer): int
         {
@@ -203,6 +205,10 @@
             // TODO: Update the timeline upon a follow event
             // Resolve the Peer ID
             $target_peer = $this->resolvePeer($peer);
+
+            if($target_peer->ID == $this->networkSession->getAuthenticatedUser()->ID)
+                throw new SelfInteractionNotPermittedException('You cannot follow a peer that you are authenticated as');
+
             $relationship = $this->resolveRelation($target_peer);
 
             if($relationship == RelationState::BlockedYou)
