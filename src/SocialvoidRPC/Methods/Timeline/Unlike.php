@@ -26,7 +26,7 @@
     use SocialvoidLib\Objects\Standard\SessionIdentification;
     use SocialvoidRPC\SocialvoidRPC;
 
-    class UnlikePost implements MethodInterface
+    class Unlike implements MethodInterface
     {
 
         /**
@@ -34,7 +34,7 @@
          */
         public function getMethodName(): string
         {
-            return 'UnlikePost';
+            return 'Unlike';
         }
 
         /**
@@ -42,7 +42,7 @@
          */
         public function getMethod(): string
         {
-            return 'timeline.unlike_post';
+            return 'timeline.unlike';
         }
 
         /**
