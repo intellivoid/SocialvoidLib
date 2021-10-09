@@ -473,6 +473,7 @@
          */
         public function getLikes(string $post_public_id, int $offset=0, int $limit=100): array
         {
+            /** @noinspection DuplicatedCode */
             if($this->networkSession->isAuthenticated() == false)
                 throw new NotAuthenticatedException();
 
@@ -531,8 +532,8 @@
                 throw new InvalidOffsetValueException('The offset value cannot be a negative value');
             if($limit < 1)
                 throw new InvalidLimitValueException('The limit value must be a value greater than 0');
-            if($limit > (int)$this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveLikesMaxLimit'])
-                throw new InvalidLimitValueException('The limit value cannot exceed ' . $this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveLikesMaxLimit']);
+            if($limit > (int)$this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveRepliesMaxLimit'])
+                throw new InvalidLimitValueException('The limit value cannot exceed ' . $this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveRepliesMaxLimit']);
 
             $Replies = $this->networkSession->getSocialvoidLib()->getReplyRecordManager()->getReplies($post_public_id, $offset, $limit);
             $StdPosts = [];
