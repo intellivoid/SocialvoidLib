@@ -238,6 +238,10 @@
         $socialvoidlib = new \SocialvoidLib\SocialvoidLib();
         $networkSession = new SocialvoidLib\NetworkSession($socialvoidlib);
         $networkSession->loadSession($SessionIdentification);
+
+        if($networkSession->isAuthenticated() == false)
+            throw new \SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException();
+
         $contentLength = true;
     }
     catch(Exception $e)
