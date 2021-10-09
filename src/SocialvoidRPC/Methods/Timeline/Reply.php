@@ -26,14 +26,14 @@
     use SocialvoidLib\Objects\Standard\SessionIdentification;
     use SocialvoidRPC\SocialvoidRPC;
 
-    class ReplyToPost implements MethodInterface
+    class Reply implements MethodInterface
     {
         /**
          * @inheritDoc
          */
         public function getMethodName(): string
         {
-            return 'ReplyToPost';
+            return 'Reply';
         }
 
         /**
@@ -41,7 +41,7 @@
          */
         public function getMethod(): string
         {
-            return 'timeline.reply_to_post';
+            return 'timeline.reply';
         }
 
         /**

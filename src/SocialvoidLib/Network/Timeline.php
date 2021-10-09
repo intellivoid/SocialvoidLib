@@ -544,12 +544,16 @@
          * @throws InvalidPostTextException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
+         * @throws NotAuthenticatedException
          * @throws PostDeletedException
          * @throws PostNotFoundException
          * @throws ReplyRecordNotFoundException
          */
         public function reply(string $post_public_id, string $text, array $media_content=[], array $flags=[]): Post
         {
+            if($this->networkSession->isAuthenticated() == false)
+                throw new NotAuthenticatedException();
+
             $selected_post = $this->networkSession->getSocialvoidLib()->getPostsManager()->getPost(
                 PostSearchMethod::ByPublicId, $post_public_id);
 
