@@ -25,7 +25,7 @@
         json_decode(file_get_contents($NetworkSessionPath), true), $Socialvoid); // Load network session
 
 
-    $Timeline = $NetworkSession->getTimeline()->retrieveTimeline(1);
+    $Timeline = $NetworkSession->getTimeline()->retrieveFeed(1);
     //var_dump($Timeline);
 
     $json_output = [];

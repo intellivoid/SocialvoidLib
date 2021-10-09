@@ -309,7 +309,7 @@
          * @throws UserTimelineNotFoundException
          * @noinspection DuplicatedCode
          */
-        public function retrieveTimeline(int $page_number, bool $recursive=True): array
+        public function retrieveFeed(int $page_number, bool $recursive=True): array
         {
             if($page_number < 1) return [];
 
@@ -347,7 +347,7 @@
                 );
 
                 // Re-run the function since the timeline may have changed since this update.
-                if($recursive) return $this->retrieveTimeline($page_number, $recursive);
+                if($recursive) return $this->retrieveFeed($page_number, $recursive);
             }
 
             return $ResolvedPostIds;

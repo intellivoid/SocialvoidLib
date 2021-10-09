@@ -127,7 +127,7 @@
 
             try
             {
-                $posts = $NetworkSession->getTimeline()->retrieveTimeline($request->Parameters['page']);
+                $posts = $NetworkSession->getTimeline()->retrieveFeed($request->Parameters['page']);
                 $posts_array = [];
 
                 foreach($posts as $post)
