@@ -338,7 +338,7 @@
          * @throws ServerNotReachableException
          * @throws ServiceJobException
          */
-        public function getMultipleUsers(array $query, bool $skip_errors=True, int $utilization=100): array
+        public function getMultipleUsers(array $query, bool $skip_errors=True, int $utilization=15): array
         {
             if(Utilities::getBoolDefinition("SOCIALVOID_LIB_BACKGROUND_WORKER_ENABLED"))
             {

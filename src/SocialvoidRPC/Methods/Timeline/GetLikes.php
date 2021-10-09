@@ -27,7 +27,7 @@
     use SocialvoidLib\Objects\Standard\SessionIdentification;
     use SocialvoidRPC\SocialvoidRPC;
 
-    class GetPostLikes implements MethodInterface
+    class GetLikes implements MethodInterface
     {
 
         /**
@@ -35,7 +35,7 @@
          */
         public function getMethodName(): string
         {
-            return 'GetPostLikes';
+            return 'GetLikes';
         }
 
         /**
@@ -43,7 +43,7 @@
          */
         public function getMethod(): string
         {
-            return 'timeline.get_post_likes';
+            return 'timeline.get_likes';
         }
 
         /**

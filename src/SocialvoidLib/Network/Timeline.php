@@ -445,24 +445,28 @@
          * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DisplayPictureException
          * @throws DocumentNotFoundException
          * @throws InvalidLimitValueException
          * @throws InvalidOffsetValueException
          * @throws InvalidSearchMethodException
+         * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
          * @throws PostNotFoundException
          * @throws ServerNotReachableException
          * @throws ServiceJobException
-         * @throws DisplayPictureException
          */
-        public function getLikes(string $post_public_id, int $offset=0, int $limit=20): array
+        public function getLikes(string $post_public_id, int $offset=0, int $limit=100): array
         {
+            if($this->networkSession->isAuthenticated() == false)
+                throw new NotAuthenticatedException();
+
             if($offset < 0)
                 throw new InvalidOffsetValueException('The offset value cannot be a negative value');
             if($limit < 1)
                 throw new InvalidLimitValueException('The limit value must be a value greater than 0');
-            if($limit > 25)
-                throw new InvalidLimitValueException('The limit value cannot exceed 25');
+            if($limit > (int)$this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveLikesMaxLimit'])
+                throw new InvalidLimitValueException('The limit value cannot exceed ' . $this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveLikesMaxLimit']);
 
             $Likes = $this->networkSession->getSocialvoidLib()->getLikesRecordManager()->getLikes($post_public_id, $offset, $limit);
 
