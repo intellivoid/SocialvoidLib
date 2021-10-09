@@ -9,13 +9,13 @@ with open(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', 'ses
     session_info = json.load(f)
 
 response = request(
-    client_info["endpoint"], "timeline.reply_to_post",
+    client_info["endpoint"], "timeline.reply",
      session_identification={
         "session_id": session_info["id"],
         "client_public_hash": client_info["public_hash"],
         "challenge_answer": answer_challenge(client_info["private_hash"], session_info["challenge"])
      },
-     post_id="35714fd511b6064908da4ed77c12f587-789a1a44-251c-11ec-aec0-113646ee4b39",
+     post="35714fd511b6064908da4ed77c12f587-789a1a44-251c-11ec-aec0-113646ee4b39",
      text="This is a reply to a post #ReplyMoment #EatMyAss"
 )
 
