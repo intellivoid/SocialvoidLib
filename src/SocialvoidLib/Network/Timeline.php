@@ -501,7 +501,7 @@
          * @throws UserHasInvalidSlaveHashException
          * @throws UserTimelineNotFoundException
          */
-        public function quotePost(string $post_public_id, string $text, array $media_content=[], array $flags=[]): Post
+        public function quote(string $post_public_id, string $text, array $media_content=[], array $flags=[]): Post
         {
             $selected_post = $this->networkSession->getSocialvoidLib()->getPostsManager()->getPost(
                 PostSearchMethod::ByPublicId, $post_public_id);

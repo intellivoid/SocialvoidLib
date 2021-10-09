@@ -25,5 +25,5 @@
         json_decode(file_get_contents($NetworkSessionPath), true), $Socialvoid); // Load network session
 
 
-    $Post = $NetworkSession->getTimeline()->quotePost("364ff7e64cc4fe16952b8d7d5a15c3f4d6c637980950a7a66816753ce653dac4", "This is a cool post");
+    $Post = $NetworkSession->getTimeline()->quote("364ff7e64cc4fe16952b8d7d5a15c3f4d6c637980950a7a66816753ce653dac4", "This is a cool post");
     print(json_encode($Post->toArray(), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
