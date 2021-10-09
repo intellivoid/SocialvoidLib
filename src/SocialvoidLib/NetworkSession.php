@@ -472,6 +472,10 @@
             $ServerInformation->UploadMaxFileSize = $this->socialvoidLib->getCdnConfiguration()['MaxFileUploadSize'];
             $ServerInformation->UnauthorizedSessionTTL = (int)$this->socialvoidLib->getMainConfiguration()['UnauthorizedSessionTTL'];
             $ServerInformation->AuthorizedSessionTTL = (int)$this->socialvoidLib->getMainConfiguration()['AuthorizedSessionTTL'];
+            $ServerInformation->RetrieveLikesMaxLimit = (int)$this->socialvoidLib->getMainConfiguration()['RetrieveLikesMaxLimit'];
+            $ServerInformation->RetrieveRepostsMaxLimit = (int)$this->socialvoidLib->getMainConfiguration()['RetrieveRepostsMaxLimit'];
+            $ServerInformation->RetrieveRepliesMaxLimit = (int)$this->socialvoidLib->getMainConfiguration()['RetrieveRepliesMaxLimit'];
+            $ServerInformation->RetrieveQuotesMaxLimit = (int)$this->socialvoidLib->getMainConfiguration()['RetrieveQuotesMaxLimit'];
 
             return $ServerInformation;
         }

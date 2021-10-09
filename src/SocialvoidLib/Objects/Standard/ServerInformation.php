@@ -49,6 +49,34 @@
         public $AuthorizedSessionTTL;
 
         /**
+         * The limit to the amount of likes you can retrieve from a post
+         *
+         * @var int
+         */
+        public $RetrieveLikesMaxLimit;
+
+        /**
+         * The limit to the amount of reposts you can retrieve from a post
+         *
+         * @var int
+         */
+        public $RetrieveRepostsMaxLimit;
+
+        /**
+         * The limit to the amount of likes you can retrieve from a post
+         *
+         * @var int
+         */
+        public $RetrieveRepliesMaxLimit;
+
+        /**
+         * The limit to the amount of quotes you can retrieve from a post
+         *
+         * @var int
+         */
+        public $RetrieveQuotesMaxLimit;
+
+        /**
          * Return an array representation of the object
          *
          * @return array
@@ -61,7 +89,11 @@
                 'cdn_server' => $this->CdnServer,
                 'upload_max_file_size' => $this->UploadMaxFileSize,
                 'unauthorized_session_ttl' => $this->UnauthorizedSessionTTL,
-                'authorized_session_ttl' => $this->AuthorizedSessionTTL
+                'authorized_session_ttl' => $this->AuthorizedSessionTTL,
+                'retrieve_likes_max_limit' => $this->RetrieveLikesMaxLimit,
+                'retrieve_reposts_max_limit' => $this->RetrieveRepostsMaxLimit,
+                'retrieve_replies_max_limit' => $this->RetrieveRepliesMaxLimit,
+                'retrieve_quotes_max_limit' => $this->RetrieveQuotesMaxLimit
             ];
         }
 
@@ -92,6 +124,18 @@
 
             if(isset($data['authorized_session_ttl']))
                 $serverInformationObject->AuthorizedSessionTTL = $data['authorized_session_ttl'];
+
+            if(isset($data['retrieve_likes_max_limit']))
+                $serverInformationObject->RetrieveLikesMaxLimit = $data['retrieve_likes_max_limit'];
+
+            if(isset($data['retrieve_reposts_max_limit']))
+                $serverInformationObject->RetrieveRepostsMaxLimit = $data['retrieve_reposts_max_limit'];
+
+            if(isset($data['retrieve_replies_max_limit']))
+                $serverInformationObject->RetrieveRepliesMaxLimit = $data['retrieve_replies_max_limit'];
+
+            if(isset($data['retrieve_quotes_max_limit']))
+                $serverInformationObject->RetrieveQuotesMaxLimit = $data['retrieve_quotes_max_limit'];
 
             return $serverInformationObject;
         }
