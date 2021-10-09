@@ -500,18 +500,26 @@
          * @param string $post_public_id
          * @param int $offset
          * @param int $limit
-         * @return Post[]
+         * @return \SocialvoidLib\Objects\Standard\Post[]
          * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
+         * @throws CannotGetOriginalImageException
          * @throws DatabaseException
+         * @throws DisplayPictureException
+         * @throws DocumentNotFoundException
+         * @throws FileNotFoundException
          * @throws InvalidLimitValueException
          * @throws InvalidOffsetValueException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
+         * @throws InvalidZimageFileException
          * @throws NotAuthenticatedException
+         * @throws PeerNotFoundException
          * @throws PostNotFoundException
          * @throws ServerNotReachableException
          * @throws ServiceJobException
+         * @throws SizeNotSetException
+         * @throws UnsupportedImageTypeException
          * @noinspection DuplicatedCode
          */
         public function getReplies(string $post_public_id, int $offset=0, int $limit=100): array
@@ -527,14 +535,10 @@
                 throw new InvalidLimitValueException('The limit value cannot exceed ' . $this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveLikesMaxLimit']);
 
             $Replies = $this->networkSession->getSocialvoidLib()->getReplyRecordManager()->getReplies($post_public_id, $offset, $limit);
-
-            $search_query = [];
-            foreach($Replies as $post_id)
-            {
-                $search_query[$post_id] = PostSearchMethod::ByPublicId;
-            }
-
-            return $this->networkSession->getSocialvoidLib()->getPostsManager()->getMultiplePosts($search_query);
+            $StdPosts = [];
+            foreach($Replies as $reply_id)
+                $StdPosts[] = $this->getStandardPost($reply_id);
+            return $StdPosts;
         }
 
         /**
