@@ -26,14 +26,14 @@
     use SocialvoidLib\Objects\Standard\SessionIdentification;
     use SocialvoidRPC\SocialvoidRPC;
 
-    class QuotePost implements MethodInterface
+    class Quote implements MethodInterface
     {
         /**
          * @inheritDoc
          */
         public function getMethodName(): string
         {
-            return 'QuotePost';
+            return 'Quote';
         }
 
         /**
@@ -41,7 +41,7 @@
          */
         public function getMethod(): string
         {
-            return 'timeline.quote_post';
+            return 'timeline.quote';
         }
 
         /**

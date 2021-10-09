@@ -499,6 +499,7 @@
          * @throws InvalidPostTextException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
+         * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
          * @throws PostDeletedException
          * @throws PostNotFoundException
@@ -510,6 +511,9 @@
          */
         public function quote(string $post_public_id, string $text, array $media_content=[], array $flags=[]): Post
         {
+            if($this->networkSession->isAuthenticated() == false)
+                throw new NotAuthenticatedException();
+
             $selected_post = $this->networkSession->getSocialvoidLib()->getPostsManager()->getPost(
                 PostSearchMethod::ByPublicId, $post_public_id);
 
