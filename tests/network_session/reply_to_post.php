@@ -25,5 +25,5 @@
         json_decode(file_get_contents($NetworkSessionPath), true), $Socialvoid); // Load network session
 
 
-    $Post = $NetworkSession->getTimeline()->replyToPost("692034fdfbb2743f001238651742b6891d454c253f6ac27047fb3e0292872e88", "This is a reply");
+    $Post = $NetworkSession->getTimeline()->reply("692034fdfbb2743f001238651742b6891d454c253f6ac27047fb3e0292872e88", "This is a reply");
     print(json_encode($Post->toArray(), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));

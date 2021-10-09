@@ -136,7 +136,7 @@
 
             try
             {
-                $ComposedPost = $NetworkSession->getTimeline()->replyToPost($request->Parameters['post_id'], $request->Parameters['text']);
+                $ComposedPost = $NetworkSession->getTimeline()->reply($request->Parameters['post_id'], $request->Parameters['text']);
                 $StandardObject = $NetworkSession->getTimeline()->getStandardPost($ComposedPost->PublicID);
             }
             catch(Exception $e)
