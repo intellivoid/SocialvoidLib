@@ -375,7 +375,7 @@
          * @throws UserHasInvalidSlaveHashException
          * @throws UserTimelineNotFoundException
          */
-        public function repostPost(string $post_public_id): Post
+        public function repost(string $post_public_id): Post
         {
             $selected_post = $this->networkSession->getSocialvoidLib()->getPostsManager()->getPost(
                 PostSearchMethod::ByPublicId, $post_public_id);

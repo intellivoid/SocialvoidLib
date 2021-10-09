@@ -131,7 +131,7 @@
 
             try
             {
-                $Repost = $NetworkSession->getTimeline()->repostPost($request->Parameters['post_id']);
+                $Repost = $NetworkSession->getTimeline()->repost($request->Parameters['post_id']);
                 $StandardObject = $NetworkSession->getTimeline()->getStandardPost($Repost->PublicID);
             }
             catch(Exception $e)
