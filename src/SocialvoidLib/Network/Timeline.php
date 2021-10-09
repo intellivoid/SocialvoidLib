@@ -426,7 +426,7 @@
          * @throws PostNotFoundException
          * @throws LikeRecordNotFoundException
          */
-        public function unlikePost(string $post_public_id): void
+        public function unlike(string $post_public_id): void
         {
             $selected_post = $this->networkSession->getSocialvoidLib()->getPostsManager()->getPost(
                 PostSearchMethod::ByPublicId, $post_public_id);

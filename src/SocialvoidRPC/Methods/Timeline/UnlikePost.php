@@ -130,7 +130,7 @@
 
             try
             {
-                $NetworkSession->getTimeline()->unlikePost($request->Parameters['post_id']);
+                $NetworkSession->getTimeline()->unlike($request->Parameters['post_id']);
             }
             catch(Exception $e)
             {

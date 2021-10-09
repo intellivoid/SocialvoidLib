@@ -25,4 +25,4 @@
         json_decode(file_get_contents($NetworkSessionPath), true), $Socialvoid); // Load network session
 
 
-    $NetworkSession->getTimeline()->unlikePost("364ff7e64cc4fe16952b8d7d5a15c3f4d6c637980950a7a66816753ce653dac4");
+    $NetworkSession->getTimeline()->unlike("364ff7e64cc4fe16952b8d7d5a15c3f4d6c637980950a7a66816753ce653dac4");
