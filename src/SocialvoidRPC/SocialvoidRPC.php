@@ -144,7 +144,7 @@
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\Compose());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\Delete());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\GetLikes());
-            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\LikePost());
+            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\Like());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\GetPost());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\UnlikePost());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\QuotePost());

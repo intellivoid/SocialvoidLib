@@ -26,7 +26,7 @@
     use SocialvoidLib\Objects\Standard\SessionIdentification;
     use SocialvoidRPC\SocialvoidRPC;
 
-    class LikePost implements MethodInterface
+    class Like implements MethodInterface
     {
 
         /**
