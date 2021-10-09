@@ -13,8 +13,8 @@ create table posts_replies
         unique (post_id, reply_post_id),
     constraint replies_user_id_post_id_uindex
         unique (user_id, post_id),
-    constraint replies_posts_public_id_fk_2
-        foreign key (post_id) references posts (public_id)
+    constraint posts_replies_posts_public_id_fk
+        foreign key (reply_post_id) references posts (public_id)
 )
     comment 'Table for housing replies to posts';
 

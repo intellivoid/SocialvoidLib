@@ -681,6 +681,7 @@
          * @throws ReplyRecordNotFoundException
          * @noinspection DuplicatedCode
          * @noinspection PhpBooleanCanBeSimplifiedInspection
+         * @noinspection PhpCastIsUnnecessaryInspection
          */
         public function replyToPost(User $user, Post $post, string $text, string $source, string $session_id=null, array $media_content=[], string $priority=PostPriorityLevel::None, array $flags=[]): Post
         {
@@ -737,9 +738,9 @@
                 'text' => $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($text)),
                 'source' => $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($source)),
                 'session_id' => ($session_id == null ? null : $session_id),
-                'poster_user_id' => $user->ID,
+                'poster_user_id' => (int)$user->ID,
                 'properties' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Properties->toArray())),
-                'reply_to_post_id' => $Reply->ReplyToPostID,
+                'reply_to_post_id' => $this->socialvoidLib->getDatabase()->real_escape_string($Reply->ReplyToPostID),
                 'reply_to_user_id' => (int)$Reply->ReplyToUserID,
                 'flags' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($flags)),
                 'is_deleted' => (int)false,

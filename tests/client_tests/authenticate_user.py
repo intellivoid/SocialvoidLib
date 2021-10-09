@@ -17,8 +17,8 @@ response = request(
         "challenge_answer": answer_challenge(client_info["private_hash"], session_info["challenge"])
      },
 
-     username="thomasgabriella",
-     password="%Uh3hT@q8ZDq5kGGIcd_UtY_M5_X+*f"
+     username="netkas",
+     password="SuperSimplePassword123"
 )
 
 print(response.data.result)

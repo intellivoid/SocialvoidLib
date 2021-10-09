@@ -536,6 +536,7 @@
                 throw new InvalidLimitValueException('The limit value cannot exceed ' . $this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveRepliesMaxLimit']);
 
             $Replies = $this->networkSession->getSocialvoidLib()->getReplyRecordManager()->getReplies($post_public_id, $offset, $limit);
+            var_dump($Replies);
             $StdPosts = [];
             foreach($Replies as $reply_id)
                 $StdPosts[] = $this->getStandardPost($reply_id);

@@ -107,18 +107,19 @@
         public function registerRecord(int $user_id, string $post_id, string $reply_post_id, bool $replied=True): void
         {
             $Query = QueryBuilder::insert_into('posts_replies', [
-                'id' => (Utilities::removeSlaveHash($post_id) . $reply_post_id),
+                'id' => ($post_id . Utilities::removeSlaveHash($reply_post_id)),
                 'user_id' => $user_id,
-                'post_id' => Utilities::removeSLaveHash($post_id),
-                'reply_post_id' => $reply_post_id,
+                'post_id' => $post_id,
+                'reply_post_id' => Utilities::removeSLaveHash($reply_post_id),
                 'replied' => (int)$replied,
                 'last_updated_timestamp' => time(),
                 'created_timestamp' => time()
             ]);
 
+            var_dump($Query);
             try
             {
-                $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($post_id));
+                $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($reply_post_id));
             }
             catch (InvalidSlaveHashException $e)
             {
@@ -157,7 +158,7 @@
             }
 
             $post_id = $this->socialvoidLib->getDatabase()->real_escape_string(Utilities::removeSlaveHash($post_id));
-            $Query = "SELECT reply_post_id FROM `posts_replies` WHERE post_id='$post_id' AND replied=1 LIMIT $offset, $limit";
+            $Query = "SELECT post_id FROM `posts_replies` WHERE reply_post_id='$post_id' AND replied=1 LIMIT $offset, $limit";
             $QueryResults = $SelectedSlave->getConnection()->query($Query);
 
             // Execute and process the query
@@ -173,7 +174,7 @@
 
                 while($Row = $QueryResults->fetch_assoc())
                 {
-                    $ResultsArray[] = $SelectedSlave->MysqlServerPointer->HashPointer . '-' . $Row['reply_post_id'];
+                    $ResultsArray[] = $Row['post_id'];
                 }
             }
 
@@ -200,7 +201,7 @@
             }
 
             $post_id = $this->socialvoidLib->getDatabase()->real_escape_string(Utilities::removeSlaveHash($post_id));
-            $Query = "SELECT COUNT(*) AS total FROM `posts_replies` WHERE post_id='$post_id' AND replied=1";
+            $Query = "SELECT COUNT(*) AS total FROM `posts_replies` WHERE reply_post_id='$post_id' AND replied=1";
             $QueryResults = $SelectedSlave->getConnection()->query($Query);
 
             // Execute and process the query
@@ -234,11 +235,12 @@
                 'replied',
                 'last_updated_timestamp',
                 'created_timestamp'
-            ], 'id', (Utilities::removeSlaveHash($post_id) . $reply_post_id), null, null, 1);
+            ], 'id', ($post_id . Utilities::removeSlaveHash($reply_post_id)), null, null, 1);
 
+            var_dump($Query);
             try
             {
-                $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($post_id));
+                $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($reply_post_id));
             }
             catch (InvalidSlaveHashException $e)
             {
@@ -279,11 +281,11 @@
             $Query = QueryBuilder::update('posts_replies', [
                 'replied' => (int)$replyRecord->Replied,
                 'last_updated_timestamp' => time()
-            ], 'id', (Utilities::removeSlaveHash($replyRecord->PostID) . $replyRecord->ReplyPostID));
+            ], 'id', ($replyRecord->PostID . Utilities::removeSlaveHash($replyRecord->ReplyPostID)));
 
             try
             {
-                $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($replyRecord->PostID));
+                $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($replyRecord->ReplyPostID));
             }
             catch (InvalidSlaveHashException $e)
             {
