@@ -38,10 +38,8 @@
                         $SocialvoidLib = SocialvoidAdmin::getSocialvoidLib();
                         $Queries = [
                             "SET FOREIGN_KEY_CHECKS = 0;",
-                            "TRUNCATE TABLE follower_data;",
-                            "TRUNCATE TABLE follower_states;",
+                            "TRUNCATE TABLE peer_relations;",
                             "TRUNCATE TABLE telegram_cdn;",
-                            "TRUNCATE TABLE user_timelines;",
                             "TRUNCATE TABLE users;",
                             "SET FOREIGN_KEY_CHECKS = 1;"
                         ];
@@ -65,6 +63,7 @@
                             $Queries = [
                                 "SET FOREIGN_KEY_CHECKS = 0;",
                                 "TRUNCATE TABLE documents;",
+                                "TRUNCATE TABLE peer_timelines;",
                                 "TRUNCATE TABLE posts;",
                                 "TRUNCATE TABLE posts_likes;",
                                 "TRUNCATE TABLE posts_quotes;",

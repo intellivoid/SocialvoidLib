@@ -17,13 +17,19 @@
     use Exception;
     use msqg\QueryBuilder;
     use SocialvoidLib\Abstracts\SearchMethods\TimelineSearchMethod;
+    use SocialvoidLib\Abstracts\SearchMethods\UserSearchMethod;
     use SocialvoidLib\Classes\Utilities;
     use SocialvoidLib\Exceptions\GenericInternal\BackgroundWorkerNotEnabledException;
+    use SocialvoidLib\Exceptions\GenericInternal\CacheException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
+    use SocialvoidLib\Exceptions\GenericInternal\DisplayPictureException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSlaveHashException;
+    use SocialvoidLib\Exceptions\GenericInternal\ServiceJobException;
     use SocialvoidLib\Exceptions\GenericInternal\UserHasInvalidSlaveHashException;
     use SocialvoidLib\Exceptions\Internal\UserTimelineNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Network\DocumentNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Objects\Standard\TimelineState;
     use SocialvoidLib\Objects\Timeline;
     use SocialvoidLib\Objects\User;
@@ -98,7 +104,7 @@
                     throw new InvalidSearchMethodException('The search method is not applicable to getTimelineState()', $search_method, $value);
             }
 
-            $Query = QueryBuilder::select('user_timelines', [
+            $Query = QueryBuilder::select('peer_timelines', [
                 'new_posts',
                 'last_updated_timestamp',
             ], $search_method, $value);
@@ -140,7 +146,7 @@
          */
         public function createTimeline(User $user): void
         {
-            $Query = QueryBuilder::insert_into('user_timelines', [
+            $Query = QueryBuilder::insert_into('peer_timelines', [
                 'user_id' => (int)$user->ID,
                 'post_chunks' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
                 'new_posts' => 0,
@@ -178,7 +184,7 @@
          */
         public function getTimeline(User $user): Timeline
         {
-            $Query = QueryBuilder::select('user_timelines', [
+            $Query = QueryBuilder::select('peer_timelines', [
                 'user_id',
                 'post_chunks',
                 'new_posts',
@@ -224,7 +230,7 @@
          */
         public function updateTimeline(Timeline $timeline): void
         {
-            $Query = QueryBuilder::update('user_timelines', [
+            $Query = QueryBuilder::update('peer_timelines', [
                 'post_chunks' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($timeline->PostChunks)),
                 'new_posts' => (int)$timeline->NewPosts,
                 'last_updated_timestamp' => (int)time()
@@ -253,18 +259,24 @@
         /**
          * Distributes a post to the array of followers
          *
+         * @param User $user
          * @param string $post_id
-         * @param array $followers
          * @param int $utilization
          * @param bool $skip_errors
          * @throws BackgroundWorkerNotEnabledException
          * @throws DatabaseException
+         * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
          * @throws ServerNotReachableException
          * @throws UserHasInvalidSlaveHashException
          * @throws UserTimelineNotFoundException
+         * @throws CacheException
+         * @throws DisplayPictureException
+         * @throws ServiceJobException
+         * @throws DocumentNotFoundException
+         * @throws PeerNotFoundException
          */
-        public function distributePost(User $user, string $post_id, int $utilization=100, bool $skip_errors=true): void
+        public function distributePost(User $user, string $post_id, int $utilization=15, bool $skip_errors=true): void
         {
             // If background worker is enabled, split the query into multiple workers to speed up the process
             if(Utilities::getBoolDefinition('SOCIALVOID_LIB_BACKGROUND_WORKER_ENABLED'))
@@ -275,19 +287,45 @@
             }
             else
             {
-                try
+                $FollowersCount = $this->socialvoidLib->getRelationStateManager()->getFollowersCount($user);
+
+                // First distribute the post to the author
+                $Timeline = $this->socialvoidLib->getTimelineManager()->retrieveTimeline($user);
+                $Timeline->addPost($post_id);
+                $this->socialvoidLib->getTimelineManager()->updateTimeline($Timeline);
+
+                // Do it chunk(s) to avoid memory crashes
+                if($FollowersCount > 0)
                 {
-                    foreach($followers as $user_id)
+                    $JobWeight = Utilities::calculateSplitJobWeight($FollowersCount,  500, 100);
+                    $current_offset = 0;
+
+                    foreach($JobWeight as $value)
                     {
-                        $Timeline = $this->retrieveTimeline($user_id);
-                        $Timeline->addPost($post_id);
-                        $this->updateTimeline($Timeline);
+                        $FollowerIds = $this->socialvoidLib->getRelationStateManager()->getFollowers($user, $value, $current_offset);
+                        $QueryResults = [];
+                        foreach($FollowerIds as $followerId)
+                            $QueryResults[$followerId] = UserSearchMethod::ById;
+                        $ResolvedFollowers = $this->socialvoidLib->getUserManager()->getMultipleUsers($QueryResults, true, 15);
+
+
+                        foreach($ResolvedFollowers as $user)
+                        {
+                            try
+                            {
+                                $Timeline = $this->socialvoidLib->getTimelineManager()->retrieveTimeline($user);
+                                $Timeline->addPost($post_id);
+                                $this->socialvoidLib->getTimelineManager()->updateTimeline($Timeline);
+                            }
+                            catch(Exception $e)
+                            {
+                                if($skip_errors == false)
+                                    throw $e;
+                            }
+                        }
+
+                        $current_offset += $value;
                     }
-                }
-                catch(Exception $e)
-                {
-                    if($skip_errors == false)
-                        throw $e;
                 }
             }
         }

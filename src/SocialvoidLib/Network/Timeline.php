@@ -80,12 +80,16 @@
          * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DisplayPictureException
+         * @throws DocumentNotFoundException
          * @throws InvalidPostTextException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
          * @throws NotAuthenticatedException
+         * @throws PeerNotFoundException
          * @throws PostNotFoundException
          * @throws ServerNotReachableException
+         * @throws ServiceJobException
          * @throws UserHasInvalidSlaveHashException
          * @throws UserTimelineNotFoundException
          */
@@ -102,7 +106,7 @@
             );
 
             $this->networkSession->getSocialvoidLib()->getTimelineManager()->distributePost(
-                $PostObject->PublicID, $FollowerData->FollowersIDs, 100, true
+                $this->networkSession->getAuthenticatedUser(), $PostObject->PublicID,15, true
             );
 
             return $PostObject;
@@ -308,7 +312,7 @@
             if($page_number < 1) return [];
 
             $UserTimeline = $this->networkSession->getSocialvoidLib()->getTimelineManager()->retrieveTimeline(
-                $this->networkSession->getAuthenticatedUser()->ID
+                $this->networkSession->getAuthenticatedUser()
             );
 
             // Anti-Dumbass check
@@ -433,7 +437,7 @@
             {
                 // Update the timeline if there are invalidated posts to be removed
                 $this->networkSession->getSocialvoidLib()->getTimelineManager()->removePosts(
-                    $this->networkSession->getAuthenticatedUser()->ID, $InvalidatedPostIDs
+                    $this->networkSession->getAuthenticatedUser(), $InvalidatedPostIDs
                 );
 
                 // Re-run the function since the timeline may have changed since this update.
@@ -452,12 +456,16 @@
          * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DisplayPictureException
+         * @throws DocumentNotFoundException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
+         * @throws PeerNotFoundException
          * @throws PostDeletedException
          * @throws PostNotFoundException
          * @throws RepostRecordNotFoundException
          * @throws ServerNotReachableException
+         * @throws ServiceJobException
          * @throws UserHasInvalidSlaveHashException
          * @throws UserTimelineNotFoundException
          */
@@ -471,14 +479,8 @@
                 $this->networkSession->getActiveSession()->ID, PostPriorityLevel::High
             );
 
-            $FollowerData = $this->networkSession->getSocialvoidLib()->getFollowerDataManager()->resolveRecord(
-                $this->networkSession->getAuthenticatedUser()->ID
-            );
-
-            // TODO: The distribution method should check if the repost already exists in the timeline
-            $FollowerData->FollowersIDs[] = $this->networkSession->getAuthenticatedUser()->ID;
             $this->networkSession->getSocialvoidLib()->getTimelineManager()->distributePost(
-                $PostObject->PublicID, $FollowerData->FollowersIDs, 100, true
+                $this->networkSession->getAuthenticatedUser(), $PostObject->PublicID, 15, true
             );
 
             return $PostObject;
@@ -579,13 +581,17 @@
          * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DisplayPictureException
+         * @throws DocumentNotFoundException
          * @throws InvalidPostTextException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
+         * @throws PeerNotFoundException
          * @throws PostDeletedException
          * @throws PostNotFoundException
          * @throws QuoteRecordNotFoundException
          * @throws ServerNotReachableException
+         * @throws ServiceJobException
          * @throws UserHasInvalidSlaveHashException
          * @throws UserTimelineNotFoundException
          */
@@ -601,13 +607,8 @@
                 PostPriorityLevel::High, $flags
             );
 
-            $FollowerData = $this->networkSession->getSocialvoidLib()->getFollowerDataManager()->resolveRecord(
-                $this->networkSession->getAuthenticatedUser()->ID
-            );
-
-            $FollowerData->FollowersIDs[] = $this->networkSession->getAuthenticatedUser()->ID;
             $this->networkSession->getSocialvoidLib()->getTimelineManager()->distributePost(
-                $PostObject->PublicID, $FollowerData->FollowersIDs, 100, true
+                $this->networkSession->getAuthenticatedUser(), $PostObject->PublicID, 15, true
             );
 
             return $PostObject;
@@ -641,12 +642,6 @@
                 $this->networkSession->getActiveSession()->ID, $media_content,
                 PostPriorityLevel::High, $flags
             );
-
-            $FollowerData = $this->networkSession->getSocialvoidLib()->getFollowerDataManager()->resolveRecord(
-                $this->networkSession->getAuthenticatedUser()->ID
-            );
-
-            $FollowerData->FollowersIDs[] = $this->networkSession->getAuthenticatedUser()->ID;
 
             return $PostObject;
         }

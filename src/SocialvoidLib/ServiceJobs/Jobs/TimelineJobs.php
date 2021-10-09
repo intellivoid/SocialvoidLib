@@ -8,10 +8,20 @@
     use BackgroundWorker\Exceptions\ServerNotReachableException;
     use Exception;
     use SocialvoidLib\Abstracts\JobPriority;
+    use SocialvoidLib\Abstracts\SearchMethods\UserSearchMethod;
     use SocialvoidLib\Abstracts\Types\JobType;
     use SocialvoidLib\Classes\Utilities;
     use SocialvoidLib\Exceptions\GenericInternal\BackgroundWorkerNotEnabledException;
+    use SocialvoidLib\Exceptions\GenericInternal\CacheException;
+    use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
+    use SocialvoidLib\Exceptions\GenericInternal\DisplayPictureException;
+    use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
+    use SocialvoidLib\Exceptions\GenericInternal\InvalidSlaveHashException;
     use SocialvoidLib\Exceptions\GenericInternal\ServiceJobException;
+    use SocialvoidLib\Exceptions\GenericInternal\UserHasInvalidSlaveHashException;
+    use SocialvoidLib\Exceptions\Internal\UserTimelineNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Network\DocumentNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Objects\User;
     use SocialvoidLib\ServiceJobs\ServiceJobQuery;
     use SocialvoidLib\ServiceJobs\ServiceJobResults;
@@ -41,33 +51,61 @@
         /**
          * Constructs a job that resolves multiple users and returns their results
          *
+         * @param User $user
          * @param string $post_id
-         * @param array $user_ids
          * @param int $utilization
          * @param bool $skip_errors
          * @throws BackgroundWorkerNotEnabledException
+         * @throws DatabaseException
          * @throws ServerNotReachableException
+         * @throws InvalidSlaveHashException
+         * @throws UserHasInvalidSlaveHashException
+         * @throws UserTimelineNotFoundException
+         * @noinspection PhpCastIsUnnecessaryInspection
          */
         public function distributeTimelinePosts(User $user, string $post_id, int $utilization=100, bool $skip_errors=False): void
         {
+            /**
+             * This method now determines how many followers the post must be distributed to, then calculates the job
+             * weight, for example if there are two workers and there are 100 users to distribute to. The fair amount of
+             * weight for each worker will be 50, so each worker will distribute the post 50 users while resolving each
+             * user. This method is faster as it doesn't need to pre-resolve the user before distribution but instead
+             * tells the worker how to retrieve the users by a limit and offset identifier
+             */
+
             $ServiceJobQueries = [];
             $FollowersCount = $this->socialvoidLib->getRelationStateManager()->getFollowersCount($user);
 
-            foreach(Utilities::splitJobWeight(
-                $user_ids, Utilities::getIntDefinition("SOCIALVOID_LIB_BACKGROUND_UPDATE_WORKERS"), false, $utilization) as $chunk)
+            if($FollowersCount > 0)
             {
-                $ServiceJobQuery = new ServiceJobQuery();
-                $ServiceJobQuery->setJobType(JobType::DistributeTimelinePost);
-                $ServiceJobQuery->setJobPriority(JobPriority::Normal);
-                $ServiceJobQuery->setJobData([
-                    0x000 => $skip_errors,
-                    0x001 => $post_id,
-                    0x002 => $chunk
-                ]);
-                $ServiceJobQuery->generateJobID();
+                $JobWeight = Utilities::calculateSplitJobWeight($FollowersCount,  Utilities::getIntDefinition("SOCIALVOID_LIB_BACKGROUND_UPDATE_WORKERS"), $utilization);
+                $current_offset = 0;
 
-                $ServiceJobQueries[] = $ServiceJobQuery;
+                foreach($JobWeight as $value)
+                {
+                    $ServiceJobQuery = new ServiceJobQuery();
+                    $ServiceJobQuery->setJobType(JobType::DistributeTimelinePost);
+                    $ServiceJobQuery->setJobPriority(JobPriority::Normal);
+                    $ServiceJobQuery->setJobData([
+                        0x000 => $skip_errors,
+                        0x001 => $post_id,
+                        0x002 => $user->toArray(),
+                        0x003 => $current_offset, // Offset
+                        0x004 => $value // Limit
+                    ]);
+                    $ServiceJobQuery->generateJobID();
+                    $ServiceJobQueries[] = $ServiceJobQuery;
+                    $current_offset += $value;
+                }
             }
+
+            // First distribute the post to the author
+            $Timeline = $this->socialvoidLib->getTimelineManager()->retrieveTimeline($user);
+            $Timeline->addPost($post_id);
+            $this->socialvoidLib->getTimelineManager()->updateTimeline($Timeline);
+
+            if($FollowersCount == 0)
+                return;
 
             // Prepare the BackgroundWorker for the jobs
             $this->socialvoidLib->getBackgroundWorker()->getClient()->getGearmanClient()->clearCallbacks();
@@ -91,15 +129,38 @@
          *
          * @param ServiceJobQuery $serviceJobQuery
          * @return ServiceJobResults
+         * @throws BackgroundWorkerNotEnabledException
+         * @throws DatabaseException
+         * @throws ServerNotReachableException
+         * @throws ServiceJobException
+         * @throws CacheException
+         * @throws DisplayPictureException
+         * @throws InvalidSearchMethodException
+         * @throws DocumentNotFoundException
+         * @throws PeerNotFoundException
          */
         public function processDistributeTimelinePost(ServiceJobQuery $serviceJobQuery): ServiceJobResults
         {
             $ServiceJobResults = ServiceJobResults::fromServiceJobQuery($serviceJobQuery);
-            foreach($serviceJobQuery->getJobData()[0x002] as $user_id)
+            $User = User::fromArray($serviceJobQuery->getJobData()[0x002]);
+
+            // Resolve the followers to distribute the post to
+            $FollowerIds = $this->socialvoidLib->getRelationStateManager()->getFollowers(
+                $User,
+                (int)$serviceJobQuery->getJobData()[0x004], // Limit
+                (int)$serviceJobQuery->getJobData()[0x003]  // Offset
+            );
+
+            $QueryResults = [];
+            foreach($FollowerIds as $followerId)
+                $QueryResults[$followerId] = UserSearchMethod::ById;
+            $ResolvedFollowers = $this->socialvoidLib->getUserManager()->getMultipleUsers($QueryResults, true, 15);
+
+            foreach($ResolvedFollowers as $user)
             {
                 try
                 {
-                    $Timeline = $this->socialvoidLib->getTimelineManager()->retrieveTimeline($user_id);
+                    $Timeline = $this->socialvoidLib->getTimelineManager()->retrieveTimeline($user);
                     $Timeline->addPost($serviceJobQuery->getJobData()[0x001]);
                     $this->socialvoidLib->getTimelineManager()->updateTimeline($Timeline);
                 }
@@ -113,7 +174,7 @@
 
                     // Set the error anyways for troubleshooting purposes
                     $ServiceJobResults->setJobError(new ServiceJobException(
-                        "There was an error while trying to resolve the distribution to the timeline '$user_id'",
+                        "There was an error while trying to resolve the distribution to the timeline",
                         $serviceJobQuery, $e
                     ));
                 }
@@ -128,11 +189,12 @@
         /**
          * Constructs a job that removes the requested Post IDs from the
          *
-         * @param int $user_id
+         * @param User $user
          * @param array $post_ids
          * @param bool $skip_errors
          * @throws BackgroundWorkerNotEnabledException
          * @throws ServerNotReachableException
+         * @noinspection PhpCastIsUnnecessaryInspection
          */
         public function removeTimelinePosts(User $user, array $post_ids, bool $skip_errors=False): void
         {

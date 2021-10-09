@@ -141,7 +141,7 @@
                 }
 
                 $Response = Response::fromRequest($request);
-                $Response->ResultData = $NetworkSession->getUsers()->getProfile($requested_peer);
+                $Response->ResultData = $NetworkSession->getUsers()->getProfile($requested_peer)->toArray();
 
                 return $Response;
             }
