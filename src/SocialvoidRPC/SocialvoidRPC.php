@@ -149,6 +149,7 @@
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\UnlikePost());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\QuotePost());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\ReplyToPost());
+            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\RetrieveTimeline());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\RepostPost());
         }
 

@@ -76,7 +76,8 @@ print(" <-- " + json.dumps(response.data.result))
 actions = [
     "compose_post",
     "follow_peer",
-    "follow_vip_peer"
+    "follow_vip_peer",
+    "retrieve_timeline"
 ]
 
 def random_peer():
@@ -127,3 +128,78 @@ while True:
             peer="@netkas"
         )
         print(" <-- " + json.dumps(response.data.result))
+    if selected_action == "retrieve_timeline":
+        timeline_response = request(
+            client_info["endpoint"], "timeline.retrieve_timeline",
+            session_identification={
+                "session_id": simulator["session"]["id"],
+                "client_public_hash": client_info["public_hash"],
+                "challenge_answer": answer_challenge(client_info["private_hash"], simulator["session"]["challenge"])
+            },
+            page=1
+        )
+        timeline_actions = ["nothing","like", "unlike", "repost", "reply", "quote"]
+        for post in timeline_response.data.result:
+            timeline_selected_action = random.choice(timeline_actions)
+            print(' Timeline > [{0}]'.format(timeline_selected_action))
+            print(post["id"])
+            if timeline_selected_action == "like":
+                response = request(
+                    client_info["endpoint"], "timeline.like_post",
+                    session_identification={
+                        "session_id": simulator["session"]["id"],
+                        "client_public_hash": client_info["public_hash"],
+                        "challenge_answer": answer_challenge(client_info["private_hash"], simulator["session"]["challenge"])
+                    },
+                    post_id=post["id"]
+                )
+                print(" <-- " + json.dumps(response.data.result))
+            if timeline_selected_action == "unlike":
+                response = request(
+                    client_info["endpoint"], "timeline.unlike_post",
+                    session_identification={
+                        "session_id": simulator["session"]["id"],
+                        "client_public_hash": client_info["public_hash"],
+                        "challenge_answer": answer_challenge(client_info["private_hash"], simulator["session"]["challenge"])
+                    },
+                    post_id=post["id"]
+                )
+                print(" <-- " + json.dumps(response.data.result))
+            if timeline_selected_action == "repost":
+                try:
+                    response = request(
+                        client_info["endpoint"], "timeline.repost_post",
+                        session_identification={
+                            "session_id": simulator["session"]["id"],
+                            "client_public_hash": client_info["public_hash"],
+                            "challenge_answer": answer_challenge(client_info["private_hash"], simulator["session"]["challenge"])
+                        },
+                        post_id=post["id"]
+                    )
+                    print(" <-- " + json.dumps(response.data.result))
+                except:
+                    print(" <-- Already reposted")
+            if timeline_selected_action == "reply":
+                response = request(
+                    client_info["endpoint"], "timeline.reply_to_post",
+                    session_identification={
+                        "session_id": simulator["session"]["id"],
+                        "client_public_hash": client_info["public_hash"],
+                        "challenge_answer": answer_challenge(client_info["private_hash"], simulator["session"]["challenge"])
+                    },
+                    post_id=post["id"],
+                    text=fake.paragraph()
+                )
+                print(" <-- " + json.dumps(response.data.result))
+            if timeline_selected_action == "quote":
+                response = request(
+                    client_info["endpoint"], "timeline.quote_post",
+                    session_identification={
+                        "session_id": simulator["session"]["id"],
+                        "client_public_hash": client_info["public_hash"],
+                        "challenge_answer": answer_challenge(client_info["private_hash"], simulator["session"]["challenge"])
+                    },
+                    post_id=post["id"],
+                    text=fake.paragraph()
+                )
+                print(" <-- " + json.dumps(response.data.result))

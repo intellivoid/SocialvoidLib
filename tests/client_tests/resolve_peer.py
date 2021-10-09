@@ -15,7 +15,7 @@ response = request(
         "client_public_hash": client_info["public_hash"],
         "challenge_answer": answer_challenge(client_info["private_hash"], session_info["challenge"])
      },
-     peer="@netkas"
+     peer="78089d073f754db07d7789e1cfcf0cce14aff4ce8ef394d756ddbdbf8bf09e7f"
 )
 
 print(response.data.result)

@@ -1,6 +1,6 @@
 <?php
 
-    namespace SocialvoidRPC\Methods\Network;
+    namespace SocialvoidRPC\Methods\Timeline;
 
     use Exception;
     use KimchiRPC\Exceptions\Server\MissingParameterException;
@@ -20,14 +20,12 @@
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPublicHashException;
-    use SocialvoidLib\Exceptions\Standard\Validation\InvalidPeerInputException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidSessionIdentificationException;
     use SocialvoidLib\NetworkSession;
-    use SocialvoidLib\Objects\Standard\Peer;
     use SocialvoidLib\Objects\Standard\SessionIdentification;
     use SocialvoidRPC\SocialvoidRPC;
 
-    class GetFollowers implements MethodInterface
+    class RetrieveTimeline implements MethodInterface
     {
 
         /**
@@ -35,7 +33,7 @@
          */
         public function getMethodName(): string
         {
-            return 'GetFollowers';
+            return 'RetrieveTimeline';
         }
 
         /**
@@ -43,7 +41,7 @@
          */
         public function getMethod(): string
         {
-            return 'network.get_followers';
+            return 'timeline.retrieve_timeline';
         }
 
         /**
@@ -51,7 +49,7 @@
          */
         public function getDescription(): string
         {
-            return 'Returns an array of peers that follows the given peer';
+            return 'Returns an array of posts from the users timeline';
         }
 
         /**
@@ -66,7 +64,6 @@
          * @param Request $request
          * @throws InvalidSessionIdentificationException
          * @throws MissingParameterException
-         * @throws InvalidPeerInputException
          * @noinspection DuplicatedCode
          */
         private function checkParameters(Request $request)
@@ -76,20 +73,9 @@
             if(gettype($request->Parameters['session_identification']) !== 'array')
                 throw new InvalidSessionIdentificationException('The parameter \'session_identification\' is not a object');
 
-            if(isset($request->Parameters['peer']))
+            if(isset($request->Parameters['page']) == false)
             {
-                if(gettype($request->Parameters['peer']) !== 'string')
-                    throw new InvalidPeerInputException('The parameter \'peer\' is not a string');
-            }
-
-            if(isset($request->Parameters['offset']) == false)
-            {
-                $request->Parameters['offset'] = 0;
-            }
-
-            if(isset($request->Parameters['limit']) == false)
-            {
-                $request->Parameters['limit'] = 100;
+                $request->Parameters['page'] = 1;
             }
         }
 
@@ -99,10 +85,10 @@
          * @throws BadSessionChallengeAnswerException
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DisplayPictureException
          * @throws DocumentNotFoundException
          * @throws InternalServerException
          * @throws InvalidClientPublicHashException
-         * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
          * @throws InvalidSessionIdentificationException
          * @throws MissingParameterException
@@ -110,7 +96,6 @@
          * @throws PeerNotFoundException
          * @throws SessionExpiredException
          * @throws SessionNotFoundException
-         * @throws DisplayPictureException
          * @noinspection DuplicatedCode
          */
         public function execute(Request $request): Response
@@ -142,16 +127,14 @@
 
             try
             {
-                $requested_peer = $request->Parameters['peer'] ?? $NetworkSession->getAuthenticatedUser()->PublicID;
+                $posts = $NetworkSession->getTimeline()->retrieveTimeline($request->Parameters['page']);
+                $posts_array = [];
 
-                $followers = $NetworkSession->getUsers()->getFollowers($requested_peer, $request->Parameters['limit'], $request->Parameters['offset']);
-                $followers_std = [];
-
-                foreach($followers as $follower)
-                    $followers_std[] = Peer::fromUser($follower)->toArray();
+                foreach($posts as $post)
+                    $posts_array[] = $post->toArray();
 
                 $Response = Response::fromRequest($request);
-                $Response->ResultData = $followers_std;
+                $Response->ResultData = $posts_array;
 
                 return $Response;
             }
@@ -162,7 +145,7 @@
                     throw $e;
 
                 // If anything else, suppress the error.There was an unexpected error while processing the requested peer
-                throw new InternalServerException('There was an unexpected error while processing the requested peer', $e);
+                throw new InternalServerException('There was an unexpected error while trying to retrieve your timeline', $e);
             }
         }
     }

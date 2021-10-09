@@ -272,8 +272,6 @@
                     $ServiceJobResults->setSuccess(false);
                 }
 
-                var_dump($e);
-                var_dump($serviceJobQuery);
                 // Set the error anyways for troubleshooting purposes
                 $ServiceJobResults->setJobError(new ServiceJobException(
                     "There was an error while trying to update the timeline",
