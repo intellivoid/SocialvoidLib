@@ -339,7 +339,6 @@
             if($limit > (int)$this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveFollowersMixLimit'])
                 throw new InvalidLimitValueException('The limit value cannot exceed ' . $this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveFollowersMixLimit']);
 
-
             // Resolve the Peer ID
             $target_peer = $this->resolvePeer($peer);
             $search_query = [];
@@ -391,6 +390,13 @@
         {
             if($this->networkSession->isAuthenticated() == false)
                 throw new NotAuthenticatedException();
+
+            if($offset < 0)
+                throw new InvalidOffsetValueException('The offset value cannot be a negative value');
+            if($limit < 1)
+                throw new InvalidLimitValueException('The limit value must be a value greater than 0');
+            if($limit > (int)$this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveFollowingMixLimit'])
+                throw new InvalidLimitValueException('The limit value cannot exceed ' . $this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveFollowingMixLimit']);
 
             // Resolve the Peer ID
             $target_peer = $this->resolvePeer($peer);
