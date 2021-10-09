@@ -43,6 +43,7 @@
     use SocialvoidLib\Managers\TelegramCdnManager;
     use SocialvoidLib\Managers\TimelineManager;
     use SocialvoidLib\Managers\UserManager;
+    use TmpFile\TmpFile;
     use udp2\udp2;
 
     /**
@@ -312,6 +313,7 @@
             $DataStorageSchema->setDefinition('UserAvatarsLocation', '/var/socialvoid/avatars');
             $DataStorageSchema->setDefinition('LegalDocumentsLocation', '/var/socialvoid/legal');
             $DataStorageSchema->setDefinition('WorkingLocation', '/var/socialvoid/lib');
+            $DataStorageSchema->setDefinition('TemporaryFiles', '/var/socialvoid/tmp');
             $this->acm->defineSchema($DataStorageSchema);
 
             // Save any changes
@@ -347,6 +349,8 @@
 
             if($this->getServiceEngineConfiguration()['EnableBackgroundWorker'] && function_exists('gearman_version') == false)
                 throw new DependencyError('ServiceEngine has BackgroundWorker enabled but the gearman extension (php-gearman) is not installed.');
+
+            TmpFile::setCustomTmpDir($this->DataStorageConfiguration['TemporaryFiles']);
         }
 
         /**
