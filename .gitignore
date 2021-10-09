@@ -1,4 +1,5 @@
 build/
+tests/client_tests/data/simulations/
 *.social_session
 timeline.json
 .cache
