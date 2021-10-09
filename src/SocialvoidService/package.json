@@ -2,7 +2,7 @@
     "package": {
         "package_name": "net.intellivoid.socialvoid_service",
         "name": "SocialvoidService",
-        "version": "1.0.0.0",
+        "version": "1.0.0.1",
         "author": "Zi Xing Narrakas",
         "organization": "Intellivoid",
         "description": "The service used for managing Socialvoid Events",
