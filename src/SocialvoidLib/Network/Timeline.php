@@ -565,7 +565,7 @@
          * @throws ReplyRecordNotFoundException
          * @throws RepostRecordNotFoundException
          */
-        public function deletePost(string $post_public_id): bool
+        public function delete(string $post_public_id): bool
         {
             $selected_post = $this->networkSession->getSocialvoidLib()->getPostsManager()->getPost(
                 PostSearchMethod::ByPublicId, $post_public_id);

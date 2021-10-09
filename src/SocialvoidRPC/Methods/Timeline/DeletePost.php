@@ -130,7 +130,7 @@
 
             try
             {
-                $NetworkSession->getTimeline()->deletePost($request->Parameters['post_id']);
+                $NetworkSession->getTimeline()->delete($request->Parameters['post_id']);
             }
             catch(Exception $e)
             {
