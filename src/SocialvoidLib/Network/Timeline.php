@@ -495,6 +495,49 @@
         }
 
         /**
+         * Returns an array of posts that replied to the selected post
+         *
+         * @param string $post_public_id
+         * @param int $offset
+         * @param int $limit
+         * @return Post[]
+         * @throws BackgroundWorkerNotEnabledException
+         * @throws CacheException
+         * @throws DatabaseException
+         * @throws InvalidLimitValueException
+         * @throws InvalidOffsetValueException
+         * @throws InvalidSearchMethodException
+         * @throws InvalidSlaveHashException
+         * @throws NotAuthenticatedException
+         * @throws PostNotFoundException
+         * @throws ServerNotReachableException
+         * @throws ServiceJobException
+         * @noinspection DuplicatedCode
+         */
+        public function getReplies(string $post_public_id, int $offset=0, int $limit=100): array
+        {
+            if($this->networkSession->isAuthenticated() == false)
+                throw new NotAuthenticatedException();
+
+            if($offset < 0)
+                throw new InvalidOffsetValueException('The offset value cannot be a negative value');
+            if($limit < 1)
+                throw new InvalidLimitValueException('The limit value must be a value greater than 0');
+            if($limit > (int)$this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveLikesMaxLimit'])
+                throw new InvalidLimitValueException('The limit value cannot exceed ' . $this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveLikesMaxLimit']);
+
+            $Replies = $this->networkSession->getSocialvoidLib()->getReplyRecordManager()->getReplies($post_public_id, $offset, $limit);
+
+            $search_query = [];
+            foreach($Replies as $post_id)
+            {
+                $search_query[$post_id] = PostSearchMethod::ByPublicId;
+            }
+
+            return $this->networkSession->getSocialvoidLib()->getPostsManager()->getMultiplePosts($search_query);
+        }
+
+        /**
          * Distributes a new post to the timeline, and it's users
          *
          * @param string $post_public_id
