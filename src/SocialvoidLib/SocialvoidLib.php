@@ -223,6 +223,8 @@
             $MainSchema->setDefinition('RetrieveRepostsMaxLimit', 100);
             $MainSchema->setDefinition('RetrieveRepliesMaxLimit', 100);
             $MainSchema->setDefinition('RetrieveQuotesMaxLimit', 100);
+            $MainSchema->setDefinition('RetrieveFollowersMixLimit', 100);
+            $MainSchema->setDefinition('RetrieveFollowingMixLimit', 100);
             $this->acm->defineSchema($MainSchema);
 
             // Database Schema Configuration

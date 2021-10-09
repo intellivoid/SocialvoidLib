@@ -77,6 +77,20 @@
         public $RetrieveQuotesMaxLimit;
 
         /**
+         * The limit to the amount of followers you can retrieve from a peer
+         *
+         * @var int
+         */
+        public $RetrieveFollowersMaxLimit;
+
+        /**
+         * The limit to the amount of following peers you can retrieve from a peer
+         *
+         * @var int
+         */
+        public $RetrieveFollowingMaxLimit;
+
+        /**
          * Return an array representation of the object
          *
          * @return array
@@ -93,7 +107,9 @@
                 'retrieve_likes_max_limit' => $this->RetrieveLikesMaxLimit,
                 'retrieve_reposts_max_limit' => $this->RetrieveRepostsMaxLimit,
                 'retrieve_replies_max_limit' => $this->RetrieveRepliesMaxLimit,
-                'retrieve_quotes_max_limit' => $this->RetrieveQuotesMaxLimit
+                'retrieve_quotes_max_limit' => $this->RetrieveQuotesMaxLimit,
+                'retrieve_followers_max_limit' => $this->RetrieveFollowersMaxLimit,
+                'retrieve_following_max_limit' => $this->RetrieveFollowingMaxLimit
             ];
         }
 
@@ -136,6 +152,12 @@
 
             if(isset($data['retrieve_quotes_max_limit']))
                 $serverInformationObject->RetrieveQuotesMaxLimit = $data['retrieve_quotes_max_limit'];
+
+            if(isset($data['retrieve_followers_max_limit']))
+                $serverInformationObject->RetrieveFollowersMaxLimit = $data['retrieve_followers_max_limit'];
+
+            if(isset($data['retrieve_following_max_limit']))
+                $serverInformationObject->RetrieveFollowingMaxLimit = $data['retrieve_following_max_limit'];
 
             return $serverInformationObject;
         }
