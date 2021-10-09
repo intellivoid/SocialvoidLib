@@ -130,7 +130,7 @@
 
             try
             {
-                $ComposedPost = $NetworkSession->getTimeline()->composePost($request->Parameters['text']);
+                $ComposedPost = $NetworkSession->getTimeline()->compose($request->Parameters['text']);
                 $StandardObject = $NetworkSession->getTimeline()->getStandardPost($ComposedPost->PublicID);
             }
             catch(Exception $e)

@@ -94,7 +94,7 @@
          * @throws UserHasInvalidSlaveHashException
          * @throws UserTimelineNotFoundException
          */
-        public function composePost(string $text, array $media_content=[], array $flags=[]): Post
+        public function compose(string $text, array $media_content=[], array $flags=[]): Post
         {
             if ($this->networkSession->isAuthenticated() == false)
                 throw new NotAuthenticatedException();
