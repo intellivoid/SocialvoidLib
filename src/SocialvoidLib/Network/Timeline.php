@@ -33,6 +33,7 @@
     use SocialvoidLib\Exceptions\Internal\RepostRecordNotFoundException;
     use SocialvoidLib\Exceptions\Internal\UserTimelineNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException;
+    use SocialvoidLib\Exceptions\Standard\Network\AccessDeniedException;
     use SocialvoidLib\Exceptions\Standard\Network\AlreadyRepostedException;
     use SocialvoidLib\Exceptions\Standard\Network\DocumentNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
@@ -553,10 +554,12 @@
          *
          * @param string $post_public_id
          * @return bool
+         * @throws AccessDeniedException
          * @throws CacheException
          * @throws DatabaseException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
+         * @throws NotAuthenticatedException
          * @throws PostDeletedException
          * @throws PostNotFoundException
          * @throws QuoteRecordNotFoundException
@@ -565,8 +568,14 @@
          */
         public function delete(string $post_public_id): bool
         {
+            if ($this->networkSession->isAuthenticated() == false)
+                throw new NotAuthenticatedException();
+
             $selected_post = $this->networkSession->getSocialvoidLib()->getPostsManager()->getPost(
                 PostSearchMethod::ByPublicId, $post_public_id);
+
+            if($selected_post->PosterUserID !== $this->networkSession->getAuthenticatedUser()->ID)
+                throw new AccessDeniedException('Insufficient permissions to delete this post');
 
             $this->networkSession->getSocialvoidLib()->getPostsManager()->deletePost($selected_post);
 

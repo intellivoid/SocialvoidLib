@@ -26,7 +26,7 @@
     use SocialvoidLib\Objects\Standard\SessionIdentification;
     use SocialvoidRPC\SocialvoidRPC;
 
-    class DeletePost implements MethodInterface
+    class Delete implements MethodInterface
     {
 
         /**
@@ -34,7 +34,7 @@
          */
         public function getMethodName(): string
         {
-            return 'GetPost';
+            return 'Delete';
         }
 
         /**
@@ -42,7 +42,7 @@
          */
         public function getMethod(): string
         {
-            return 'timeline.delete_post';
+            return 'timeline.delete';
         }
 
         /**

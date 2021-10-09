@@ -142,7 +142,7 @@
 
             // Timeline methods
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\Compose());
-            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\DeletePost());
+            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\Delete());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\GetPostLikes());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\LikePost());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\GetPost());
