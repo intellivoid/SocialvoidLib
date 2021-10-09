@@ -82,12 +82,12 @@
                     throw new InvalidPeerInputException('The parameter \'peer\' is not a string');
             }
 
-            if(isset($request->Parameters['offset']))
+            if(isset($request->Parameters['offset']) == false)
             {
                 $request->Parameters['offset'] = 0;
             }
 
-            if(isset($request->Parameters['limit']))
+            if(isset($request->Parameters['limit']) == false)
             {
                 $request->Parameters['limit'] = 100;
             }
@@ -144,6 +144,7 @@
             {
                 $requested_peer = $request->Parameters['peer'] ?? $NetworkSession->getAuthenticatedUser()->PublicID;
 
+                var_dump($request->Parameters);
                 $followers = $NetworkSession->getUsers()->getFollowers($requested_peer, $request->Parameters['limit'], $request->Parameters['offset']);
                 $followers_std = [];
 

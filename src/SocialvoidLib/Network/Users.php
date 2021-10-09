@@ -315,6 +315,7 @@
          * @throws ServerNotReachableException
          * @throws ServiceJobException
          * @throws DisplayPictureException
+         * @noinspection DuplicatedCode
          */
         public function getFollowers($peer, int $limit, int $offset): array
         {
@@ -323,14 +324,29 @@
 
             // Resolve the Peer ID
             $target_peer = $this->resolvePeer($peer);
-            $followers = [];
+            $search_query = [];
+            $followers_ids = $this->networkSession->getSocialvoidLib()->getRelationStateManager()->getFollowers($target_peer, $limit, $offset);
 
-            foreach($this->networkSession->getSocialvoidLib()->getRelationStateManager()->getFollowers($target_peer, $limit, $offset) as $user_id)
+            foreach($followers_ids as $user_id)
+                $search_query[$user_id] = UserSearchMethod::ById;
+
+            $resolvedPeers = $this->resolveMultiplePeers($search_query);
+            $return_results = [];
+
+            // Sort the results
+            foreach($followers_ids as $followers_id)
             {
-                $followers[$user_id] = UserSearchMethod::ById;
+                foreach($resolvedPeers as $resolvedPeer)
+                {
+                    if($resolvedPeer->ID == $followers_id)
+                    {
+                        $return_results[] = $resolvedPeer;
+                        break;
+                    }
+                }
             }
 
-            return $this->resolveMultiplePeers($followers);
+            return $return_results;
         }
 
         /**
@@ -351,6 +367,7 @@
          * @throws ServerNotReachableException
          * @throws ServiceJobException
          * @throws DisplayPictureException
+         * @noinspection DuplicatedCode
          */
         public function getFollowing($peer, int $limit, int $offset): array
         {
@@ -359,13 +376,28 @@
 
             // Resolve the Peer ID
             $target_peer = $this->resolvePeer($peer);
-            $following = [];
+            $search_query = [];
+            $following_ids = $this->networkSession->getSocialvoidLib()->getRelationStateManager()->getFollowing($target_peer, $limit, $offset);
 
-            foreach($this->networkSession->getSocialvoidLib()->getRelationStateManager()->getFollowing($target_peer, $limit, $offset) as $user_id)
+            foreach($following_ids as $user_id)
+                $search_query[$user_id] = UserSearchMethod::ById;
+
+            $resolvedPeers = $this->resolveMultiplePeers($search_query);
+            $return_results = [];
+
+            // Sort the results
+            foreach($following_ids as $followers_id)
             {
-                $following[$user_id] = UserSearchMethod::ById;
+                foreach($resolvedPeers as $resolvedPeer)
+                {
+                    if($resolvedPeer->ID == $followers_id)
+                    {
+                        $return_results[] = $resolvedPeer;
+                        break;
+                    }
+                }
             }
 
-            return $this->resolveMultiplePeers($following);
+            return $return_results;
         }
     }

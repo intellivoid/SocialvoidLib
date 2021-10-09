@@ -212,7 +212,7 @@
             $limit = (int)$limit;
             $offset = (int)$offset;
 
-            $Query = "SELECT user_id FROM `peer_relations` WHERE target_user_id='$user_id' AND state=$state LIMIT $offset, $limit";
+            $Query = "SELECT user_id FROM `peer_relations` WHERE target_user_id='$user_id' AND state=$state ORDER BY created_timestamp DESC LIMIT $offset, $limit";
 
             $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
             // Execute and process the query
@@ -252,7 +252,7 @@
             $limit = (int)$limit;
             $offset = (int)$offset;
 
-            $Query = "SELECT target_user_id FROM `peer_relations` WHERE user_id='$user_id' AND state=$state LIMIT $offset, $limit";
+            $Query = "SELECT target_user_id FROM `peer_relations` WHERE user_id='$user_id' AND state=$state ORDER BY created_timestamp DESC LIMIT $offset, $limit";
             $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
 
             // Execute and process the query
