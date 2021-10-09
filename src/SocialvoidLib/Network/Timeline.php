@@ -16,6 +16,7 @@
     use SocialvoidLib\Abstracts\SearchMethods\PostSearchMethod;
     use SocialvoidLib\Abstracts\SearchMethods\TimelineSearchMethod;
     use SocialvoidLib\Abstracts\SearchMethods\UserSearchMethod;
+    use SocialvoidLib\Abstracts\Types\Standard\PostType;
     use SocialvoidLib\Abstracts\Types\Standard\TextEntityType;
     use SocialvoidLib\Classes\Converter;
     use SocialvoidLib\Exceptions\GenericInternal\BackgroundWorkerNotEnabledException;
@@ -297,6 +298,7 @@
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
          * @throws InvalidZimageFileException
+         * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
          * @throws PostNotFoundException
          * @throws ServerNotReachableException
@@ -320,117 +322,21 @@
             if($page_number > count($UserTimeline->PostChunks)) return [];
 
             // Retrieve posts
-            $PostsIDs = array_fill_keys($UserTimeline->PostChunks[($page_number - 1)], PostSearchMethod::ByPublicId);
-            $ResolvedPosts = $this->networkSession->getSocialvoidLib()->getPostsManager()->getMultiplePosts(
-                $PostsIDs, true);
-
-            $SubPosts = [];
-            $UserIDs = [];
-            foreach($ResolvedPosts as $post)
-            {
-                $UserIDs[$post->PosterUserID] = UserSearchMethod::ById;
-
-                if($post->Repost !== null && $post->Repost->OriginalPostID)
-                    $SubPosts[$post->Repost->OriginalPostID] = PostSearchMethod::ByPublicId;
-                if($post->Repost !== null && $post->Repost->OriginalUserID)
-                    $UserIDs[$post->Repost->OriginalUserID] = UserSearchMethod::ById;
-
-                if($post->Quote !== null && $post->Quote->OriginalPostID)
-                    $SubPosts[$post->Quote->OriginalPostID] = PostSearchMethod::ByPublicId;
-                if($post->Quote !== null && $post->Quote->OriginalUserID)
-                    $UserIDs[$post->Quote->OriginalUserID] = UserSearchMethod::ById;
-
-                if($post->Reply !== null && $post->Reply->ReplyToPostID)
-                    $SubPosts[$post->Reply->ReplyToPostID] = PostSearchMethod::ByPublicId;
-                if($post->Reply !== null && $post->Reply->ReplyToUserID)
-                    $UserIDs[(int)$post->Reply->ReplyToUserID] = UserSearchMethod::ById;
-            }
-
-
-            $ResolvedSubPosts = $this->networkSession->getSocialvoidLib()->getPostsManager()->getMultiplePosts(
-                $SubPosts, false);
-            $ResolvedUsers = $this->networkSession->getSocialvoidLib()->getUserManager()->getMultipleUsers(
-                $UserIDs, false);
-
-            // Sort results
-            $SortedPostResolutions = [];
-            $SortedUserResolutions = [];
+            $ResolvedPostIds = [];
             $InvalidatedPostIDs = [];
 
-            foreach($ResolvedPosts as $resolvedPost)
-                $SortedPostResolutions[$resolvedPost->PublicID] = $resolvedPost;
-            foreach($ResolvedSubPosts as $resolvedPost)
-                $SortedPostResolutions[$resolvedPost->PublicID] = $resolvedPost;
-            foreach($ResolvedUsers as $resolvedUser)
-                $SortedUserResolutions[$resolvedUser->ID] = $resolvedUser;
-
-            $ReturnResults = [];
-            foreach($ResolvedPosts as $resolvedPost)
+            foreach($UserTimeline->PostChunks[($page_number - 1)] as $postID)
             {
-                if(Converter::hasFlag($resolvedPost->Flags, PostFlags::Deleted))
+                $StandardPost = $this->getStandardPost($postID);
+
+                if($StandardPost->PostType == PostType::Deleted)
                 {
-                    $InvalidatedPostIDs[] = $resolvedPost->PublicID;
-                    continue;
+                    $InvalidatedPostIDs[] = $postID;
                 }
-
-                $stdPost = \SocialvoidLib\Objects\Standard\Post::fromPost($resolvedPost);
-                $stdPost->Peer = Peer::fromUser($SortedUserResolutions[$resolvedPost->PosterUserID]);
-
-                // Resolve quoted post
-                if($resolvedPost->Quote !== null && $resolvedPost->Quote->OriginalPostID)
+                else
                 {
-                    $stdPost->QuotedPost = \SocialvoidLib\Objects\Standard\Post::fromPost(
-                        $SortedPostResolutions[$resolvedPost->Quote->OriginalPostID]
-                    );
-
-                    if($resolvedPost->Quote->OriginalUserID !== null)
-                    {
-                        $stdPost->QuotedPost->Peer = Peer::fromUser(
-                            $SortedUserResolutions[$resolvedPost->Quote->OriginalUserID]
-                        );
-                    }
-
+                    $ResolvedPostIds[] = $this->getStandardPost($postID);
                 }
-
-                if($resolvedPost->Repost !== null && $resolvedPost->Repost->OriginalPostID !== null)
-                {
-                    if(Converter::hasFlag($SortedPostResolutions[$resolvedPost->Repost->OriginalPostID]->Flags, PostFlags::Deleted))
-                    {
-                        // This is an invalidated post since the original repost has been deleted
-                        $InvalidatedPostIDs[] = $resolvedPost->PublicID;
-                        $InvalidatedPostIDs[] = $resolvedPost->Repost->OriginalPostID; // To be on the safe side.
-                    }
-                    else
-                    {
-
-                        $stdPost->RepostedPost = \SocialvoidLib\Objects\Standard\Post::fromPost(
-                            $SortedPostResolutions[$resolvedPost->Repost->OriginalPostID]
-                        );
-
-                        if($resolvedPost->Repost->OriginalUserID !== null)
-                        {
-                            $stdPost->RepostedPost->Peer = Peer::fromUser(
-                                $SortedUserResolutions[$resolvedPost->Repost->OriginalUserID]
-                            );
-                        }
-                    }
-                }
-
-                if($resolvedPost->Reply !== null && $resolvedPost->Reply->ReplyToPostID)
-                {
-                    $stdPost->ReplyToPost = \SocialvoidLib\Objects\Standard\Post::fromPost(
-                        $SortedPostResolutions[$resolvedPost->Reply->ReplyToPostID]
-                    );
-
-                    if($resolvedPost->Reply->ReplyToUserID !== null)
-                    {
-                        $stdPost->ReplyToPost->Peer = Peer::fromUser(
-                            $SortedUserResolutions[$resolvedPost->Reply->ReplyToUserID]
-                        );
-                    }
-                }
-
-                $ReturnResults[] = $stdPost;
             }
 
             if(count($InvalidatedPostIDs) > 0)
@@ -444,7 +350,7 @@
                 if($recursive) return $this->retrieveTimeline($page_number, $recursive);
             }
 
-            return $ReturnResults;
+            return $ResolvedPostIds;
         }
 
         /**
