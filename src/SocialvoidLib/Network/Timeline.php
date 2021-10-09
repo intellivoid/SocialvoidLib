@@ -161,8 +161,6 @@
          */
         public function getStandardPost(string $post_id): \SocialvoidLib\Objects\Standard\Post
         {
-            // TODO: Use BackgroundWorker to resolve all IDs at once
-            // TODO: Resolve reposts & replied post
             if ($this->networkSession->isAuthenticated() == false)
                 throw new NotAuthenticatedException();
 
