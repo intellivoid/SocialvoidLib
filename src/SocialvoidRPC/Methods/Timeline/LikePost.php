@@ -34,7 +34,7 @@
          */
         public function getMethodName(): string
         {
-            return 'LikePost';
+            return 'Like';
         }
 
         /**
@@ -42,7 +42,7 @@
          */
         public function getMethod(): string
         {
-            return 'timeline.like_post';
+            return 'timeline.like';
         }
 
         /**
@@ -66,6 +66,7 @@
          * @throws InvalidPostTextException
          * @throws InvalidSessionIdentificationException
          * @throws MissingParameterException
+         * @noinspection DuplicatedCode
          */
         private function checkParameters(Request $request)
         {

@@ -399,12 +399,16 @@
          * @throws DatabaseException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
+         * @throws LikeRecordNotFoundException
+         * @throws NotAuthenticatedException
          * @throws PostDeletedException
          * @throws PostNotFoundException
-         * @throws LikeRecordNotFoundException
          */
         public function like(string $post_public_id): void
         {
+            if($this->networkSession->isAuthenticated() == false)
+                throw new NotAuthenticatedException();
+
             $selected_post = $this->networkSession->getSocialvoidLib()->getPostsManager()->getPost(
                 PostSearchMethod::ByPublicId, $post_public_id);
 
