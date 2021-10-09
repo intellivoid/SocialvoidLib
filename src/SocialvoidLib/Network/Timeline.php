@@ -542,14 +542,12 @@
             $selected_post = $this->networkSession->getSocialvoidLib()->getPostsManager()->getPost(
                 PostSearchMethod::ByPublicId, $post_public_id);
 
-            $PostObject = $this->networkSession->getSocialvoidLib()->getPostsManager()->replyToPost(
+            return $this->networkSession->getSocialvoidLib()->getPostsManager()->replyToPost(
                 $this->networkSession->getAuthenticatedUser(), $selected_post, $text,
                 Converter::getSource($this->networkSession->getActiveSession()),
                 $this->networkSession->getActiveSession()->ID, $media_content,
                 PostPriorityLevel::High, $flags
             );
-
-            return $PostObject;
         }
 
         /**
