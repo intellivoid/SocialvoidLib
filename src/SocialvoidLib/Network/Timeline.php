@@ -365,6 +365,7 @@
          * @throws DocumentNotFoundException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
+         * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
          * @throws PostDeletedException
          * @throws PostNotFoundException
@@ -376,6 +377,9 @@
          */
         public function repost(string $post_public_id): Post
         {
+            if($this->networkSession->isAuthenticated() == false)
+                throw new NotAuthenticatedException();
+
             $selected_post = $this->networkSession->getSocialvoidLib()->getPostsManager()->getPost(
                 PostSearchMethod::ByPublicId, $post_public_id);
 

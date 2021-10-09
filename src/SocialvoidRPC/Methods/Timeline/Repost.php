@@ -26,14 +26,14 @@
     use SocialvoidLib\Objects\Standard\SessionIdentification;
     use SocialvoidRPC\SocialvoidRPC;
 
-    class RepostPost implements MethodInterface
+    class Repost implements MethodInterface
     {
         /**
          * @inheritDoc
          */
         public function getMethodName(): string
         {
-            return 'RepostPost';
+            return 'Repost';
         }
 
         /**
@@ -41,7 +41,7 @@
          */
         public function getMethod(): string
         {
-            return 'timeline.repost_post';
+            return 'timeline.repost';
         }
 
         /**

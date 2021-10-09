@@ -150,7 +150,7 @@
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\Quote());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\Reply());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\RetrieveTimeline());
-            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\RepostPost());
+            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\Repost());
         }
 
         /**
