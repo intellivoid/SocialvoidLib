@@ -75,10 +75,10 @@
             if(gettype($request->Parameters["session_identification"]) !== "array")
                 throw new InvalidSessionIdentificationException("The parameter 'session_identification' is not a object");
 
-            if(isset($request->Parameters['post_id']) == false)
-                throw new MissingParameterException('Missing parameter \'post_id\'');
-            if(gettype($request->Parameters['post_id']) !== 'string')
-                throw new InvalidPostTextException('The parameter \'post_id\' must be a string');
+            if(isset($request->Parameters['post']) == false)
+                throw new MissingParameterException('Missing parameter \'post\'');
+            if(gettype($request->Parameters['post']) !== 'string')
+                throw new InvalidPostTextException('The parameter \'post\' must be a string');
         }
 
         /**
@@ -130,7 +130,7 @@
 
             try
             {
-                $Post = $NetworkSession->getTimeline()->getStandardPost($request->Parameters['post_id']);
+                $Post = $NetworkSession->getTimeline()->getStandardPost($request->Parameters['post']);
             }
             catch(Exception $e)
             {

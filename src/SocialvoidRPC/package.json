@@ -149,27 +149,27 @@
         },
         {
             "required": true,
-            "file": "Methods/Timeline/LikePost.php"
+            "file": "Methods/Timeline/Like.php"
         },
         {
             "required": true,
-            "file": "Methods/Timeline/QuotePost.php"
+            "file": "Methods/Timeline/Quote.php"
         },
         {
             "required": true,
-            "file": "Methods/Timeline/ReplyToPost.php"
+            "file": "Methods/Timeline/Reply.php"
         },
         {
             "required": true,
-            "file": "Methods/Timeline/RepostPost.php"
+            "file": "Methods/Timeline/Repost.php"
         },
         {
             "required": true,
-            "file": "Methods/Timeline/RetrieveTimeline.php"
+            "file": "Methods/Timeline/RetrieveFeed.php"
         },
         {
             "required": true,
-            "file": "Methods/Timeline/UnlikePost.php"
+            "file": "Methods/Timeline/Unlike.php"
         },
         {
             "required": true,

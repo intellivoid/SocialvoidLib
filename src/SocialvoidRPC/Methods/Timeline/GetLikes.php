@@ -76,9 +76,9 @@
             if(gettype($request->Parameters["session_identification"]) !== "array")
                 throw new InvalidSessionIdentificationException("The parameter 'session_identification' is not a object");
 
-            if(isset($request->Parameters['post_id']) == false)
+            if(isset($request->Parameters['post']) == false)
                 throw new MissingParameterException('Missing parameter \'text\'');
-            if(gettype($request->Parameters['post_id']) !== 'string')
+            if(gettype($request->Parameters['post']) !== 'string')
                 throw new InvalidPostTextException('The parameter \'text\' must be a string');
 
             if(isset($request->Parameters['offset']))
@@ -142,7 +142,7 @@
             try
             {
                 $Peers = $NetworkSession->getTimeline()->getLikes(
-                    $request->Parameters['post_id'], (int)$request->Parameters['offset'], (int)$request->Parameters['limit']
+                    $request->Parameters['post'], (int)$request->Parameters['offset'], (int)$request->Parameters['limit']
                 );
             }
             catch(Exception $e)
