@@ -25,7 +25,7 @@
     use SocialvoidLib\Objects\Standard\SessionIdentification;
     use SocialvoidRPC\SocialvoidRPC;
 
-    class RetrieveTimeline implements MethodInterface
+    class RetrieveFeed implements MethodInterface
     {
 
         /**
@@ -33,7 +33,7 @@
          */
         public function getMethodName(): string
         {
-            return 'RetrieveTimeline';
+            return 'RetrieveFeed';
         }
 
         /**
@@ -41,7 +41,7 @@
          */
         public function getMethod(): string
         {
-            return 'timeline.retrieve_timeline';
+            return 'timeline.retrieve_feed';
         }
 
         /**

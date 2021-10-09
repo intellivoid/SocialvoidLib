@@ -310,6 +310,9 @@
          */
         public function retrieveFeed(int $page_number, bool $recursive=True): array
         {
+            if($this->networkSession->isAuthenticated() == false)
+                throw new NotAuthenticatedException();
+
             if($page_number < 1) return [];
 
             $UserTimeline = $this->networkSession->getSocialvoidLib()->getTimelineManager()->retrieveTimeline(
