@@ -207,14 +207,39 @@
             // Sort results
             $SortedPostResolutions = [];
             $SortedUserResolutions = [];
+            $MentionSubUserIDs = [];
 
             foreach($ResolvedSubPosts as $resolvedPost)
                 $SortedPostResolutions[$resolvedPost->PublicID] = $resolvedPost;
             foreach($ResolvedUsers as $resolvedUser)
                 $SortedUserResolutions[$resolvedUser->ID] = $resolvedUser;
 
+            foreach($ResolvedSubPosts as $resolvedSubPost)
+            {
+                foreach($resolvedSubPost->TextEntities as $textEntity)
+                {
+                    if($textEntity->Type == TextEntityType::Mention)
+                        $MentionSubUserIDs[$textEntity->Value] = UserSearchMethod::ByUsername;
+                }
+            }
+
+            $ResolvedSubMentionedUsers = $this->networkSession->getSocialvoidLib()->getUserManager()->getMultipleUsers($MentionSubUserIDs, true);
+            $SortedSubMentionedUsers = [];
+
+            foreach($ResolvedSubMentionedUsers as $resolvedSubMentionedUser)
+                $SortedSubMentionedUsers[$resolvedSubMentionedUser->Username] = Peer::fromUser($resolvedSubMentionedUser);
+
             $stdPost = \SocialvoidLib\Objects\Standard\Post::fromPost($post);
             $stdPost->Peer = Peer::fromUser($SortedUserResolutions[$post->PosterUserID]);
+
+            // Resolve reposted post
+            if($post->Repost !== null && $post->Repost->OriginalPostID !== null)
+            {
+                if(Converter::hasFlag($SortedPostResolutions[$post->Repost->OriginalPostID]->Flags, PostFlags::Deleted) == false)
+                {
+                    $stdPost->RepostedPost = $this->getStandardPost($post->Repost->OriginalPostID);
+                }
+            }
 
             // Resolve quoted post
             if($post->Quote !== null && $post->Quote->OriginalPostID)
@@ -222,6 +247,19 @@
                 $stdPost->QuotedPost = \SocialvoidLib\Objects\Standard\Post::fromPost(
                     $SortedPostResolutions[$post->Quote->OriginalPostID]
                 );
+
+                $mentionedUsernames = [];
+                $stdPost->QuotedPost->MentionedPeers = [];
+                foreach($SortedPostResolutions[$post->Quote->OriginalPostID]->TextEntities as $textEntity)
+                {
+                    if(isset($SortedSubMentionedUsers[$textEntity->Value]))
+                    {
+                        if(in_array($textEntity->Value, $mentionedUsernames))
+                            continue;
+                        $stdPost->QuotedPost->MentionedPeers[] = $SortedSubMentionedUsers[$textEntity->Value];
+                        $mentionedUsernames[] = $textEntity->Value;
+                    }
+                }
 
                 if($post->Quote->OriginalUserID !== null && Converter::hasFlag($SortedPostResolutions[$post->Quote->OriginalPostID]->Flags, PostFlags::Deleted) == false)
                 {
@@ -232,19 +270,25 @@
 
             }
 
-            if($post->Repost !== null && $post->Repost->OriginalPostID !== null)
-            {
-                if(Converter::hasFlag($SortedPostResolutions[$post->Repost->OriginalPostID]->Flags, PostFlags::Deleted) == false)
-                {
-                    $stdPost->RepostedPost = $this->getStandardPost($post->Repost->OriginalPostID);
-                }
-            }
-
+            // Resolve replied post
             if($post->Reply !== null && $post->Reply->ReplyToPostID)
             {
                 $stdPost->ReplyToPost = \SocialvoidLib\Objects\Standard\Post::fromPost(
                     $SortedPostResolutions[$post->Reply->ReplyToPostID]
                 );
+
+                $mentionedUsernames = [];
+                $stdPost->ReplyToPost->MentionedPeers = [];
+                foreach($SortedPostResolutions[$post->Reply->ReplyToPostID]->TextEntities as $textEntity)
+                {
+                    if(isset($SortedSubMentionedUsers[$textEntity->Value]))
+                    {
+                        if(in_array($textEntity->Value, $mentionedUsernames))
+                            continue;
+                        $stdPost->ReplyToPost->MentionedPeers[] = $SortedSubMentionedUsers[$textEntity->Value];
+                        $mentionedUsernames[] = $textEntity->Value;
+                    }
+                }
 
                 if($post->Reply->ReplyToUserID !== null && Converter::hasFlag($SortedPostResolutions[$post->Reply->ReplyToPostID]->Flags, PostFlags::Deleted) == false)
                 {
@@ -536,7 +580,6 @@
                 throw new InvalidLimitValueException('The limit value cannot exceed ' . $this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveRepliesMaxLimit']);
 
             $Replies = $this->networkSession->getSocialvoidLib()->getReplyRecordManager()->getReplies($post_public_id, $offset, $limit);
-            var_dump($Replies);
             $StdPosts = [];
             foreach($Replies as $reply_id)
                 $StdPosts[] = $this->getStandardPost($reply_id);

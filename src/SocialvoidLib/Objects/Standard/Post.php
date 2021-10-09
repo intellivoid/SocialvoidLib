@@ -158,7 +158,7 @@
             foreach($this->Entities as $textEntity)
                 $entities[] = $textEntity->toArray();
 
-            $mentions = null;
+            $mentions = [];
 
             if($this->MentionedPeers !== null)
                 foreach($this->MentionedPeers as $mentionedPeer)

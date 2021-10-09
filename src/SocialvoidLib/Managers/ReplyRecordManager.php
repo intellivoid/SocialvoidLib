@@ -116,7 +116,6 @@
                 'created_timestamp' => time()
             ]);
 
-            var_dump($Query);
             try
             {
                 $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($reply_post_id));
@@ -237,7 +236,6 @@
                 'created_timestamp'
             ], 'id', ($post_id . Utilities::removeSlaveHash($reply_post_id)), null, null, 1);
 
-            var_dump($Query);
             try
             {
                 $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($reply_post_id));
