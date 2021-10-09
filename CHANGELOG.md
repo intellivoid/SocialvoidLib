@@ -11,12 +11,13 @@
  - Updated deleted post structure
  - Rewrote posts related tables such as `posts.sql`, `posts_likes.sql`, `posts_quotes.sql`, 
    `posts_replies.sql`, `posts_reposts.sql` to work with slave servers
- - Added method timeline.compose_post
- - Added method timeline.like_post
+ - Added method timeline.compose
+ - Added method timeline.like
  - Added method timeline.get_post
  - Added method timeline.get_likes
- - Added method timeline.delete_post
- - Added method timeline.quote_post
+ - Added method timeline.delete
+ - Added method timeline.quote
+ - Added method timeline.retrieve_feed
  - Added method account.clear_profile_biography
  - Added method account.clear_profile_location
  - Added method account.clear_profile_url
