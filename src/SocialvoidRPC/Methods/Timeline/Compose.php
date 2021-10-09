@@ -26,14 +26,14 @@
     use SocialvoidLib\Objects\Standard\SessionIdentification;
     use SocialvoidRPC\SocialvoidRPC;
 
-    class ComposePost implements MethodInterface
+    class Compose implements MethodInterface
     {
         /**
          * @inheritDoc
          */
         public function getMethodName(): string
         {
-            return 'ComposePost';
+            return 'Compose';
         }
 
         /**
@@ -41,7 +41,7 @@
          */
         public function getMethod(): string
         {
-            return 'timeline.compose_post';
+            return 'timeline.compose';
         }
 
         /**
@@ -135,7 +135,6 @@
             }
             catch(Exception $e)
             {
-                throw $e;
                 // Allow standard errors
                 if(Validate::isStandardError($e->getCode()))
                     throw $e;
