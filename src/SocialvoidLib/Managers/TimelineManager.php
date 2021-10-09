@@ -249,6 +249,8 @@
 
             if($QueryResults == false)
             {
+                var_dump($SelectedSlave->getConnection()->error);
+                var_dump($Query);
                 throw new DatabaseException(
                     'There was an error while trying to update the timeline',
                     $Query, $SelectedSlave->getConnection()->error, $SelectedSlave->getConnection()

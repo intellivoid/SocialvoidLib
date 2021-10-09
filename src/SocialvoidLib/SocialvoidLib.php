@@ -402,6 +402,9 @@
                 $this->connectDatabase();
             }
 
+            if($this->database->ping() == false)
+                $this->connectDatabase();
+
             return $this->database;
         }
 
