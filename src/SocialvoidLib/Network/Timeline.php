@@ -590,6 +590,53 @@
         }
 
         /**
+         * Returns an array of standard reposts to the selected post
+         *
+         * @param string $post_public_id
+         * @param int $offset
+         * @param int $limit
+         * @return \SocialvoidLib\Objects\Standard\Post[]
+         * @throws BackgroundWorkerNotEnabledException
+         * @throws CacheException
+         * @throws CannotGetOriginalImageException
+         * @throws DatabaseException
+         * @throws DisplayPictureException
+         * @throws DocumentNotFoundException
+         * @throws FileNotFoundException
+         * @throws InvalidLimitValueException
+         * @throws InvalidOffsetValueException
+         * @throws InvalidSearchMethodException
+         * @throws InvalidSlaveHashException
+         * @throws InvalidZimageFileException
+         * @throws NotAuthenticatedException
+         * @throws PeerNotFoundException
+         * @throws PostNotFoundException
+         * @throws ServerNotReachableException
+         * @throws ServiceJobException
+         * @throws SizeNotSetException
+         * @throws UnsupportedImageTypeException
+         * @noinspection DuplicatedCode
+         */
+        public function getReposts(string $post_public_id, int $offset=0, int $limit=100): array
+        {
+            if($this->networkSession->isAuthenticated() == false)
+                throw new NotAuthenticatedException();
+
+            if($offset < 0)
+                throw new InvalidOffsetValueException('The offset value cannot be a negative value');
+            if($limit < 1)
+                throw new InvalidLimitValueException('The limit value must be a value greater than 0');
+            if($limit > (int)$this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveRepostsMaxLimit'])
+                throw new InvalidLimitValueException('The limit value cannot exceed ' . $this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveRepostsMaxLimit']);
+
+            $Replies = $this->networkSession->getSocialvoidLib()->getRepostsRecordManager()->getReposts($post_public_id, $offset, $limit);
+            $StdPosts = [];
+            foreach($Replies as $reply_id)
+                $StdPosts[] = $this->getStandardPost($reply_id);
+            return $StdPosts;
+        }
+
+        /**
          * Distributes a new post to the timeline, and it's users
          *
          * @param string $post_public_id
