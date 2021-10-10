@@ -15,7 +15,7 @@ response = request(
         "client_public_hash": client_info["public_hash"],
         "challenge_answer": answer_challenge(client_info["private_hash"], session_info["challenge"])
      },
-     page=1
+     page=2
 )
 
 print(json.dumps(response.data.result))

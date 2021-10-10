@@ -118,25 +118,11 @@
         public $TextEntities;
 
         /**
-         * Array of User IDs that liked this post
-         *
-         * @var int[]
-         */
-        public $Likes;
-
-        /**
          * The amount of likes this post has
          * 
          * @var int
          */
         public $LikesCount;
-
-        /**
-         * Array of user IDs that reposted this post
-         *
-         * @var int[]
-         */
-        public $Reposts;
 
         /**
          * The amount of reposts this post has
@@ -146,25 +132,11 @@
         public $RepostsCount;
 
         /**
-         * Array if Post IDs that quoted this post
-         *
-         * @var int[]
-         */
-        public $Quotes;
-
-        /**
          * The amount of quotes this post has
          * 
          * @var int
          */
         public $QuotesCount;
-
-        /**
-         * Array of Post IDs that replied to this post
-         *
-         * @var int[]
-         */
-        public $Replies;
 
         /**
          * The amount of replies this post has
@@ -180,6 +152,12 @@
          */
         public $MediaContent;
 
+        /**
+         * The Unix Timestamp for when this records counts was last updated
+         *
+         * @var int
+         */
+        public $CountLastUpdatedTimestamp;
 
         /**
          * The Unix Timestamp for when this record was last updated
@@ -234,15 +212,12 @@
                 'flags' => ($this->Flags == null ? [] : $this->Flags),
                 'priority_level' => ($this->Flags == null ? [] : $this->Flags),
                 'text_entities' => $text_entities,
-                'likes' => ($this->Likes == null ? [] : $this->Likes),
                 'likes_count' => ($this->LikesCount == null ? 0 : (int)$this->LikesCount),
-                'reposts' => ($this->Reposts == null ? [] : $this->Reposts),
                 'reposts_count' => ($this->RepostsCount == null ? 0 : (int)$this->RepostsCount),
-                'quotes' => ($this->Quotes == null ? [] : $this->Quotes),
                 'quotes_count' => ($this->QuotesCount == null ? 0 : (int)$this->QuotesCount),
-                'replies' => ($this->Replies == null ? []: $this->Replies),
                 'replies_count' => ($this->RepliesCount == null ? 0 : (int)$this->RepliesCount),
                 'media_content' => $media_content_results,
+                'count_last_updated_timestamp' => ($this->CountLastUpdatedTimestamp == null ? 0 : $this->CountLastUpdatedTimestamp),
                 'last_updated_timestamp' => ($this->LastUpdatedTimestamp == null ? null : $this->LastUpdatedTimestamp),
                 'created_timestamp' => ($this->CreatedTimestamp == null ? null : $this->CreatedTimestamp)
             ];
@@ -305,26 +280,14 @@
                 }
             }
 
-            if(isset($data['likes']))
-                $PostObject->Likes = ($data['likes'] == null ? [] : $data['likes']);
-
             if(isset($data['likes_count']))
                 $PostObject->LikesCount = ($data['likes_count'] == null ? 0 : (int)$data['likes_count']);
-
-            if(isset($data['reposts']))
-                $PostObject->Reposts = ($data['reposts'] == null ? [] : $data['reposts']);
 
             if(isset($data['reposts_count']))
                 $PostObject->RepostsCount = ($data['reposts_count'] == null ? 0 : (int)$data['reposts_count']);
 
-            if(isset($data['quotes']))
-                $PostObject->Quotes = ($data['quotes'] == null ? [] : $data['quotes']);
-
             if(isset($data['quotes_count']))
                 $PostObject->QuotesCount = ($data['quotes_count'] == null ? 0 : (int)$data['quotes_count']);
-
-            if(isset($data['replies']))
-                $PostObject->Replies = ($data['replies'] == null ? [] : $data['replies']);
 
             if(isset($data['replies_count']))
                 $PostObject->RepliesCount = ($data['replies_count'] == null ? 0 : (int)$data['replies_count']);
@@ -335,6 +298,9 @@
                 foreach($data['media_content'] as $datum)
                     $PostObject->MediaContent[] = MediaContent::fromArray($datum);
             }
+
+            if(isset($data['count_last_updated_timestamp']))
+                $PostObject->CountLastUpdatedTimestamp = ($data['count_last_updated_timestamp'] == null ? 0 : (int)$data['count_last_updated_timestamp']);
 
             if(isset($data['last_updated_timestamp']))
                 $PostObject->LastUpdatedTimestamp = ($data['last_updated_timestamp'] == null ? null : (int)$data['last_updated_timestamp']);
@@ -383,15 +349,12 @@
                 'flags' => ($this->Flags == null ? [] : $this->Flags),
                 'priority_level' => ($this->Flags == null ? [] : $this->Flags),
                 'text_entities' => ($this->TextEntities == null ? [] : $text_entities),
-                'likes' => ($this->Likes == null ? [] : $this->Likes),
                 'likes_count' => ($this->LikesCount == null ? 0 : (int)$this->LikesCount),
-                'reposts' => ($this->Reposts == null ? [] : $this->Reposts),
                 'reposts_count' => ($this->RepostsCount == null ? 0 : (int)$this->RepostsCount),
-                'quotes' => ($this->Quotes == null ? [] : $this->Quotes),
                 'quotes_count' => ($this->QuotesCount == null ? 0 : (int)$this->QuotesCount),
-                'replies' => ($this->Replies == null ? [] : $this->Replies),
                 'replies_count' => ($this->RepliesCount == null ? 0 : (int)$this->RepliesCount),
                 'media_content' => $media_content_results,
+                'count_last_updated_timestamp' => ($this->CountLastUpdatedTimestamp == null ? 0 : $this->CountLastUpdatedTimestamp),
                 'last_updated_timestamp' => ($this->LastUpdatedTimestamp == null ? null : $this->LastUpdatedTimestamp),
                 'created_timestamp' => ($this->CreatedTimestamp == null ? null : $this->CreatedTimestamp)
             ];
@@ -478,26 +441,14 @@
                     $PostObject->TextEntities[] = TextEntity::fromArray($entity);
             }
 
-            if(isset($data['likes']))
-                $PostObject->Likes = ($data['likes'] == null ? [] : $data['likes']);
-
             if(isset($data['likes_count']))
                 $PostObject->LikesCount = ($data['likes_count'] == null ? 0 : $data['likes_count']);
-
-            if(isset($data['reposts']))
-                $PostObject->Reposts = ($data['reposts'] == null ? [] : $data['reposts']);
 
             if(isset($data['reposts_count']))
                 $PostObject->RepostsCount = ($data['reposts_count'] == null ? 0 : $data['reposts_count']);
 
-            if(isset($data['quotes']))
-                $PostObject->Quotes = ($data['quotes'] == null ? [] : $data['quotes']);
-
             if(isset($data['quotes_count']))
                 $PostObject->QuotesCount = ($data['quotes_count'] == null ? 0 : $data['quotes_count']);
-
-            if(isset($data['replies']))
-                $PostObject->Replies = ($data['replies'] == null ? [] : $data['replies']);
 
             if(isset($data['replies_count']))
                 $PostObject->RepliesCount = ($data['replies_count'] == null ? 0 : $data['replies_count']);
@@ -511,6 +462,9 @@
 
             if(isset($data['last_updated_timestamp']))
                 $PostObject->LastUpdatedTimestamp = ($data['last_updated_timestamp'] == null ? null : (int)$data['last_updated_timestamp']);
+
+            if(isset($data['count_last_updated_timestamp']))
+                $PostObject->CountLastUpdatedTimestamp = ($data['count_last_updated_timestamp'] == null ? 0 : (int)$data['count_last_updated_timestamp']);
 
             if(isset($data['created_timestamp']))
                 $PostObject->CreatedTimestamp = ($data['created_timestamp'] == null ? null : (int)$data['created_timestamp']);

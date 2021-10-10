@@ -133,21 +133,6 @@
         public $Flags;
 
         /**
-         * Adds user flags to the post
-         *
-         * @param \SocialvoidLib\Objects\Post $post
-         * @param int $user_id
-         */
-        public function addUserFlags(\SocialvoidLib\Objects\Post $post, int $user_id)
-        {
-            if(in_array($user_id, $post->Likes))
-                $this->Flags[] = PostFlags::Liked;
-
-            if(in_array($user_id, $post->Reposts))
-                $this->Flags[] = PostFlags::Reposted;
-        }
-
-        /**
          * Returns an array representation o the object
          *
          * @return array
@@ -271,10 +256,10 @@
             $StandardPostObject->Entities = [];
             $StandardPostObject->MentionedPeers = [];
             $StandardPostObject->Source = $post->Source;
-            $StandardPostObject->LikesCount = ($post->Likes == null ? 0 : count($post->Likes));
-            $StandardPostObject->RepostsCount = ($post->Reposts == null ? 0 : count($post->Reposts));
-            $StandardPostObject->QuotesCount = ($post->Quotes == null ? 0 : count($post->Quotes));
-            $StandardPostObject->RepliesCount = ($post->Replies == null ? 0 : count($post->Replies));
+            $StandardPostObject->LikesCount = $post->LikesCount;
+            $StandardPostObject->RepostsCount = $post->RepostsCount;
+            $StandardPostObject->QuotesCount = $post->QuotesCount;
+            $StandardPostObject->RepliesCount = $post->RepliesCount;
             $StandardPostObject->PostedTimestamp = $post->CreatedTimestamp;
             $StandardPostObject->Flags = $post->Flags;
 

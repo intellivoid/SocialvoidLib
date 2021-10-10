@@ -128,11 +128,8 @@
                 'is_deleted' => (int)false,
                 'priority_level' => $this->socialvoidLib->getDatabase()->real_escape_string($priority),
                 'text_entities' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($EntitiesArray)),
-                'likes' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
-                'reposts' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
-                'quotes' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
-                'replies' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
                 'media_content' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($MediaContentArray)),
+                'count_last_updated_timestamp' => $timestamp,
                 'last_updated_timestamp' => $timestamp,
                 'created_timestamp' => $timestamp
             ]);
@@ -204,15 +201,12 @@
                 'flags',
                 'priority_level',
                 'text_entities',
-                'likes',
                 'likes_count',
-                'reposts',
                 'reposts_count',
-                'quotes',
                 'quotes_count',
-                'replies',
                 'replies_count',
                 'media_content',
+                'count_last_updated_timestamp',
                 'last_updated_timestamp',
                 'created_timestamp'
             ], $search_method, Utilities::removeSlaveHash($value), null, null, 1);
@@ -233,18 +227,25 @@
                     $Row['properties'] = ($Row['properties'] == null ? null : ZiProto::decode($Row['properties']));
                     $Row['flags'] = ($Row['flags'] == null ? null : ZiProto::decode($Row['flags']));
                     $Row['text_entities'] = ($Row['text_entities'] == null ? null : ZiProto::decode($Row['text_entities']));
-                    $Row['likes'] = ($Row['likes'] == null ? null : ZiProto::decode($Row['likes']));
-                    $Row['reposts'] = ($Row['reposts'] == null ? null : ZiProto::decode($Row['reposts']));
-                    $Row['quotes'] = ($Row['quotes'] == null ? null : ZiProto::decode($Row['quotes']));
-                    $Row['replies'] = ($Row['replies'] == null ? null : ZiProto::decode($Row['replies']));
                     $Row['media_content'] = ($Row['media_content'] == null ? null : ZiProto::decode($Row['media_content']));
                     $Row['text'] = ($Row['text'] == null ? null : urldecode($Row['text']));
                     $Row['source'] = ($Row['source'] == null ? null : urldecode($Row['source']));
 
                     $returnResults = Post::fromAlternativeArray($Row);
                     $returnResults->PublicID = $SelectedSlave->MysqlServerPointer->HashPointer . '-' . $returnResults->PublicID;
-                    $this->registerPostCacheEntry($returnResults);
 
+                    // Update counts if it's older than an hour
+                    if((time() - $returnResults->CountLastUpdatedTimestamp) > 3600 && $returnResults->Repost == null)
+                    {
+                        $returnResults->LikesCount = $this->socialvoidLib->getLikesRecordManager()->getLikesCount($returnResults->PublicID);
+                        $returnResults->QuotesCount = $this->socialvoidLib->getQuotesRecordManager()->getQuotesCount($returnResults->PublicID);
+                        $returnResults->RepostsCount = $this->socialvoidLib->getRepostsRecordManager()->getRepostsCount($returnResults->PublicID);
+                        $returnResults->RepliesCount = $this->socialvoidLib->getReplyRecordManager()->getRepliesCount($returnResults->PublicID);
+                        $returnResults->CountLastUpdatedTimestamp = time();
+                        $returnResults = $this->updatePost($returnResults);
+                    }
+
+                    $this->registerPostCacheEntry($returnResults);
                     return $returnResults;
                 }
             }
@@ -301,16 +302,13 @@
                 'is_deleted' => (Converter::hasFlag($post->Flags, PostFlags::Deleted) ? (int)true : (int)false),
                 'priority_level' => ($post->PriorityLevel == null ? $this->socialvoidLib->getDatabase()->real_escape_string(PostPriorityLevel::None) : $this->socialvoidLib->getDatabase()->real_escape_string($post->PriorityLevel)),
                 'text_entities' => ($post->TextEntities == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($TextEntities))),
-                'likes' => (is_null($post->Likes) ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Likes))),
                 'likes_count' => ($post->LikesCount == null ? 0 : (int)$post->LikesCount),
-                'reposts' => (is_null($post->Reposts) ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Reposts))),
                 'reposts_count' => ($post->RepostsCount == null ? 0 : (int)$post->RepostsCount),
-                'quotes' => (is_null($post->Quotes) ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Quotes))),
                 'quotes_count' => ($post->QuotesCount == null ? 0 : (int)$post->QuotesCount),
-                'replies' => (is_null($post->Replies) ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Replies))),
                 'replies_count' => ($post->RepliesCount == null ? 0 : (int)$post->RepliesCount),
                 'media_content' => (is_null($MediaContent) ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($MediaContent))),
-                'last_updated_timestamp' => $post->LastUpdatedTimestamp,
+                'last_updated_timestamp' => (int)$post->LastUpdatedTimestamp,
+                'count_last_updated_timestamp' => (int)$post->CountLastUpdatedTimestamp
             ], 'public_id', Utilities::removeSlaveHash($post->PublicID));
 
             $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($post->PublicID));
@@ -367,12 +365,10 @@
                     }
                 }
 
-                // Do not continue if the user already likes this post
-                if(in_array($user->ID, $post->Likes))
-                    return;
-
                 $this->socialvoidLib->getLikesRecordManager()->likeRecord($user->ID, $post->PublicID);
-                Converter::addFlag($post->Likes, $user->ID);
+                $post->LikesCount += 1;
+                if($post->LikesCount < 0)
+                    $post->LikesCount = 0;
                 $this->updatePost($post);
             }
             catch(Exception $e)
@@ -418,12 +414,10 @@
                     }
                 }
 
-                // Do not continue if the user never liked this post
-                if(in_array($user->ID, $post->Likes) == false)
-                    return;
-
                 $this->socialvoidLib->getLikesRecordManager()->unlikeRecord($user->ID, $post->PublicID);
-                Converter::removeFlag($post->Likes, $user->ID);
+                $post->LikesCount -= 1;
+                if($post->LikesCount < 0)
+                    $post->LikesCount = 0;
                 $this->updatePost($post);
             }
             catch(Exception $e)
@@ -520,6 +514,7 @@
                 'is_deleted' => (int)false,
                 'priority_level' => $this->socialvoidLib->getDatabase()->real_escape_string($priority),
                 'last_updated_timestamp' => $timestamp,
+                'count_last_updated_timestamp' => $timestamp,
                 'created_timestamp' => $timestamp
             ]);
             $QueryResults = $SelectedSlave->getConnection()->query($Query);
@@ -537,7 +532,7 @@
             }
 
             $this->socialvoidLib->getRepostsRecordManager()->repostRecord($user->ID, $returnResults->PublicID, $post->PublicID);
-            $post->Reposts[] = $user->ID;
+            $post->RepostsCount += 1;
             $this->updatePost($post);
 
             return $returnResults;
@@ -629,11 +624,8 @@
                 'is_deleted' => (int)false,
                 'priority_level' => $this->socialvoidLib->getDatabase()->real_escape_string($priority),
                 'text_entities' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($EntitiesArray)),
-                'likes' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
-                'reposts' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
-                'quotes' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
-                'replies' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
                 'media_content' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($MediaContentArray)),
+                'count_last_updated_timestamp' => $timestamp,
                 'last_updated_timestamp' => $timestamp,
                 'created_timestamp' => $timestamp
             ]);
@@ -654,7 +646,7 @@
             }
 
             $this->socialvoidLib->getQuotesRecordManager()->quoteRecord($user->ID, $returnResults->PublicID, $post->PublicID);
-            $post->Quotes[] = $returnResults->PublicID;
+            $post->QuotesCount += 1;
             $this->updatePost($post);
 
             return $returnResults;
@@ -745,11 +737,8 @@
                 'is_deleted' => (int)false,
                 'priority_level' => $this->socialvoidLib->getDatabase()->real_escape_string($priority),
                 'text_entities' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($EntitiesArray)),
-                'likes' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
-                'reposts' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
-                'quotes' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
-                'replies' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
                 'media_content' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($MediaContentArray)),
+                'count_last_updated_timestamp' => $timestamp,
                 'last_updated_timestamp' => $timestamp,
                 'created_timestamp' => $timestamp
             ]);
@@ -770,7 +759,7 @@
             }
 
             $this->socialvoidLib->getReplyRecordManager()->replyRecord($user->ID, $returnResults->PublicID, $post->PublicID);
-            $post->Replies[] = $returnResults->PublicID;
+            $post->RepliesCount += 1;
             $this->updatePost($post);
 
             return $returnResults;

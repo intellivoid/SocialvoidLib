@@ -239,6 +239,33 @@
                 if(Converter::hasFlag($SortedPostResolutions[$post->Repost->OriginalPostID]->Flags, PostFlags::Deleted) == false)
                 {
                     $stdPost->RepostedPost = $this->getStandardPost($post->Repost->OriginalPostID);
+
+                    try
+                    {
+                        if ($this->networkSession->getSocialvoidLib()->getLikesRecordManager()->getRecord(
+                            $this->networkSession->getAuthenticatedUser()->ID, $post->Repost->OriginalPostID)->Liked
+                        ) {
+                            $stdPost->RepostedPost->Flags[] = PostFlags::Liked;
+                        }
+                    }
+                    catch (LikeRecordNotFoundException $e)
+                    {
+                        unset($e);
+                    }
+
+                    try
+                    {
+                        if($this->networkSession->getSocialvoidLib()->getRepostsRecordManager()->getRecord(
+                            $this->networkSession->getAuthenticatedUser()->ID, $post->Repost->OriginalPostID)->Reposted
+                        )
+                        {
+                            $stdPost->RepostedPost->Flags[] = PostFlags::Reposted;
+                        }
+                    }
+                    catch(RepostRecordNotFoundException $e)
+                    {
+                        unset($e);
+                    }
                 }
             }
 
@@ -248,6 +275,34 @@
                 $stdPost->QuotedPost = \SocialvoidLib\Objects\Standard\Post::fromPost(
                     $SortedPostResolutions[$post->Quote->OriginalPostID]
                 );
+
+                try
+                {
+                    if($this->networkSession->getSocialvoidLib()->getLikesRecordManager()->getRecord(
+                        $this->networkSession->getAuthenticatedUser()->ID, $post->Quote->OriginalPostID)->Liked
+                    )
+                    {
+                        $stdPost->QuotedPost->Flags[] = PostFlags::Liked;
+                    }
+                }
+                catch (LikeRecordNotFoundException $e)
+                {
+                    unset($e);
+                }
+
+                try
+                {
+                    if($this->networkSession->getSocialvoidLib()->getRepostsRecordManager()->getRecord(
+                        $this->networkSession->getAuthenticatedUser()->ID, $post->Quote->OriginalPostID)->Reposted
+                    )
+                    {
+                        $stdPost->QuotedPost->Flags[] = PostFlags::Reposted;
+                    }
+                }
+                catch(RepostRecordNotFoundException $e)
+                {
+                    unset($e);
+                }
 
                 $mentionedUsernames = [];
                 $stdPost->QuotedPost->MentionedPeers = [];
@@ -278,6 +333,34 @@
                     $SortedPostResolutions[$post->Reply->ReplyToPostID]
                 );
 
+                try
+                {
+                    if($this->networkSession->getSocialvoidLib()->getLikesRecordManager()->getRecord(
+                        $this->networkSession->getAuthenticatedUser()->ID, $post->Reply->ReplyToPostID)->Liked
+                    )
+                    {
+                        $stdPost->ReplyToPost->Flags[] = PostFlags::Liked;
+                    }
+                }
+                catch (LikeRecordNotFoundException $e)
+                {
+                    unset($e);
+                }
+
+                try
+                {
+                    if($this->networkSession->getSocialvoidLib()->getRepostsRecordManager()->getRecord(
+                        $this->networkSession->getAuthenticatedUser()->ID, $post->Reply->ReplyToPostID)->Reposted
+                    )
+                    {
+                        $stdPost->ReplyToPost->Flags[] = PostFlags::Reposted;
+                    }
+                }
+                catch(RepostRecordNotFoundException $e)
+                {
+                    unset($e);
+                }
+
                 $mentionedUsernames = [];
                 $stdPost->ReplyToPost->MentionedPeers = [];
                 foreach($SortedPostResolutions[$post->Reply->ReplyToPostID]->TextEntities as $textEntity)
@@ -303,8 +386,6 @@
             {
                 $stdPost->MentionedPeers[] = Peer::fromUser($user);
             }
-
-            $stdPost->addUserFlags($post, $this->networkSession->getAuthenticatedUser()->ID);
 
             return $stdPost;
         }
