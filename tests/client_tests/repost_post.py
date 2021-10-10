@@ -15,7 +15,7 @@ response = request(
         "client_public_hash": client_info["public_hash"],
         "challenge_answer": answer_challenge(client_info["private_hash"], session_info["challenge"])
      },
-     post="35714fd511b6064908da4ed77c12f587-c847cc1a-26c2-11ec-b85e-d575a4dc4c47"
+     post="67e69af2653afd783a3e41d375ba2e73-cfcb2dca-2955-11ec-a89f-5761a4013454"
 )
 
 print(json.dumps(response.data.result))

@@ -15,7 +15,7 @@ response = request(
         "client_public_hash": client_info["public_hash"],
         "challenge_answer": answer_challenge(client_info["private_hash"], session_info["challenge"])
      },
-     post="g",
+     post="67e69af2653afd783a3e41d375ba2e73-cfcb2dca-2955-11ec-a89f-5761a4013454",
      text="Third and final reply"
 )
 

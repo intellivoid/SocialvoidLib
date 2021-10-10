@@ -478,13 +478,12 @@
             // Check if the post has already been reposted
             try
             {
-                $repostRecordState = $this->socialvoidLib->getRepostsRecordManager()->getRepostedRecord($user, $post->PublicID);
-
-                if($repostRecordState->PostID !== null)
+                $repostRecordState = $this->socialvoidLib->getRepostsRecordManager()->getRepostedRecord($user->ID, $post->PublicID);
+                if($repostRecordState->Reposted)
                 {
                     try
                     {
-                        $originalRepostPost = $this->getPost(PostSearchMethod::ByPublicId, $SelectedSlave->MysqlServerPointer->HashPointer . '-' . $repostRecordState->PostID);
+                        $originalRepostPost = $this->getPost(PostSearchMethod::ByPublicId, $repostRecordState->PostID);
                         if(Converter::hasFlag($originalRepostPost->Flags, PostFlags::Deleted) == false)
                             throw new AlreadyRepostedException('The requested repost has already been reposted');
                     }
@@ -537,7 +536,7 @@
                 );
             }
 
-            $this->socialvoidLib->getRepostsRecordManager()->repostRecord($user, $returnResults->PublicID, $post->PublicID);
+            $this->socialvoidLib->getRepostsRecordManager()->repostRecord($user->ID, $returnResults->PublicID, $post->PublicID);
             $post->Reposts[] = $user->ID;
             $this->updatePost($post);
 

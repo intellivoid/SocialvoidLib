@@ -15,7 +15,7 @@ response = request(
         "client_public_hash": client_info["public_hash"],
         "challenge_answer": answer_challenge(client_info["private_hash"], session_info["challenge"])
      },
-     post="e3c158bfc9495b94f7f768662b1cea58-2079a68a-1ef6-11ec-83fe-731123d16b37",
+     post="67e69af2653afd783a3e41d375ba2e73-cfcb2dca-2955-11ec-a89f-5761a4013454",
      text="This is a quoted post!"
 )
 

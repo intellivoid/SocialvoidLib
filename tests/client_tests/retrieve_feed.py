@@ -9,7 +9,7 @@ with open(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', 'ses
     session_info = json.load(f)
 
 response = request(
-    client_info["endpoint"], "timeline.retrieve_timeline",
+    client_info["endpoint"], "timeline.retrieve_feed",
      session_identification={
         "session_id": session_info["id"],
         "client_public_hash": client_info["public_hash"],
