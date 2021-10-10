@@ -27,7 +27,7 @@ namespace SocialvoidLib\Exceptions\Standard\Authentication;
          * @param string $message
          * @param Throwable|null $previous
          */
-        public function __construct($message = "You must be authenticated to preform this action", Throwable $previous = null)
+        public function __construct($message = "You must be authenticated to perform this action", Throwable $previous = null)
         {
             parent::__construct($message, StandardErrorCodes::NotAuthenticatedException, $previous);
             $this->message = $message;

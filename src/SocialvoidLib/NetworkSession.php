@@ -222,7 +222,7 @@
         public function loadAuthenticatedPeer()
         {
             if($this->active_session == null)
-                throw new NotAuthenticatedException("You must be authenticated to preform this action");
+                throw new NotAuthenticatedException("You must be authenticated to perform this action");
 
             if($this->authenticated_user !== null && $this->authenticated_user->ID !== $this->active_session->UserID)
                 return;
@@ -245,7 +245,7 @@
         public function logout()
         {
             if($this->active_session->Authenticated == false)
-                throw new NotAuthenticatedException("You must be authenticated to preform this action");
+                throw new NotAuthenticatedException("You must be authenticated to perform this action");
 
             $this->active_session->Authenticated = false;
             $this->active_session->UserID = null;
