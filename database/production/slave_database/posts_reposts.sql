@@ -13,8 +13,8 @@ create table posts_reposts
         unique (user_id, original_post_id),
     constraint reposts_user_id_post_id_uindex
         unique (user_id, post_id),
-    constraint reposts_posts_public_id_fk
-        foreign key (post_id) references posts (public_id)
+    constraint posts_reposts_posts_public_id_fk
+        foreign key (original_post_id) references posts (public_id)
 )
     comment 'Table for housing reposts for posts';
 

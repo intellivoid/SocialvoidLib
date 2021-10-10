@@ -15,7 +15,7 @@ create table users
     profile                   blob         null comment 'ZiProto encoded blob of the user profile data',
     settings                  blob         null comment 'ZiProto encoded blob of the settings configuration made by the user',
     privacy_state             varchar(64)  null comment 'The Privacy State of the user account',
-    slave_server              varchar(12)  null comment 'The data center the user''s data is stored at (Slave ID)',
+    slave_server              varchar(32)  null comment 'The data center the user''s data is stored at (Slave ID)',
     last_activity_timestamp   int          null comment 'The Unix Timestamp of the last activity of the user',
     created_timestamp         int          null comment 'The Unix Timestamp for when this user was created',
     constraint users_id_uindex

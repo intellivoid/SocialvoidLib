@@ -13,8 +13,8 @@ create table posts_quotes
         unique (post_id, original_post_id),
     constraint quotes_user_id_post_id_uindex
         unique (user_id, post_id),
-    constraint quotes_posts_public_id_fk
-        foreign key (post_id) references posts (public_id)
+    constraint posts_quotes_posts_public_id_fk
+        foreign key (original_post_id) references posts (public_id)
 )
     comment 'Table for housing quotes for posts';
 

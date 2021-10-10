@@ -1,4 +1,4 @@
-create table socialvoid_slave.peer_timelines
+create table peer_timelines
 (
     user_id                int        not null comment 'The User ID that owns this timeline',
     post_chunks            mediumblob null comment 'ZiProto encoded data of the Timeline post chunks',
@@ -10,6 +10,6 @@ create table socialvoid_slave.peer_timelines
 )
     comment 'Data for housing personalized Timelines for users';
 
-alter table socialvoid_slave.peer_timelines
+alter table peer_timelines
     add primary key (user_id);
 
