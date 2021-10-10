@@ -145,6 +145,7 @@
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\Delete());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\GetLikes());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\GetPost());
+            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\GetQuotes());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\GetReplies());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\GetRepostedPeers());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\Like());
