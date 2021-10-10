@@ -153,6 +153,10 @@
         },
         {
             "required": true,
+            "file": "Methods/Timeline/GetRepostedPeers.php"
+        },
+        {
+            "required": true,
             "file": "Methods/Timeline/Like.php"
         },
         {

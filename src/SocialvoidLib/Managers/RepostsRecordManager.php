@@ -141,7 +141,7 @@
         }
 
         /**
-         * Returns an array of Post IDs that reposted the post
+         * Returns an array of user IDs that reposted the post
          *
          * @param string $post_id
          * @param int $offset
@@ -162,7 +162,7 @@
             }
 
             $post_id = $this->socialvoidLib->getDatabase()->real_escape_string(Utilities::removeSlaveHash($post_id));
-            $Query = "SELECT post_id FROM `posts_reposts` WHERE original_post_id='$post_id' AND reposted=1 LIMIT $offset, $limit";
+            $Query = "SELECT user_id FROM `posts_reposts` WHERE original_post_id='$post_id' AND reposted=1 LIMIT $offset, $limit";
             $QueryResults = $SelectedSlave->getConnection()->query($Query);
 
             // Execute and process the query
@@ -178,7 +178,7 @@
 
                 while($Row = $QueryResults->fetch_assoc())
                 {
-                    $ResultsArray[] = $SelectedSlave->MysqlServerPointer->HashPointer . '-' . $Row['post_id'];
+                    $ResultsArray[] = $Row['user_id'];
                 }
             }
 

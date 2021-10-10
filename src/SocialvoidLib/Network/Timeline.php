@@ -46,6 +46,7 @@
     use SocialvoidLib\Objects\Post;
     use SocialvoidLib\Objects\Standard\Peer;
     use SocialvoidLib\Objects\Standard\TimelineState;
+    use SocialvoidLib\Objects\User;
     use Zimage\Exceptions\CannotGetOriginalImageException;
     use Zimage\Exceptions\FileNotFoundException;
     use Zimage\Exceptions\InvalidZimageFileException;
@@ -634,31 +635,25 @@
         }
 
         /**
-         * Returns an array of standard reposts to the selected post
+         * Returns an array of users that reposted the selected post
          *
          * @param string $post_public_id
          * @param int $offset
          * @param int $limit
-         * @return \SocialvoidLib\Objects\Standard\Post[]
+         * @return User[]
          * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
-         * @throws CannotGetOriginalImageException
          * @throws DatabaseException
          * @throws DisplayPictureException
          * @throws DocumentNotFoundException
-         * @throws FileNotFoundException
          * @throws InvalidLimitValueException
          * @throws InvalidOffsetValueException
          * @throws InvalidSearchMethodException
-         * @throws InvalidSlaveHashException
-         * @throws InvalidZimageFileException
          * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
          * @throws PostNotFoundException
          * @throws ServerNotReachableException
          * @throws ServiceJobException
-         * @throws SizeNotSetException
-         * @throws UnsupportedImageTypeException
          * @noinspection DuplicatedCode
          */
         public function getReposts(string $post_public_id, int $offset=0, int $limit=100): array
@@ -673,11 +668,12 @@
             if($limit > (int)$this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveRepostsMaxLimit'])
                 throw new InvalidLimitValueException('The limit value cannot exceed ' . $this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveRepostsMaxLimit']);
 
-            $Replies = $this->networkSession->getSocialvoidLib()->getRepostsRecordManager()->getReposts($post_public_id, $offset, $limit);
-            $StdPosts = [];
-            foreach($Replies as $reply_id)
-                $StdPosts[] = $this->getStandardPost($reply_id);
-            return $StdPosts;
+            $UserIds = $this->networkSession->getSocialvoidLib()->getRepostsRecordManager()->getReposts($post_public_id, $offset, $limit);
+            $search_query = [];
+            foreach($UserIds as $user_id)
+                $search_query[$user_id] = UserSearchMethod::ById;
+
+            return $this->networkSession->getUsers()->resolveMultiplePeers($search_query);
         }
 
         /**
