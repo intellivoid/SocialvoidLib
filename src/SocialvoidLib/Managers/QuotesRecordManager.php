@@ -103,6 +103,7 @@
          * @return array
          * @throws DatabaseException
          * @throws PostNotFoundException
+         * @noinspection DuplicatedCode
          */
         public function getQuotes(string $post_id, int $offset=0, int $limit=100): array
         {
@@ -132,7 +133,7 @@
 
                 while($Row = $QueryResults->fetch_assoc())
                 {
-                    $ResultsArray[] = $SelectedSlave->MysqlServerPointer->HashPointer . '-' . $Row['post_id'];
+                    $ResultsArray[] = $Row['post_id'];
                 }
             }
 
@@ -186,10 +187,10 @@
         public function registerRecord(int $user_id, string $post_id, string $original_post_id, bool $quoted=True): void
         {
             $Query = QueryBuilder::insert_into('posts_quotes', [
-                'id' => (Utilities::removeSlaveHash($post_id) . $original_post_id),
+                'id' => ($post_id . Utilities::removeSlaveHash($original_post_id)),
                 'user_id' => $user_id,
-                'post_id' => Utilities::removeSlaveHash($post_id),
-                'original_post_id' => $original_post_id,
+                'post_id' => $post_id,
+                'original_post_id' => Utilities::removeSlaveHash($original_post_id),
                 'quoted' => (int)$quoted,
                 'last_updated_timestamp' => time(),
                 'created_timestamp' => time()
@@ -197,7 +198,7 @@
 
             try
             {
-                $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($post_id));
+                $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($original_post_id));
             }
             catch (InvalidSlaveHashException $e)
             {
@@ -233,11 +234,11 @@
                 'quoted',
                 'last_updated_timestamp',
                 'created_timestamp'
-            ], 'id', (Utilities::removeSlaveHash($post_id) . $original_post_id), null, null, 1);
+            ], 'id', ($post_id . Utilities::removeSlaveHash($original_post_id)), null, null, 1);
 
             try
             {
-                $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($post_id));
+                $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($original_post_id));
             }
             catch (InvalidSlaveHashException $e)
             {
@@ -278,7 +279,7 @@
             $Query = QueryBuilder::update('posts_quotes', [
                 'quoted' => (int)$QuoteRecord->Quoted,
                 'last_updated_timestamp' => time()
-            ], 'id', (Utilities::removeSlaveHash($QuoteRecord->PostID) . $QuoteRecord->OriginalPostID));
+            ], 'id', ($QuoteRecord->PostID . Utilities::removeSlaveHash($QuoteRecord->OriginalPostID)));
 
             try
             {
