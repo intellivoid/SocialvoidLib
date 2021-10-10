@@ -122,6 +122,9 @@
                 throw new InternalServerException('There was an unexpected error while trying to loading your session', $e);
             }
 
+            if($NetworkSession->isAuthenticated() == false)
+                throw new NotAuthenticatedException();
+
             try
             {
                 $resolved_peer = $NetworkSession->getUsers()->resolvePeer($NetworkSession->getAuthenticatedUser()->PublicID);
