@@ -823,6 +823,10 @@
         },
         {
             "required": true,
+            "file": "Objects/Standard/DisplayPictureSize.php"
+        },
+        {
+            "required": true,
             "file": "Objects/Standard/Document.php"
         },
         {
@@ -836,10 +840,6 @@
         {
             "required": true,
             "file": "Objects/Standard/Post.php"
-        },
-        {
-            "required": true,
-            "file": "Objects/Standard/Profile/DisplayPictureSize.php"
         },
         {
             "required": true,

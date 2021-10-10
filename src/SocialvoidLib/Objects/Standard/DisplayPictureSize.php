@@ -3,9 +3,7 @@
     /** @noinspection PhpUnused */
     /** @noinspection PhpMissingFieldTypeInspection */
 
-    namespace SocialvoidLib\Objects\Standard\Profile;
-
-    use SocialvoidLib\Objects\Standard\Document;
+    namespace SocialvoidLib\Objects\Standard;
 
     class DisplayPictureSize
     {
