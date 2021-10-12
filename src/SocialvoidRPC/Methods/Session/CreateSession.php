@@ -87,12 +87,12 @@
          * @param Request $request
          * @return Response
          * @throws InternalServerException
-         * @throws MissingParameterException
          * @throws InvalidClientNameException
          * @throws InvalidClientPrivateHashException
          * @throws InvalidClientPublicHashException
          * @throws InvalidPlatformException
          * @throws InvalidVersionException
+         * @throws MissingParameterException
          */
         public function execute(Request $request): Response
         {

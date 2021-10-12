@@ -99,21 +99,21 @@
          * @param Request $request
          * @return Response
          * @throws BadSessionChallengeAnswerException
-         * @throws CacheException !may
-         * @throws DatabaseException !may
+         * @throws CacheException
+         * @throws DatabaseException
+         * @throws DisplayPictureException
          * @throws DocumentNotFoundException
          * @throws InternalServerException
          * @throws InvalidClientPublicHashException
          * @throws InvalidPasswordException
-         * @throws InvalidSearchMethodException !may
+         * @throws InvalidSearchMethodException
          * @throws InvalidSessionIdentificationException
          * @throws InvalidUsernameException
          * @throws MissingParameterException
          * @throws NotAuthenticatedException
-         * @throws PeerNotFoundException !may
+         * @throws PeerNotFoundException
          * @throws SessionExpiredException
-         * @throws SessionNotFoundException !may
-         * @throws DisplayPictureException
+         * @throws SessionNotFoundException
          * @noinspection DuplicatedCode
          */
         public function execute(Request $request): Response

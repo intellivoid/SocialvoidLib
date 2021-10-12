@@ -85,19 +85,18 @@
          * @return Response
          * @throws BadSessionChallengeAnswerException
          * @throws CacheException
-         * @throws DatabaseException !may
+         * @throws DatabaseException
+         * @throws DisplayPictureException
          * @throws DocumentNotFoundException
          * @throws InternalServerException
          * @throws InvalidClientPublicHashException
-         * @throws InvalidSearchMethodException !may
+         * @throws InvalidSearchMethodException
          * @throws InvalidSessionIdentificationException
          * @throws MissingParameterException
          * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
          * @throws SessionExpiredException
          * @throws SessionNotFoundException
-         * @throws DisplayPictureException
-         * @throws DisplayPictureException
          * @noinspection DuplicatedCode
          */
         public function execute(Request $request): Response
