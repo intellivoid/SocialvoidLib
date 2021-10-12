@@ -20,6 +20,7 @@
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPublicHashException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidCursorValueException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidSessionIdentificationException;
     use SocialvoidLib\NetworkSession;
     use SocialvoidLib\Objects\Standard\SessionIdentification;
@@ -62,6 +63,7 @@
 
         /**
          * @param Request $request
+         * @throws InvalidCursorValueException
          * @throws InvalidSessionIdentificationException
          * @throws MissingParameterException
          * @noinspection DuplicatedCode
@@ -73,9 +75,14 @@
             if(gettype($request->Parameters['session_identification']) !== 'array')
                 throw new InvalidSessionIdentificationException('The parameter \'session_identification\' is not a object');
 
-            if(isset($request->Parameters['page']) == false)
+            if(isset($request->Parameters['cursor']) == false)
             {
-                $request->Parameters['page'] = 1;
+                $request->Parameters['cursor'] = 1;
+            }
+            else
+            {
+                if(gettype($request->Parameters['cursor']) !== 'integer')
+                    throw new InvalidCursorValueException('The parameter \'cursor\' must be a integer');
             }
         }
 
@@ -89,6 +96,7 @@
          * @throws DocumentNotFoundException
          * @throws InternalServerException
          * @throws InvalidClientPublicHashException
+         * @throws InvalidCursorValueException
          * @throws InvalidSearchMethodException
          * @throws InvalidSessionIdentificationException
          * @throws MissingParameterException
@@ -127,7 +135,7 @@
 
             try
             {
-                $posts = $NetworkSession->getTimeline()->retrieveFeed($request->Parameters['page']);
+                $posts = $NetworkSession->getTimeline()->retrieveFeed((int)$request->Parameters['cursor']);
                 $posts_array = [];
 
                 foreach($posts as $post)
