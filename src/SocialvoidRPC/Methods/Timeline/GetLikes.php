@@ -20,6 +20,7 @@
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPublicHashException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidCursorValueException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPostTextException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidSessionIdentificationException;
     use SocialvoidLib\NetworkSession;
@@ -64,6 +65,7 @@
 
         /**
          * @param Request $request
+         * @throws InvalidCursorValueException
          * @throws InvalidPostTextException
          * @throws InvalidSessionIdentificationException
          * @throws MissingParameterException
@@ -81,8 +83,15 @@
             if(gettype($request->Parameters['post']) !== 'string')
                 throw new InvalidPostTextException('The parameter \'post\' must be a string');
 
-            if(isset($request->Parameters['cursor']))
+            if(isset($request->Parameters['cursor']) == false)
+            {
                 $request->Parameters['cursor'] = 1;
+            }
+            else
+            {
+                if(gettype($request->Parameters['cursor']) !== 'integer')
+                    throw new InvalidCursorValueException('The parameter \'cursor\' must be a integer');
+            }
         }
 
         /**
@@ -95,6 +104,7 @@
          * @throws DocumentNotFoundException
          * @throws InternalServerException
          * @throws InvalidClientPublicHashException
+         * @throws InvalidCursorValueException
          * @throws InvalidPostTextException
          * @throws InvalidSearchMethodException
          * @throws InvalidSessionIdentificationException
