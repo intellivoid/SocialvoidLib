@@ -49,7 +49,7 @@
          */
         public function getDescription(): string
         {
-            return 'Clears the users URL';
+            return 'Clears the peers URL/Website from the profile';
         }
 
         /**
@@ -80,19 +80,19 @@
          * @param Request $request
          * @return Response
          * @throws BadSessionChallengeAnswerException
-         * @throws CacheException !may
-         * @throws DatabaseException !may
+         * @throws CacheException
+         * @throws DatabaseException
+         * @throws DisplayPictureException
          * @throws DocumentNotFoundException
          * @throws InternalServerException
          * @throws InvalidClientPublicHashException
-         * @throws InvalidSearchMethodException !may
+         * @throws InvalidSearchMethodException
          * @throws InvalidSessionIdentificationException
          * @throws MissingParameterException
          * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
          * @throws SessionExpiredException
          * @throws SessionNotFoundException
-         * @throws DisplayPictureException
          * @noinspection DuplicatedCode
          */
         public function execute(Request $request): Response

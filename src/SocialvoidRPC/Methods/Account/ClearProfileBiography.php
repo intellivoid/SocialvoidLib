@@ -75,24 +75,23 @@
                 throw new InvalidSessionIdentificationException("The parameter 'session_identification' is not a object");
         }
 
-
         /**
          * @param Request $request
          * @return Response
          * @throws BadSessionChallengeAnswerException
-         * @throws CacheException !may
-         * @throws DatabaseException !may
+         * @throws CacheException
+         * @throws DatabaseException
+         * @throws DisplayPictureException
          * @throws DocumentNotFoundException
          * @throws InternalServerException
          * @throws InvalidClientPublicHashException
-         * @throws InvalidSearchMethodException !may
+         * @throws InvalidSearchMethodException
          * @throws InvalidSessionIdentificationException
          * @throws MissingParameterException
          * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
          * @throws SessionExpiredException
          * @throws SessionNotFoundException
-         * @throws DisplayPictureException
          * @noinspection DuplicatedCode
          */
         public function execute(Request $request): Response
@@ -124,7 +123,7 @@
 
             try
             {
-                $NetworkSession->getAccount()->clearProfileBiography($SessionIdentification);
+                $NetworkSession->getAccount()->clearProfileBiography();
             }
             catch(Exception $e)
             {

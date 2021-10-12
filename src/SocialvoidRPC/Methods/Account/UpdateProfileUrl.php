@@ -83,26 +83,6 @@
         }
 
 
-        /**
-         * @param Request $request
-         * @return Response
-         * @throws BadSessionChallengeAnswerException
-         * @throws CacheException !may
-         * @throws DatabaseException !may
-         * @throws DocumentNotFoundException
-         * @throws InternalServerException
-         * @throws InvalidBiographyException
-         * @throws InvalidClientPublicHashException
-         * @throws InvalidSearchMethodException !may
-         * @throws InvalidSessionIdentificationException
-         * @throws MissingParameterException
-         * @throws NotAuthenticatedException
-         * @throws PeerNotFoundException
-         * @throws SessionExpiredException
-         * @throws SessionNotFoundException
-         * @throws DisplayPictureException
-         * @noinspection DuplicatedCode
-         */
         public function execute(Request $request): Response
         {
             $this->checkParameters($request);
