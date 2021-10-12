@@ -219,7 +219,6 @@
             $MainSchema->setDefinition('AuthorizedSessionTTL', 259200);
             $MainSchema->setDefinition('TimelineChunkSize', 20);
             $MainSchema->setDefinition('TimelineMaxSize', 3200);
-            $MainSchema->setDefinition('TimelineMaxSize', 3200);
             $MainSchema->setDefinition('RetrieveLikesMaxLimit', 100);
             $MainSchema->setDefinition('RetrieveRepostsMaxLimit', 100);
             $MainSchema->setDefinition('RetrieveRepliesMaxLimit', 100);
