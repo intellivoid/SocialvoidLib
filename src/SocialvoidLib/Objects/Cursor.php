@@ -27,6 +27,8 @@
         public function getOffset(): int
         {
             $offset = 0;
+            if($this->Cursor == 1)
+                return 0;
             for ($k = 0 ; $k < ($this->Cursor < 0 ? 1 : $this->Cursor); $k++)
             {
                 $offset += $this->ContentLimit;
