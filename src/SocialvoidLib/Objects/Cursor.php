@@ -28,7 +28,11 @@
         {
             $offset = 0;
             for ($k = 0 ; $k < ($this->Cursor < 0 ? 1 : $this->Cursor); $k++)
+            {
                 $offset += $this->ContentLimit;
+                if($offset >= 2147483647)
+                    return 2147483647;
+            }
             return $offset;
         }
 
