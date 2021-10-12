@@ -317,6 +317,7 @@
             if($omit_http_code == false)
                 http_response_code(200);
             header('Content-Type: ' . $contentResults->FileMime);
+            header('Access-Control-Allow-Origin: *');
             header('Content-Disposition: attachment; filename="' . $contentResults->FileName . '"');
             if($contentLength)
                 header('Content-Length: ' . $contentResults->FileSize);

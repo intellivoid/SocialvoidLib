@@ -144,6 +144,7 @@
 
         http_response_code($response['response_code']);
         header('Content-Type: application/json');
+        header('Access-Control-Allow-Origin: *');
         unset($response['response_code']);
         if($_SERVER['REQUEST_METHOD'] !== 'HEAD')
         {
@@ -165,6 +166,7 @@
         ];
         http_response_code(200);
         header('Content-Type: application/json');
+        header('Access-Control-Allow-Origin: *');
         if($_SERVER['REQUEST_METHOD'] !== 'HEAD')
         {
             print(json_encode($response, JSON_UNESCAPED_SLASHES));
@@ -188,6 +190,7 @@
 
         http_response_code($response['response_code']);
         header('Content-Type: application/json');
+        header('Access-Control-Allow-Origin: *');
         unset($response['response_code']);
         if($_SERVER['REQUEST_METHOD'] !== 'HEAD')
         {

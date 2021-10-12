@@ -1,8 +1,13 @@
 <?php
 
-namespace SocialvoidLib\Objects;
+    /** @noinspection PhpMissingFieldTypeInspection */
 
-class Cursor
-{
+    namespace SocialvoidLib\Objects;
 
-}
+    class Cursor
+    {
+        /**
+         * @var int
+         */
+        public $ContentLimit;
+    }
