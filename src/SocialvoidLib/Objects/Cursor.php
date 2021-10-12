@@ -42,6 +42,11 @@
          */
         public function __construct(int $content_limit=100, int $cursor=1)
         {
+            if($content_limit > 2147483647)
+                $content_limit = 2147483647;
+            if($cursor > 2147483647)
+                $cursor = 2147483647;
+
             $this->ContentLimit = $content_limit;
             $this->Cursor = $cursor;
         }
