@@ -26,15 +26,11 @@
          */
         public function getOffset(): int
         {
-            $offset = 0;
             if($this->Cursor == 1)
                 return 0;
-            for ($k = 0 ; $k < ($this->Cursor < 0 ? 0 : $this->Cursor - 1); $k++)
-            {
-                $offset += $this->ContentLimit;
-                if($offset >= 2147483647)
-                    return 2147483647;
-            }
+            $offset = ($this->Cursor - 1) * $this->ContentLimit;
+            if($offset >= 2147483647)
+                return 2147483647;
             return $offset;
         }
 
