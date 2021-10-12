@@ -755,6 +755,10 @@
         },
         {
             "required": true,
+            "file": "Objects/Cursor.php"
+        },
+        {
+            "required": true,
             "file": "Objects/Document/File.php"
         },
         {
