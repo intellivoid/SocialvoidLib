@@ -81,15 +81,8 @@
             if(gettype($request->Parameters['post']) !== 'string')
                 throw new InvalidPostTextException('The parameter \'post\' must be a string');
 
-            if(isset($request->Parameters['offset']))
-            {
-                $request->Parameters['offset'] = 0;
-            }
-
-            if(isset($request->Parameters['limit']))
-            {
-                $request->Parameters['limit'] = 25;
-            }
+            if(isset($request->Parameters['cursor']))
+                $request->Parameters['cursor'] = 1;
         }
 
         /**
@@ -98,6 +91,7 @@
          * @throws BadSessionChallengeAnswerException
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DisplayPictureException
          * @throws DocumentNotFoundException
          * @throws InternalServerException
          * @throws InvalidClientPublicHashException
@@ -109,7 +103,6 @@
          * @throws PeerNotFoundException
          * @throws SessionExpiredException
          * @throws SessionNotFoundException
-         * @throws DisplayPictureException
          * @noinspection DuplicatedCode
          */
         public function execute(Request $request): Response
@@ -142,7 +135,7 @@
             try
             {
                 $Peers = $NetworkSession->getTimeline()->getLikes(
-                    $request->Parameters['post'], (int)$request->Parameters['offset'], (int)$request->Parameters['limit']
+                    $request->Parameters['post'], (int)$request->Parameters['cursor']
                 );
             }
             catch(Exception $e)
