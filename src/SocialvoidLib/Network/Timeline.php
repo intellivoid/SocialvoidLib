@@ -43,6 +43,7 @@
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidCursorValueException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPostTextException;
     use SocialvoidLib\NetworkSession;
+    use SocialvoidLib\Objects\Cursor;
     use SocialvoidLib\Objects\Post;
     use SocialvoidLib\Objects\Standard\Peer;
     use SocialvoidLib\Objects\Standard\TimelineState;
@@ -597,20 +598,22 @@
          * @throws ServerNotReachableException
          * @throws ServiceJobException
          */
-        public function getLikes(string $post_public_id, int $offset=0, int $limit=100): array
+        public function getLikes(string $post_public_id, int $cursor=1): array
         {
             /** @noinspection DuplicatedCode */
             if($this->networkSession->isAuthenticated() == false)
                 throw new NotAuthenticatedException();
 
-            if($offset < 0)
-                throw new InvalidCursorValueException('The offset value cannot be a negative value');
-            if($limit < 1)
-                throw new InvalidLimitValueException('The limit value must be a value greater than 0');
-            if($limit > (int)$this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveLikesMaxLimit'])
-                throw new InvalidLimitValueException('The limit value cannot exceed ' . $this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveLikesMaxLimit']);
+            if($cursor < 0)
+                throw new InvalidCursorValueException('The cursor value cannot be a negative value');
+            if($cursor < 1)
+                throw new InvalidCursorValueException('The cursor value must be a value greater than 0');
 
-            $Likes = $this->networkSession->getSocialvoidLib()->getLikesRecordManager()->getLikes($post_public_id, $offset, $limit);
+            $cursor_object = new Cursor(
+                (int)$this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveLikesMaxLimit'], $cursor
+            );
+
+            $Likes = $this->networkSession->getSocialvoidLib()->getLikesRecordManager()->getLikes($post_public_id, $cursor_object->getOffset(), $cursor_object->ContentLimit);
 
             $search_query = [];
             foreach($Likes as $user_id)
