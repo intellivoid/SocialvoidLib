@@ -49,46 +49,53 @@
         public $AuthorizedSessionTTL;
 
         /**
-         * The limit to the amount of likes you can retrieve from a post
+         * The limit to the amount of likes you can retrieve from a post per cursor
          *
          * @var int
          */
         public $RetrieveLikesMaxLimit;
 
         /**
-         * The limit to the amount of reposts you can retrieve from a post
+         * The limit to the amount of reposts you can retrieve from a post per cursor
          *
          * @var int
          */
         public $RetrieveRepostsMaxLimit;
 
         /**
-         * The limit to the amount of likes you can retrieve from a post
+         * The limit to the amount of likes you can retrieve from a post per cursor
          *
          * @var int
          */
         public $RetrieveRepliesMaxLimit;
 
         /**
-         * The limit to the amount of quotes you can retrieve from a post
+         * The limit to the amount of quotes you can retrieve from a post per cursor
          *
          * @var int
          */
         public $RetrieveQuotesMaxLimit;
 
         /**
-         * The limit to the amount of followers you can retrieve from a peer
+         * The limit to the amount of followers you can retrieve from a peer per cursor
          *
          * @var int
          */
         public $RetrieveFollowersMaxLimit;
 
         /**
-         * The limit to the amount of following peers you can retrieve from a peer
+         * The limit to the amount of following peers you can retrieve from a peer per cursor
          *
          * @var int
          */
         public $RetrieveFollowingMaxLimit;
+
+        /**
+         * The limit to the amount of posts you can retrieve from the feed per cursor
+         *
+         * @var int
+         */
+        public $RetrieveFeedMaxLimit;
 
         /**
          * Return an array representation of the object
@@ -109,7 +116,8 @@
                 'retrieve_replies_max_limit' => $this->RetrieveRepliesMaxLimit,
                 'retrieve_quotes_max_limit' => $this->RetrieveQuotesMaxLimit,
                 'retrieve_followers_max_limit' => $this->RetrieveFollowersMaxLimit,
-                'retrieve_following_max_limit' => $this->RetrieveFollowingMaxLimit
+                'retrieve_following_max_limit' => $this->RetrieveFollowingMaxLimit,
+                'retrieve_feed_max_limit' => $this->RetrieveFeedMaxLimit
             ];
         }
 
@@ -158,6 +166,9 @@
 
             if(isset($data['retrieve_following_max_limit']))
                 $serverInformationObject->RetrieveFollowingMaxLimit = $data['retrieve_following_max_limit'];
+
+            if(isset($data['retrieve_feed_max_limit']))
+                $serverInformationObject->RetrieveFeedMaxLimit = $data['retrieve_feed_max_limit'];
 
             return $serverInformationObject;
         }

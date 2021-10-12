@@ -478,6 +478,7 @@
             $ServerInformation->RetrieveQuotesMaxLimit = (int)$this->socialvoidLib->getMainConfiguration()['RetrieveQuotesMaxLimit'];
             $ServerInformation->RetrieveFollowersMaxLimit = (int)$this->socialvoidLib->getMainConfiguration()['RetrieveFollowersMixLimit'];
             $ServerInformation->RetrieveFollowingMaxLimit = (int)$this->socialvoidLib->getMainConfiguration()['RetrieveFollowingMixLimit'];
+            $ServerInformation->RetrieveFeedMaxLimit = (int)$this->socialvoidLib->getMainConfiguration()['TimelineChunkSize'];
 
             return $ServerInformation;
         }
