@@ -581,15 +581,13 @@
          * Returns the likes given to a certain post
          *
          * @param string $post_public_id
-         * @param int $offset
-         * @param int $limit
+         * @param int $cursor
          * @return array
          * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
          * @throws DatabaseException
          * @throws DisplayPictureException
          * @throws DocumentNotFoundException
-         * @throws InvalidLimitValueException
          * @throws InvalidCursorValueException
          * @throws InvalidSearchMethodException
          * @throws NotAuthenticatedException
@@ -628,8 +626,7 @@
          * Returns an array of posts that replied to the selected post
          *
          * @param string $post_public_id
-         * @param int $offset
-         * @param int $limit
+         * @param int $cursor
          * @return \SocialvoidLib\Objects\Standard\Post[]
          * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
@@ -638,7 +635,6 @@
          * @throws DisplayPictureException
          * @throws DocumentNotFoundException
          * @throws FileNotFoundException
-         * @throws InvalidLimitValueException
          * @throws InvalidCursorValueException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
@@ -652,19 +648,21 @@
          * @throws UnsupportedImageTypeException
          * @noinspection DuplicatedCode
          */
-        public function getReplies(string $post_public_id, int $offset=0, int $limit=100): array
+        public function getReplies(string $post_public_id, int $cursor=1): array
         {
             if($this->networkSession->isAuthenticated() == false)
                 throw new NotAuthenticatedException();
 
-            if($offset < 0)
-                throw new InvalidCursorValueException('The offset value cannot be a negative value');
-            if($limit < 1)
-                throw new InvalidLimitValueException('The limit value must be a value greater than 0');
-            if($limit > (int)$this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveRepliesMaxLimit'])
-                throw new InvalidLimitValueException('The limit value cannot exceed ' . $this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveRepliesMaxLimit']);
+            if($cursor < 0)
+                throw new InvalidCursorValueException('The cursor value cannot be a negative value');
+            if($cursor < 1)
+                throw new InvalidCursorValueException('The cursor value must be a value greater than 0');
 
-            $Replies = $this->networkSession->getSocialvoidLib()->getReplyRecordManager()->getReplies($post_public_id, $offset, $limit);
+            $cursor_object = new Cursor(
+                (int)$this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveRepliesMaxLimit'], $cursor
+            );
+
+            $Replies = $this->networkSession->getSocialvoidLib()->getReplyRecordManager()->getReplies($post_public_id, $cursor_object->getOffset(), $cursor_object->ContentLimit);
             $StdPosts = [];
             foreach($Replies as $reply_id)
                 $StdPosts[] = $this->getStandardPost($reply_id);
