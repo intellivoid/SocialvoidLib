@@ -720,15 +720,13 @@
          * Returns an array of users that reposted the selected post
          *
          * @param string $post_public_id
-         * @param int $offset
-         * @param int $limit
+         * @param int $cursor
          * @return User[]
          * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
          * @throws DatabaseException
          * @throws DisplayPictureException
          * @throws DocumentNotFoundException
-         * @throws InvalidLimitValueException
          * @throws InvalidCursorValueException
          * @throws InvalidSearchMethodException
          * @throws NotAuthenticatedException
@@ -738,19 +736,21 @@
          * @throws ServiceJobException
          * @noinspection DuplicatedCode
          */
-        public function getReposts(string $post_public_id, int $offset=0, int $limit=100): array
+        public function getReposts(string $post_public_id, int $cursor=1): array
         {
             if($this->networkSession->isAuthenticated() == false)
                 throw new NotAuthenticatedException();
 
-            if($offset < 0)
-                throw new InvalidCursorValueException('The offset value cannot be a negative value');
-            if($limit < 1)
-                throw new InvalidLimitValueException('The limit value must be a value greater than 0');
-            if($limit > (int)$this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveRepostsMaxLimit'])
-                throw new InvalidLimitValueException('The limit value cannot exceed ' . $this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveRepostsMaxLimit']);
+            if($cursor < 0)
+                throw new InvalidCursorValueException('The cursor value cannot be a negative value');
+            if($cursor < 1)
+                throw new InvalidCursorValueException('The cursor value must be a value greater than 0');
 
-            $UserIds = $this->networkSession->getSocialvoidLib()->getRepostsRecordManager()->getReposts($post_public_id, $offset, $limit);
+            $cursor_object = new Cursor(
+                (int)$this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveRepostsMaxLimit'], $cursor
+            );
+
+            $UserIds = $this->networkSession->getSocialvoidLib()->getRepostsRecordManager()->getReposts($post_public_id, $cursor_object->getOffset(), $cursor_object->ContentLimit);
             $search_query = [];
             foreach($UserIds as $user_id)
                 $search_query[$user_id] = UserSearchMethod::ById;
