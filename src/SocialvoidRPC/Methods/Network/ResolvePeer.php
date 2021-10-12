@@ -87,6 +87,7 @@
          * @throws BadSessionChallengeAnswerException
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DisplayPictureException
          * @throws DocumentNotFoundException
          * @throws InternalServerException
          * @throws InvalidClientPublicHashException
@@ -98,7 +99,6 @@
          * @throws PeerNotFoundException
          * @throws SessionExpiredException
          * @throws SessionNotFoundException
-         * @throws DisplayPictureException
          */
         public function execute(Request $request): Response
         {
