@@ -29,7 +29,7 @@
     use SocialvoidLib\Exceptions\Standard\Network\DocumentNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\SelfInteractionNotPermittedException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidLimitValueException;
-    use SocialvoidLib\Exceptions\Standard\Validation\InvalidOffsetValueException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidCursorValueException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPeerInputException;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\NetworkSession;
@@ -318,7 +318,7 @@
          * @throws DisplayPictureException
          * @throws DocumentNotFoundException
          * @throws InvalidLimitValueException
-         * @throws InvalidOffsetValueException
+         * @throws InvalidCursorValueException
          * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
          * @throws NotAuthenticatedException
@@ -333,7 +333,7 @@
                 throw new NotAuthenticatedException();
 
             if($offset < 0)
-                throw new InvalidOffsetValueException('The offset value cannot be a negative value');
+                throw new InvalidCursorValueException('The offset value cannot be a negative value');
             if($limit < 1)
                 throw new InvalidLimitValueException('The limit value must be a value greater than 0');
             if($limit > (int)$this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveFollowersMixLimit'])
@@ -392,7 +392,7 @@
                 throw new NotAuthenticatedException();
 
             if($offset < 0)
-                throw new InvalidOffsetValueException('The offset value cannot be a negative value');
+                throw new InvalidCursorValueException('The offset value cannot be a negative value');
             if($limit < 1)
                 throw new InvalidLimitValueException('The limit value must be a value greater than 0');
             if($limit > (int)$this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveFollowingMixLimit'])

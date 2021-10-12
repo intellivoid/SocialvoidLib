@@ -40,7 +40,7 @@
     use SocialvoidLib\Exceptions\Standard\Network\PostDeletedException;
     use SocialvoidLib\Exceptions\Standard\Network\PostNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidLimitValueException;
-    use SocialvoidLib\Exceptions\Standard\Validation\InvalidOffsetValueException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidCursorValueException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPostTextException;
     use SocialvoidLib\NetworkSession;
     use SocialvoidLib\Objects\Post;
@@ -589,7 +589,7 @@
          * @throws DisplayPictureException
          * @throws DocumentNotFoundException
          * @throws InvalidLimitValueException
-         * @throws InvalidOffsetValueException
+         * @throws InvalidCursorValueException
          * @throws InvalidSearchMethodException
          * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
@@ -604,7 +604,7 @@
                 throw new NotAuthenticatedException();
 
             if($offset < 0)
-                throw new InvalidOffsetValueException('The offset value cannot be a negative value');
+                throw new InvalidCursorValueException('The offset value cannot be a negative value');
             if($limit < 1)
                 throw new InvalidLimitValueException('The limit value must be a value greater than 0');
             if($limit > (int)$this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveLikesMaxLimit'])
@@ -636,7 +636,7 @@
          * @throws DocumentNotFoundException
          * @throws FileNotFoundException
          * @throws InvalidLimitValueException
-         * @throws InvalidOffsetValueException
+         * @throws InvalidCursorValueException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
          * @throws InvalidZimageFileException
@@ -655,7 +655,7 @@
                 throw new NotAuthenticatedException();
 
             if($offset < 0)
-                throw new InvalidOffsetValueException('The offset value cannot be a negative value');
+                throw new InvalidCursorValueException('The offset value cannot be a negative value');
             if($limit < 1)
                 throw new InvalidLimitValueException('The limit value must be a value greater than 0');
             if($limit > (int)$this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveRepliesMaxLimit'])
@@ -683,7 +683,7 @@
          * @throws DocumentNotFoundException
          * @throws FileNotFoundException
          * @throws InvalidLimitValueException
-         * @throws InvalidOffsetValueException
+         * @throws InvalidCursorValueException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
          * @throws InvalidZimageFileException
@@ -702,7 +702,7 @@
                 throw new NotAuthenticatedException();
 
             if($offset < 0)
-                throw new InvalidOffsetValueException('The offset value cannot be a negative value');
+                throw new InvalidCursorValueException('The offset value cannot be a negative value');
             if($limit < 1)
                 throw new InvalidLimitValueException('The limit value must be a value greater than 0');
             if($limit > (int)$this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveQuotesMaxLimit'])
@@ -728,7 +728,7 @@
          * @throws DisplayPictureException
          * @throws DocumentNotFoundException
          * @throws InvalidLimitValueException
-         * @throws InvalidOffsetValueException
+         * @throws InvalidCursorValueException
          * @throws InvalidSearchMethodException
          * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
@@ -743,7 +743,7 @@
                 throw new NotAuthenticatedException();
 
             if($offset < 0)
-                throw new InvalidOffsetValueException('The offset value cannot be a negative value');
+                throw new InvalidCursorValueException('The offset value cannot be a negative value');
             if($limit < 1)
                 throw new InvalidLimitValueException('The limit value must be a value greater than 0');
             if($limit > (int)$this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveRepostsMaxLimit'])

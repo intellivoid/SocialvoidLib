@@ -6,7 +6,7 @@
     use SocialvoidLib\Abstracts\StandardErrorCodes;
     use Throwable;
 
-    class InvalidOffsetValueException extends Exception
+    class InvalidCursorValueException extends Exception
     {
         /**
          * @param string $message
@@ -14,6 +14,6 @@
          */
         public function __construct($message = "", Throwable $previous = null)
         {
-            parent::__construct($message, StandardErrorCodes::InvalidOffsetValueException, $previous);
+            parent::__construct($message, StandardErrorCodes::InvalidCursorValueException, $previous);
         }
     }

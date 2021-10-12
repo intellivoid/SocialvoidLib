@@ -42,7 +42,7 @@
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidHelpDocumentId;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidLastNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidLimitValueException;
-    use SocialvoidLib\Exceptions\Standard\Validation\InvalidOffsetValueException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidCursorValueException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPasswordException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPeerInputException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPlatformException;
@@ -179,18 +179,11 @@
         const AgreementRequiredException = 0x02111;
 
         /**
-         * Raised when the given offset is invalid
+         * Raised when the given cursor value is invalid
          *
-         * @see InvalidOffsetValueException
+         * @see InvalidCursorValueException
          */
-        const InvalidOffsetValueException = 0x02112;
-
-        /**
-         * Raised when the given limit is invalid
-         *
-         * @see InvalidLimitValueException
-         */
-        const InvalidLimitValueException = 0x02113;
+        const InvalidCursorValueException = 0x02112;
 
         /** 22-Set error codes (Authentication) */
 
