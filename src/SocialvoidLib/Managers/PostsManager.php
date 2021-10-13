@@ -292,13 +292,14 @@
                 'text' => ($post->Text == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($post->Text))),
                 'source' => ($post->Source == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string(urlencode($post->Source))),
                 'properties' => ($post->Properties == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Properties->toArray()))),
-                'poster_user_id' => ($post->PosterUserID == null ? null : $post->PosterUserID),
-                'reply_to_post_id' => ($post->Reply == null || $post->Reply->ReplyToPostID == null ? null : $post->Reply->ReplyToPostID),
+                'poster_user_id' => ($post->PosterUserID == null ? null : (int)$post->PosterUserID),
+                'reply_to_post_id' => ($post->Reply == null || $post->Reply->ReplyToPostID == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string($post->Reply->ReplyToPostID)),
                 'reply_to_user_id' => ($post->Reply == null || $post->Reply->ReplyToUserID == null ? null : (int)$post->Reply->ReplyToUserID),
-                'quote_original_post_id' => ($post->Quote == null || $post->Quote->OriginalPostID == null ? null : $post->Quote->OriginalPostID),
+                'quote_original_post_id' => ($post->Quote == null || $post->Quote->OriginalPostID == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string($post->Quote->OriginalPostID)),
                 'quote_original_user_id' => ($post->Quote == null || $post->Quote->OriginalUserID == null ? null : (int)$post->Quote->OriginalUserID),
-                'repost_original_post_id' => ($post->Repost == null || $post->Repost->OriginalPostID == null ? null : $post->Repost->OriginalPostID),
+                'repost_original_post_id' => ($post->Repost == null || $post->Repost->OriginalPostID == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string($post->Repost->OriginalPostID)),
                 'repost_original_user_id' => ($post->Repost == null || $post->Repost->OriginalUserID == null ? null : (int)$post->Repost->OriginalUserID),
+                'original_thread_post_id' => ($post->OriginalPostThreadID == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string($post->OriginalPostThreadID)),
                 'flags' => ($post->Flags == null ?  $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])) : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($post->Flags))),
                 'is_deleted' => (Converter::hasFlag($post->Flags, PostFlags::Deleted) ? (int)true : (int)false),
                 'priority_level' => ($post->PriorityLevel == null ? $this->socialvoidLib->getDatabase()->real_escape_string(PostPriorityLevel::None) : $this->socialvoidLib->getDatabase()->real_escape_string($post->PriorityLevel)),
@@ -310,7 +311,7 @@
                 'media_content' => (is_null($MediaContent) ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($MediaContent))),
                 'last_updated_timestamp' => (int)$post->LastUpdatedTimestamp,
                 'count_last_updated_timestamp' => (int)$post->CountLastUpdatedTimestamp
-            ], 'public_id', Utilities::removeSlaveHash($post->PublicID));
+            ], 'public_id', $this->socialvoidLib->getDatabase()->real_escape_string(Utilities::removeSlaveHash($post->PublicID)));
 
             $SelectedSlave = $this->socialvoidLib->getSlaveManager()->getMySqlServer(Utilities::getSlaveHash($post->PublicID));
             $QueryResults = $SelectedSlave->getConnection()->query($Query);
