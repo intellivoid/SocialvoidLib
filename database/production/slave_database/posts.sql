@@ -20,7 +20,7 @@ create table posts
     like_count                   int default 0 not null comment 'The amount of likes this post has gotten (Query calculated)',
     repost_count                 int default 0 not null comment 'The amount of reposts this post has gotten (Query calculated)',
     quote_count                  int default 0 not null comment 'The amount of quotes this post has gotten (Query calculated)',
-    replies_count                int default 0 not null comment 'The amount of replies that was made to this post (Query Calculated)',
+    reply_count                  int default 0 not null comment 'The amount of replies that was made to this post (Query Calculated)',
     media_content                blob          null comment 'ZiProto encoded data of the media content associated with this post',
     count_last_updated_timestamp int           null comment 'The Unix Timestamp for when this posts counters was last updated',
     last_updated_timestamp       int           null comment 'The Unix Timestamp for when this record was last updated',
