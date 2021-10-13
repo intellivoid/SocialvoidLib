@@ -36,6 +36,9 @@ create index posts_created_timestamp_index
 create index posts_last_updated_timestamp_index
     on posts (last_updated_timestamp);
 
+create index posts_original_thread_post_id_index
+    on posts (original_thread_post_id);
+
 create index posts_poster_user_id_index
     on posts (poster_user_id);
 
