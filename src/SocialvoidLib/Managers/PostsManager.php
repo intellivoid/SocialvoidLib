@@ -688,11 +688,11 @@
             if($post->Repost !== null && $post->Repost->OriginalPostID !== null)
             {
                 $post = $this->getPost(PostSearchMethod::ByPublicId, $post->Repost->OriginalPostID);
-            }
 
-            if(Converter::hasFlag($post->Flags, PostFlags::Deleted))
-            {
-                throw new PostDeletedException('The requested post was deleted');
+                if(Converter::hasFlag($post->Flags, PostFlags::Deleted))
+                {
+                    throw new PostDeletedException('The requested post was deleted');
+                }
             }
 
             $original_thread_post_id = $post->PublicID;
