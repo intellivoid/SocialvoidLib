@@ -695,6 +695,10 @@
                 throw new PostDeletedException('The requested post was deleted');
             }
 
+            $original_thread_post_id = $post->PublicID;
+            if($post->OriginalPostThreadID !== null)
+                $original_thread_post_id = $post->OriginalPostThreadID;
+
             $timestamp = time();
 
             $Reply = new Post\Reply();
@@ -734,6 +738,7 @@
                 'properties' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Properties->toArray())),
                 'reply_to_post_id' => $this->socialvoidLib->getDatabase()->real_escape_string($Reply->ReplyToPostID),
                 'reply_to_user_id' => (int)$Reply->ReplyToUserID,
+                'original_thread_post_id' => $this->socialvoidLib->getDatabase()->real_escape_string($original_thread_post_id),
                 'flags' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($flags)),
                 'is_deleted' => (int)false,
                 'priority_level' => $this->socialvoidLib->getDatabase()->real_escape_string($priority),
