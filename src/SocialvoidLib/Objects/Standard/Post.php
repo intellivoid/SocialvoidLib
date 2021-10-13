@@ -194,18 +194,18 @@
             if(isset($data['text']))
                 $PostObject->Text = $data['text'];
 
+            $PostObject->Entities = [];
             if(isset($data['entities']))
             {
-                $PostObject->Entities = [];
                 foreach($data['entities'] as $entity)
                     $PostObject->Entities[] = TextEntity::fromArray($entity);
             }
 
+            $PostObject->MentionedPeers = [];
             if(isset($data['mentioned_peers']))
             {
-                $PostObject->Entities = [];
-                foreach($data['entities'] as $entity)
-                    $PostObject->Entities[] = TextEntity::fromArray($entity);
+                foreach($data['mentioned_peers'] as $mentioned_peer)
+                    $PostObject->MentionedPeers[] = Peer::fromArray($mentioned_peer);
             }
 
             if(isset($data['reply_to_post']))
@@ -282,7 +282,8 @@
                 $StandardPostObject->Text = null;
                 $StandardPostObject->Peer = null;
                 $StandardPostObject->Source = null;
-                $StandardPostObject->MentionedPeers = null;
+                $StandardPostObject->Entities = [];
+                $StandardPostObject->MentionedPeers = [];
                 $StandardPostObject->LikeCount = 0;
                 $StandardPostObject->ReplyCount = 0;
                 $StandardPostObject->ReplyToPost = null;
