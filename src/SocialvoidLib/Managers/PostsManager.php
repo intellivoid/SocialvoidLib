@@ -201,10 +201,10 @@
                 'flags',
                 'priority_level',
                 'text_entities',
-                'likes_count',
-                'reposts_count',
-                'quotes_count',
-                'replies_count',
+                'like_count',
+                'repost_count',
+                'quote_count',
+                'reply_count',
                 'media_content',
                 'count_last_updated_timestamp',
                 'last_updated_timestamp',
@@ -237,10 +237,10 @@
                     // Update counts if it's older than an hour
                     if((time() - $returnResults->CountLastUpdatedTimestamp) > 3600 && $returnResults->Repost == null)
                     {
-                        $returnResults->LikesCount = $this->socialvoidLib->getLikesRecordManager()->getLikesCount($returnResults->PublicID);
-                        $returnResults->QuotesCount = $this->socialvoidLib->getQuotesRecordManager()->getQuotesCount($returnResults->PublicID);
-                        $returnResults->RepostsCount = $this->socialvoidLib->getRepostsRecordManager()->getRepostsCount($returnResults->PublicID);
-                        $returnResults->RepliesCount = $this->socialvoidLib->getReplyRecordManager()->getRepliesCount($returnResults->PublicID);
+                        $returnResults->LikeCount = $this->socialvoidLib->getLikesRecordManager()->getLikesCount($returnResults->PublicID);
+                        $returnResults->QuoteCount = $this->socialvoidLib->getQuotesRecordManager()->getQuotesCount($returnResults->PublicID);
+                        $returnResults->RepostCount = $this->socialvoidLib->getRepostsRecordManager()->getRepostsCount($returnResults->PublicID);
+                        $returnResults->ReplyCount = $this->socialvoidLib->getReplyRecordManager()->getRepliesCount($returnResults->PublicID);
                         $returnResults->CountLastUpdatedTimestamp = time();
                         $returnResults = $this->updatePost($returnResults);
                     }
@@ -302,10 +302,10 @@
                 'is_deleted' => (Converter::hasFlag($post->Flags, PostFlags::Deleted) ? (int)true : (int)false),
                 'priority_level' => ($post->PriorityLevel == null ? $this->socialvoidLib->getDatabase()->real_escape_string(PostPriorityLevel::None) : $this->socialvoidLib->getDatabase()->real_escape_string($post->PriorityLevel)),
                 'text_entities' => ($post->TextEntities == null ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($TextEntities))),
-                'likes_count' => ($post->LikesCount == null ? 0 : (int)$post->LikesCount),
-                'reposts_count' => ($post->RepostsCount == null ? 0 : (int)$post->RepostsCount),
-                'quotes_count' => ($post->QuotesCount == null ? 0 : (int)$post->QuotesCount),
-                'replies_count' => ($post->RepliesCount == null ? 0 : (int)$post->RepliesCount),
+                'like_count' => ($post->LikeCount == null ? 0 : (int)$post->LikeCount),
+                'repost_count' => ($post->RepostCount == null ? 0 : (int)$post->RepostCount),
+                'quote_count' => ($post->QuoteCount == null ? 0 : (int)$post->QuoteCount),
+                'reply_count' => ($post->ReplyCount == null ? 0 : (int)$post->ReplyCount),
                 'media_content' => (is_null($MediaContent) ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($MediaContent))),
                 'last_updated_timestamp' => (int)$post->LastUpdatedTimestamp,
                 'count_last_updated_timestamp' => (int)$post->CountLastUpdatedTimestamp
@@ -366,9 +366,9 @@
                 }
 
                 $this->socialvoidLib->getLikesRecordManager()->likeRecord($user->ID, $post->PublicID);
-                $post->LikesCount += 1;
-                if($post->LikesCount < 0)
-                    $post->LikesCount = 0;
+                $post->LikeCount += 1;
+                if($post->LikeCount < 0)
+                    $post->LikeCount = 0;
                 $this->updatePost($post);
             }
             catch(Exception $e)
@@ -415,9 +415,9 @@
                 }
 
                 $this->socialvoidLib->getLikesRecordManager()->unlikeRecord($user->ID, $post->PublicID);
-                $post->LikesCount -= 1;
-                if($post->LikesCount < 0)
-                    $post->LikesCount = 0;
+                $post->LikeCount -= 1;
+                if($post->LikeCount < 0)
+                    $post->LikeCount = 0;
                 $this->updatePost($post);
             }
             catch(Exception $e)
@@ -532,7 +532,7 @@
             }
 
             $this->socialvoidLib->getRepostsRecordManager()->repostRecord($user->ID, $returnResults->PublicID, $post->PublicID);
-            $post->RepostsCount += 1;
+            $post->RepostCount += 1;
             $this->updatePost($post);
 
             return $returnResults;
@@ -646,7 +646,7 @@
             }
 
             $this->socialvoidLib->getQuotesRecordManager()->quoteRecord($user->ID, $returnResults->PublicID, $post->PublicID);
-            $post->QuotesCount += 1;
+            $post->QuoteCount += 1;
             $this->updatePost($post);
 
             return $returnResults;
@@ -759,7 +759,7 @@
             }
 
             $this->socialvoidLib->getReplyRecordManager()->replyRecord($user->ID, $returnResults->PublicID, $post->PublicID);
-            $post->RepliesCount += 1;
+            $post->ReplyCount += 1;
             $this->updatePost($post);
 
             return $returnResults;

@@ -91,7 +91,7 @@
          *
          * @var int|null
          */
-        public $LikesCount;
+        public $LikeCount;
 
         /**
          * The amount of reposts this post got, this can be null
@@ -99,7 +99,7 @@
          *
          * @var int|null
          */
-        public $RepostsCount;
+        public $RepostCount;
 
         /**
          * The amount of reposts this post got, this can be null if
@@ -107,7 +107,7 @@
          *
          * @var int|null
          */
-        public $QuotesCount;
+        public $QuoteCount;
 
         /**
          * The amount of replies this post got, this can be null
@@ -115,7 +115,7 @@
          *
          * @var int|null
          */
-        public $RepliesCount;
+        public $ReplyCount;
 
         /**
          * The Unix Timestamp when this post was posted
@@ -160,10 +160,10 @@
                 'reply_to_post' => ($this->ReplyToPost == null ? null : $this->ReplyToPost->toArray()),
                 'quoted_post' => ($this->QuotedPost == null ? null : $this->QuotedPost->toArray()),
                 'reposted_post' => ($this->RepostedPost == null ? null :$this->RepostedPost->toArray()),
-                'likes_count' => (is_null($this->LikesCount) ? null : (int)$this->LikesCount),
-                'reposts_count' => (is_null($this->RepostsCount) ? null : (int)$this->RepostsCount),
-                'quotes_count' => (is_null($this->QuotesCount) ? null : (int)$this->QuotesCount),
-                'replies_count' => (is_null($this->RepliesCount) == null ? 0 : (int)$this->RepliesCount),
+                'like_count' => (is_null($this->LikeCount) ? null : (int)$this->LikeCount),
+                'repost_count' => (is_null($this->RepostCount) ? null : (int)$this->RepostCount),
+                'quote_count' => (is_null($this->QuoteCount) ? null : (int)$this->QuoteCount),
+                'reply_count' => (is_null($this->ReplyCount) == null ? 0 : (int)$this->ReplyCount),
                 'posted_timestamp' => ($this->PostedTimestamp),
                 'flags' => $this->Flags,
             ];
@@ -217,17 +217,17 @@
             if(isset($data['reposted_post']))
                 $PostObject->RepostedPost = ($data['reposted_post'] == null ? null : Post::fromArray($data['reposted_post']));
 
-            if(isset($data['likes_count']))
-                $PostObject->LikesCount = $data['likes_count'];
+            if(isset($data['like_count']))
+                $PostObject->LikeCount = $data['like_count'];
 
-            if(isset($data['reposts_count']))
-                $PostObject->RepostsCount = $data['reposts_count'];
+            if(isset($data['repost_count']))
+                $PostObject->RepostCount = $data['repost_count'];
 
-            if(isset($data['quotes_count']))
-                $PostObject->QuotesCount = $data['quotes_count'];
+            if(isset($data['quote_count']))
+                $PostObject->QuoteCount = $data['quote_count'];
 
-            if(isset($data['replies_count']))
-                $PostObject->RepliesCount = $data['replies_count'];
+            if(isset($data['reply_count']))
+                $PostObject->ReplyCount = $data['reply_count'];
 
             if(isset($data['posted_timestamp']))
                 $PostObject->PostedTimestamp = $data['posted_timestamp'];
@@ -256,10 +256,10 @@
             $StandardPostObject->Entities = [];
             $StandardPostObject->MentionedPeers = [];
             $StandardPostObject->Source = $post->Source;
-            $StandardPostObject->LikesCount = $post->LikesCount;
-            $StandardPostObject->RepostsCount = $post->RepostsCount;
-            $StandardPostObject->QuotesCount = $post->QuotesCount;
-            $StandardPostObject->RepliesCount = $post->RepliesCount;
+            $StandardPostObject->LikeCount = $post->LikeCount;
+            $StandardPostObject->RepostCount = $post->RepostCount;
+            $StandardPostObject->QuoteCount = $post->QuoteCount;
+            $StandardPostObject->ReplyCount = $post->ReplyCount;
             $StandardPostObject->PostedTimestamp = $post->CreatedTimestamp;
             $StandardPostObject->Flags = $post->Flags;
 
@@ -283,13 +283,13 @@
                 $StandardPostObject->Peer = null;
                 $StandardPostObject->Source = null;
                 $StandardPostObject->MentionedPeers = null;
-                $StandardPostObject->LikesCount = 0;
-                $StandardPostObject->RepliesCount = 0;
+                $StandardPostObject->LikeCount = 0;
+                $StandardPostObject->ReplyCount = 0;
                 $StandardPostObject->ReplyToPost = null;
                 $StandardPostObject->RepostedPost = null;
-                $StandardPostObject->RepostsCount = 0;
+                $StandardPostObject->RepostCount = 0;
                 $StandardPostObject->QuotedPost = null;
-                $StandardPostObject->QuotesCount = 0;
+                $StandardPostObject->QuoteCount = 0;
             }
 
             return $StandardPostObject;
