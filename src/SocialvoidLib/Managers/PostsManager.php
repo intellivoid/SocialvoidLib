@@ -198,6 +198,7 @@
                 'quote_original_user_id',
                 'repost_original_post_id',
                 'repost_original_user_id',
+                'original_thread_post_id',
                 'flags',
                 'priority_level',
                 'text_entities',

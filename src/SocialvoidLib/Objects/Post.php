@@ -99,6 +99,13 @@
         public $Repost;
 
         /**
+         * The original post that this thread is for
+         *
+         * @var string|null
+         */
+        public $OriginalPostThreadID;
+
+        /**
          * Flags associated with this post
          *
          * @var array
@@ -209,6 +216,7 @@
                 'reply' => ($this->Reply == null ? null : $this->Reply->toArray()),
                 'quote' => ($this->Quote == null ? null : $this->Quote->toArray()),
                 'repost' => ($this->Repost == null ? null : $this->Repost->toArray()),
+                'original_thread_post_id' => $this->OriginalPostThreadID,
                 'flags' => ($this->Flags == null ? [] : $this->Flags),
                 'priority_level' => ($this->Flags == null ? [] : $this->Flags),
                 'text_entities' => $text_entities,
@@ -268,6 +276,9 @@
 
             if(isset($data['flags']))
                 $PostObject->Flags = ($data['flags'] == null ? [] : $data['flags']);
+
+            if(isset($data['original_thread_post_id']))
+                $PostObject->OriginalPostThreadID = $data['original_thread_post_id'];
 
             if(isset($data['priority_level']))
                 $PostObject->PriorityLevel = $data['priority_level'];
@@ -346,6 +357,7 @@
                 'quote_original_user_id' => ($this->Quote == null ? null : $this->Quote->OriginalUserID),
                 'repost_original_post_id' => ($this->Repost == null ? null : $this->Repost->OriginalPostID),
                 'repost_original_user_id' => ($this->Repost == null ? null : $this->Repost->OriginalUserID),
+                'original_thread_post_id' => ($this->OriginalPostThreadID == null ? null : $this->OriginalPostThreadID),
                 'flags' => ($this->Flags == null ? [] : $this->Flags),
                 'priority_level' => ($this->Flags == null ? [] : $this->Flags),
                 'text_entities' => ($this->TextEntities == null ? [] : $text_entities),
@@ -428,6 +440,9 @@
                     $PostObject->Repost = new Quote();
                 $PostObject->Repost->OriginalUserID = (int)$data['repost_original_user_id'];
             }
+
+            if(isset($data['original_thread_post_id']))
+                $PostObject->OriginalPostThreadID = $data['original_thread_post_id'];
 
             if(isset($data['flags']))
                 $PostObject->Flags = ($data['flags'] !== null ? [] : $data['flags']);
