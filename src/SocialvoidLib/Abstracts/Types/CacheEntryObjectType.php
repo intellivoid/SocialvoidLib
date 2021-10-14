@@ -13,6 +13,8 @@
 
         const Post = "post";
 
+        const StandardPost = "std::post";
+
         const Session = "session";
 
         const Document = "document";

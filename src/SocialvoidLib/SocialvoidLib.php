@@ -292,6 +292,9 @@
             $RedisBasicCacheSchema->setDefinition('PostCacheEnabled', True);
             $RedisBasicCacheSchema->setDefinition('PostCacheTTL', 300);
             $RedisBasicCacheSchema->setDefinition('PostCacheLimit', 1000);
+            $RedisBasicCacheSchema->setDefinition('StandardPostCacheEnabled', True);
+            $RedisBasicCacheSchema->setDefinition('StandardPostCacheTTL', 300);
+            $RedisBasicCacheSchema->setDefinition('StandardPostCacheLimit', 1000);
             $RedisBasicCacheSchema->setDefinition('SessionCacheEnabled', True);
             $RedisBasicCacheSchema->setDefinition('SessionCacheTTL', 300);
             $RedisBasicCacheSchema->setDefinition('SessionCacheLimit', 1000);

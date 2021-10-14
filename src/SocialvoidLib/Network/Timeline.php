@@ -11,21 +11,26 @@
     namespace SocialvoidLib\Network;
 
     use BackgroundWorker\Exceptions\ServerNotReachableException;
+    use Exception;
     use InvalidArgumentException;
     use SocialvoidLib\Abstracts\Flags\PostFlags;
     use SocialvoidLib\Abstracts\Levels\PostPriorityLevel;
     use SocialvoidLib\Abstracts\SearchMethods\PostSearchMethod;
     use SocialvoidLib\Abstracts\SearchMethods\TimelineSearchMethod;
     use SocialvoidLib\Abstracts\SearchMethods\UserSearchMethod;
+    use SocialvoidLib\Abstracts\Types\CacheEntryObjectType;
     use SocialvoidLib\Abstracts\Types\Standard\PostType;
     use SocialvoidLib\Abstracts\Types\Standard\TextEntityType;
     use SocialvoidLib\Classes\Converter;
     use SocialvoidLib\Exceptions\GenericInternal\BackgroundWorkerNotEnabledException;
     use SocialvoidLib\Exceptions\GenericInternal\CacheException;
+    use SocialvoidLib\Exceptions\GenericInternal\CacheMissedException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
+    use SocialvoidLib\Exceptions\GenericInternal\DependencyError;
     use SocialvoidLib\Exceptions\GenericInternal\DisplayPictureException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSlaveHashException;
+    use SocialvoidLib\Exceptions\GenericInternal\RedisCacheException;
     use SocialvoidLib\Exceptions\GenericInternal\ServiceJobException;
     use SocialvoidLib\Exceptions\GenericInternal\UserHasInvalidSlaveHashException;
     use SocialvoidLib\Exceptions\Internal\LikeRecordNotFoundException;
@@ -42,6 +47,7 @@
     use SocialvoidLib\Exceptions\Standard\Network\PostNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidCursorValueException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPostTextException;
+    use SocialvoidLib\InputTypes\RegisterCacheInput;
     use SocialvoidLib\NetworkSession;
     use SocialvoidLib\Objects\Cursor;
     use SocialvoidLib\Objects\Post;
@@ -178,6 +184,28 @@
             elseif(is_object($post) == false && get_class($post) !== Post::class)
             {
                 throw new InvalidArgumentException('Argument \'post\' must be type \'' . Post::class . '\' or Post ID string');
+            }
+
+            if(
+                $this->networkSession->getSocialvoidLib()->getRedisBasicCacheConfiguration()['Enabled'] &&
+                $this->networkSession->getSocialvoidLib()->getRedisBasicCacheConfiguration()['StandardPostCacheEnabled']
+            )
+            {
+                try
+                {
+                    $CacheEntryResults = $this->networkSession->getSocialvoidLib()->getBasicRedisCacheManager()->getCacheEntry(
+                        CacheEntryObjectType::StandardPost, $post->PublicID);
+
+                    return \SocialvoidLib\Objects\Standard\Post::fromArray($CacheEntryResults->ObjectData);
+                }
+                catch(CacheMissedException $e)
+                {
+                    unset($e);
+                }
+                catch (DependencyError | RedisCacheException $e)
+                {
+                    throw new CacheException('There was an issue while trying to request a standard post cache entry', 0, $e);
+                }
             }
 
             // Return the post as is if it's deleted
@@ -448,8 +476,32 @@
                 {
                     $stdPost->MentionedPeers[] = Peer::fromUser($user);
                 }
-            }
 
+                // Register the standard post to cache
+                if(
+                    $this->networkSession->getSocialvoidLib()->getRedisBasicCacheConfiguration()['Enabled'] &&
+                    $this->networkSession->getSocialvoidLib()->getRedisBasicCacheConfiguration()['StandardPostCacheEnabled']
+                )
+                {
+                    $CacheEntryInput = new RegisterCacheInput();
+                    $CacheEntryInput->ObjectType = CacheEntryObjectType::StandardPost;
+                    $CacheEntryInput->ObjectData = $stdPost->toArray();
+                    $CacheEntryInput->Pointers = [$stdPost->ID];
+
+                    try
+                    {
+                        $this->networkSession->getSocialvoidLib()->getBasicRedisCacheManager()->registerCache(
+                            $CacheEntryInput,
+                            $this->networkSession->getSocialvoidLib()->getRedisBasicCacheConfiguration()['StandardPostCacheTTL'],
+                            $this->networkSession->getSocialvoidLib()->getRedisBasicCacheConfiguration()['StandardPostCacheLimit']
+                        );
+                    }
+                    catch(Exception $e)
+                    {
+                        throw new CacheException('There was an error while trying to register the standard post cache entry', 0, $e);
+                    }
+                }
+            }
 
             return $stdPost;
         }
