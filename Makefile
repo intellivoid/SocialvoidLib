@@ -84,13 +84,29 @@ clean:
 	rm -rf "$(build_dir)"
 update:
 	make update_socialvoidlib update_socialvoid_service update_socialvoid_rpc update_socialvoid_admin update_socialvoid
+update_p:
+	make update_socialvoidlib & \
+	make update_socialvoid_service & \
+	make update_socialvoid_rpc & \
+	make update_socialvoid_admin & \
+	make update_socialvoid & \
+	wait;
 build:
 	mkdir build
 	make socialvoidlib socialvoid_service socialvoid_rpc socialvoid_admin socialvoid
+build_p:
+	mkdir build
+	make socialvoidlib & \
+	make socialvoid_service & \
+	make socialvoid_rpc & \
+	make socialvoid_admin & \
+	make socialvoid & \
+	wait;
 install:
 	make install_socialvoidlib install_socialvoid_service install_socialvoid_rpc install_socialvoid_admin install_socialvoid
 install_fast:
 	make install_fast_socialvoidlib install_fast_socialvoid_service install_fast_socialvoid_rpc install_fast_socialvoidadmin install_fast_socialvoid
+
 start_service:
 	ppm --main="$(socialvoidservice_name)" --version="latest" --runtime-version="$(runtime_version)"
 start_rpc:
