@@ -42,7 +42,7 @@
          */
         public function getMethod(): string
         {
-            return 'account.update_location';
+            return 'account.update_profile_location';
         }
 
         /**
