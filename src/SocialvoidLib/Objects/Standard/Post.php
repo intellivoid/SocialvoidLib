@@ -171,7 +171,7 @@
                 'like_count' => (is_null($this->LikeCount) ? null : (int)$this->LikeCount),
                 'repost_count' => (is_null($this->RepostCount) ? null : (int)$this->RepostCount),
                 'quote_count' => (is_null($this->QuoteCount) ? null : (int)$this->QuoteCount),
-                'reply_count' => (is_null($this->ReplyCount) == null ? 0 : (int)$this->ReplyCount),
+                'reply_count' => (is_null($this->ReplyCount) ? null : (int)$this->ReplyCount),
                 'posted_timestamp' => ($this->PostedTimestamp),
                 'flags' => $this->Flags,
             ];

@@ -22,6 +22,7 @@
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidBiographyException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidFileForProfilePictureException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidFirstNameException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidGeoLocationException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidLastNameException;
     use SocialvoidLib\NetworkSession;
     use TelegramCDN\Exceptions\FileSecurityException;
@@ -273,6 +274,7 @@
          * @param string $location
          * @return bool
          * @throws InternalServerException
+         * @throws InvalidGeoLocationException
          * @throws NotAuthenticatedException
          */
         public function updateProfileLocation(string $location): bool
@@ -280,7 +282,8 @@
             if($this->networkSession->isAuthenticated() == false)
                 throw new NotAuthenticatedException();
 
-            // TODO: Validate location
+            if(Validate::location($location) == false)
+                throw new InvalidGeoLocationException();
 
             $user = $this->networkSession->getAuthenticatedUser();
             $user->Profile->Location = $location;

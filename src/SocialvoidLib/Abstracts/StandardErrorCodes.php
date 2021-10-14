@@ -39,6 +39,7 @@
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPublicHashException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidFileForProfilePictureException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidFirstNameException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidGeoLocationException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidHelpDocumentId;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidLastNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidLimitValueException;
@@ -184,6 +185,13 @@
          * @see InvalidCursorValueException
          */
         const InvalidCursorValueException = 0x02112;
+
+        /**
+         * Raised when the given location is invalid
+         *
+         * @see InvalidGeoLocationException
+         */
+        const InvalidGeoLocationException = 0x02113;
 
         /** 22-Set error codes (Authentication) */
 

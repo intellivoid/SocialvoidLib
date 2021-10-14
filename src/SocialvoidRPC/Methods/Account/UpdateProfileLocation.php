@@ -19,8 +19,8 @@
     use SocialvoidLib\Exceptions\Standard\Network\DocumentNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
-    use SocialvoidLib\Exceptions\Standard\Validation\InvalidBiographyException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPublicHashException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidGeoLocationException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidSessionIdentificationException;
     use SocialvoidLib\NetworkSession;
     use SocialvoidLib\Objects\Standard\SessionIdentification;
@@ -64,7 +64,7 @@
 
         /**
          * @param Request $request
-         * @throws InvalidBiographyException
+         * @throws InvalidGeoLocationException
          * @throws InvalidSessionIdentificationException
          * @throws MissingParameterException
          * @noinspection DuplicatedCode
@@ -79,7 +79,7 @@
             if(isset($request->Parameters["location"]) == false)
                 throw new MissingParameterException("Missing parameter 'location'");
             if(gettype($request->Parameters["location"]) !== "string")
-                throw new InvalidBiographyException("The 'location' parameter must be a string", $request->Parameters["location"]);
+                throw new InvalidGeoLocationException("The 'location' parameter must be a string", $request->Parameters["location"]);
         }
 
         /**
@@ -91,8 +91,8 @@
          * @throws DisplayPictureException
          * @throws DocumentNotFoundException
          * @throws InternalServerException
-         * @throws InvalidBiographyException
          * @throws InvalidClientPublicHashException
+         * @throws InvalidGeoLocationException
          * @throws InvalidSearchMethodException
          * @throws InvalidSessionIdentificationException
          * @throws MissingParameterException

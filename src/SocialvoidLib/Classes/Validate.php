@@ -123,6 +123,20 @@ namespace SocialvoidLib\Classes;
         }
 
         /**
+         * Validates the user location
+         *
+         * @param string $input
+         * @return bool
+         */
+        public static function location(string $input): bool
+        {
+            if(strlen($input) > 52)
+                return false;
+
+            return true;
+        }
+
+        /**
          * Determines the standard error code type by checking the error code range
          *
          * @param int $error_code

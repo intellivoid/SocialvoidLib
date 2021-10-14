@@ -595,6 +595,10 @@
         },
         {
             "required": true,
+            "file": "Exceptions/Standard/Validation/InvalidGeoLocationException.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/Standard/Validation/InvalidHelpDocumentId.php"
         },
         {
