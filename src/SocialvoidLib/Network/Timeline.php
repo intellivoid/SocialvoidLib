@@ -11,6 +11,7 @@
     namespace SocialvoidLib\Network;
 
     use BackgroundWorker\Exceptions\ServerNotReachableException;
+    use InvalidArgumentException;
     use SocialvoidLib\Abstracts\Flags\PostFlags;
     use SocialvoidLib\Abstracts\Levels\PostPriorityLevel;
     use SocialvoidLib\Abstracts\SearchMethods\PostSearchMethod;
@@ -140,12 +141,14 @@
         /**
          * Retrieves a standard post object while resolving all of it's contents
          *
-         * @param string $post_id
+         * @param string|Post $post
+         * @param bool $first_layer
          * @return \SocialvoidLib\Objects\Standard\Post
          * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
          * @throws CannotGetOriginalImageException
          * @throws DatabaseException
+         * @throws DisplayPictureException
          * @throws DocumentNotFoundException
          * @throws FileNotFoundException
          * @throws InvalidSearchMethodException
@@ -158,21 +161,30 @@
          * @throws ServiceJobException
          * @throws SizeNotSetException
          * @throws UnsupportedImageTypeException
-         * @throws DisplayPictureException
          * @noinspection DuplicatedCode
          */
-        public function getStandardPost(string $post_id): \SocialvoidLib\Objects\Standard\Post
+        public function getStandardPost($post, bool $first_layer=true): \SocialvoidLib\Objects\Standard\Post
         {
+            // Check if authenticated
             if ($this->networkSession->isAuthenticated() == false)
                 throw new NotAuthenticatedException();
 
-            $post = $this->networkSession->getSocialvoidLib()->getPostsManager()->getPost(
-                PostSearchMethod::ByPublicId, $post_id
-            );
+            if(gettype($post) == 'string')
+            {
+                $post = $this->networkSession->getSocialvoidLib()->getPostsManager()->getPost(
+                    PostSearchMethod::ByPublicId, $post
+                );
+            }
+            elseif(is_object($post) == false && get_class($post) !== Post::class)
+            {
+                throw new InvalidArgumentException('Argument \'post\' must be type \'' . Post::class . '\' or Post ID string');
+            }
 
+            // Return the post as is if it's deleted
             if(Converter::hasFlag($post->Flags, PostFlags::Deleted))
                 return \SocialvoidLib\Objects\Standard\Post::fromPost($post);
 
+            // Start pre-resolving all entities before proceeding
             $SubPosts = [];
             $UserIDs = [];
 
@@ -194,12 +206,14 @@
             if($post->Reply !== null && $post->Reply->ReplyToUserID)
                 $UserIDs[(int)$post->Reply->ReplyToUserID] = UserSearchMethod::ById;
 
+            if($post->OriginalPostThreadID !== null)
+                $SubPosts[$post->OriginalPostThreadID] = PostSearchMethod::ByPublicId;
+
             foreach($post->TextEntities as $textEntity)
             {
                 if($textEntity->Type == TextEntityType::Mention)
                     $MentionUserIDs[$textEntity->Value] = UserSearchMethod::ByUsername;
             }
-
 
             $ResolvedSubPosts = $this->networkSession->getSocialvoidLib()->getPostsManager()->getMultiplePosts($SubPosts, false);
             $ResolvedUsers = $this->networkSession->getSocialvoidLib()->getUserManager()->getMultipleUsers($UserIDs, false);
@@ -234,12 +248,12 @@
             $stdPost->Peer = Peer::fromUser($SortedUserResolutions[$post->PosterUserID]);
 
             // Resolve reposted post
-            if($post->Repost !== null && $post->Repost->OriginalPostID !== null)
+            if($post->Repost !== null && $post->Repost->OriginalPostID !== null && $first_layer)
             {
+                $stdPost->RepostedPost = $this->getStandardPost($SortedPostResolutions[$post->Repost->OriginalPostID], false);
+
                 if(Converter::hasFlag($SortedPostResolutions[$post->Repost->OriginalPostID]->Flags, PostFlags::Deleted) == false)
                 {
-                    $stdPost->RepostedPost = $this->getStandardPost($post->Repost->OriginalPostID);
-
                     try
                     {
                         if ($this->networkSession->getSocialvoidLib()->getLikesRecordManager()->getRecord(
@@ -270,11 +284,9 @@
             }
 
             // Resolve quoted post
-            if($post->Quote !== null && $post->Quote->OriginalPostID)
+            if($post->Quote !== null && $post->Quote->OriginalPostID && $first_layer)
             {
-                $stdPost->QuotedPost = \SocialvoidLib\Objects\Standard\Post::fromPost(
-                    $SortedPostResolutions[$post->Quote->OriginalPostID]
-                );
+                $stdPost->QuotedPost = $this->getStandardPost($SortedPostResolutions[$post->Quote->OriginalPostID], false);
 
                 try
                 {
@@ -327,11 +339,9 @@
             }
 
             // Resolve replied post
-            if($post->Reply !== null && $post->Reply->ReplyToPostID)
+            if($post->Reply !== null && $post->Reply->ReplyToPostID && $first_layer)
             {
-                $stdPost->ReplyToPost = \SocialvoidLib\Objects\Standard\Post::fromPost(
-                    $SortedPostResolutions[$post->Reply->ReplyToPostID]
-                );
+                $stdPost->ReplyToPost = $this->getStandardPost($SortedPostResolutions[$post->Reply->ReplyToPostID], false);
 
                 try
                 {
@@ -382,10 +392,64 @@
                 }
             }
 
-            foreach($ResolvedMentionedUsers as $user)
+            if($post->OriginalPostThreadID !== null && $first_layer)
             {
-                $stdPost->MentionedPeers[] = Peer::fromUser($user);
+                $stdPost->OriginalThreadPost = $this->getStandardPost($SortedPostResolutions[$post->OriginalPostThreadID], false);
+
+                if(Converter::hasFlag($SortedPostResolutions[$post->OriginalPostThreadID]->Flags, PostFlags::Deleted)  == false)
+                {
+                    try
+                    {
+                         if($this->networkSession->getSocialvoidLib()->getLikesRecordManager()->getRecord(
+                             $this->networkSession->getAuthenticatedUser()->ID, $post->OriginalPostThreadID)->Liked
+                         )
+                         {
+                             $stdPost->OriginalThreadPost->Flags[] = PostFlags::Liked;
+                         }
+                    }
+                    catch (LikeRecordNotFoundException $e)
+                    {
+                        unset($e);
+                    }
+
+                    try
+                    {
+                        if($this->networkSession->getSocialvoidLib()->getRepostsRecordManager()->getRecord(
+                            $this->networkSession->getAuthenticatedUser()->ID, $post->OriginalPostThreadID)->Reposted
+                        )
+                        {
+                            $stdPost->OriginalThreadPost->Flags[] = PostFlags::Reposted;
+                        }
+                    }
+                    catch(RepostRecordNotFoundException $e)
+                    {
+                        unset($e);
+                    }
+
+                    $mentionedUsernames = [];
+                    $stdPost->OriginalThreadPost->MentionedPeers = [];
+                    foreach($SortedPostResolutions[$post->OriginalPostThreadID]->TextEntities as $textEntity)
+                    {
+                        if(isset($SortedSubMentionedUsers[$textEntity->Value]))
+                        {
+                            if(in_array($textEntity->Value, $mentionedUsernames))
+                                continue;
+                            $stdPost->OriginalThreadPost->MentionedPeers[] = $SortedSubMentionedUsers[$textEntity->Value];
+                            $mentionedUsernames[] = $textEntity->Value;
+                        }
+                    }
+                }
+
             }
+
+            if($first_layer)
+            {
+                foreach($ResolvedMentionedUsers as $user)
+                {
+                    $stdPost->MentionedPeers[] = Peer::fromUser($user);
+                }
+            }
+
 
             return $stdPost;
         }

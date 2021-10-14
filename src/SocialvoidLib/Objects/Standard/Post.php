@@ -86,6 +86,13 @@
         public $RepostedPost;
 
         /**
+         * The original thread post
+         *
+         * @var Post|null
+         */
+        public $OriginalThreadPost;
+
+        /**
          * The amount of like this post got, this can be null
          * if the post is a repost
          *
@@ -159,7 +166,8 @@
                 'mentioned_peers' => $mentions,
                 'reply_to_post' => ($this->ReplyToPost == null ? null : $this->ReplyToPost->toArray()),
                 'quoted_post' => ($this->QuotedPost == null ? null : $this->QuotedPost->toArray()),
-                'reposted_post' => ($this->RepostedPost == null ? null :$this->RepostedPost->toArray()),
+                'reposted_post' => ($this->RepostedPost == null ? null : $this->RepostedPost->toArray()),
+                'original_thread_post' => ($this->OriginalThreadPost == null ? null : $this->OriginalThreadPost->toArray()),
                 'like_count' => (is_null($this->LikeCount) ? null : (int)$this->LikeCount),
                 'repost_count' => (is_null($this->RepostCount) ? null : (int)$this->RepostCount),
                 'quote_count' => (is_null($this->QuoteCount) ? null : (int)$this->QuoteCount),
@@ -216,6 +224,9 @@
 
             if(isset($data['reposted_post']))
                 $PostObject->RepostedPost = ($data['reposted_post'] == null ? null : Post::fromArray($data['reposted_post']));
+
+            if(isset($data['original_thread_post']))
+                $PostObject->OriginalThreadPost = ($data['original_thread_post'] == null ? null : Post::fromArray($data['original_thread_post']));
 
             if(isset($data['like_count']))
                 $PostObject->LikeCount = $data['like_count'];
