@@ -43,7 +43,7 @@
          */
         public function getMethod(): string
         {
-            return 'account.change_profile_name';
+            return 'account.update_profile_name';
         }
 
         /**
