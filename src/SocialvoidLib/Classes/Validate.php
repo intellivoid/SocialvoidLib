@@ -289,4 +289,15 @@ namespace SocialvoidLib\Classes;
         {
             return (ctype_xdigit($input) && strlen($input) % 2 == 0 && hex2bin($input));
         }
+
+        /**
+         * Validates a URL input
+         *
+         * @param string $input
+         * @return bool
+         */
+        public static function url(string $input): bool
+        {
+            return (bool)filter_var($input, FILTER_VALIDATE_URL);
+        }
     }
