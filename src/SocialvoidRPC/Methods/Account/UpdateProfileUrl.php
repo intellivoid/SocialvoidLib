@@ -19,9 +19,9 @@
     use SocialvoidLib\Exceptions\Standard\Network\DocumentNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
-    use SocialvoidLib\Exceptions\Standard\Validation\InvalidBiographyException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPublicHashException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidSessionIdentificationException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidUrlValueException;
     use SocialvoidLib\NetworkSession;
     use SocialvoidLib\Objects\Standard\SessionIdentification;
     use SocialvoidRPC\SocialvoidRPC;
@@ -64,8 +64,8 @@
 
         /**
          * @param Request $request
-         * @throws InvalidBiographyException
          * @throws InvalidSessionIdentificationException
+         * @throws InvalidUrlValueException
          * @throws MissingParameterException
          * @noinspection DuplicatedCode
          */
@@ -79,7 +79,7 @@
             if(isset($request->Parameters["url"]) == false)
                 throw new MissingParameterException("Missing parameter 'url'");
             if(gettype($request->Parameters["url"]) !== "string")
-                throw new InvalidBiographyException("The 'url' parameter must be a string", $request->Parameters["url"]);
+                throw new InvalidUrlValueException("The 'url' parameter must be a string", $request->Parameters["url"]);
         }
 
         /**
@@ -91,15 +91,16 @@
          * @throws DisplayPictureException
          * @throws DocumentNotFoundException
          * @throws InternalServerException
-         * @throws InvalidBiographyException
          * @throws InvalidClientPublicHashException
          * @throws InvalidSearchMethodException
          * @throws InvalidSessionIdentificationException
+         * @throws InvalidUrlValueException
          * @throws MissingParameterException
          * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
          * @throws SessionExpiredException
          * @throws SessionNotFoundException
+         * @noinspection DuplicatedCode
          */
         public function execute(Request $request): Response
         {

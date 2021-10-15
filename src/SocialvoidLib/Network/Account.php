@@ -24,6 +24,7 @@
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidFirstNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidGeoLocationException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidLastNameException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidUrlValueException;
     use SocialvoidLib\NetworkSession;
     use TelegramCDN\Exceptions\FileSecurityException;
     use TmpFile\TmpFile;
@@ -337,6 +338,7 @@
          * @param string $url
          * @return bool
          * @throws InternalServerException
+         * @throws InvalidUrlValueException
          * @throws NotAuthenticatedException
          */
         public function updateProfileUrl(string $url): bool
@@ -344,7 +346,8 @@
             if($this->networkSession->isAuthenticated() == false)
                 throw new NotAuthenticatedException();
 
-            // TODO: Validate URL
+            if(Validate::url($url) == false)
+                throw new InvalidUrlValueException();
 
             $user = $this->networkSession->getAuthenticatedUser();
             $user->Profile->URL = $url;
