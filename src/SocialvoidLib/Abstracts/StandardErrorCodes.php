@@ -49,6 +49,7 @@
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPlatformException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPostTextException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidSessionIdentificationException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidUrlValueException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidUsernameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidVersionException;
     use SocialvoidLib\Exceptions\Standard\Validation\UsernameAlreadyExistsException;
@@ -192,6 +193,13 @@
          * @see InvalidGeoLocationException
          */
         const InvalidGeoLocationException = 0x02113;
+
+        /**
+         * Raised when the given url is invalid
+         *
+         * @see InvalidUrlValueException
+         */
+        const InvalidUrlValueException = 0x02114;
 
         /** 22-Set error codes (Authentication) */
 

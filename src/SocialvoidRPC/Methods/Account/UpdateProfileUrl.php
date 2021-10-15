@@ -82,7 +82,25 @@
                 throw new InvalidBiographyException("The 'url' parameter must be a string", $request->Parameters["url"]);
         }
 
-
+        /**
+         * @param Request $request
+         * @return Response
+         * @throws BadSessionChallengeAnswerException
+         * @throws CacheException
+         * @throws DatabaseException
+         * @throws DisplayPictureException
+         * @throws DocumentNotFoundException
+         * @throws InternalServerException
+         * @throws InvalidBiographyException
+         * @throws InvalidClientPublicHashException
+         * @throws InvalidSearchMethodException
+         * @throws InvalidSessionIdentificationException
+         * @throws MissingParameterException
+         * @throws NotAuthenticatedException
+         * @throws PeerNotFoundException
+         * @throws SessionExpiredException
+         * @throws SessionNotFoundException
+         */
         public function execute(Request $request): Response
         {
             $this->checkParameters($request);

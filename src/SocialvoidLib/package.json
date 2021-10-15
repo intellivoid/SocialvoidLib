@@ -627,6 +627,10 @@
         },
         {
             "required": true,
+            "file": "Exceptions/Standard/Validation/InvalidUrlValueException.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/Standard/Validation/InvalidUsernameException.php"
         },
         {
