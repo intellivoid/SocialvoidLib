@@ -36,7 +36,7 @@
          */
         public function getMethodName(): string
         {
-            return 'GetFollowers';
+            return 'GetFollowing';
         }
 
         /**
