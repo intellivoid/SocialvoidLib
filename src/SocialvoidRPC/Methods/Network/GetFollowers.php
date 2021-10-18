@@ -20,6 +20,7 @@
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPublicHashException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidCursorValueException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPeerInputException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidSessionIdentificationException;
     use SocialvoidLib\NetworkSession;
@@ -64,9 +65,10 @@
 
         /**
          * @param Request $request
+         * @throws InvalidCursorValueException
+         * @throws InvalidPeerInputException
          * @throws InvalidSessionIdentificationException
          * @throws MissingParameterException
-         * @throws InvalidPeerInputException
          * @noinspection DuplicatedCode
          */
         private function checkParameters(Request $request)
@@ -82,16 +84,17 @@
                     throw new InvalidPeerInputException('The parameter \'peer\' is not a string');
             }
 
-            if(isset($request->Parameters['offset']) == false)
+            if(isset($request->Parameters['cursor']) == false)
             {
-                $request->Parameters['offset'] = 0;
+                $request->Parameters['cursor'] = 1;
             }
-
-            if(isset($request->Parameters['limit']) == false)
+            else
             {
-                $request->Parameters['limit'] = 100;
+                if(gettype($request->Parameters['cursor']) !== 'integer')
+                    throw new InvalidCursorValueException('The parameter \'cursor\' must be a integer');
             }
         }
+
 
         /**
          * @param Request $request
@@ -103,6 +106,7 @@
          * @throws DocumentNotFoundException
          * @throws InternalServerException
          * @throws InvalidClientPublicHashException
+         * @throws InvalidCursorValueException
          * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
          * @throws InvalidSessionIdentificationException
@@ -144,7 +148,7 @@
             {
                 $requested_peer = $request->Parameters['peer'] ?? $NetworkSession->getAuthenticatedUser()->PublicID;
 
-                $followers = $NetworkSession->getUsers()->getFollowers($requested_peer, $request->Parameters['limit'], $request->Parameters['offset']);
+                $followers = $NetworkSession->getUsers()->getFollowers($requested_peer, $request->Parameters['cursor']);
                 $followers_std = [];
 
                 foreach($followers as $follower)
