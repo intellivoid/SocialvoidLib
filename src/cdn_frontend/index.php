@@ -154,7 +154,7 @@
 
         http_response_code($response['response_code']);
         header('Content-Type: application/json');
-
+        setRequiredHeaders();
         unset($response['response_code']);
         if($_SERVER['REQUEST_METHOD'] !== 'HEAD')
         {
@@ -176,7 +176,7 @@
         ];
         http_response_code(200);
         header('Content-Type: application/json');
-        header('Access-Control-Allow-Origin: *');
+        setRequiredHeaders();
         if($_SERVER['REQUEST_METHOD'] !== 'HEAD')
         {
             print(json_encode($response, JSON_UNESCAPED_SLASHES));
@@ -200,7 +200,7 @@
 
         http_response_code($response['response_code']);
         header('Content-Type: application/json');
-        header('Access-Control-Allow-Origin: *');
+        setRequiredHeaders();
         unset($response['response_code']);
         if($_SERVER['REQUEST_METHOD'] !== 'HEAD')
         {
@@ -223,7 +223,7 @@
 
         http_response_code($response['response_code']);
         header('Content-Type: application/json');
-        header('Access-Control-Allow-Origin: *');
+        setRequiredHeaders();
         unset($response['response_code']);
         print(json_encode($response, JSON_UNESCAPED_SLASHES));
         exit();
@@ -313,7 +313,7 @@
                         {
                             header("$header: $header_value");
                         }
-                        header('Access-Control-Allow-Origin: *');
+                        setRequiredHeaders();
                         unlink($content_location);
                         return;
                     }
@@ -323,7 +323,7 @@
                     {
                         header("$header: $header_value");
                     }
-                    header('Access-Control-Allow-Origin: *');
+                    setRequiredHeaders();
 
                     if($_SERVER['REQUEST_METHOD'] !== 'HEAD')
                     {
@@ -350,7 +350,7 @@
                         {
                             header("$header: $header_value");
                         }
-                        header('Access-Control-Allow-Origin: *');
+                        setRequiredHeaders();
                         return;
                     }
             }
@@ -359,7 +359,7 @@
         catch (Exception $e)
         {
             http_response_code(500);
-            header('Access-Control-Allow-Origin: *');
+            setRequiredHeaders();
             returnErrorResponse($e);
         }
     }
