@@ -76,7 +76,7 @@
             if($this->networkSession->isAuthenticated() == false)
                 throw new NotAuthenticatedException();
 
-            if(gettype($peer) == 'object' && get_class($peer) == 'SocialvoidLib\Objects\User')
+            if(gettype($peer) == 'object' && get_class($peer) == User::class)
                 return $peer; // No need to resolve an already constructed object!
 
             // Probably an ID
