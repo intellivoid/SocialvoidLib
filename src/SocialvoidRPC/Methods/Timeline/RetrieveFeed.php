@@ -79,7 +79,7 @@
             {
                 $request->Parameters['cursor'] = 1;
             }
-            else
+            else\
             {
                 if(gettype($request->Parameters['cursor']) !== 'integer')
                     throw new InvalidCursorValueException('The parameter \'cursor\' must be a integer');
