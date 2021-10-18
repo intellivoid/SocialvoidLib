@@ -100,6 +100,16 @@
     }
 
     /**
+     * Sets the required headers to the http response
+     */
+    function setRequiredHeaders()
+    {
+        header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Methods: POST,GET,OPTIONS');
+        header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept');
+    }
+
+    /**
      * Returns an error response in JSON
      *
      * @param Exception $e
@@ -144,7 +154,7 @@
 
         http_response_code($response['response_code']);
         header('Content-Type: application/json');
-        header('Access-Control-Allow-Origin: *');
+
         unset($response['response_code']);
         if($_SERVER['REQUEST_METHOD'] !== 'HEAD')
         {
