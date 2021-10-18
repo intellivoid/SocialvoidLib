@@ -310,15 +310,13 @@
          * Returns an array of resolved users from followers
          *
          * @param $peer
-         * @param int $limit
-         * @param int $offset
+         * @param int $cursor
          * @return User[]
          * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
          * @throws DatabaseException
          * @throws DisplayPictureException
          * @throws DocumentNotFoundException
-         * @throws InvalidLimitValueException
          * @throws InvalidCursorValueException
          * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
@@ -328,22 +326,23 @@
          * @throws ServiceJobException
          * @noinspection DuplicatedCode
          */
-        public function getFollowers($peer, int $limit, int $offset): array
+        public function getFollowers($peer, int $cursor): array
         {
             if($this->networkSession->isAuthenticated() == false)
                 throw new NotAuthenticatedException();
 
-            if($offset < 0)
-                throw new InvalidCursorValueException('The offset value cannot be a negative value');
-            if($limit < 1)
-                throw new InvalidLimitValueException('The limit value must be a value greater than 0');
-            if($limit > (int)$this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveFollowersMixLimit'])
-                throw new InvalidLimitValueException('The limit value cannot exceed ' . $this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveFollowersMixLimit']);
+            if($cursor < 0)
+                throw new InvalidCursorValueException('The cursor value cannot be a negative value');
+            if($cursor < 1)
+                throw new InvalidCursorValueException('The cursor value must be a value greater than 0');
+            $cursor_object = new Cursor(
+                (int)$this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveFollowersMixLimit'], $cursor
+            );
 
             // Resolve the Peer ID
             $target_peer = $this->resolvePeer($peer);
             $search_query = [];
-            $followers_ids = $this->networkSession->getSocialvoidLib()->getRelationStateManager()->getFollowers($target_peer, $limit, $offset);
+            $followers_ids = $this->networkSession->getSocialvoidLib()->getRelationStateManager()->getFollowers($target_peer, $cursor_object->ContentLimit, $cursor_object->getOffset());
 
             foreach($followers_ids as $user_id)
                 $search_query[$user_id] = UserSearchMethod::ById;
