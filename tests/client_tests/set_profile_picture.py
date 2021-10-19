@@ -9,7 +9,7 @@ with open(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', 'cli
     client_info = json.load(f)
 with open(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', 'session.social_session'), 'r') as f:
     session_info = json.load(f)
-file_upload = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', 'profile_picture.jpg')
+file_upload = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', '137897416-239c664e-966c-4a9f-836c-38f49f97c828.jpg')
 
 cdn_endpoint = request(client_info["endpoint"], "help.get_server_information").data.result['cdn_server']
 

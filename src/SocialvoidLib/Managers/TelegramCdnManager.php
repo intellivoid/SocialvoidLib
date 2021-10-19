@@ -247,7 +247,7 @@
                 $telegramCdnUploadRecord = $this->updateAccessURL($telegramCdnUploadRecord);
             }
 
-            return $this->cdn->downloadEncryptedFile(EncryptedFile::fromArray($telegramCdnUploadRecord->toArray()), true);
+            return file_get_contents($this->cdn->downloadEncryptedFile(EncryptedFile::fromArray($telegramCdnUploadRecord->toArray()), true));
         }
 
         /**
