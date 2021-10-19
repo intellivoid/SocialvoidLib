@@ -1,0 +1,99 @@
+<?php
+    /*
+     * Copyright (c) 2017-2021. Intellivoid Technologies
+     *
+     * All rights reserved, SocialvoidLib was written by Zi Xing Narrakas <netkas@intellivoid.net> licensed by
+     * Intellivoid Technologies, no part of this source code is open source. SocialvoidLib is a closed-source
+     * solution for the Socialvoid Community Standard, if you wish to redistribute this source code you
+     * must have a written permission from Intellivoid Technologies to do so.
+     */
+
+    /** @noinspection PhpUndefinedClassInspection */
+    /** @noinspection DuplicatedCode */
+
+    use BackgroundWorker\BackgroundWorker;
+    use ppm\ppm;
+    use SocialvoidLib\SocialvoidLib;
+    use SocialvoidService\SocialvoidService;
+    use VerboseAdventure\Abstracts\EventType;
+    use VerboseAdventure\Classes\ErrorHandler;
+    use VerboseAdventure\VerboseAdventure;
+    use ZiProto\ZiProto;
+
+    // Import all required auto loaders
+    /** @noinspection PhpIncludeInspection */
+    require("ppm");
+
+    /** @noinspection PhpUnhandledExceptionInspection */
+    ppm::import("net.intellivoid.socialvoid_service");
+    ppm::import("net.intellivoid.socialvoidlib");
+
+    $current_directory = getcwd();
+    VerboseAdventure::setStdout(true); // Enable stdout
+    VerboseAdventure::setSimpleStdout(true); // Enable enable output
+    ErrorHandler::registerHandlers(); // Register error handlers
+
+    if(file_exists($current_directory . DIRECTORY_SEPARATOR . 'SocialvoidService.php'))
+    {
+        require_once($current_directory . DIRECTORY_SEPARATOR . 'SocialvoidService.php');
+    }
+    elseif(file_exists(__DIR__ . DIRECTORY_SEPARATOR . 'SocialvoidService.php'))
+    {
+        require_once(__DIR__ . DIRECTORY_SEPARATOR . 'SocialvoidService.php');
+    }
+    else
+    {
+        throw new RuntimeException("Cannot locate service class");
+    }
+
+    // Load all required configurations
+    SocialvoidService::setLogHandler(new VerboseAdventure("Socialvoid Service"));
+    SocialvoidService::setLastWorkerActivity((int)time());
+    SocialvoidService::setIsSleeping(false);
+
+
+    // Start the worker instance
+    SocialvoidService::$SocialvoidLib = new SocialvoidLib();
+    SocialvoidService::$SocialvoidLib->connectDatabase();
+
+    if(SocialvoidService::$SocialvoidLib->getDatabase()->connect_error)
+    {
+        SocialvoidService::getLogHandler()->log(EventType::ERROR, "Failed to initialize SocialvoidLib, " . SocialvoidService::$SocialvoidLib->getDatabase()->connect_error, "Process Worker");
+        exit(255);
+    }
+
+    try
+    {
+        SocialvoidService::$BackgroundWorker = new BackgroundWorker();
+        SocialvoidService::$BackgroundWorker->getWorker()->addServer(
+            SocialvoidService::getSocialvoidLib()->getServiceEngineConfiguration()["GearmanHost"],
+            (int)SocialvoidService::getSocialvoidLib()->getServiceEngineConfiguration()["GearmanPort"]
+        );
+    }
+    catch(Exception $e)
+    {
+        SocialvoidService::getLogHandler()->logException($e, "Process Worker");
+        exit(255);
+    }
+
+    /** START Define the functions  */
+
+    // Search Queries
+    SocialvoidService::getBackgroundWorker()->getWorker()->addFunction("process", function(GearmanJob $job){
+        SocialvoidService::processWakeup();
+        return ZiProto::encode(SocialvoidService::getSocialvoidLib()->getServiceJobManager()->getServiceJobHandler()->handle($job)->toArray());
+    });
+
+
+    /** END Define the functions  */
+
+    // Set the timeout to 5 seconds
+    SocialvoidService::getBackgroundWorker()->getWorker()->setTimeout(500);
+    while(true)
+    {
+        SocialvoidService::getBackgroundWorker()->getWorker()->work(false);
+        if(SocialvoidService::getBackgroundWorker()->getWorker()->getGearmanWorker()->returnCode() == GEARMAN_TIMEOUT)
+        {
+            SocialvoidService::processSleepCycle();
+        }
+    }

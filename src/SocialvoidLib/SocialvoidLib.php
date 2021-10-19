@@ -264,6 +264,7 @@
             $ServiceEngineSchema->setDefinition('GearmanPort', 4730);
             $ServiceEngineSchema->setDefinition('QueryWorkers', 30);
             $ServiceEngineSchema->setDefinition('UpdateWorkers', 20);
+            $ServiceEngineSchema->setDefinition('ProcessWorkers', 10);
             $ServiceEngineSchema->setDefinition('HeavyWorkers', 5);
             $ServiceEngineSchema->setDefinition('DisplayOutput', true);
             $this->acm->defineSchema($ServiceEngineSchema);

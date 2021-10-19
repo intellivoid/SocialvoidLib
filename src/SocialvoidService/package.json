@@ -53,6 +53,7 @@
     "files": [
         "main",
         "package.json",
+        "process_worker",
         "query_worker",
         "update_worker"
     ]

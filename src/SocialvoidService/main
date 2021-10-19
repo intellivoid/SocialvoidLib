@@ -78,6 +78,15 @@
             $current_directory . DIRECTORY_SEPARATOR . "update_worker", "SocialvoidUpdateService",
             (int)SocialvoidService::getSocialvoidLib()->getServiceEngineConfiguration()["UpdateWorkers"]
         );
+
+        // Start process workers
+        SocialvoidService::getLogHandler()->log(EventType::INFO, "Starting Service Process Workers", "Main");
+        SocialvoidService::$BackgroundWorker->getSupervisor()->setDisplayOutput(
+            "SocialvoidProcessService", (bool)SocialvoidService::getSocialvoidLib()->getServiceEngineConfiguration()["DisplayOutput"]);
+        SocialvoidService::getBackgroundWorker()->getSupervisor()->startWorkers(
+            $current_directory . DIRECTORY_SEPARATOR . "process_worker", "SocialvoidProcessService",
+            (int)SocialvoidService::getSocialvoidLib()->getServiceEngineConfiguration()["ProcessWorkers"]
+        );
     }
     catch(Exception $e)
     {
@@ -92,6 +101,7 @@
     {
         SocialvoidService::getBackgroundWorker()->getSupervisor()->monitor("SocialvoidQueryService");
         SocialvoidService::getBackgroundWorker()->getSupervisor()->monitor("SocialvoidUpdateService");
+        SocialvoidService::getBackgroundWorker()->getSupervisor()->monitor("SocialvoidProcessService");
         SocialvoidService::getSocialvoidLib()->getHealthMonitoring()->sync(SERVICE_NAME, HealthStatusCode::Ok);
 
         usleep(500000);
