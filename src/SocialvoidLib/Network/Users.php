@@ -309,7 +309,7 @@
          * Returns an array of resolved users from followers
          *
          * @param $peer
-         * @param int $cursor
+         * @param int $page
          * @return User[]
          * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
@@ -325,17 +325,17 @@
          * @throws ServiceJobException
          * @noinspection DuplicatedCode
          */
-        public function getFollowers($peer, int $cursor): array
+        public function getFollowers($peer, int $page): array
         {
             if($this->networkSession->isAuthenticated() == false)
                 throw new NotAuthenticatedException();
 
-            if($cursor < 0)
+            if($page < 0)
                 throw new InvalidPageValueException('The cursor value cannot be a negative value');
-            if($cursor < 1)
+            if($page < 1)
                 throw new InvalidPageValueException('The cursor value must be a value greater than 0');
             $cursor_object = new Cursor(
-                (int)$this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveFollowersMixLimit'], $cursor
+                (int)$this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveFollowersMixLimit'], $page
             );
 
             // Resolve the Peer ID
@@ -369,7 +369,7 @@
          * Returns an array of users that this user is following
          *
          * @param $peer
-         * @param int $cursor
+         * @param int $page
          * @return User[]
          * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
@@ -385,17 +385,17 @@
          * @throws ServiceJobException
          * @noinspection DuplicatedCode
          */
-        public function getFollowing($peer, int $cursor): array
+        public function getFollowing($peer, int $page): array
         {
             if($this->networkSession->isAuthenticated() == false)
                 throw new NotAuthenticatedException();
 
-            if($cursor < 0)
+            if($page < 0)
                 throw new InvalidPageValueException('The cursor value cannot be a negative value');
-            if($cursor < 1)
+            if($page < 1)
                 throw new InvalidPageValueException('The cursor value must be a value greater than 0');
             $cursor_object = new Cursor(
-                (int)$this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveFollowingMixLimit'], $cursor
+                (int)$this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveFollowingMixLimit'], $page
             );
 
             // Resolve the Peer ID

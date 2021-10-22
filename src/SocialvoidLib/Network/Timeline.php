@@ -696,7 +696,7 @@
          * Returns the likes given to a certain post
          *
          * @param string $post_public_id
-         * @param int $cursor
+         * @param int $page
          * @return array
          * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
@@ -711,19 +711,19 @@
          * @throws ServerNotReachableException
          * @throws ServiceJobException
          */
-        public function getLikes(string $post_public_id, int $cursor=1): array
+        public function getLikes(string $post_public_id, int $page=1): array
         {
             /** @noinspection DuplicatedCode */
             if($this->networkSession->isAuthenticated() == false)
                 throw new NotAuthenticatedException();
 
-            if($cursor < 0)
+            if($page < 0)
                 throw new InvalidPageValueException('The cursor value cannot be a negative value');
-            if($cursor < 1)
+            if($page < 1)
                 throw new InvalidPageValueException('The cursor value must be a value greater than 0');
 
             $cursor_object = new Cursor(
-                (int)$this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveLikesMaxLimit'], $cursor
+                (int)$this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveLikesMaxLimit'], $page
             );
 
             $Likes = $this->networkSession->getSocialvoidLib()->getLikesRecordManager()->getLikes($post_public_id, $cursor_object->getOffset(), $cursor_object->ContentLimit);
@@ -741,7 +741,7 @@
          * Returns an array of posts that replied to the selected post
          *
          * @param string $post_public_id
-         * @param int $cursor
+         * @param int $page
          * @return \SocialvoidLib\Objects\Standard\Post[]
          * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
@@ -763,18 +763,18 @@
          * @throws UnsupportedImageTypeException
          * @noinspection DuplicatedCode
          */
-        public function getReplies(string $post_public_id, int $cursor=1): array
+        public function getReplies(string $post_public_id, int $page=1): array
         {
             if($this->networkSession->isAuthenticated() == false)
                 throw new NotAuthenticatedException();
 
-            if($cursor < 0)
+            if($page < 0)
                 throw new InvalidPageValueException('The cursor value cannot be a negative value');
-            if($cursor < 1)
+            if($page < 1)
                 throw new InvalidPageValueException('The cursor value must be a value greater than 0');
 
             $cursor_object = new Cursor(
-                (int)$this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveRepliesMaxLimit'], $cursor
+                (int)$this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveRepliesMaxLimit'], $page
             );
 
             $Replies = $this->networkSession->getSocialvoidLib()->getReplyRecordManager()->getReplies($post_public_id, $cursor_object->getOffset(), $cursor_object->ContentLimit);
@@ -788,7 +788,7 @@
          * Retrieves an array of posts that quoted the selected post
          *
          * @param string $post_public_id
-         * @param int $cursor
+         * @param int $page
          * @return \SocialvoidLib\Objects\Standard\Post[]
          * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
@@ -810,18 +810,18 @@
          * @throws UnsupportedImageTypeException
          * @noinspection DuplicatedCode
          */
-        public function getQuotes(string $post_public_id, int $cursor=1): array
+        public function getQuotes(string $post_public_id, int $page=1): array
         {
             if($this->networkSession->isAuthenticated() == false)
                 throw new NotAuthenticatedException();
 
-            if($cursor < 0)
+            if($page < 0)
                 throw new InvalidPageValueException('The cursor value cannot be a negative value');
-            if($cursor < 1)
+            if($page < 1)
                 throw new InvalidPageValueException('The cursor value must be a value greater than 0');
 
             $cursor_object = new Cursor(
-                (int)$this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveQuotesMaxLimit'], $cursor
+                (int)$this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveQuotesMaxLimit'], $page
             );
 
             $Replies = $this->networkSession->getSocialvoidLib()->getQuotesRecordManager()->getQuotes($post_public_id, $cursor_object->getOffset(), $cursor_object->ContentLimit);
@@ -835,7 +835,7 @@
          * Returns an array of users that reposted the selected post
          *
          * @param string $post_public_id
-         * @param int $cursor
+         * @param int $page
          * @return User[]
          * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
@@ -851,18 +851,18 @@
          * @throws ServiceJobException
          * @noinspection DuplicatedCode
          */
-        public function getReposts(string $post_public_id, int $cursor=1): array
+        public function getReposts(string $post_public_id, int $page=1): array
         {
             if($this->networkSession->isAuthenticated() == false)
                 throw new NotAuthenticatedException();
 
-            if($cursor < 0)
+            if($page < 0)
                 throw new InvalidPageValueException('The cursor value cannot be a negative value');
-            if($cursor < 1)
+            if($page < 1)
                 throw new InvalidPageValueException('The cursor value must be a value greater than 0');
 
             $cursor_object = new Cursor(
-                (int)$this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveRepostsMaxLimit'], $cursor
+                (int)$this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveRepostsMaxLimit'], $page
             );
 
             $UserIds = $this->networkSession->getSocialvoidLib()->getRepostsRecordManager()->getReposts($post_public_id, $cursor_object->getOffset(), $cursor_object->ContentLimit);
