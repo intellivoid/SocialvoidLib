@@ -9,7 +9,8 @@
         'test file.txt',
         'test',
         'test/file',
-        'test\file'
+        'test\file',
+        '$$test.txt'
     ];
 
     foreach($names as $name)

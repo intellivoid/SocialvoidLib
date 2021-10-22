@@ -51,7 +51,7 @@
          */
         public function getDescription(): string
         {
-            return 'Returns the peers that liked the requested post';
+            return 'Returns an array of posts that replied to the selected post';
         }
 
         /**
