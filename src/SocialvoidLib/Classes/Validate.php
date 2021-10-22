@@ -45,7 +45,7 @@ namespace SocialvoidLib\Classes;
          */
         public static function fileName(string $input): bool
         {
-            if(preg_match('/^[a-z0-9-]+\.ext$/', $input) == false)
+            if(preg_match('/^[a-zA-Z0-9 ._-]+(?:.(a-zA-Z0-9)+)?$/m', $input) == false)
                return false;
 
             if(strlen($input) > 255)
