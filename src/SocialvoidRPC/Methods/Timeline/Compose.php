@@ -19,6 +19,7 @@
     use SocialvoidLib\Exceptions\Standard\Network\DocumentNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidAttachmentsException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPublicHashException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPostTextException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidSessionIdentificationException;
@@ -64,6 +65,7 @@
          * Checks the parameters for invalid data or missing parameters
          *
          * @param Request $request
+         * @throws InvalidAttachmentsException
          * @throws InvalidPostTextException
          * @throws InvalidSessionIdentificationException
          * @throws MissingParameterException
@@ -79,6 +81,16 @@
                 throw new MissingParameterException('Missing parameter \'text\'');
             if(gettype($request->Parameters['text']) !== 'string')
                 throw new InvalidPostTextException('The parameter \'text\' must be a string');
+
+            if(isset($request->Parameters['attachments']) == false)
+                $request->Parameters['attachments'] = [];
+            if(gettype($request->Parameters['attachments']) !== 'array')
+                throw new InvalidAttachmentsException('The parameter \'attachments\' must be a array');
+            foreach($request->Parameters['attachments'] as $attachment)
+            {
+                if(gettype($attachment) !== 'string')
+                    throw new InvalidAttachmentsException('The parameter \'attachments\' must contain type strings only');
+            }
         }
 
         /**
@@ -87,8 +99,10 @@
          * @throws BadSessionChallengeAnswerException
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DisplayPictureException
          * @throws DocumentNotFoundException
          * @throws InternalServerException
+         * @throws InvalidAttachmentsException
          * @throws InvalidClientPublicHashException
          * @throws InvalidPostTextException
          * @throws InvalidSearchMethodException
@@ -98,7 +112,6 @@
          * @throws PeerNotFoundException
          * @throws SessionExpiredException
          * @throws SessionNotFoundException
-         * @throws DisplayPictureException
          * @noinspection DuplicatedCode
          */
         public function execute(Request $request): Response
@@ -130,7 +143,7 @@
 
             try
             {
-                $ComposedPost = $NetworkSession->getTimeline()->compose($request->Parameters['text']);
+                $ComposedPost = $NetworkSession->getTimeline()->compose($request->Parameters['text'], $request->Parameters['attachments']);
                 $StandardObject = $NetworkSession->getTimeline()->getStandardPost($ComposedPost->PublicID);
             }
             catch(Exception $e)

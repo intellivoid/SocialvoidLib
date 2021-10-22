@@ -567,6 +567,10 @@
         },
         {
             "required": true,
+            "file": "Exceptions/Standard/Validation/InvalidAttachmentsException.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/Standard/Validation/InvalidBiographyException.php"
         },
         {
@@ -636,6 +640,10 @@
         {
             "required": true,
             "file": "Exceptions/Standard/Validation/InvalidVersionException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Validation/TooManyAttachmentsException.php"
         },
         {
             "required": true,
@@ -792,10 +800,6 @@
         {
             "required": true,
             "file": "Objects/MySqlServerPointer.php"
-        },
-        {
-            "required": true,
-            "file": "Objects/Post/MediaContent.php"
         },
         {
             "required": true,

@@ -139,7 +139,7 @@
                 $content_results_object->Location = $data['location'];
 
             if(isset($data['file_id']))
-                $content_results_object->FIleID = $data['file_id'];
+                $content_results_object->FileID = $data['file_id'];
 
             if(isset($data['file_hash']))
                 $content_results_object->FileHash = $data['file_hash'];

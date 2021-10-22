@@ -225,6 +225,7 @@
             $MainSchema->setDefinition('RetrieveQuotesMaxLimit', 100);
             $MainSchema->setDefinition('RetrieveFollowersMixLimit', 100);
             $MainSchema->setDefinition('RetrieveFollowingMixLimit', 100);
+            $MainSchema->setDefinition('MaxAttachmentsPerPost', 10);
             $this->acm->defineSchema($MainSchema);
 
             // Database Schema Configuration

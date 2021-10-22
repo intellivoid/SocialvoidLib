@@ -47,10 +47,12 @@
     use SocialvoidLib\Exceptions\Standard\Network\PostNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPageValueException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPostTextException;
+    use SocialvoidLib\Exceptions\Standard\Validation\TooManyAttachmentsException;
     use SocialvoidLib\InputTypes\RegisterCacheInput;
     use SocialvoidLib\NetworkSession;
     use SocialvoidLib\Objects\Cursor;
     use SocialvoidLib\Objects\Post;
+    use SocialvoidLib\Objects\Standard\Document;
     use SocialvoidLib\Objects\Standard\Peer;
     use SocialvoidLib\Objects\Standard\TimelineState;
     use SocialvoidLib\Objects\User;
@@ -84,7 +86,7 @@
          * Distributes a new post to the timeline, and it's users
          *
          * @param string $text
-         * @param array $media_content
+         * @param array $attachments
          * @param array $flags
          * @return Post
          * @throws BackgroundWorkerNotEnabledException
@@ -102,8 +104,9 @@
          * @throws ServiceJobException
          * @throws UserHasInvalidSlaveHashException
          * @throws UserTimelineNotFoundException
+         * @throws TooManyAttachmentsException
          */
-        public function compose(string $text, array $media_content=[], array $flags=[]): Post
+        public function compose(string $text, array $attachments=[], array $flags=[]): Post
         {
             if ($this->networkSession->isAuthenticated() == false)
                 throw new NotAuthenticatedException();
@@ -111,7 +114,7 @@
             $PostObject = $this->networkSession->getSocialvoidLib()->getPostsManager()->publishPost(
                 $this->networkSession->getAuthenticatedUser(),
                 Converter::getSource($this->networkSession->getActiveSession()),
-                $text, $this->networkSession->getActiveSession()->ID, $media_content,
+                $text, $this->networkSession->getActiveSession()->ID, $attachments,
                 PostPriorityLevel::High, $flags
             );
 
@@ -129,10 +132,12 @@
          * @return Post
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DocumentNotFoundException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
          * @throws NotAuthenticatedException
          * @throws PostNotFoundException
+         * @throws TooManyAttachmentsException
          */
         public function getPost(string $post_id): Post
         {
@@ -167,6 +172,8 @@
          * @throws ServiceJobException
          * @throws SizeNotSetException
          * @throws UnsupportedImageTypeException
+         * @throws TooManyAttachmentsException
+         * @throws AccessDeniedException
          * @noinspection DuplicatedCode
          */
         public function getStandardPost($post, bool $first_layer=true): \SocialvoidLib\Objects\Standard\Post
@@ -272,8 +279,17 @@
             foreach($ResolvedSubMentionedUsers as $resolvedSubMentionedUser)
                 $SortedSubMentionedUsers[$resolvedSubMentionedUser->Username] = Peer::fromUser($resolvedSubMentionedUser);
 
+
             $stdPost = \SocialvoidLib\Objects\Standard\Post::fromPost($post);
             $stdPost->Peer = Peer::fromUser($SortedUserResolutions[$post->PosterUserID]);
+
+            foreach($post->Attachments as $attachment)
+            {
+                var_dump($post->Attachments);
+                var_dump($attachment);
+                $stdPost->Attachments[] = Document::fromContentResults($this->networkSession->getCloud()->getDocument($attachment));
+
+            }
 
             // Resolve reposted post
             if($post->Repost !== null && $post->Repost->OriginalPostID !== null && $first_layer)
@@ -529,6 +545,7 @@
          * @param int $page_number
          * @param bool $recursive
          * @return \SocialvoidLib\Objects\Standard\Post[]
+         * @throws AccessDeniedException
          * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
          * @throws CannotGetOriginalImageException
@@ -545,6 +562,7 @@
          * @throws ServerNotReachableException
          * @throws ServiceJobException
          * @throws SizeNotSetException
+         * @throws TooManyAttachmentsException
          * @throws UnsupportedImageTypeException
          * @throws UserHasInvalidSlaveHashException
          * @throws UserTimelineNotFoundException
@@ -619,6 +637,7 @@
          * @throws ServiceJobException
          * @throws UserHasInvalidSlaveHashException
          * @throws UserTimelineNotFoundException
+         * @throws TooManyAttachmentsException
          */
         public function repost(string $post_public_id): Post
         {
@@ -646,12 +665,14 @@
          * @param string $post_public_id
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DocumentNotFoundException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
          * @throws LikeRecordNotFoundException
          * @throws NotAuthenticatedException
          * @throws PostDeletedException
          * @throws PostNotFoundException
+         * @throws TooManyAttachmentsException
          */
         public function like(string $post_public_id): void
         {
@@ -672,12 +693,14 @@
          * @param string $post_public_id
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DocumentNotFoundException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
          * @throws LikeRecordNotFoundException
          * @throws NotAuthenticatedException
          * @throws PostDeletedException
          * @throws PostNotFoundException
+         * @throws TooManyAttachmentsException
          */
         public function unlike(string $post_public_id): void
         {
@@ -743,6 +766,7 @@
          * @param string $post_public_id
          * @param int $page
          * @return \SocialvoidLib\Objects\Standard\Post[]
+         * @throws AccessDeniedException
          * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
          * @throws CannotGetOriginalImageException
@@ -760,6 +784,7 @@
          * @throws ServerNotReachableException
          * @throws ServiceJobException
          * @throws SizeNotSetException
+         * @throws TooManyAttachmentsException
          * @throws UnsupportedImageTypeException
          * @noinspection DuplicatedCode
          */
@@ -790,6 +815,7 @@
          * @param string $post_public_id
          * @param int $page
          * @return \SocialvoidLib\Objects\Standard\Post[]
+         * @throws AccessDeniedException
          * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
          * @throws CannotGetOriginalImageException
@@ -807,6 +833,7 @@
          * @throws ServerNotReachableException
          * @throws ServiceJobException
          * @throws SizeNotSetException
+         * @throws TooManyAttachmentsException
          * @throws UnsupportedImageTypeException
          * @noinspection DuplicatedCode
          */
@@ -898,6 +925,7 @@
          * @throws ServiceJobException
          * @throws UserHasInvalidSlaveHashException
          * @throws UserTimelineNotFoundException
+         * @throws TooManyAttachmentsException
          */
         public function quote(string $post_public_id, string $text, array $media_content=[], array $flags=[]): Post
         {
@@ -931,6 +959,7 @@
          * @return Post
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DocumentNotFoundException
          * @throws InvalidPostTextException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
@@ -938,6 +967,7 @@
          * @throws PostDeletedException
          * @throws PostNotFoundException
          * @throws ReplyRecordNotFoundException
+         * @throws TooManyAttachmentsException
          */
         public function reply(string $post_public_id, string $text, array $media_content=[], array $flags=[]): Post
         {
@@ -963,6 +993,7 @@
          * @throws AccessDeniedException
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DocumentNotFoundException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
          * @throws NotAuthenticatedException
@@ -971,6 +1002,7 @@
          * @throws QuoteRecordNotFoundException
          * @throws ReplyRecordNotFoundException
          * @throws RepostRecordNotFoundException
+         * @throws TooManyAttachmentsException
          */
         public function delete(string $post_public_id): bool
         {

@@ -27,7 +27,14 @@
     use SocialvoidLib\Exceptions\Standard\Network\DocumentNotFoundException;
     use SocialvoidLib\NetworkSession;
     use SocialvoidLib\Objects\ContentResults;
+    use SocialvoidLib\Objects\Standard\Document;
     use TelegramCDN\Exceptions\FileSecurityException;
+    use udp2\Exceptions\AvatarNotFoundException;
+    use Zimage\Exceptions\CannotGetOriginalImageException;
+    use Zimage\Exceptions\FileNotFoundException;
+    use Zimage\Exceptions\InvalidZimageFileException;
+    use Zimage\Exceptions\SizeNotSetException;
+    use Zimage\Exceptions\UnsupportedImageTypeException;
     use Zimage\Objects\Size;
 
     /**
@@ -146,6 +153,12 @@
          * @throws IOException
          * @throws TelegramException
          * @throws WrongKeyOrModifiedCiphertextException
+         * @throws CannotGetOriginalImageException
+         * @throws FileNotFoundException
+         * @throws InvalidZimageFileException
+         * @throws SizeNotSetException
+         * @throws UnsupportedImageTypeException
+         * @throws AvatarNotFoundException
          */
         public function getDocumentContents(ContentResults $contentResults): ?string
         {

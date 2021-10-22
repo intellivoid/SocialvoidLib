@@ -51,6 +51,13 @@
         public $Text;
 
         /**
+         * An array of attached documents to the post
+         *
+         * @var Document[]
+         */
+        public $Attachments;
+
+        /**
          * An array of text entities
          *
          * @var TextEntity[]
@@ -156,12 +163,18 @@
                 foreach($this->MentionedPeers as $mentionedPeer)
                     $mentions[] = $mentionedPeer->toArray();
 
+            $attachments = [];
+            if($this->Attachments !== null)
+                foreach($this->Attachments as $attachment)
+                    $attachments[] = $attachment->toArray();
+
             return [
                 'id' => $this->ID,
                 'type' => $this->PostType,
                 'peer' => ($this->Peer == null ? null : $this->Peer->toArray()),
                 'source' => $this->Source,
                 'text' => $this->Text,
+                'attachments' => $attachments,
                 'entities' => $entities,
                 'mentioned_peers' => $mentions,
                 'reply_to_post' => ($this->ReplyToPost == null ? null : $this->ReplyToPost->toArray()),
@@ -201,6 +214,13 @@
 
             if(isset($data['text']))
                 $PostObject->Text = $data['text'];
+
+            $PostObject->Attachments = [];
+            if(isset($data['attachments']))
+            {
+                foreach($data['attachments'] as $attachment)
+                    $PostObject->Attachments[] = Document::fromArray($attachment);
+            }
 
             $PostObject->Entities = [];
             if(isset($data['entities']))
@@ -266,6 +286,7 @@
             $StandardPostObject->Text = $post->Text;
             $StandardPostObject->Entities = [];
             $StandardPostObject->MentionedPeers = [];
+            $StandardPostObject->Attachments = [];
             $StandardPostObject->Source = $post->Source;
             $StandardPostObject->LikeCount = $post->LikeCount;
             $StandardPostObject->RepostCount = $post->RepostCount;
@@ -295,6 +316,7 @@
                 $StandardPostObject->Source = null;
                 $StandardPostObject->Entities = [];
                 $StandardPostObject->MentionedPeers = [];
+                $StandardPostObject->Attachments = [];
                 $StandardPostObject->LikeCount = 0;
                 $StandardPostObject->ReplyCount = 0;
                 $StandardPostObject->ReplyToPost = null;

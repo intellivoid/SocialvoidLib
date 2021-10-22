@@ -33,6 +33,7 @@
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
     use SocialvoidLib\Exceptions\Standard\Validation\AgreementRequiredException;
     use SocialvoidLib\Exceptions\Standard\Validation\FileTooLargeException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidAttachmentsException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidBiographyException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPrivateHashException;
@@ -51,6 +52,7 @@
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidUrlValueException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidUsernameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidVersionException;
+    use SocialvoidLib\Exceptions\Standard\Validation\TooManyAttachmentsException;
     use SocialvoidLib\Exceptions\Standard\Validation\UsernameAlreadyExistsException;
 
     /**
@@ -199,6 +201,20 @@
          * @see InvalidUrlValueException
          */
         const InvalidUrlValueException = 0x02114;
+
+        /**
+         * Raised when the amount of attachments exceeds what the server supports
+         *
+         * @see TooManyAttachmentsException
+         */
+        const TooManyAttachmentsException = 0x02115;
+
+        /**
+         * Raised when the given attachments are invalid
+         *
+         * @see InvalidAttachmentsException
+         */
+        const InvalidAttachmentsException = 0x02116;
 
         /** 22-Set error codes (Authentication) */
 

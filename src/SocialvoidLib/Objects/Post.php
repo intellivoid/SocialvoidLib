@@ -13,7 +13,6 @@
 
     namespace SocialvoidLib\Objects;
 
-    use SocialvoidLib\Objects\Post\MediaContent;
     use SocialvoidLib\Objects\Post\Properties;
     use SocialvoidLib\Objects\Post\Quote;
     use SocialvoidLib\Objects\Post\Reply;
@@ -153,11 +152,11 @@
         public $ReplyCount;
 
         /**
-         * The media content associated with this post
+         * An array of Document IDs attached to this post
          *
-         * @var MediaContent[]
+         * @var string[]
          */
-        public $MediaContent;
+        public $Attachments;
 
         /**
          * The Unix Timestamp for when this records counts was last updated
@@ -188,15 +187,7 @@
          */
         public function toArray(): array
         {
-            $media_content_results = null;
             $text_entities = [];
-
-            if($this->MediaContent !== null)
-            {
-                $media_content_results = [];
-                foreach($this->MediaContent as $mediaContent)
-                    $media_content_results[] = $mediaContent->toArray();
-            }
 
             if($this->TextEntities !== null)
             {
@@ -204,7 +195,6 @@
                     $text_entities[] = $textEntity->toArray();
             }
 
-            
             return [
                 //'id' => ($this->ID == null ? null : (int)$this->ID), https://github.com/intellivoid/SocialvoidLib/issues/1
                 'public_id' => $this->PublicID,
@@ -224,7 +214,7 @@
                 'repost_count' => ($this->RepostCount == null ? 0 : (int)$this->RepostCount),
                 'quote_count' => ($this->QuoteCount == null ? 0 : (int)$this->QuoteCount),
                 'reply_count' => ($this->ReplyCount == null ? 0 : (int)$this->ReplyCount),
-                'media_content' => $media_content_results,
+                'attachments' => ($this->Attachments == null ? [] : $this->Attachments),
                 'count_last_updated_timestamp' => ($this->CountLastUpdatedTimestamp == null ? 0 : $this->CountLastUpdatedTimestamp),
                 'last_updated_timestamp' => ($this->LastUpdatedTimestamp == null ? null : $this->LastUpdatedTimestamp),
                 'created_timestamp' => ($this->CreatedTimestamp == null ? null : $this->CreatedTimestamp)
@@ -242,6 +232,7 @@
         {
             $PostObject = new Post();
             $PostObject->TextEntities = [];
+            $PostObject->Attachments = [];
 
             // https://github.com/intellivoid/SocialvoidLib/issues/1
             //if(isset($data['id']))
@@ -303,12 +294,8 @@
             if(isset($data['reply_count']))
                 $PostObject->ReplyCount = ($data['reply_count'] == null ? 0 : (int)$data['reply_count']);
 
-            if(isset($data['media_content']))
-            {
-                $PostObject->MediaContent = [];
-                foreach($data['media_content'] as $datum)
-                    $PostObject->MediaContent[] = MediaContent::fromArray($datum);
-            }
+            if(isset($data['attachments']))
+                $PostObject->Attachments = ($data['attachments'] == null ? [] : $data['attachments']);
 
             if(isset($data['count_last_updated_timestamp']))
                 $PostObject->CountLastUpdatedTimestamp = ($data['count_last_updated_timestamp'] == null ? 0 : (int)$data['count_last_updated_timestamp']);
@@ -330,18 +317,10 @@
          */
         public function toArrayAlternative(): array
         {
-            $media_content_results = null;
             $text_entities = [];
 
             foreach($this->TextEntities as $textEntity)
                 $text_entities[] = $textEntity->toArray();
-
-            if($this->MediaContent !== null)
-            {
-                $media_content_results = [];
-                foreach($this->MediaContent as $mediaContent)
-                    $media_content_results[] = $mediaContent->toArray();
-            }
 
             return [
                 //'id' => ($this->ID == null ? null : (int)$this->ID),
@@ -365,7 +344,7 @@
                 'repost_count' => ($this->RepostCount == null ? 0 : (int)$this->RepostCount),
                 'quote_count' => ($this->QuoteCount == null ? 0 : (int)$this->QuoteCount),
                 'reply_count' => ($this->ReplyCount == null ? 0 : (int)$this->ReplyCount),
-                'media_content' => $media_content_results,
+                'attachments' => ($this->Attachments == null ? [] : $this->Attachments),
                 'count_last_updated_timestamp' => ($this->CountLastUpdatedTimestamp == null ? 0 : $this->CountLastUpdatedTimestamp),
                 'last_updated_timestamp' => ($this->LastUpdatedTimestamp == null ? null : $this->LastUpdatedTimestamp),
                 'created_timestamp' => ($this->CreatedTimestamp == null ? null : $this->CreatedTimestamp)
@@ -377,6 +356,7 @@
         {
             $PostObject = new Post();
             $PostObject->TextEntities = [];
+            $PostObject->Attachments = [];
 
             //if(isset($data['id']))
             //    $PostObject->ID = ($data['id'] == null ? null : (int)$data['id']);
@@ -468,12 +448,8 @@
             if(isset($data['reply_count']))
                 $PostObject->ReplyCount = ($data['reply_count'] == null ? 0 : $data['reply_count']);
 
-            if(isset($data['media_content']))
-            {
-                $PostObject->MediaContent = [];
-                foreach($data['media_content'] as $datum)
-                    $PostObject->MediaContent[] = MediaContent::fromArray($datum);
-            }
+            if(isset($data['attachments']))
+                $PostObject->Attachments = ($data['attachments'] == null ? [] : $data['attachments']);
 
             if(isset($data['last_updated_timestamp']))
                 $PostObject->LastUpdatedTimestamp = ($data['last_updated_timestamp'] == null ? null : (int)$data['last_updated_timestamp']);

@@ -38,9 +38,11 @@
     use SocialvoidLib\Exceptions\Internal\ReplyRecordNotFoundException;
     use SocialvoidLib\Exceptions\Internal\RepostRecordNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\AlreadyRepostedException;
+    use SocialvoidLib\Exceptions\Standard\Network\DocumentNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\PostDeletedException;
     use SocialvoidLib\Exceptions\Standard\Network\PostNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPostTextException;
+    use SocialvoidLib\Exceptions\Standard\Validation\TooManyAttachmentsException;
     use SocialvoidLib\InputTypes\RegisterCacheInput;
     use SocialvoidLib\Objects\Post;
     use SocialvoidLib\Objects\User;
@@ -70,26 +72,70 @@
         }
 
         /**
+         * Validates the array of attachments and returns the sanitized array of IDs
+         *
+         * @param array $attachments
+         * @param bool $remove_deleted_documents
+         * @return array
+         * @throws CacheException
+         * @throws DatabaseException
+         * @throws DocumentNotFoundException
+         * @throws TooManyAttachmentsException
+         */
+        private function validateAttachments(array $attachments, bool $remove_deleted_documents=False): array
+        {
+            $attachments = array_unique($attachments);
+            if(count($attachments) > (int)$this->socialvoidLib->getMainConfiguration()['MaxAttachmentsPerPost'])
+                throw new TooManyAttachmentsException('You cannot attach more than ' . (int)$this->socialvoidLib->getMainConfiguration()['MaxAttachmentsPerPost'] . ' documents to a post');
+
+            // TODO: Preform permission checks
+            foreach($attachments as $attachment)
+            {
+                $parsed_id = explode('-', $attachment);
+                if (count($parsed_id) !== 3)
+                    throw new DocumentNotFoundException('The requested document was not found in the network (-1)');
+                $document = $this->socialvoidLib->getDocumentsManager()->getDocument($parsed_id[0] . '-' . $parsed_id[1]);
+
+                if($document->Deleted)
+                {
+                    if($remove_deleted_documents)
+                    {
+                        if (($key = array_search('foo', $attachments)) !== false)
+                            unset($attachments[$key]);
+                    }
+                    else
+                    {
+                        throw new DocumentNotFoundException('The requested document was not found on the network');
+                    }
+                }
+            }
+
+            return $attachments;
+        }
+
+        /**
          * Publishes a post to the network
          *
          * @param User $user
          * @param string $source
          * @param string $text
          * @param string|null $session_id
-         * @param array $media_content
+         * @param array $attachments
          * @param string $priority
          * @param array $flags
          * @return Post
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DocumentNotFoundException
          * @throws InvalidPostTextException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
          * @throws PostNotFoundException
+         * @throws TooManyAttachmentsException
          * @noinspection DuplicatedCode
          * @noinspection PhpBooleanCanBeSimplifiedInspection
          */
-        public function publishPost(User $user, string $source, string $text, string $session_id=null, array $media_content=[], string $priority=PostPriorityLevel::None, array $flags=[]): Post
+        public function publishPost(User $user, string $source, string $text, string $session_id=null, array $attachments=[], string $priority=PostPriorityLevel::None, array $flags=[]): Post
         {
             $timestamp = time();
 
@@ -108,10 +154,8 @@
                 ParseOptions::Mentions
             ]);
 
-            $MediaContentArray = [];
-            /** @var Post\MediaContent $value */
-            foreach($media_content as $value)
-                $MediaContentArray[] = $value->toArray();
+            // Validate the attachments
+            $attachments = $this->validateAttachments($attachments);
 
             $EntitiesArray = [];
             foreach($Entities as $textEntity)
@@ -128,7 +172,7 @@
                 'is_deleted' => (int)false,
                 'priority_level' => $this->socialvoidLib->getDatabase()->real_escape_string($priority),
                 'text_entities' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($EntitiesArray)),
-                'media_content' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($MediaContentArray)),
+                'attachments' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($attachments)),
                 'count_last_updated_timestamp' => $timestamp,
                 'last_updated_timestamp' => $timestamp,
                 'created_timestamp' => $timestamp
@@ -158,9 +202,11 @@
          * @return Post
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DocumentNotFoundException
          * @throws InvalidSearchMethodException
-         * @throws PostNotFoundException
          * @throws InvalidSlaveHashException
+         * @throws PostNotFoundException
+         * @throws TooManyAttachmentsException
          */
         public function getPost(string $search_method, string $value): Post
         {
@@ -206,7 +252,7 @@
                 'repost_count',
                 'quote_count',
                 'reply_count',
-                'media_content',
+                'attachments',
                 'count_last_updated_timestamp',
                 'last_updated_timestamp',
                 'created_timestamp'
@@ -228,7 +274,7 @@
                     $Row['properties'] = ($Row['properties'] == null ? null : ZiProto::decode($Row['properties']));
                     $Row['flags'] = ($Row['flags'] == null ? null : ZiProto::decode($Row['flags']));
                     $Row['text_entities'] = ($Row['text_entities'] == null ? null : ZiProto::decode($Row['text_entities']));
-                    $Row['media_content'] = ($Row['media_content'] == null ? null : ZiProto::decode($Row['media_content']));
+                    $Row['attachments'] = ($Row['attachments'] == null ? [] : ZiProto::decode($Row['attachments']));
                     $Row['text'] = ($Row['text'] == null ? null : urldecode($Row['text']));
                     $Row['source'] = ($Row['source'] == null ? null : urldecode($Row['source']));
 
@@ -263,28 +309,26 @@
          * Updates an existing post on the network
          *
          * @param Post $post
+         * @param bool $update_attachments
          * @return Post
-         * @throws DatabaseException
          * @throws CacheException
+         * @throws DatabaseException
+         * @throws DocumentNotFoundException
          * @throws InvalidSlaveHashException
+         * @throws TooManyAttachmentsException
          * @noinspection PhpBooleanCanBeSimplifiedInspection
          * @noinspection PhpCastIsUnnecessaryInspection
          */
-        public function updatePost(Post $post): Post
+        public function updatePost(Post $post, bool $update_attachments=false): Post
         {
-            $MediaContent = [];
             $TextEntities = [];
 
             foreach($post->TextEntities as $textEntity)
                 $TextEntities[] = $textEntity->toArray();
 
-            if($post->MediaContent !== null)
-            {
-                foreach($post->MediaContent as $mediaContent)
-                    $MediaContent[] = $mediaContent->toArray();
-            }
-
             $post->LastUpdatedTimestamp = time();
+            if($update_attachments)
+                $post->Attachments = $this->validateAttachments($post->Attachments, true);
             
             // TODO: Validate text
             // Probably the most CPU intensive update there is here.
@@ -308,7 +352,7 @@
                 'repost_count' => ($post->RepostCount == null ? 0 : (int)$post->RepostCount),
                 'quote_count' => ($post->QuoteCount == null ? 0 : (int)$post->QuoteCount),
                 'reply_count' => ($post->ReplyCount == null ? 0 : (int)$post->ReplyCount),
-                'media_content' => (is_null($MediaContent) ? null : $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($MediaContent))),
+                'attachments' => $this->socialvoidLib->getDatabase()->real_escape_string(($post->Attachments == null ? ZiProto::encode([]) : ZiProto::encode($post->Attachments))),
                 'last_updated_timestamp' => (int)$post->LastUpdatedTimestamp,
                 'count_last_updated_timestamp' => (int)$post->CountLastUpdatedTimestamp
             ], 'public_id', $this->socialvoidLib->getDatabase()->real_escape_string(Utilities::removeSlaveHash($post->PublicID)));
@@ -338,11 +382,13 @@
          * @param bool $skip_errors
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DocumentNotFoundException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
+         * @throws LikeRecordNotFoundException
          * @throws PostDeletedException
          * @throws PostNotFoundException
-         * @throws LikeRecordNotFoundException
+         * @throws TooManyAttachmentsException
          * @noinspection DuplicatedCode
          */
         public function likePost(User $user, Post $post, bool $skip_errors=False): void
@@ -387,11 +433,13 @@
          * @param bool $skip_errors
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DocumentNotFoundException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
+         * @throws LikeRecordNotFoundException
          * @throws PostDeletedException
          * @throws PostNotFoundException
-         * @throws LikeRecordNotFoundException
+         * @throws TooManyAttachmentsException
          * @noinspection DuplicatedCode
          */
         public function unlikePost(User $user, Post $post, bool $skip_errors=False): void
@@ -440,11 +488,13 @@
          * @throws AlreadyRepostedException
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DocumentNotFoundException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
          * @throws PostDeletedException
          * @throws PostNotFoundException
          * @throws RepostRecordNotFoundException
+         * @throws TooManyAttachmentsException
          * @throws UserHasInvalidSlaveHashException
          * @noinspection DuplicatedCode
          * @noinspection PhpBooleanCanBeSimplifiedInspection
@@ -548,22 +598,24 @@
          * @param string $text
          * @param string $source
          * @param string|null $session_id
-         * @param array $media_content
+         * @param array $attachments
          * @param string $priority
          * @param array $flags
          * @return Post
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DocumentNotFoundException
          * @throws InvalidPostTextException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
          * @throws PostDeletedException
          * @throws PostNotFoundException
          * @throws QuoteRecordNotFoundException
+         * @throws TooManyAttachmentsException
          * @noinspection DuplicatedCode
          * @noinspection PhpBooleanCanBeSimplifiedInspection
          */
-        public function quotePost(User $user, Post $post, string $text, string $source, string $session_id=null, array $media_content=[], string $priority=PostPriorityLevel::None, array $flags=[]): Post
+        public function quotePost(User $user, Post $post, string $text, string $source, string $session_id=null, array $attachments=[], string $priority=PostPriorityLevel::None, array $flags=[]): Post
         {
             // Do not quote the post if it's deleted
             if(Converter::hasFlag($post->Flags, PostFlags::Deleted))
@@ -604,14 +656,11 @@
                 ParseOptions::Mentions
             ]);
 
+            $attachments = $this->validateAttachments($attachments);
+
             $EntitiesArray = [];
             foreach($Entities as $textEntity)
                 $EntitiesArray[] = $textEntity->toArray();
-
-            $MediaContentArray = [];
-            /** @var Post\MediaContent $value */
-            foreach($media_content as $value)
-                $MediaContentArray[] = $value->toArray();
 
             $Query = QueryBuilder::insert_into('posts', [
                 'public_id' => $this->socialvoidLib->getDatabase()->real_escape_string($PublicID),
@@ -626,7 +675,7 @@
                 'is_deleted' => (int)false,
                 'priority_level' => $this->socialvoidLib->getDatabase()->real_escape_string($priority),
                 'text_entities' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($EntitiesArray)),
-                'media_content' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($MediaContentArray)),
+                'attachments' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($attachments)),
                 'count_last_updated_timestamp' => $timestamp,
                 'last_updated_timestamp' => $timestamp,
                 'created_timestamp' => $timestamp
@@ -660,23 +709,25 @@
          * @param string $text
          * @param string $source
          * @param string|null $session_id
-         * @param array $media_content
+         * @param array $attachments
          * @param string $priority
          * @param array $flags
          * @return Post
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DocumentNotFoundException
          * @throws InvalidPostTextException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
          * @throws PostDeletedException
          * @throws PostNotFoundException
          * @throws ReplyRecordNotFoundException
+         * @throws TooManyAttachmentsException
          * @noinspection DuplicatedCode
          * @noinspection PhpBooleanCanBeSimplifiedInspection
          * @noinspection PhpCastIsUnnecessaryInspection
          */
-        public function replyToPost(User $user, Post $post, string $text, string $source, string $session_id=null, array $media_content=[], string $priority=PostPriorityLevel::None, array $flags=[]): Post
+        public function replyToPost(User $user, Post $post, string $text, string $source, string $session_id=null, array $attachments=[], string $priority=PostPriorityLevel::None, array $flags=[]): Post
         {
             // Do not repost the post if it's deleted
             if(Converter::hasFlag($post->Flags, PostFlags::Deleted))
@@ -724,10 +775,7 @@
             foreach($Entities as $textEntity)
                 $EntitiesArray[] = $textEntity->toArray();
 
-            $MediaContentArray = [];
-            /** @var Post\MediaContent $value */
-            foreach($media_content as $value)
-                $MediaContentArray[] = $value->toArray();
+            $attachments = $this->validateAttachments($attachments);
 
             $Query = QueryBuilder::insert_into('posts', [
                 'public_id' => $this->socialvoidLib->getDatabase()->real_escape_string($PublicID),
@@ -743,7 +791,7 @@
                 'is_deleted' => (int)false,
                 'priority_level' => $this->socialvoidLib->getDatabase()->real_escape_string($priority),
                 'text_entities' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($EntitiesArray)),
-                'media_content' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($MediaContentArray)),
+                'attachments' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($attachments)),
                 'count_last_updated_timestamp' => $timestamp,
                 'last_updated_timestamp' => $timestamp,
                 'created_timestamp' => $timestamp
@@ -777,12 +825,14 @@
          * @param Post $post
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DocumentNotFoundException
          * @throws InvalidSlaveHashException
          * @throws PostDeletedException
          * @throws PostNotFoundException
-         * @throws RepostRecordNotFoundException
          * @throws QuoteRecordNotFoundException
          * @throws ReplyRecordNotFoundException
+         * @throws RepostRecordNotFoundException
+         * @throws TooManyAttachmentsException
          */
         public function deletePost(Post $post)
         {
@@ -795,6 +845,8 @@
             // Add the deleted flag to the post
             Converter::addFlag($post->Flags, PostFlags::Deleted);
             $this->updatePost($post);
+
+            // TODO: Delete attachments when deleting a post
 
             // Remove this post from its associates
             if($post->Reply !== null && $post->Reply->ReplyToPostID !== null)
@@ -828,11 +880,13 @@
          * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DocumentNotFoundException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
          * @throws PostNotFoundException
-         * @throws ServiceJobException
          * @throws ServerNotReachableException
+         * @throws ServiceJobException
+         * @throws TooManyAttachmentsException
          */
         public function getMultiplePosts(array $query, bool $skip_errors=True, int $utilization=15): array
         {
