@@ -39,6 +39,7 @@
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPrivateHashException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPublicHashException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidFileForProfilePictureException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidFileNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidFirstNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidGeoLocationException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidHelpDocumentId;
@@ -215,6 +216,13 @@
          * @see InvalidAttachmentsException
          */
         const InvalidAttachmentsException = 0x02116;
+
+        /**
+         * Raised when the given filename is invalid
+         *
+         * @see InvalidFileNameException
+         */
+        const InvalidFileNameException = 0x02117;
 
         /** 22-Set error codes (Authentication) */
 

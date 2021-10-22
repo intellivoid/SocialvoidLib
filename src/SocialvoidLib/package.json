@@ -591,6 +591,10 @@
         },
         {
             "required": true,
+            "file": "Exceptions/Standard/Validation/InvalidFileNameException.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/Standard/Validation/InvalidFirstNameException.php"
         },
         {

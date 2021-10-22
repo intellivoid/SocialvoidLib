@@ -38,6 +38,23 @@ namespace SocialvoidLib\Classes;
         }
 
         /**
+         * Validates if the given filename is valid or not
+         *
+         * @param string $input
+         * @return bool
+         */
+        public static function fileName(string $input): bool
+        {
+            if(preg_match('/^[a-z0-9-]+\.ext$/', $input) == false)
+               return false;
+
+            if(strlen($input) > 255)
+                return false;
+
+            return true;
+        }
+
+        /**
          * Validates if the given password is safe or not.
          *
          * @param string $input

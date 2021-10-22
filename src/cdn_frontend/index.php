@@ -395,6 +395,10 @@
         if ($_FILES['document']['size'] > (int)$socialvoidlib->getCdnConfiguration()['MaxFileUploadSize'])
             returnErrorResponse(new \SocialvoidLib\Exceptions\Standard\Server\DocumentUploadException('File size limit exceeded'));
 
+        // Verify the file name
+        if(\SocialvoidLib\Classes\Validate::fileName($_FILES['document']['name']) == false)
+            returnErrorResponse(new \SocialvoidLib\Exceptions\Standard\Validation\InvalidFileNameException('The given file name is invalid'));
+
         // Move uploaded file
         $TemporaryFile = new \TmpFile\TmpFile(null);
         if(!move_uploaded_file($_FILES['document']['tmp_name'], $TemporaryFile->getFileName()))
