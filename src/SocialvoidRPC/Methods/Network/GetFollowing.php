@@ -84,14 +84,14 @@
                     throw new InvalidPeerInputException('The parameter \'peer\' is not a string');
             }
 
-            if(isset($request->Parameters['cursor']) == false)
+            if(isset($request->Parameters['page']) == false)
             {
-                $request->Parameters['cursor'] = 1;
+                $request->Parameters['page'] = 1;
             }
             else
             {
-                if(gettype($request->Parameters['cursor']) !== 'integer')
-                    throw new InvalidPageValueException('The parameter \'cursor\' must be a integer');
+                if(gettype($request->Parameters['page']) !== 'integer')
+                    throw new InvalidPageValueException('The parameter \'page\' must be a integer');
             }
         }
 
@@ -147,7 +147,7 @@
             {
                 $requested_peer = $request->Parameters['peer'] ?? $NetworkSession->getAuthenticatedUser()->PublicID;
 
-                $following = $NetworkSession->getUsers()->getFollowing($requested_peer, $request->Parameters['cursor']);
+                $following = $NetworkSession->getUsers()->getFollowing($requested_peer, $request->Parameters['page']);
                 $following_std = [];
 
                 foreach($following as $follower)

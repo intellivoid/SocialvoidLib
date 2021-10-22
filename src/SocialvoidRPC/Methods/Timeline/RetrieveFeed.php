@@ -75,14 +75,14 @@
             if(gettype($request->Parameters['session_identification']) !== 'array')
                 throw new InvalidSessionIdentificationException('The parameter \'session_identification\' is not a object');
 
-            if(isset($request->Parameters['cursor']) == false)
+            if(isset($request->Parameters['page']) == false)
             {
-                $request->Parameters['cursor'] = 1;
+                $request->Parameters['page'] = 1;
             }
             else
             {
-                if(gettype($request->Parameters['cursor']) !== 'integer')
-                    throw new InvalidPageValueException('The parameter \'cursor\' must be a integer');
+                if(gettype($request->Parameters['page']) !== 'integer')
+                    throw new InvalidPageValueException('The parameter \'page\' must be a integer');
             }
         }
 
@@ -135,7 +135,7 @@
 
             try
             {
-                $posts = $NetworkSession->getTimeline()->retrieveFeed((int)$request->Parameters['cursor']);
+                $posts = $NetworkSession->getTimeline()->retrieveFeed((int)$request->Parameters['page']);
                 $posts_array = [];
 
                 foreach($posts as $post)

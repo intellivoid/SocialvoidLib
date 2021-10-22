@@ -83,14 +83,14 @@
             if(gettype($request->Parameters['post']) !== 'string')
                 throw new InvalidPostTextException('The parameter \'post\' must be a string');
 
-            if(isset($request->Parameters['cursor']) == false)
+            if(isset($request->Parameters['page']) == false)
             {
-                $request->Parameters['cursor'] = 1;
+                $request->Parameters['page'] = 1;
             }
             else
             {
-                if(gettype($request->Parameters['cursor']) !== 'integer')
-                    throw new InvalidPageValueException('The parameter \'cursor\' must be a integer');
+                if(gettype($request->Parameters['page']) !== 'integer')
+                    throw new InvalidPageValueException('The parameter \'page\' must be a integer');
             }
         }
 
@@ -145,7 +145,7 @@
             try
             {
                 $Peers = $NetworkSession->getTimeline()->getLikes(
-                    $request->Parameters['post'], (int)$request->Parameters['cursor']
+                    $request->Parameters['post'], (int)$request->Parameters['page']
                 );
             }
             catch(Exception $e)
