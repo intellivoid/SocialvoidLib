@@ -4,7 +4,7 @@ runtime_version = 8.0
 
 socialvoidlib_src_dir = src/SocialvoidLib
 socialvoidlib_name = net.intellivoid.socialvoidlib
-socivlvoidservice_src_dir = src/SocialvoidService
+socialvoidservice_src_dir = src/SocialvoidService
 socialvoidservice_name = net.intellivoid.socialvoid_service
 socivlvoidrpc_src_dir = src/SocialvoidRPC
 socialvoidrpc_name = net.intellivoid.socialvoid_rpc
@@ -31,9 +31,9 @@ install_fast_socialvoidlib:
 #######################
 socialvoid_service:
 	make update_socialvoid_service
-	ppm --no-intro --cerror --lwarning --compile="$(socivlvoidservice_src_dir)" --directory="$(build_dir)"
+	ppm --no-intro --cerror --lwarning --compile="$(socialvoidservice_src_dir)" --directory="$(build_dir)"
 update_socialvoid_service:
-	ppm --generate-package="$(socivlvoidservice_src_dir)"
+	ppm --generate-package="$(socialvoidservice_src_dir)"
 install_socialvoid_service:
 	ppm --no-prompt --fix-conflict --install="$(build_dir)/$(socialvoidservice_name).ppm" --branch="$(install_branch)"
 install_fast_socialvoid_service:
