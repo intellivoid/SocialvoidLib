@@ -6,7 +6,7 @@
     use SocialvoidLib\Abstracts\StandardErrorCodes;
     use Throwable;
 
-    class InvalidCursorValueException extends Exception
+    class InvalidPageValueException extends Exception
     {
         /**
          * @param string $message
@@ -14,6 +14,6 @@
          */
         public function __construct($message = "", Throwable $previous = null)
         {
-            parent::__construct($message, StandardErrorCodes::InvalidCursorValueException, $previous);
+            parent::__construct($message, StandardErrorCodes::InvalidPageValueException, $previous);
         }
     }

@@ -583,10 +583,6 @@
         },
         {
             "required": true,
-            "file": "Exceptions/Standard/Validation/InvalidCursorValueException.php"
-        },
-        {
-            "required": true,
             "file": "Exceptions/Standard/Validation/InvalidFileForProfilePictureException.php"
         },
         {
@@ -604,6 +600,10 @@
         {
             "required": true,
             "file": "Exceptions/Standard/Validation/InvalidLastNameException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Validation/InvalidPageValueException.php"
         },
         {
             "required": true,

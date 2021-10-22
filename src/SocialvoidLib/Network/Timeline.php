@@ -45,7 +45,7 @@
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\PostDeletedException;
     use SocialvoidLib\Exceptions\Standard\Network\PostNotFoundException;
-    use SocialvoidLib\Exceptions\Standard\Validation\InvalidCursorValueException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidPageValueException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPostTextException;
     use SocialvoidLib\InputTypes\RegisterCacheInput;
     use SocialvoidLib\NetworkSession;
@@ -703,7 +703,7 @@
          * @throws DatabaseException
          * @throws DisplayPictureException
          * @throws DocumentNotFoundException
-         * @throws InvalidCursorValueException
+         * @throws InvalidPageValueException
          * @throws InvalidSearchMethodException
          * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
@@ -718,9 +718,9 @@
                 throw new NotAuthenticatedException();
 
             if($cursor < 0)
-                throw new InvalidCursorValueException('The cursor value cannot be a negative value');
+                throw new InvalidPageValueException('The cursor value cannot be a negative value');
             if($cursor < 1)
-                throw new InvalidCursorValueException('The cursor value must be a value greater than 0');
+                throw new InvalidPageValueException('The cursor value must be a value greater than 0');
 
             $cursor_object = new Cursor(
                 (int)$this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveLikesMaxLimit'], $cursor
@@ -750,7 +750,7 @@
          * @throws DisplayPictureException
          * @throws DocumentNotFoundException
          * @throws FileNotFoundException
-         * @throws InvalidCursorValueException
+         * @throws InvalidPageValueException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
          * @throws InvalidZimageFileException
@@ -769,9 +769,9 @@
                 throw new NotAuthenticatedException();
 
             if($cursor < 0)
-                throw new InvalidCursorValueException('The cursor value cannot be a negative value');
+                throw new InvalidPageValueException('The cursor value cannot be a negative value');
             if($cursor < 1)
-                throw new InvalidCursorValueException('The cursor value must be a value greater than 0');
+                throw new InvalidPageValueException('The cursor value must be a value greater than 0');
 
             $cursor_object = new Cursor(
                 (int)$this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveRepliesMaxLimit'], $cursor
@@ -797,7 +797,7 @@
          * @throws DisplayPictureException
          * @throws DocumentNotFoundException
          * @throws FileNotFoundException
-         * @throws InvalidCursorValueException
+         * @throws InvalidPageValueException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
          * @throws InvalidZimageFileException
@@ -816,9 +816,9 @@
                 throw new NotAuthenticatedException();
 
             if($cursor < 0)
-                throw new InvalidCursorValueException('The cursor value cannot be a negative value');
+                throw new InvalidPageValueException('The cursor value cannot be a negative value');
             if($cursor < 1)
-                throw new InvalidCursorValueException('The cursor value must be a value greater than 0');
+                throw new InvalidPageValueException('The cursor value must be a value greater than 0');
 
             $cursor_object = new Cursor(
                 (int)$this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveQuotesMaxLimit'], $cursor
@@ -842,7 +842,7 @@
          * @throws DatabaseException
          * @throws DisplayPictureException
          * @throws DocumentNotFoundException
-         * @throws InvalidCursorValueException
+         * @throws InvalidPageValueException
          * @throws InvalidSearchMethodException
          * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
@@ -857,9 +857,9 @@
                 throw new NotAuthenticatedException();
 
             if($cursor < 0)
-                throw new InvalidCursorValueException('The cursor value cannot be a negative value');
+                throw new InvalidPageValueException('The cursor value cannot be a negative value');
             if($cursor < 1)
-                throw new InvalidCursorValueException('The cursor value must be a value greater than 0');
+                throw new InvalidPageValueException('The cursor value must be a value greater than 0');
 
             $cursor_object = new Cursor(
                 (int)$this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveRepostsMaxLimit'], $cursor

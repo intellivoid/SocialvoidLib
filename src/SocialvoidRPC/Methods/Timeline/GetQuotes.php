@@ -20,7 +20,7 @@
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPublicHashException;
-    use SocialvoidLib\Exceptions\Standard\Validation\InvalidCursorValueException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidPageValueException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPostTextException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidSessionIdentificationException;
     use SocialvoidLib\NetworkSession;
@@ -64,7 +64,7 @@
 
         /**
          * @param Request $request
-         * @throws InvalidCursorValueException
+         * @throws InvalidPageValueException
          * @throws InvalidPostTextException
          * @throws InvalidSessionIdentificationException
          * @throws MissingParameterException
@@ -89,7 +89,7 @@
             else
             {
                 if(gettype($request->Parameters['cursor']) !== 'integer')
-                    throw new InvalidCursorValueException('The parameter \'cursor\' must be a integer');
+                    throw new InvalidPageValueException('The parameter \'cursor\' must be a integer');
             }
         }
 
@@ -103,7 +103,7 @@
          * @throws DocumentNotFoundException
          * @throws InternalServerException
          * @throws InvalidClientPublicHashException
-         * @throws InvalidCursorValueException
+         * @throws InvalidPageValueException
          * @throws InvalidPostTextException
          * @throws InvalidSearchMethodException
          * @throws InvalidSessionIdentificationException

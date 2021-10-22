@@ -28,7 +28,7 @@
     use SocialvoidLib\Exceptions\Standard\Network\BlockedPeerException;
     use SocialvoidLib\Exceptions\Standard\Network\DocumentNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\SelfInteractionNotPermittedException;
-    use SocialvoidLib\Exceptions\Standard\Validation\InvalidCursorValueException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidPageValueException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPeerInputException;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\NetworkSession;
@@ -316,7 +316,7 @@
          * @throws DatabaseException
          * @throws DisplayPictureException
          * @throws DocumentNotFoundException
-         * @throws InvalidCursorValueException
+         * @throws InvalidPageValueException
          * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
          * @throws NotAuthenticatedException
@@ -331,9 +331,9 @@
                 throw new NotAuthenticatedException();
 
             if($cursor < 0)
-                throw new InvalidCursorValueException('The cursor value cannot be a negative value');
+                throw new InvalidPageValueException('The cursor value cannot be a negative value');
             if($cursor < 1)
-                throw new InvalidCursorValueException('The cursor value must be a value greater than 0');
+                throw new InvalidPageValueException('The cursor value must be a value greater than 0');
             $cursor_object = new Cursor(
                 (int)$this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveFollowersMixLimit'], $cursor
             );
@@ -376,7 +376,7 @@
          * @throws DatabaseException
          * @throws DisplayPictureException
          * @throws DocumentNotFoundException
-         * @throws InvalidCursorValueException
+         * @throws InvalidPageValueException
          * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
          * @throws NotAuthenticatedException
@@ -391,9 +391,9 @@
                 throw new NotAuthenticatedException();
 
             if($cursor < 0)
-                throw new InvalidCursorValueException('The cursor value cannot be a negative value');
+                throw new InvalidPageValueException('The cursor value cannot be a negative value');
             if($cursor < 1)
-                throw new InvalidCursorValueException('The cursor value must be a value greater than 0');
+                throw new InvalidPageValueException('The cursor value must be a value greater than 0');
             $cursor_object = new Cursor(
                 (int)$this->networkSession->getSocialvoidLib()->getMainConfiguration()['RetrieveFollowingMixLimit'], $cursor
             );

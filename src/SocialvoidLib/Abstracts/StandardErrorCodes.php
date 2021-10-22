@@ -42,8 +42,7 @@
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidGeoLocationException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidHelpDocumentId;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidLastNameException;
-    use SocialvoidLib\Exceptions\Standard\Validation\InvalidLimitValueException;
-    use SocialvoidLib\Exceptions\Standard\Validation\InvalidCursorValueException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidPageValueException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPasswordException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPeerInputException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPlatformException;
@@ -183,9 +182,9 @@
         /**
          * Raised when the given cursor value is invalid
          *
-         * @see InvalidCursorValueException
+         * @see InvalidPageValueException
          */
-        const InvalidCursorValueException = 0x02112;
+        const InvalidPageValueException = 0x02112;
 
         /**
          * Raised when the given location is invalid
