@@ -8,6 +8,7 @@
     use SocialvoidLib\Abstracts\Types\CacheEntryObjectType;
     use SocialvoidLib\Classes\Standard\BaseIdentification;
     use SocialvoidLib\Classes\Utilities;
+    use SocialvoidLib\Classes\Validate;
     use SocialvoidLib\Exceptions\GenericInternal\CacheException;
     use SocialvoidLib\Exceptions\GenericInternal\CacheMissedException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
@@ -15,6 +16,7 @@
     use SocialvoidLib\Exceptions\GenericInternal\InvalidSlaveHashException;
     use SocialvoidLib\Exceptions\GenericInternal\RedisCacheException;
     use SocialvoidLib\Exceptions\Standard\Network\DocumentNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidFileNameException;
     use SocialvoidLib\InputTypes\DocumentInput;
     use SocialvoidLib\InputTypes\RegisterCacheInput;
     use SocialvoidLib\Objects\Document;
@@ -48,6 +50,7 @@
          * @param DocumentInput $documentInput
          * @return string
          * @throws DatabaseException
+         * @throws InvalidFileNameException
          * @noinspection PhpBooleanCanBeSimplifiedInspection
          */
         public function createDocument(DocumentInput $documentInput): string
@@ -56,7 +59,12 @@
 
             $files = [];
             foreach($documentInput->Files as $file)
+            {
+                if(Validate::fileName($file->Name) == false)
+                    throw new InvalidFileNameException('The given file name \'' . $file->Name . '\' is invalid');
+
                 $files[] = $file->toArray();
+            }
 
             $query = QueryBuilder::insert_into("documents", [
                 'id' => $this->socialvoidLib->getDatabase()->real_escape_string($id),
