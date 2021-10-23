@@ -905,7 +905,7 @@
          *
          * @param string $post_public_id
          * @param string $text
-         * @param array $media_content
+         * @param array $attachments
          * @param array $flags
          * @return Post
          * @throws BackgroundWorkerNotEnabledException
@@ -927,7 +927,7 @@
          * @throws UserTimelineNotFoundException
          * @throws TooManyAttachmentsException
          */
-        public function quote(string $post_public_id, string $text, array $media_content=[], array $flags=[]): Post
+        public function quote(string $post_public_id, string $text, array $attachments=[], array $flags=[]): Post
         {
             if($this->networkSession->isAuthenticated() == false)
                 throw new NotAuthenticatedException();
@@ -938,7 +938,7 @@
             $PostObject = $this->networkSession->getSocialvoidLib()->getPostsManager()->quotePost(
                 $this->networkSession->getAuthenticatedUser(), $selected_post, $text,
                 Converter::getSource($this->networkSession->getActiveSession()),
-                $this->networkSession->getActiveSession()->ID, $media_content,
+                $this->networkSession->getActiveSession()->ID, $attachments,
                 PostPriorityLevel::High, $flags
             );
 
