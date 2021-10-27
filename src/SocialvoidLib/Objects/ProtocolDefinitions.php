@@ -7,6 +7,13 @@
     class ProtocolDefinitions
     {
         /**
+         * The version of the protocol
+         *
+         * @var string
+         */
+        public $Version;
+
+        /**
          * An array of error definitions that the server uses
          *
          * @var ErrorDefinition[]
@@ -26,6 +33,7 @@
                 $error_definitions[] = $definition->toArray();
 
             return [
+                'version' => $this->Version,
                 'errors' => $error_definitions
             ];
         }

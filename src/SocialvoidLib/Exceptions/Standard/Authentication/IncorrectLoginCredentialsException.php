@@ -15,13 +15,15 @@
 
     use Exception;
     use SocialvoidLib\Abstracts\StandardErrorCodes;
+    use SocialvoidLib\Interfaces\StandardErrorInterface;
+    use SocialvoidLib\Objects\Definitions\ErrorDefinition;
     use Throwable;
 
     /**
      * Class IncorrectLoginCredentialsException
      * @package SocialvoidLib\Exceptions\Standard\Authentication
      */
-    class IncorrectLoginCredentialsException extends Exception
+    class IncorrectLoginCredentialsException extends Exception implements StandardErrorInterface
     {
 
         /**
@@ -33,5 +35,37 @@
         {
             parent::__construct($message, StandardErrorCodes::IncorrectLoginCredentialsException, $previous);
             $this->message = $message;
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDefinition(): ErrorDefinition
+        {
+            return new ErrorDefinition(self::getName(), self::getDescription(), self::getErrorCode());
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getName(): string
+        {
+            return 'IncorrectLoginCredentials';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDescription(): string
+        {
+            return 'The given login credentials are incorrect';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getErrorCode(): int
+        {
+            return StandardErrorCodes::IncorrectLoginCredentialsException;
         }
     }

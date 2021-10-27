@@ -13,13 +13,15 @@ namespace SocialvoidLib\Exceptions\Standard\Authentication;
 
     use Exception;
     use SocialvoidLib\Abstracts\StandardErrorCodes;
+    use SocialvoidLib\Interfaces\StandardErrorInterface;
+    use SocialvoidLib\Objects\Definitions\ErrorDefinition;
     use Throwable;
 
     /**
      * Class NotAuthenticatedException
      * @package SocialvoidLib\Exceptions\Standard\Authentication
      */
-    class NotAuthenticatedException extends Exception
+    class NotAuthenticatedException extends Exception implements StandardErrorInterface
     {
 
         /**
@@ -31,5 +33,37 @@ namespace SocialvoidLib\Exceptions\Standard\Authentication;
         {
             parent::__construct($message, StandardErrorCodes::NotAuthenticatedException, $previous);
             $this->message = $message;
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDefinition(): ErrorDefinition
+        {
+            return new ErrorDefinition(self::getName(), self::getDescription(), self::getErrorCode());
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getName(): string
+        {
+            return 'NotAuthenticated';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDescription(): string
+        {
+            return 'Raised when the client attempts to invoke a method that requires authentication';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getErrorCode(): int
+        {
+            return StandardErrorCodes::NotAuthenticatedException;
         }
     }

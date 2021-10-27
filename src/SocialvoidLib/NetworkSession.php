@@ -22,9 +22,14 @@
     use SocialvoidLib\Classes\Validate;
     use SocialvoidLib\Exceptions\Standard\Authentication\AlreadyAuthenticatedException;
     use SocialvoidLib\Exceptions\Standard\Authentication\AuthenticationFailureException;
+    use SocialvoidLib\Exceptions\Standard\Authentication\AuthenticationNotApplicableException;
+    use SocialvoidLib\Exceptions\Standard\Authentication\BadSessionChallengeAnswerException;
     use SocialvoidLib\Exceptions\Standard\Authentication\IncorrectLoginCredentialsException;
+    use SocialvoidLib\Exceptions\Standard\Authentication\IncorrectTwoFactorAuthenticationCodeException;
     use SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException;
+    use SocialvoidLib\Exceptions\Standard\Authentication\PrivateAccessTokenRequiredException;
     use SocialvoidLib\Exceptions\Standard\Authentication\SessionExpiredException;
+    use SocialvoidLib\Exceptions\Standard\Authentication\TwoFactorAuthenticationRequiredException;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPasswordException;
@@ -484,11 +489,27 @@
             return $ServerInformation;
         }
 
-        public function getProtocolDefinitions(): ProtocolDefinitions
+        /**
+         * @return ProtocolDefinitions
+         */
+        public static function getProtocolDefinitions(): ProtocolDefinitions
         {
             $ProtocolDefinitions = new ProtocolDefinitions();
 
+            $ProtocolDefinitions->Version = '1.0';
 
+            $ProtocolDefinitions->ErrorDefinitions = [
+                AlreadyAuthenticatedException::getDefinition(),
+                AuthenticationFailureException::getDefinition(),
+                AuthenticationNotApplicableException::getDefinition(),
+                BadSessionChallengeAnswerException::getDefinition(),
+                IncorrectLoginCredentialsException::getDefinition(),
+                IncorrectTwoFactorAuthenticationCodeException::getDefinition(),
+                NotAuthenticatedException::getDefinition(),
+                PrivateAccessTokenRequiredException::getDefinition(),
+                SessionExpiredException::getDefinition(),
+                TwoFactorAuthenticationRequiredException::getDefinition()
+            ];
 
             return $ProtocolDefinitions;
         }
