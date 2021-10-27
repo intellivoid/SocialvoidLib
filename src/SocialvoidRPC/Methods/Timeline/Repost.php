@@ -49,7 +49,7 @@
          */
         public function getDescription(): string
         {
-            return 'Composes a new post by quoting an existing post';
+            return 'Reposts an existing post';
         }
 
         /**
