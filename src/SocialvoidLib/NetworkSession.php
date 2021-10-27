@@ -34,6 +34,7 @@
     use SocialvoidLib\Network\Timeline;
     use SocialvoidLib\Network\Users;
     use SocialvoidLib\Objects\ActiveSession;
+    use SocialvoidLib\Objects\ProtocolDefinitions;
     use SocialvoidLib\Objects\Standard\HelpDocument;
     use SocialvoidLib\Objects\Standard\Peer;
     use SocialvoidLib\Objects\Standard\ServerInformation;
@@ -481,6 +482,15 @@
             $ServerInformation->RetrieveFeedMaxLimit = (int)$this->socialvoidLib->getMainConfiguration()['TimelineChunkSize'];
 
             return $ServerInformation;
+        }
+
+        public function getProtocolDefinitions(): ProtocolDefinitions
+        {
+            $ProtocolDefinitions = new ProtocolDefinitions();
+
+
+
+            return $ProtocolDefinitions;
         }
 
         /**

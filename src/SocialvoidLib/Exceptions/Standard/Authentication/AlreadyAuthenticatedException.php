@@ -6,13 +6,15 @@
 
     use Exception;
     use SocialvoidLib\Abstracts\StandardErrorCodes;
+    use SocialvoidLib\Interfaces\StandardErrorInterface;
+    use SocialvoidLib\Objects\Definitions\ErrorDefinition;
     use Throwable;
 
     /**
      * Class AlreadyAuthenticatedException
      * @package SocialvoidLib\Exceptions\Standard\Authentication
      */
-    class AlreadyAuthenticatedException extends Exception
+    class AlreadyAuthenticatedException extends Exception implements StandardErrorInterface
     {
 
         /**
@@ -24,5 +26,37 @@
         {
             parent::__construct($message, StandardErrorCodes::AlreadyAuthenticatedException, $previous);
             $this->message = $message;
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDefinition(): ErrorDefinition
+        {
+            return new ErrorDefinition(self::getName(), self::getDescription(), self::getErrorCode());
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getName(): string
+        {
+            return 'AlreadyAuthenticated';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDescription(): string
+        {
+            return 'The client is attempting to authenticate when already authenticated';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getErrorCode(): int
+        {
+            return StandardErrorCodes::AlreadyAuthenticatedException;
         }
     }
