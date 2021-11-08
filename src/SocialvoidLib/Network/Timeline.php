@@ -11,20 +11,17 @@
     namespace SocialvoidLib\Network;
 
     use BackgroundWorker\Exceptions\ServerNotReachableException;
-    use Exception;
     use InvalidArgumentException;
     use SocialvoidLib\Abstracts\Flags\PostFlags;
     use SocialvoidLib\Abstracts\Levels\PostPriorityLevel;
     use SocialvoidLib\Abstracts\SearchMethods\PostSearchMethod;
     use SocialvoidLib\Abstracts\SearchMethods\TimelineSearchMethod;
     use SocialvoidLib\Abstracts\SearchMethods\UserSearchMethod;
-    use SocialvoidLib\Abstracts\Types\CacheEntryObjectType;
     use SocialvoidLib\Abstracts\Types\Standard\PostType;
     use SocialvoidLib\Abstracts\Types\Standard\TextEntityType;
     use SocialvoidLib\Classes\Converter;
     use SocialvoidLib\Exceptions\GenericInternal\BackgroundWorkerNotEnabledException;
     use SocialvoidLib\Exceptions\GenericInternal\CacheException;
-    use SocialvoidLib\Exceptions\GenericInternal\CacheMissedException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
     use SocialvoidLib\Exceptions\GenericInternal\DependencyError;
     use SocialvoidLib\Exceptions\GenericInternal\DisplayPictureException;
@@ -48,7 +45,6 @@
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPageValueException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPostTextException;
     use SocialvoidLib\Exceptions\Standard\Validation\TooManyAttachmentsException;
-    use SocialvoidLib\InputTypes\RegisterCacheInput;
     use SocialvoidLib\NetworkSession;
     use SocialvoidLib\Objects\Cursor;
     use SocialvoidLib\Objects\Post;
@@ -92,6 +88,7 @@
          * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DependencyError
          * @throws DisplayPictureException
          * @throws DocumentNotFoundException
          * @throws InvalidPostTextException
@@ -100,11 +97,12 @@
          * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
          * @throws PostNotFoundException
+         * @throws RedisCacheException
          * @throws ServerNotReachableException
          * @throws ServiceJobException
+         * @throws TooManyAttachmentsException
          * @throws UserHasInvalidSlaveHashException
          * @throws UserTimelineNotFoundException
-         * @throws TooManyAttachmentsException
          */
         public function compose(string $text, array $attachments=[], array $flags=[]): Post
         {
@@ -132,11 +130,13 @@
          * @return Post
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DependencyError
          * @throws DocumentNotFoundException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
          * @throws NotAuthenticatedException
          * @throws PostNotFoundException
+         * @throws RedisCacheException
          * @throws TooManyAttachmentsException
          */
         public function getPost(string $post_id): Post
@@ -149,21 +149,26 @@
             );
         }
 
-        public function getRelationalFlags(\SocialvoidLib\Objects\Standard\Post $post): array
+        /**
+         * Returns flags related to the authenticated peer and the post
+         *
+         * @param \SocialvoidLib\Objects\Standard\Post $post
+         * @return array
+         * @throws DatabaseException
+         * @throws PostNotFoundException
+         */
+        public function getRelationalPostFlags(\SocialvoidLib\Objects\Standard\Post $post): array
         {
-            $Flags = [];
-            if(Converter::hasFlag($post->Flags, PostFlags::Deleted) == false)
-            {
-                $Flags[] = PostFlags::Deleted;
-            }
-            else
+            $Flags = $post->Flags;
+
+            if(in_array(PostFlags::Deleted, $Flags) == false)
             {
                 try
                 {
                     if ($this->networkSession->getSocialvoidLib()->getLikesRecordManager()->getRecord(
-                        $this->networkSession->getAuthenticatedUser()->ID, $post->Repost->OriginalPostID)->Liked
-                    ) {
-                        $stdPost->RepostedPost->Flags[] = PostFlags::Liked;
+                        $this->networkSession->getAuthenticatedUser()->ID, $post->ID)->Liked)
+                    {
+                        $Flags[] = PostFlags::Liked;
                     }
                 }
                 catch (LikeRecordNotFoundException $e)
@@ -174,10 +179,10 @@
                 try
                 {
                     if($this->networkSession->getSocialvoidLib()->getRepostsRecordManager()->getRecord(
-                        $this->networkSession->getAuthenticatedUser()->ID, $post->Repost->OriginalPostID)->Reposted
+                        $this->networkSession->getAuthenticatedUser()->ID, $post->ID)->Reposted
                     )
                     {
-                        $stdPost->RepostedPost->Flags[] = PostFlags::Reposted;
+                        $Flags[] = PostFlags::Reposted;
                     }
                 }
                 catch(RepostRecordNotFoundException $e)
@@ -185,6 +190,8 @@
                     unset($e);
                 }
             }
+
+            return array_unique($Flags);
         }
 
         /**
@@ -193,10 +200,12 @@
          * @param string|Post $post
          * @param bool $first_layer
          * @return \SocialvoidLib\Objects\Standard\Post
+         * @throws AccessDeniedException
          * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
          * @throws CannotGetOriginalImageException
          * @throws DatabaseException
+         * @throws DependencyError
          * @throws DisplayPictureException
          * @throws DocumentNotFoundException
          * @throws FileNotFoundException
@@ -206,12 +215,12 @@
          * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
          * @throws PostNotFoundException
+         * @throws RedisCacheException
          * @throws ServerNotReachableException
          * @throws ServiceJobException
          * @throws SizeNotSetException
-         * @throws UnsupportedImageTypeException
          * @throws TooManyAttachmentsException
-         * @throws AccessDeniedException
+         * @throws UnsupportedImageTypeException
          * @noinspection DuplicatedCode
          */
         public function getStandardPost($post, bool $first_layer=true): \SocialvoidLib\Objects\Standard\Post
@@ -231,6 +240,8 @@
                 throw new InvalidArgumentException('Argument \'post\' must be type \'' . Post::class . '\' or Post ID string');
             }
 
+            // Disabled for now due to relational flags
+            /**
             if(
                 $this->networkSession->getSocialvoidLib()->getRedisBasicCacheConfiguration()['Enabled'] &&
                 $this->networkSession->getSocialvoidLib()->getRedisBasicCacheConfiguration()['StandardPostCacheEnabled']
@@ -241,7 +252,7 @@
                     $CacheEntryResults = $this->networkSession->getSocialvoidLib()->getBasicRedisCacheManager()->getCacheEntry(
                         CacheEntryObjectType::StandardPost, $post->PublicID);
 
-                    return \SocialvoidLib\Objects\Standard\Post::fromArray($CacheEntryResults->ObjectData);
+                    $StandardPost = \SocialvoidLib\Objects\Standard\Post::fromArray($CacheEntryResults->ObjectData);
                 }
                 catch(CacheMissedException $e)
                 {
@@ -252,6 +263,7 @@
                     throw new CacheException('There was an issue while trying to request a standard post cache entry', 0, $e);
                 }
             }
+             */
 
             // Return the post as is if it's deleted
             if(Converter::hasFlag($post->Flags, PostFlags::Deleted))
@@ -330,71 +342,14 @@
             if($post->Repost !== null && $post->Repost->OriginalPostID !== null && $first_layer)
             {
                 $stdPost->RepostedPost = $this->getStandardPost($SortedPostResolutions[$post->Repost->OriginalPostID], false);
-
-                $stdPost->RepostedPost->Flags = $SortedPostResolutions[$post->Repost->OriginalPostID];
-                if(Converter::hasFlag($SortedPostResolutions[$post->Repost->OriginalPostID]->Flags, PostFlags::Deleted) == false)
-                {
-                    try
-                    {
-                        if ($this->networkSession->getSocialvoidLib()->getLikesRecordManager()->getRecord(
-                            $this->networkSession->getAuthenticatedUser()->ID, $post->Repost->OriginalPostID)->Liked
-                        ) {
-                            $stdPost->RepostedPost->Flags[] = PostFlags::Liked;
-                        }
-                    }
-                    catch (LikeRecordNotFoundException $e)
-                    {
-                        unset($e);
-                    }
-
-                    try
-                    {
-                        if($this->networkSession->getSocialvoidLib()->getRepostsRecordManager()->getRecord(
-                            $this->networkSession->getAuthenticatedUser()->ID, $post->Repost->OriginalPostID)->Reposted
-                        )
-                        {
-                            $stdPost->RepostedPost->Flags[] = PostFlags::Reposted;
-                        }
-                    }
-                    catch(RepostRecordNotFoundException $e)
-                    {
-                        unset($e);
-                    }
-                }
+                $stdPost->RepostedPost->Flags = $this->getRelationalPostFlags($SortedPostResolutions[$post->Repost->OriginalPostID]);
             }
 
             // Resolve quoted post
             if($post->Quote !== null && $post->Quote->OriginalPostID && $first_layer)
             {
                 $stdPost->QuotedPost = $this->getStandardPost($SortedPostResolutions[$post->Quote->OriginalPostID], false);
-
-                try
-                {
-                    if($this->networkSession->getSocialvoidLib()->getLikesRecordManager()->getRecord(
-                        $this->networkSession->getAuthenticatedUser()->ID, $post->Quote->OriginalPostID)->Liked
-                    )
-                    {
-                        $stdPost->QuotedPost->Flags[] = PostFlags::Liked;
-                    }
-                }
-                catch (LikeRecordNotFoundException $e)
-                {
-                    unset($e);
-                }
-
-                try
-                {
-                    if($this->networkSession->getSocialvoidLib()->getRepostsRecordManager()->getRecord(
-                        $this->networkSession->getAuthenticatedUser()->ID, $post->Quote->OriginalPostID)->Reposted
-                    )
-                    {
-                        $stdPost->QuotedPost->Flags[] = PostFlags::Reposted;
-                    }
-                }
-                catch(RepostRecordNotFoundException $e)
-                {
-                    unset($e);
-                }
+                $stdPost->QuotedPost->Flags = $this->getRelationalPostFlags($SortedPostResolutions[$post->Quote->OriginalPostID]);
 
                 $mentionedUsernames = [];
                 $stdPost->QuotedPost->MentionedPeers = [];
@@ -422,50 +377,23 @@
             if($post->Reply !== null && $post->Reply->ReplyToPostID && $first_layer)
             {
                 $stdPost->ReplyToPost = $this->getStandardPost($SortedPostResolutions[$post->Reply->ReplyToPostID], false);
+                $stdPost->ReplyToPost->Flags = $this->getRelationalPostFlags($SortedPostResolutions[$post->Reply->ReplyToPostID]);
 
-                try
+                if(Converter::hasFlag($stdPost->ReplyToPost->Flags, PostFlags::Deleted)  == false)
                 {
-                    if($this->networkSession->getSocialvoidLib()->getLikesRecordManager()->getRecord(
-                        $this->networkSession->getAuthenticatedUser()->ID, $post->Reply->ReplyToPostID)->Liked
-                    )
+                    $mentionedUsernames = [];
+                    $stdPost->ReplyToPost->MentionedPeers = [];
+                    foreach($SortedPostResolutions[$post->Reply->ReplyToPostID]->TextEntities as $textEntity)
                     {
-                        $stdPost->ReplyToPost->Flags[] = PostFlags::Liked;
+                        if(isset($SortedSubMentionedUsers[$textEntity->Value]))
+                        {
+                            if(in_array($textEntity->Value, $mentionedUsernames))
+                                continue;
+                            $stdPost->ReplyToPost->MentionedPeers[] = $SortedSubMentionedUsers[$textEntity->Value];
+                            $mentionedUsernames[] = $textEntity->Value;
+                        }
                     }
-                }
-                catch (LikeRecordNotFoundException $e)
-                {
-                    unset($e);
-                }
 
-                try
-                {
-                    if($this->networkSession->getSocialvoidLib()->getRepostsRecordManager()->getRecord(
-                        $this->networkSession->getAuthenticatedUser()->ID, $post->Reply->ReplyToPostID)->Reposted
-                    )
-                    {
-                        $stdPost->ReplyToPost->Flags[] = PostFlags::Reposted;
-                    }
-                }
-                catch(RepostRecordNotFoundException $e)
-                {
-                    unset($e);
-                }
-
-                $mentionedUsernames = [];
-                $stdPost->ReplyToPost->MentionedPeers = [];
-                foreach($SortedPostResolutions[$post->Reply->ReplyToPostID]->TextEntities as $textEntity)
-                {
-                    if(isset($SortedSubMentionedUsers[$textEntity->Value]))
-                    {
-                        if(in_array($textEntity->Value, $mentionedUsernames))
-                            continue;
-                        $stdPost->ReplyToPost->MentionedPeers[] = $SortedSubMentionedUsers[$textEntity->Value];
-                        $mentionedUsernames[] = $textEntity->Value;
-                    }
-                }
-
-                if($post->Reply->ReplyToUserID !== null && Converter::hasFlag($SortedPostResolutions[$post->Reply->ReplyToPostID]->Flags, PostFlags::Deleted) == false)
-                {
                     $stdPost->ReplyToPost->Peer = Peer::fromUser(
                         $SortedUserResolutions[$post->Reply->ReplyToUserID]
                     );
@@ -475,37 +403,9 @@
             if($post->OriginalPostThreadID !== null && $first_layer)
             {
                 $stdPost->OriginalThreadPost = $this->getStandardPost($SortedPostResolutions[$post->OriginalPostThreadID], false);
-
+                $stdPost->OriginalThreadPost->Flags = $this->getRelationalPostFlags($SortedPostResolutions[$post->OriginalPostThreadID]);
                 if(Converter::hasFlag($SortedPostResolutions[$post->OriginalPostThreadID]->Flags, PostFlags::Deleted)  == false)
                 {
-                    try
-                    {
-                         if($this->networkSession->getSocialvoidLib()->getLikesRecordManager()->getRecord(
-                             $this->networkSession->getAuthenticatedUser()->ID, $post->OriginalPostThreadID)->Liked
-                         )
-                         {
-                             $stdPost->OriginalThreadPost->Flags[] = PostFlags::Liked;
-                         }
-                    }
-                    catch (LikeRecordNotFoundException $e)
-                    {
-                        unset($e);
-                    }
-
-                    try
-                    {
-                        if($this->networkSession->getSocialvoidLib()->getRepostsRecordManager()->getRecord(
-                            $this->networkSession->getAuthenticatedUser()->ID, $post->OriginalPostThreadID)->Reposted
-                        )
-                        {
-                            $stdPost->OriginalThreadPost->Flags[] = PostFlags::Reposted;
-                        }
-                    }
-                    catch(RepostRecordNotFoundException $e)
-                    {
-                        unset($e);
-                    }
-
                     $mentionedUsernames = [];
                     $stdPost->OriginalThreadPost->MentionedPeers = [];
                     foreach($SortedPostResolutions[$post->OriginalPostThreadID]->TextEntities as $textEntity)
@@ -530,6 +430,8 @@
                 }
 
                 // Register the standard post to cache
+                // Disabled for now due to relational flags
+                /**
                 if(
                     $this->networkSession->getSocialvoidLib()->getRedisBasicCacheConfiguration()['Enabled'] &&
                     $this->networkSession->getSocialvoidLib()->getRedisBasicCacheConfiguration()['StandardPostCacheEnabled']
@@ -553,6 +455,7 @@
                         throw new CacheException('There was an error while trying to register the standard post cache entry', 0, $e);
                     }
                 }
+                 */
             }
 
             return $stdPost;
@@ -586,6 +489,7 @@
          * @throws CacheException
          * @throws CannotGetOriginalImageException
          * @throws DatabaseException
+         * @throws DependencyError
          * @throws DisplayPictureException
          * @throws DocumentNotFoundException
          * @throws FileNotFoundException
@@ -595,6 +499,7 @@
          * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
          * @throws PostNotFoundException
+         * @throws RedisCacheException
          * @throws ServerNotReachableException
          * @throws ServiceJobException
          * @throws SizeNotSetException
@@ -660,6 +565,7 @@
          * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DependencyError
          * @throws DisplayPictureException
          * @throws DocumentNotFoundException
          * @throws InvalidSearchMethodException
@@ -668,12 +574,13 @@
          * @throws PeerNotFoundException
          * @throws PostDeletedException
          * @throws PostNotFoundException
+         * @throws RedisCacheException
          * @throws RepostRecordNotFoundException
          * @throws ServerNotReachableException
          * @throws ServiceJobException
+         * @throws TooManyAttachmentsException
          * @throws UserHasInvalidSlaveHashException
          * @throws UserTimelineNotFoundException
-         * @throws TooManyAttachmentsException
          */
         public function repost(string $post_public_id): Post
         {
@@ -701,6 +608,7 @@
          * @param string $post_public_id
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DependencyError
          * @throws DocumentNotFoundException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
@@ -708,6 +616,7 @@
          * @throws NotAuthenticatedException
          * @throws PostDeletedException
          * @throws PostNotFoundException
+         * @throws RedisCacheException
          * @throws TooManyAttachmentsException
          */
         public function like(string $post_public_id): void
@@ -729,6 +638,7 @@
          * @param string $post_public_id
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DependencyError
          * @throws DocumentNotFoundException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
@@ -736,6 +646,7 @@
          * @throws NotAuthenticatedException
          * @throws PostDeletedException
          * @throws PostNotFoundException
+         * @throws RedisCacheException
          * @throws TooManyAttachmentsException
          */
         public function unlike(string $post_public_id): void
@@ -807,6 +718,7 @@
          * @throws CacheException
          * @throws CannotGetOriginalImageException
          * @throws DatabaseException
+         * @throws DependencyError
          * @throws DisplayPictureException
          * @throws DocumentNotFoundException
          * @throws FileNotFoundException
@@ -817,6 +729,7 @@
          * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
          * @throws PostNotFoundException
+         * @throws RedisCacheException
          * @throws ServerNotReachableException
          * @throws ServiceJobException
          * @throws SizeNotSetException
@@ -856,6 +769,7 @@
          * @throws CacheException
          * @throws CannotGetOriginalImageException
          * @throws DatabaseException
+         * @throws DependencyError
          * @throws DisplayPictureException
          * @throws DocumentNotFoundException
          * @throws FileNotFoundException
@@ -866,6 +780,7 @@
          * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
          * @throws PostNotFoundException
+         * @throws RedisCacheException
          * @throws ServerNotReachableException
          * @throws ServiceJobException
          * @throws SizeNotSetException
@@ -947,6 +862,7 @@
          * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DependencyError
          * @throws DisplayPictureException
          * @throws DocumentNotFoundException
          * @throws InvalidPostTextException
@@ -957,11 +873,12 @@
          * @throws PostDeletedException
          * @throws PostNotFoundException
          * @throws QuoteRecordNotFoundException
+         * @throws RedisCacheException
          * @throws ServerNotReachableException
          * @throws ServiceJobException
+         * @throws TooManyAttachmentsException
          * @throws UserHasInvalidSlaveHashException
          * @throws UserTimelineNotFoundException
-         * @throws TooManyAttachmentsException
          */
         public function quote(string $post_public_id, string $text, array $attachments=[], array $flags=[]): Post
         {
@@ -995,6 +912,7 @@
          * @return Post
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DependencyError
          * @throws DocumentNotFoundException
          * @throws InvalidPostTextException
          * @throws InvalidSearchMethodException
@@ -1002,6 +920,7 @@
          * @throws NotAuthenticatedException
          * @throws PostDeletedException
          * @throws PostNotFoundException
+         * @throws RedisCacheException
          * @throws ReplyRecordNotFoundException
          * @throws TooManyAttachmentsException
          */
@@ -1029,6 +948,7 @@
          * @throws AccessDeniedException
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DependencyError
          * @throws DocumentNotFoundException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
@@ -1036,6 +956,7 @@
          * @throws PostDeletedException
          * @throws PostNotFoundException
          * @throws QuoteRecordNotFoundException
+         * @throws RedisCacheException
          * @throws ReplyRecordNotFoundException
          * @throws RepostRecordNotFoundException
          * @throws TooManyAttachmentsException
