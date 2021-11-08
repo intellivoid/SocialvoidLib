@@ -13,13 +13,15 @@
 
     use Exception;
     use SocialvoidLib\Abstracts\StandardErrorCodes;
+    use SocialvoidLib\Interfaces\StandardErrorInterface;
+    use SocialvoidLib\Objects\Definitions\ErrorDefinition;
     use Throwable;
 
     /**
      * Class FileUploadException
      * @package SocialvoidLib\Exceptions\Standard\Network
      */
-    class FileUploadException extends Exception
+    class FileUploadException extends Exception implements StandardErrorInterface
     {
 
         /**
@@ -31,5 +33,37 @@
         {
             parent::__construct($message, StandardErrorCodes::FileUploadErrorException, $previous);
             $this->message = $message;
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDefinition(): ErrorDefinition
+        {
+            return new ErrorDefinition(self::getName(), self::getDescription(), self::getErrorCode());
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getName(): string
+        {
+            return 'FileUploadError';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDescription(): string
+        {
+            return 'Raised when there was an error while trying to upload one or more files to the network';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getErrorCode(): int
+        {
+            return StandardErrorCodes::FileUploadErrorException;
         }
     }

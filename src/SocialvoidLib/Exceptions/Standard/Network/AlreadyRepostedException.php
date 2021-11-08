@@ -15,13 +15,15 @@
 
     use Exception;
     use SocialvoidLib\Abstracts\StandardErrorCodes;
+    use SocialvoidLib\Interfaces\StandardErrorInterface;
+    use SocialvoidLib\Objects\Definitions\ErrorDefinition;
     use Throwable;
 
     /**
      * Class AlreadyRepostedException
      * @package SocialvoidLib\Exceptions\Standard\Network
      */
-    class AlreadyRepostedException extends Exception
+    class AlreadyRepostedException extends Exception implements StandardErrorInterface
     {
 
         /**
@@ -33,5 +35,37 @@
         {
             parent::__construct($message, StandardErrorCodes::AlreadyRepostedException, $previous);
             $this->message = $message;
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDefinition(): ErrorDefinition
+        {
+            return new ErrorDefinition(self::getName(), self::getDescription(), self::getErrorCode());
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getName(): string
+        {
+            return 'AlreadyReposted';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDescription(): string
+        {
+            return 'Raised when the client attempts to repost a post that has already been reposted';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getErrorCode(): int
+        {
+            return StandardErrorCodes::AlreadyRepostedException;
         }
     }

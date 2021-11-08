@@ -16,12 +16,14 @@
 
     use Exception;
     use SocialvoidLib\Abstracts\StandardErrorCodes;
+    use SocialvoidLib\Interfaces\StandardErrorInterface;
+    use SocialvoidLib\Objects\Definitions\ErrorDefinition;
 
     /**
      * Class PostDeletedException
      * @package SocialvoidLib\Exceptions\Standard\Network
      */
-    class PostDeletedException extends Exception
+    class PostDeletedException extends Exception implements StandardErrorInterface
     {
         /**
          * @var null
@@ -37,5 +39,37 @@
         {
             parent::__construct($message, StandardErrorCodes::PostDeletedException, $previous);
             $this->message = $message;
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDefinition(): ErrorDefinition
+        {
+            return new ErrorDefinition(self::getName(), self::getDescription(), self::getErrorCode());
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getName(): string
+        {
+            return 'PostDeleted';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDescription(): string
+        {
+            return 'Raised when the client requested a post that was deleted';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getErrorCode(): int
+        {
+            return StandardErrorCodes::PostDeletedException;
         }
     }

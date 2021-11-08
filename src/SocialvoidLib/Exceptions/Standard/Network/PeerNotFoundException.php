@@ -13,13 +13,15 @@ namespace SocialvoidLib\Exceptions\Standard\Network;
 
     use Exception;
     use SocialvoidLib\Abstracts\StandardErrorCodes;
+    use SocialvoidLib\Interfaces\StandardErrorInterface;
+    use SocialvoidLib\Objects\Definitions\ErrorDefinition;
     use Throwable;
 
     /**
      * Class PeerNotFoundException
      * @package SocialvoidLib\Exceptions\Standard\Network
      */
-    class PeerNotFoundException extends Exception
+    class PeerNotFoundException extends Exception implements StandardErrorInterface
     {
         /**
          * @var string|null
@@ -61,5 +63,37 @@ namespace SocialvoidLib\Exceptions\Standard\Network;
         public function getSearchValue(): ?string
         {
             return $this->search_value;
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDefinition(): ErrorDefinition
+        {
+            return new ErrorDefinition(self::getName(), self::getDescription(), self::getErrorCode());
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getName(): string
+        {
+            return 'PeerNotFound';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDescription(): string
+        {
+            return 'The requested user entity was not found in the network';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getErrorCode(): int
+        {
+            return StandardErrorCodes::PeerNotFoundException;
         }
     }

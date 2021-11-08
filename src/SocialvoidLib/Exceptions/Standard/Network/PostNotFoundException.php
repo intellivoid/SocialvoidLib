@@ -15,13 +15,15 @@
 
     use Exception;
     use SocialvoidLib\Abstracts\StandardErrorCodes;
+    use SocialvoidLib\Interfaces\StandardErrorInterface;
+    use SocialvoidLib\Objects\Definitions\ErrorDefinition;
     use Throwable;
 
     /**
      * Class PostNotFoundException
      * @package SocialvoidLib\Exceptions\Standard\Network
      */
-    class PostNotFoundException extends Exception
+    class PostNotFoundException extends Exception implements StandardErrorInterface
     {
 
         /**
@@ -33,5 +35,37 @@
         {
             parent::__construct($message, StandardErrorCodes::PostNotFoundException, $previous);
             $this->message = $message;
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDefinition(): ErrorDefinition
+        {
+            return new ErrorDefinition(self::getName(), self::getDescription(), self::getErrorCode());
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getName(): string
+        {
+            return 'PostNotFound';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDescription(): string
+        {
+            return 'Raised when the client requested a post that isn\'t found';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getErrorCode(): int
+        {
+            return StandardErrorCodes::PostNotFoundException;
         }
     }

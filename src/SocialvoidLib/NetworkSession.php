@@ -30,7 +30,16 @@
     use SocialvoidLib\Exceptions\Standard\Authentication\PrivateAccessTokenRequiredException;
     use SocialvoidLib\Exceptions\Standard\Authentication\SessionExpiredException;
     use SocialvoidLib\Exceptions\Standard\Authentication\TwoFactorAuthenticationRequiredException;
+    use SocialvoidLib\Exceptions\Standard\Network\AccessDeniedException;
+    use SocialvoidLib\Exceptions\Standard\Network\AlreadyRepostedException;
+    use SocialvoidLib\Exceptions\Standard\Network\BlockedByPeerException;
+    use SocialvoidLib\Exceptions\Standard\Network\BlockedPeerException;
+    use SocialvoidLib\Exceptions\Standard\Network\DocumentNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Network\FileUploadException;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Network\PostDeletedException;
+    use SocialvoidLib\Exceptions\Standard\Network\PostNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Network\SelfInteractionNotPermittedException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPasswordException;
     use SocialvoidLib\InputTypes\SessionClient;
@@ -53,10 +62,6 @@
      */
     class NetworkSession
     {
-        // TODO: Add auto-update for ActiveSession
-        // TODO: Add auto-update for AuthenticatedUser
-        // TODO: Add function for loading and dumping the network session to a file
-
         /**
          * Flags associated with this network session
          *
@@ -499,6 +504,7 @@
             $ProtocolDefinitions->Version = '1.0';
 
             $ProtocolDefinitions->ErrorDefinitions = [
+                // Authentication
                 AlreadyAuthenticatedException::getDefinition(),
                 AuthenticationFailureException::getDefinition(),
                 AuthenticationNotApplicableException::getDefinition(),
@@ -508,7 +514,19 @@
                 NotAuthenticatedException::getDefinition(),
                 PrivateAccessTokenRequiredException::getDefinition(),
                 SessionExpiredException::getDefinition(),
-                TwoFactorAuthenticationRequiredException::getDefinition()
+                TwoFactorAuthenticationRequiredException::getDefinition(),
+
+                // Network
+                AccessDeniedException::getDefinition(),
+                AlreadyRepostedException::getDefinition(),
+                BlockedByPeerException::getDefinition(),
+                BlockedPeerException::getDefinition(),
+                DocumentNotFoundException::getDefinition(),
+                FileUploadException::getDefinition(),
+                PeerNotFoundException::getDefinition(),
+                PostDeletedException::getDefinition(),
+                PostNotFoundException::getDefinition(),
+                SelfInteractionNotPermittedException::getDefinition()
             ];
 
             return $ProtocolDefinitions;
