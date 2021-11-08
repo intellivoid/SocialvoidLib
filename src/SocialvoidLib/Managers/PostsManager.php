@@ -413,11 +413,13 @@
                     }
                 }
 
-                $this->socialvoidLib->getLikesRecordManager()->likeRecord($user->ID, $post->PublicID);
-                $post->LikeCount += 1;
-                if($post->LikeCount < 0)
-                    $post->LikeCount = 0;
-                $this->updatePost($post);
+                if($this->socialvoidLib->getLikesRecordManager()->likeRecord($user->ID, $post->PublicID) == true)
+                {
+                    $post->LikeCount += 1;
+                    if($post->LikeCount < 0)
+                        $post->LikeCount = 0;
+                    $this->updatePost($post);
+                }
             }
             catch(Exception $e)
             {
@@ -464,11 +466,13 @@
                     }
                 }
 
-                $this->socialvoidLib->getLikesRecordManager()->unlikeRecord($user->ID, $post->PublicID);
-                $post->LikeCount -= 1;
-                if($post->LikeCount < 0)
-                    $post->LikeCount = 0;
-                $this->updatePost($post);
+                if($this->socialvoidLib->getLikesRecordManager()->unlikeRecord($user->ID, $post->PublicID) == true)
+                {
+                    $post->LikeCount -= 1;
+                    if($post->LikeCount < 0)
+                        $post->LikeCount = 0;
+                    $this->updatePost($post);
+                }
             }
             catch(Exception $e)
             {
@@ -488,11 +492,13 @@
          * @throws AlreadyRepostedException
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DependencyError
          * @throws DocumentNotFoundException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
          * @throws PostDeletedException
          * @throws PostNotFoundException
+         * @throws RedisCacheException
          * @throws RepostRecordNotFoundException
          * @throws TooManyAttachmentsException
          * @throws UserHasInvalidSlaveHashException
@@ -803,7 +809,6 @@
             if($QueryResults)
             {
                 $returnResults = $this->getPost(PostSearchMethod::ByPublicId, $SelectedSlave->MysqlServerPointer->HashPointer . '-' . $PublicID);
-                $this->registerPostCacheEntry($returnResults);
             }
             else
             {
@@ -920,12 +925,18 @@
          * Registers a user cache entry
          *
          * @param Post $post
+         * @return bool
          * @throws CacheException
+         * @throws DependencyError
+         * @throws RedisCacheException
+         * @noinspection PhpUnhandledExceptionInspection
          */
-        private function registerPostCacheEntry(Post $post): void
+        private function registerPostCacheEntry(Post $post): bool
         {
-            // TODO: Add check if post cache is enabled
-            if($this->socialvoidLib->getRedisBasicCacheConfiguration()['Enabled'])
+            if(
+                $this->socialvoidLib->getRedisBasicCacheConfiguration()['Enabled'] &&
+                $this->socialvoidLib->getRedisBasicCacheConfiguration()['PostCacheEnabled']
+            )
             {
                 $CacheEntryInput = new RegisterCacheInput();
                 $CacheEntryInput->ObjectType = CacheEntryObjectType::Post;
@@ -944,7 +955,19 @@
                 {
                     throw new CacheException('There was an error while trying to register the post cache entry', 0, $e);
                 }
+
+                // Invalidate the standard post cache if it's set
+                if($this->socialvoidLib->getRedisBasicCacheConfiguration()['StandardPostCacheEnabled'])
+                {
+                    $this->socialvoidLib->getBasicRedisCacheManager()->invalidateCacheEntry(
+                        CacheEntryObjectType::StandardPost, $post->PublicID
+                    );
+                }
+
+                return true;
             }
+
+            return false;
         }
 
         /**

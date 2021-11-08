@@ -76,9 +76,12 @@
                 }
 
                 if(strlen($pointer) > 0)
+                {
                     $this->socialvoidLib->getBasicRedis()->set(
                         Converter::normalizeText($CacheEntryObject->ObjectType . "." . $pointer), $pointerData,
                         ['ex'=>$ttl]);
+                }
+
             }
 
             $entryData = ZiProto::encode($CacheEntryObject->toArray());
@@ -104,7 +107,7 @@
         {
             $CachePointerRequest = $this->socialvoidLib->getBasicRedis()->get($object_type . "." . $pointer_value);
             if($CachePointerRequest == false)
-                throw new CacheMissedException("The requested cache request was a miss");
+                throw new CacheMissedException('The requested cache request was a miss');
 
             if($this->socialvoidLib->getRedisBasicCacheConfiguration()["UseCompression"])
                 $CachePointerRequest = gzuncompress($CachePointerRequest);
@@ -119,6 +122,19 @@
                 $CacheEntryRequest = gzuncompress($CacheEntryRequest);
 
             return CacheEntry::fromArray(ZiProto::decode($CacheEntryRequest));
+        }
+
+        /**
+         * Invalidates a cache entry
+         *
+         * @param string $object_type
+         * @param string $pointer_value
+         * @throws DependencyError
+         * @throws RedisCacheException
+         */
+        public function invalidateCacheEntry(string $object_type, string $pointer_value)
+        {
+            $this->socialvoidLib->getBasicRedis()->del($object_type . "." . $pointer_value);
         }
 
         /**

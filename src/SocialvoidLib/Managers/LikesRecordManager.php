@@ -49,11 +49,12 @@
          *
          * @param int $user_id
          * @param string $post_id
+         * @return bool
          * @throws DatabaseException
          * @throws LikeRecordNotFoundException
          * @throws PostNotFoundException
          */
-        public function likeRecord(int $user_id, string $post_id)
+        public function likeRecord(int $user_id, string $post_id): bool
         {
             try
             {
@@ -62,11 +63,14 @@
             catch(LikeRecordNotFoundException $e)
             {
                 $this->registerRecord($user_id, $post_id, true);
-                return;
+                return true;
             }
 
+            if($record->Liked == true)
+                return false;
             $record->Liked = true;
             $this->updateRecord($record);
+            return true;
         }
 
         /**
@@ -74,11 +78,12 @@
          *
          * @param int $user_id
          * @param string $post_id
+         * @return bool
          * @throws DatabaseException
          * @throws LikeRecordNotFoundException
          * @throws PostNotFoundException
          */
-        public function unlikeRecord(int $user_id, string $post_id)
+        public function unlikeRecord(int $user_id, string $post_id): bool
         {
             try
             {
@@ -87,11 +92,14 @@
             catch(LikeRecordNotFoundException $e)
             {
                 $this->registerRecord($user_id, $post_id, false);
-                return;
+                return true;
             }
 
+            if($record->Liked == false)
+                return false;
             $record->Liked = false;
             $this->updateRecord($record);
+            return true;
         }
 
         /**

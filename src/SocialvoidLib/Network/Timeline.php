@@ -285,10 +285,7 @@
 
             foreach($post->Attachments as $attachment)
             {
-                var_dump($post->Attachments);
-                var_dump($attachment);
                 $stdPost->Attachments[] = Document::fromContentResults($this->networkSession->getCloud()->getDocument($attachment));
-
             }
 
             // Resolve reposted post
