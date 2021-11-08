@@ -107,15 +107,11 @@
         },
         {
             "required": true,
-            "file": "Abstracts/Flags/ActiveSessionFlag.php"
-        },
-        {
-            "required": true,
-            "file": "Abstracts/Flags/FollowerFlag.php"
-        },
-        {
-            "required": true,
             "file": "Abstracts/Flags/NetworkFlags.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/Flags/PermissionSets.php"
         },
         {
             "required": true,
