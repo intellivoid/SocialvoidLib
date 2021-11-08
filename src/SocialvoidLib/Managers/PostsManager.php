@@ -126,11 +126,13 @@
          * @return Post
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DependencyError
          * @throws DocumentNotFoundException
          * @throws InvalidPostTextException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
          * @throws PostNotFoundException
+         * @throws RedisCacheException
          * @throws TooManyAttachmentsException
          * @noinspection DuplicatedCode
          * @noinspection PhpBooleanCanBeSimplifiedInspection
@@ -202,11 +204,14 @@
          * @return Post
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DependencyError
          * @throws DocumentNotFoundException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
          * @throws PostNotFoundException
+         * @throws RedisCacheException
          * @throws TooManyAttachmentsException
+         * @noinspection PhpUnhandledExceptionInspection
          */
         public function getPost(string $search_method, string $value): Post
         {
@@ -313,8 +318,10 @@
          * @return Post
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DependencyError
          * @throws DocumentNotFoundException
          * @throws InvalidSlaveHashException
+         * @throws RedisCacheException
          * @throws TooManyAttachmentsException
          * @noinspection PhpBooleanCanBeSimplifiedInspection
          * @noinspection PhpCastIsUnnecessaryInspection
@@ -382,12 +389,14 @@
          * @param bool $skip_errors
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DependencyError
          * @throws DocumentNotFoundException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
          * @throws LikeRecordNotFoundException
          * @throws PostDeletedException
          * @throws PostNotFoundException
+         * @throws RedisCacheException
          * @throws TooManyAttachmentsException
          * @noinspection DuplicatedCode
          */
@@ -435,12 +444,14 @@
          * @param bool $skip_errors
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DependencyError
          * @throws DocumentNotFoundException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
          * @throws LikeRecordNotFoundException
          * @throws PostDeletedException
          * @throws PostNotFoundException
+         * @throws RedisCacheException
          * @throws TooManyAttachmentsException
          * @noinspection DuplicatedCode
          */
@@ -610,6 +621,7 @@
          * @return Post
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DependencyError
          * @throws DocumentNotFoundException
          * @throws InvalidPostTextException
          * @throws InvalidSearchMethodException
@@ -617,6 +629,7 @@
          * @throws PostDeletedException
          * @throws PostNotFoundException
          * @throws QuoteRecordNotFoundException
+         * @throws RedisCacheException
          * @throws TooManyAttachmentsException
          * @noinspection DuplicatedCode
          * @noinspection PhpBooleanCanBeSimplifiedInspection
@@ -721,12 +734,14 @@
          * @return Post
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DependencyError
          * @throws DocumentNotFoundException
          * @throws InvalidPostTextException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
          * @throws PostDeletedException
          * @throws PostNotFoundException
+         * @throws RedisCacheException
          * @throws ReplyRecordNotFoundException
          * @throws TooManyAttachmentsException
          * @noinspection DuplicatedCode
@@ -830,11 +845,13 @@
          * @param Post $post
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DependencyError
          * @throws DocumentNotFoundException
          * @throws InvalidSlaveHashException
          * @throws PostDeletedException
          * @throws PostNotFoundException
          * @throws QuoteRecordNotFoundException
+         * @throws RedisCacheException
          * @throws ReplyRecordNotFoundException
          * @throws RepostRecordNotFoundException
          * @throws TooManyAttachmentsException
@@ -885,10 +902,12 @@
          * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DependencyError
          * @throws DocumentNotFoundException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
          * @throws PostNotFoundException
+         * @throws RedisCacheException
          * @throws ServerNotReachableException
          * @throws ServiceJobException
          * @throws TooManyAttachmentsException
