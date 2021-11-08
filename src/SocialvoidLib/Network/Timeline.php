@@ -149,6 +149,44 @@
             );
         }
 
+        public function getRelationalFlags(\SocialvoidLib\Objects\Standard\Post $post): array
+        {
+            $Flags = [];
+            if(Converter::hasFlag($post->Flags, PostFlags::Deleted) == false)
+            {
+                $Flags[] = PostFlags::Deleted;
+            }
+            else
+            {
+                try
+                {
+                    if ($this->networkSession->getSocialvoidLib()->getLikesRecordManager()->getRecord(
+                        $this->networkSession->getAuthenticatedUser()->ID, $post->Repost->OriginalPostID)->Liked
+                    ) {
+                        $stdPost->RepostedPost->Flags[] = PostFlags::Liked;
+                    }
+                }
+                catch (LikeRecordNotFoundException $e)
+                {
+                    unset($e);
+                }
+
+                try
+                {
+                    if($this->networkSession->getSocialvoidLib()->getRepostsRecordManager()->getRecord(
+                        $this->networkSession->getAuthenticatedUser()->ID, $post->Repost->OriginalPostID)->Reposted
+                    )
+                    {
+                        $stdPost->RepostedPost->Flags[] = PostFlags::Reposted;
+                    }
+                }
+                catch(RepostRecordNotFoundException $e)
+                {
+                    unset($e);
+                }
+            }
+        }
+
         /**
          * Retrieves a standard post object while resolving all of it's contents
          *
@@ -293,6 +331,7 @@
             {
                 $stdPost->RepostedPost = $this->getStandardPost($SortedPostResolutions[$post->Repost->OriginalPostID], false);
 
+                $stdPost->RepostedPost->Flags = $SortedPostResolutions[$post->Repost->OriginalPostID];
                 if(Converter::hasFlag($SortedPostResolutions[$post->Repost->OriginalPostID]->Flags, PostFlags::Deleted) == false)
                 {
                     try

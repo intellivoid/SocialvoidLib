@@ -17,17 +17,47 @@
     abstract class PostFlags
     {
         /**
+         * This indicates if the post was deleted
+         */
+        const Deleted = 'DELETED';
+
+        /**
          * Indicates if the post is currently liked by the user
          */
-        const Liked = "LIKED";
+        const Liked = 'LIKED';
 
         /**
          * Indicates if the post is currently reposted by the user
          */
-        const Reposted = "REPOSTED";
+        const Reposted = 'REPOSTED';
 
         /**
-         * This indicates if the post was deleted
+         * Indicates if this post is an advertisement
          */
-        const Deleted = "DELETED";
+        const Advertisement = 'ADVERTISEMENT';
+
+        /**
+         * Indicates if this post is sponsored
+         */
+        const Sponsored = 'SPONSORED';
+
+        /**
+         * Indicates if the post was infringing on copyright and was claimed by a DMCA report
+         */
+        const DmcaViolation = 'DMCA_VIOLATION';
+
+        /**
+         * Indicates if the post was infringing on the server's terms of service or rules
+         */
+        const TermsViolation = 'TERMS_VIOLATION';
+
+        /**
+         * Indicates that the post contains content that is considered not safe for work
+         */
+        const NsfwContent = 'NSFW';
+
+        /**
+         * Indicates that the post contains content is considered not safe for life
+         */
+        const NsflContent = 'NSFL';
     }
