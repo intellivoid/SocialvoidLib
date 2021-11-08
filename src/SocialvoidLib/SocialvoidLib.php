@@ -199,6 +199,13 @@
         private $MainConfiguration;
 
         /**
+         * The Unix Timestamp for when the MySQL Database connection was last established
+         *
+         * @var int
+         */
+        private $LastConnectedDatabaseTimestamp;
+
+        /**
          * SocialvoidLib constructor.
          * @throws ConfigurationError
          * @throws DependencyError
@@ -416,9 +423,9 @@
                 $this->connectDatabase();
             }
 
-            if($this->database->ping() == false)
+            if( (time() - $this->LastConnectedDatabaseTimestamp) > 1800)
                 $this->connectDatabase();
-
+            
             return $this->database;
         }
 
@@ -430,6 +437,7 @@
         {
             $this->database->close();
             $this->database = null;
+            $this->LastConnectedDatabaseTimestamp = null;
         }
 
         /**
@@ -449,6 +457,7 @@
                 $this->DatabaseConfiguration['Name'],
                 $this->DatabaseConfiguration['Port']
             );
+            $this->LastConnectedDatabaseTimestamp = time();
         }
 
         /**
