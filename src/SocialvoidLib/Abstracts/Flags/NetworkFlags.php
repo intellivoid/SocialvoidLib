@@ -22,17 +22,7 @@
         const Authenticated = "AUTHENTICATED";
 
         /**
-         * Indicates that the user has administrator access to the network
+         * Indicates that the user is not authenticated to the network
          */
-        const AdministratorAccess = "ADMINISTRATOR_ACCESS";
-
-        /**
-         * Indicates that the user has moderator access to the network
-         */
-        const ModeratorAccess = "MODERATOR_ACCESS";
-
-        /**
-         * Indicates that the user is currently browsing the network as a guest (Read-only)
-         */
-        const GuestAccess = "GUEST_ACCESS";
+        const Unauthenticated = "UNAUTHENTICATED";
     }

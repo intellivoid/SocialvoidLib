@@ -425,7 +425,7 @@
 
             if( (time() - $this->LastConnectedDatabaseTimestamp) > 1800)
                 $this->connectDatabase();
-            
+
             return $this->database;
         }
 
