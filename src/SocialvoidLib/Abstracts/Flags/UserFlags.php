@@ -20,13 +20,8 @@
     abstract class UserFlags
     {
         /**
-         * Indicates if the user is verified
+         * Indicates if the user is a verified entity on the network, verification doesn't give any additional abilities,
+         * it is simply one of the ways to demonstrate that the user is official.
          */
         const Verified = "VERIFIED";
-
-        /**
-         * Indicates if the user is an official entity
-         * representation of the network
-         */
-        const Official = "OFFICIAL";
     }
