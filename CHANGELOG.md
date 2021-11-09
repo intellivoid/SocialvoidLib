@@ -58,3 +58,5 @@
    retrieve_quotes_max_limit, retrieve_followers_max_limit, retrieve_following_max_limit to Standard object
    ServerInformation
  - Various performance improvements and bug fixes
+
+### v1.0.0.2 Alpha
