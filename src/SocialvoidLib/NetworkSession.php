@@ -42,7 +42,29 @@
     use SocialvoidLib\Exceptions\Standard\Network\SelfInteractionNotPermittedException;
     use SocialvoidLib\Exceptions\Standard\Server\DocumentUploadException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
+    use SocialvoidLib\Exceptions\Standard\Validation\AgreementRequiredException;
+    use SocialvoidLib\Exceptions\Standard\Validation\FileTooLargeException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidAttachmentsException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidBiographyException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientNameException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPrivateHashException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPublicHashException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidFileForProfilePictureException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidFileNameException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidGeoLocationException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidHelpDocumentId;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidLastNameException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidPageValueException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPasswordException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidPeerInputException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidPlatformException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidPostTextException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidSessionIdentificationException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidUrlValueException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidUsernameException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidVersionException;
+    use SocialvoidLib\Exceptions\Standard\Validation\TooManyAttachmentsException;
+    use SocialvoidLib\Exceptions\Standard\Validation\UsernameAlreadyExistsException;
     use SocialvoidLib\InputTypes\SessionClient;
     use SocialvoidLib\Network\Account;
     use SocialvoidLib\Network\Cloud;
@@ -531,7 +553,33 @@
 
                 // Server
                 DocumentUploadException::getDefinition(),
-                InternalServerException::getDefinition()
+                InternalServerException::getDefinition(),
+
+                // Validation
+                AgreementRequiredException::getDefinition(),
+                FileTooLargeException::getDefinition(),
+                InvalidAttachmentsException::getDefinition(),
+                InvalidBiographyException::getDefinition(),
+                InvalidClientNameException::getDefinition(),
+                InvalidClientPrivateHashException::getDefinition(),
+                InvalidClientPublicHashException::getDefinition(),
+                InvalidFileForProfilePictureException::getDefinition(),
+                InvalidFileNameException::getDefinition(),
+                InvalidFileNameException::getDefinition(),
+                InvalidGeoLocationException::getDefinition(),
+                InvalidHelpDocumentId::getDefinition(),
+                InvalidLastNameException::getDefinition(),
+                InvalidPageValueException::getDefinition(),
+                InvalidPasswordException::getDefinition(),
+                InvalidPeerInputException::getDefinition(),
+                InvalidPlatformException::getDefinition(),
+                InvalidPostTextException::getDefinition(),
+                InvalidSessionIdentificationException::getDefinition(),
+                InvalidUrlValueException::getDefinition(),
+                InvalidUsernameException::getDefinition(),
+                InvalidVersionException::getDefinition(),
+                TooManyAttachmentsException::getDefinition(),
+                UsernameAlreadyExistsException::getDefinition()
             ];
 
             return $ProtocolDefinitions;
