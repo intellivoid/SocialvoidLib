@@ -40,6 +40,7 @@
     use SocialvoidLib\Exceptions\Standard\Network\PostDeletedException;
     use SocialvoidLib\Exceptions\Standard\Network\PostNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\SelfInteractionNotPermittedException;
+    use SocialvoidLib\Exceptions\Standard\Server\DocumentUploadException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPasswordException;
     use SocialvoidLib\InputTypes\SessionClient;
@@ -526,7 +527,11 @@
                 PeerNotFoundException::getDefinition(),
                 PostDeletedException::getDefinition(),
                 PostNotFoundException::getDefinition(),
-                SelfInteractionNotPermittedException::getDefinition()
+                SelfInteractionNotPermittedException::getDefinition(),
+
+                // Server
+                DocumentUploadException::getDefinition(),
+                InternalServerException::getDefinition()
             ];
 
             return $ProtocolDefinitions;
