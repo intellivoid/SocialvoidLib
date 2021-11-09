@@ -4,9 +4,11 @@
 
     use Exception;
     use SocialvoidLib\Abstracts\StandardErrorCodes;
+    use SocialvoidLib\Interfaces\StandardErrorInterface;
+    use SocialvoidLib\Objects\Definitions\ErrorDefinition;
     use Throwable;
 
-    class DocumentUploadException extends Exception
+    class DocumentUploadException extends Exception implements StandardErrorInterface
     {
 
         /**
@@ -17,5 +19,37 @@
         {
             parent::__construct($message, StandardErrorCodes::DocumentUploadException, $previous);
             $this->message = $message;
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDefinition(): ErrorDefinition
+        {
+            return new ErrorDefinition(self::getName(), self::getDescription(), self::getErrorCode());
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getName(): string
+        {
+            return 'DocumentUpload';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDescription(): string
+        {
+            return 'Raised when there was an error while trying to process the document upload';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getErrorCode(): int
+        {
+            return StandardErrorCodes::DocumentUploadException;
         }
     }
