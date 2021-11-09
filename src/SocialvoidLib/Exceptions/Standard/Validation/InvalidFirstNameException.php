@@ -8,24 +8,24 @@
      * must have a written permission from Intellivoid Technologies to do so.
      */
 
-namespace SocialvoidLib\Exceptions\Standard\Validation;
-
+    namespace SocialvoidLib\Exceptions\Standard\Validation;
 
     use Exception;
     use SocialvoidLib\Abstracts\StandardErrorCodes;
+    use SocialvoidLib\Interfaces\StandardErrorInterface;
+    use SocialvoidLib\Objects\Definitions\ErrorDefinition;
     use Throwable;
 
     /**
      * Class InvalidFirstNameException
      * @package SocialvoidLib\Exceptions\Standard\Validation
      */
-    class InvalidFirstNameException extends Exception
+    class InvalidFirstNameException extends Exception implements StandardErrorInterface
     {
         /**
          * @var string|null
          */
         private ?string $first_name;
-
 
         /**
          * InvalidFirstNameException constructor.
@@ -38,5 +38,45 @@ namespace SocialvoidLib\Exceptions\Standard\Validation;
             parent::__construct($message, StandardErrorCodes::InvalidFirstNameException, $previous);
             $this->message = $message;
             $this->first_name = $first_name;
+        }
+
+        /**
+         * @return string|null
+         */
+        public function getFirstName(): ?string
+        {
+            return $this->first_name;
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDefinition(): ErrorDefinition
+        {
+            return new ErrorDefinition(self::getName(), self::getDescription(), self::getErrorCode());
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getName(): string
+        {
+            return 'InvalidFirstName';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDescription(): string
+        {
+            return 'The First Name provided contains invalid characters and or is too long, see the message for further details';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getErrorCode(): int
+        {
+            return StandardErrorCodes::InvalidFirstNameException;
         }
     }

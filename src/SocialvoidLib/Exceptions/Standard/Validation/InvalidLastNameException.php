@@ -8,18 +8,20 @@
      * must have a written permission from Intellivoid Technologies to do so.
      */
 
-namespace SocialvoidLib\Exceptions\Standard\Validation;
+    namespace SocialvoidLib\Exceptions\Standard\Validation;
 
 
     use Exception;
     use SocialvoidLib\Abstracts\StandardErrorCodes;
+    use SocialvoidLib\Interfaces\StandardErrorInterface;
+    use SocialvoidLib\Objects\Definitions\ErrorDefinition;
     use Throwable;
 
     /**
      * Class InvalidLastNameException
      * @package SocialvoidLib\Exceptions\Standard\Validation
      */
-    class InvalidLastNameException extends Exception
+    class InvalidLastNameException extends Exception implements StandardErrorInterface
     {
         /**
          * @var string|null
@@ -46,5 +48,37 @@ namespace SocialvoidLib\Exceptions\Standard\Validation;
         public function getLastName(): ?string
         {
             return $this->last_name;
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDefinition(): ErrorDefinition
+        {
+            return new ErrorDefinition(self::getName(), self::getDescription(), self::getErrorCode());
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getName(): string
+        {
+            return 'InvalidLastName';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDescription(): string
+        {
+            return 'The Last Name provided contains invalid characters and or is too long, see the message for further details';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getErrorCode(): int
+        {
+            return StandardErrorCodes::InvalidLastNameException;
         }
     }

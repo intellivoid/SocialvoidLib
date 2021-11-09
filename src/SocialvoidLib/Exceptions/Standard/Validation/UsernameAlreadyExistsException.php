@@ -13,13 +13,15 @@ namespace SocialvoidLib\Exceptions\Standard\Validation;
 
     use Exception;
     use SocialvoidLib\Abstracts\StandardErrorCodes;
+    use SocialvoidLib\Interfaces\StandardErrorInterface;
+    use SocialvoidLib\Objects\Definitions\ErrorDefinition;
     use Throwable;
 
     /**
      * Class UsernameAlreadyExistsException
      * @package SocialvoidLib\Exceptions\Standard\Validation
      */
-    class UsernameAlreadyExistsException extends Exception
+    class UsernameAlreadyExistsException extends Exception implements StandardErrorInterface
     {
         /**
          * @var string
@@ -46,5 +48,37 @@ namespace SocialvoidLib\Exceptions\Standard\Validation;
         public function getUsername(): string
         {
             return $this->username;
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDefinition(): ErrorDefinition
+        {
+            return new ErrorDefinition(self::getName(), self::getDescription(), self::getErrorCode());
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getName(): string
+        {
+            return 'UsernameAlreadyExists';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDescription(): string
+        {
+            return 'The username is already registered in the network and cannot be used';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getErrorCode(): int
+        {
+            return StandardErrorCodes::UsernameAlreadyExistsException;
         }
     }

@@ -13,13 +13,15 @@ namespace SocialvoidLib\Exceptions\Standard\Validation;
 
     use Exception;
     use SocialvoidLib\Abstracts\StandardErrorCodes;
+    use SocialvoidLib\Interfaces\StandardErrorInterface;
+    use SocialvoidLib\Objects\Definitions\ErrorDefinition;
     use Throwable;
 
     /**
      * Class InvalidPasswordException
      * @package SocialvoidLib\Exceptions\Standard\Validation
      */
-    class InvalidPasswordException extends Exception
+    class InvalidPasswordException extends Exception implements StandardErrorInterface
     {
         /**
          * @var string
@@ -46,5 +48,37 @@ namespace SocialvoidLib\Exceptions\Standard\Validation;
         public function getPassword(): string
         {
             return $this->password;
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDefinition(): ErrorDefinition
+        {
+            return new ErrorDefinition(self::getName(), self::getDescription(), self::getErrorCode());
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getName(): string
+        {
+            return 'InvalidPassword';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDescription(): string
+        {
+            return 'The given password is insecure, see the message for further details';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getErrorCode(): int
+        {
+            return StandardErrorCodes::InvalidPasswordException;
         }
     }

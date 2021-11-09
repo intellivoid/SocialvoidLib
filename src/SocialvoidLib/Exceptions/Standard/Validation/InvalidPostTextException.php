@@ -13,19 +13,20 @@ namespace SocialvoidLib\Exceptions\Standard\Validation;
 
     use Exception;
     use SocialvoidLib\Abstracts\StandardErrorCodes;
+    use SocialvoidLib\Interfaces\StandardErrorInterface;
+    use SocialvoidLib\Objects\Definitions\ErrorDefinition;
     use Throwable;
 
     /**
      * Class InvalidPostTextException
      * @package SocialvoidLib\Exceptions\Standard\Validation
      */
-    class InvalidPostTextException extends Exception
+    class InvalidPostTextException extends Exception implements StandardErrorInterface
     {
         /**
          * @var string|null
          */
         private ?string $text;
-
 
         /**
          * InvalidPostTextException constructor.
@@ -38,5 +39,45 @@ namespace SocialvoidLib\Exceptions\Standard\Validation;
             parent::__construct($message, StandardErrorCodes::InvalidPostTextException, $previous);
             $this->message = $message;
             $this->text = $text;
+        }
+
+        /**
+         * @return string|null
+         */
+        public function getText(): ?string
+        {
+            return $this->text;
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDefinition(): ErrorDefinition
+        {
+            return new ErrorDefinition(self::getName(), self::getDescription(), self::getErrorCode());
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getName(): string
+        {
+            return 'InvalidPostText';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDescription(): string
+        {
+            return 'The post contains invalid characters or is too long, see the message for further details';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getErrorCode(): int
+        {
+            return StandardErrorCodes::InvalidPostTextException;
         }
     }

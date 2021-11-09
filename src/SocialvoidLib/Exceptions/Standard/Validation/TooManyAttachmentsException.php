@@ -4,9 +4,11 @@
 
     use Exception;
     use SocialvoidLib\Abstracts\StandardErrorCodes;
+    use SocialvoidLib\Interfaces\StandardErrorInterface;
+    use SocialvoidLib\Objects\Definitions\ErrorDefinition;
     use Throwable;
 
-    class TooManyAttachmentsException extends Exception
+    class TooManyAttachmentsException extends Exception implements StandardErrorInterface
     {
         /**
          * @param string $message
@@ -16,5 +18,37 @@
         {
             parent::__construct($message, StandardErrorCodes::TooManyAttachmentsException, $previous);
             $this->message = $message;
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDefinition(): ErrorDefinition
+        {
+            return new ErrorDefinition(self::getName(), self::getDescription(), self::getErrorCode());
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getName(): string
+        {
+            return 'TooManyAttachments';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDescription(): string
+        {
+            return 'Raised when the amount of attachments exceeds what the server supports';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getErrorCode(): int
+        {
+            return StandardErrorCodes::TooManyAttachmentsException;
         }
     }
