@@ -7,6 +7,13 @@
     class ErrorDefinition
     {
         /**
+         * The version of the protocol being used
+         *
+         * @var string
+         */
+        public $ProtocolVersion;
+
+        /**
          * The name of the error definition
          *
          * @var string
@@ -34,6 +41,7 @@
          */
         public function __construct(?string $name=null, ?string $description=null, ?int $standard_error_code=null)
         {
+            $this->ProtocolVersion = '1.0';
             $this->Name = $name;
             $this->Description = $description;
             $this->ErrorCode = $standard_error_code;
@@ -44,7 +52,7 @@
          */
         public function getId(): string
         {
-            return hash('crc32', $this->ErrorCode);
+            return hash('crc32',  $this->ProtocolVersion . ':' . $this->Name . ':' . $this->ErrorCode);
         }
 
         /**
