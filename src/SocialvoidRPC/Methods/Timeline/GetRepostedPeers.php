@@ -161,7 +161,7 @@
             $Response = Response::fromRequest($request);
             $Response->ResultData = [];
             foreach($Peers as $peer)
-                $Response->ResultData[] = Peer::fromUser($peer)->toArray();
+                $Response->ResultData[] = Peer::fromInternalPeer($peer)->toArray();
 
             return $Response;
         }

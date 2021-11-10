@@ -151,7 +151,7 @@
                 $following_std = [];
 
                 foreach($following as $follower)
-                    $following_std[] = Peer::fromUser($follower)->toArray();
+                    $following_std[] = Peer::fromInternalPeer($follower)->toArray();
 
                 $Response = Response::fromRequest($request);
                 $Response->ResultData = $following_std;

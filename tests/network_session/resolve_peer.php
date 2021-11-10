@@ -26,7 +26,7 @@
 
 
     $User = $NetworkSession->getUsers()->resolvePeer(getInput("Peer: "));
-    print(json_encode(\SocialvoidLib\Objects\Standard\Peer::fromUser($User)->toArray(), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+    print(json_encode(\SocialvoidLib\Objects\Standard\Peer::fromInternalPeer($User)->toArray(), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
 
     function convert($size)
     {

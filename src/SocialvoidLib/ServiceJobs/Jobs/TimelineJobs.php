@@ -138,6 +138,7 @@
          * @throws InvalidSearchMethodException
          * @throws DocumentNotFoundException
          * @throws PeerNotFoundException
+         * @throws \SocialvoidLib\Exceptions\Standard\Validation\InvalidFileNameException
          */
         public function processDistributeTimelinePost(ServiceJobQuery $serviceJobQuery): ServiceJobResults
         {

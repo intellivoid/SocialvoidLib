@@ -42,6 +42,7 @@
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\PostDeletedException;
     use SocialvoidLib\Exceptions\Standard\Network\PostNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidFileNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPageValueException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPostTextException;
     use SocialvoidLib\Exceptions\Standard\Validation\TooManyAttachmentsException;
@@ -51,7 +52,6 @@
     use SocialvoidLib\Objects\Standard\Document;
     use SocialvoidLib\Objects\Standard\Peer;
     use SocialvoidLib\Objects\Standard\TimelineState;
-    use SocialvoidLib\Objects\Peer;
     use Zimage\Exceptions\CannotGetOriginalImageException;
     use Zimage\Exceptions\FileNotFoundException;
     use Zimage\Exceptions\InvalidZimageFileException;
@@ -103,6 +103,7 @@
          * @throws TooManyAttachmentsException
          * @throws UserHasInvalidSlaveHashException
          * @throws UserTimelineNotFoundException
+         * @throws InvalidFileNameException
          */
         public function compose(string $text, array $attachments=[], array $flags=[]): Post
         {
@@ -221,6 +222,9 @@
          * @throws SizeNotSetException
          * @throws TooManyAttachmentsException
          * @throws UnsupportedImageTypeException
+         * @throws InvalidFileNameException
+         * @throws InvalidFileNameException
+         * @throws InvalidFileNameException
          * @noinspection DuplicatedCode
          */
         public function getStandardPost($post, bool $first_layer=true): \SocialvoidLib\Objects\Standard\Post
@@ -507,6 +511,7 @@
          * @throws UnsupportedImageTypeException
          * @throws UserHasInvalidSlaveHashException
          * @throws UserTimelineNotFoundException
+         * @throws InvalidFileNameException
          * @noinspection DuplicatedCode
          */
         public function retrieveFeed(int $page_number, bool $recursive=True): array
@@ -581,6 +586,7 @@
          * @throws TooManyAttachmentsException
          * @throws UserHasInvalidSlaveHashException
          * @throws UserTimelineNotFoundException
+         * @throws InvalidFileNameException
          */
         public function repost(string $post_public_id): Post
         {
@@ -680,6 +686,7 @@
          * @throws PostNotFoundException
          * @throws ServerNotReachableException
          * @throws ServiceJobException
+         * @throws InvalidFileNameException
          */
         public function getLikes(string $post_public_id, int $page=1): array
         {
@@ -735,6 +742,7 @@
          * @throws SizeNotSetException
          * @throws TooManyAttachmentsException
          * @throws UnsupportedImageTypeException
+         * @throws InvalidFileNameException
          * @noinspection DuplicatedCode
          */
         public function getReplies(string $post_public_id, int $page=1): array
@@ -786,6 +794,7 @@
          * @throws SizeNotSetException
          * @throws TooManyAttachmentsException
          * @throws UnsupportedImageTypeException
+         * @throws InvalidFileNameException
          * @noinspection DuplicatedCode
          */
         public function getQuotes(string $post_public_id, int $page=1): array
@@ -827,6 +836,7 @@
          * @throws PostNotFoundException
          * @throws ServerNotReachableException
          * @throws ServiceJobException
+         * @throws InvalidFileNameException
          * @noinspection DuplicatedCode
          */
         public function getReposts(string $post_public_id, int $page=1): array
@@ -879,6 +889,7 @@
          * @throws TooManyAttachmentsException
          * @throws UserHasInvalidSlaveHashException
          * @throws UserTimelineNotFoundException
+         * @throws InvalidFileNameException
          */
         public function quote(string $post_public_id, string $text, array $attachments=[], array $flags=[]): Post
         {

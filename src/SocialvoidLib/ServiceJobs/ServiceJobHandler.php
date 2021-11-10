@@ -3,9 +3,18 @@
 
     namespace SocialvoidLib\ServiceJobs;
 
+    use BackgroundWorker\Exceptions\ServerNotReachableException;
     use GearmanJob;
     use SocialvoidLib\Abstracts\Types\JobType;
+    use SocialvoidLib\Exceptions\GenericInternal\BackgroundWorkerNotEnabledException;
+    use SocialvoidLib\Exceptions\GenericInternal\CacheException;
+    use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
+    use SocialvoidLib\Exceptions\GenericInternal\DisplayPictureException;
+    use SocialvoidLib\Exceptions\GenericInternal\InvalidSearchMethodException;
     use SocialvoidLib\Exceptions\GenericInternal\ServiceJobException;
+    use SocialvoidLib\Exceptions\Standard\Network\DocumentNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidFileNameException;
     use SocialvoidLib\SocialvoidLib;
     use ZiProto\ZiProto;
 
@@ -47,6 +56,16 @@
          *
          * @param GearmanJob $job
          * @return ServiceJobResults
+         * @throws ServiceJobException
+         * @throws ServerNotReachableException
+         * @throws BackgroundWorkerNotEnabledException
+         * @throws CacheException
+         * @throws DatabaseException
+         * @throws DisplayPictureException
+         * @throws InvalidSearchMethodException
+         * @throws DocumentNotFoundException
+         * @throws PeerNotFoundException
+         * @throws InvalidFileNameException
          */
         public function handle(GearmanJob $job): ServiceJobResults
         {

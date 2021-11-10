@@ -275,6 +275,7 @@
          * @throws ServiceJobException
          * @throws DocumentNotFoundException
          * @throws PeerNotFoundException
+         * @throws \SocialvoidLib\Exceptions\Standard\Validation\InvalidFileNameException
          */
         public function distributePost(Peer $user, string $post_id, int $utilization=15, bool $skip_errors=true): void
         {

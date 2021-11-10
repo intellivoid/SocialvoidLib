@@ -417,7 +417,7 @@
             {
                 throw new InternalServerException("There was an error while trying to process your request", $e);
             }
-            
+
             return true;
         }
 
@@ -482,7 +482,7 @@
                 throw new InternalServerException("There was an error while trying to update the registered peer", $e);
             }
 
-            return Peer::fromUser($registered_peer);
+            return Peer::fromInternalPeer($registered_peer);
         }
 
         /**
@@ -655,7 +655,7 @@
          *
          * @return Peer|null
          */
-        public function getAuthenticatedUser(): ?Peer
+        public function getAuthenticatedUser(): ?Objects\Peer
         {
             return $this->authenticated_user;
         }

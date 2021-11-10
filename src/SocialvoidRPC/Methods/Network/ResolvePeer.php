@@ -142,7 +142,7 @@
             }
             
             $Response = Response::fromRequest($request);
-            $Response->ResultData = Peer::fromUser($resolved_peer)->toArray();
+            $Response->ResultData = Peer::fromInternalPeer($resolved_peer)->toArray();
 
             return $Response;
         }
