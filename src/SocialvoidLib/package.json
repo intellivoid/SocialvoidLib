@@ -819,6 +819,26 @@
         },
         {
             "required": true,
+            "file": "Objects/Peer/Profile.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/Peer/UserAuthenticationProperties.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/Peer/UserProperties.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/Peer/UserSettings.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/Peer.php"
+        },
+        {
+            "required": true,
             "file": "Objects/Post/Properties.php"
         },
         {
@@ -924,26 +944,6 @@
         {
             "required": true,
             "file": "Objects/Timeline.php"
-        },
-        {
-            "required": true,
-            "file": "Objects/User/Profile.php"
-        },
-        {
-            "required": true,
-            "file": "Objects/User/UserAuthenticationProperties.php"
-        },
-        {
-            "required": true,
-            "file": "Objects/User/UserProperties.php"
-        },
-        {
-            "required": true,
-            "file": "Objects/User/UserSettings.php"
-        },
-        {
-            "required": true,
-            "file": "Objects/User.php"
         },
         {
             "required": true,
