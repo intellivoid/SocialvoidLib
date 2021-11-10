@@ -4,10 +4,15 @@
 
     namespace SocialvoidLib\Objects\Standard;
 
+    use SocialvoidLib\Abstracts\Types\BuiltinTypes;
     use SocialvoidLib\Abstracts\Types\Standard\DocumentType;
+    use SocialvoidLib\Interfaces\StandardObjectInterface;
     use SocialvoidLib\Objects\ContentResults;
+    use SocialvoidLib\Objects\Standard\ObjectDefinition;
+    use SocialvoidLib\Objects\Standard\ParameterDefinition;
+    use SocialvoidLib\Objects\Standard\TypeDefinition;
 
-    class Document
+    class Document implements StandardObjectInterface
     {
         /**
          * The ID of the document
@@ -143,5 +148,61 @@
             $document_object->FileName = $contentResults->FileName;
 
             return $document_object;
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getName(): string
+        {
+            return 'Document';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDescription(): string
+        {
+            return 'A document object contains basic information about the file associated with the document and the document ID used to retrieve the document from the CDN Server';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDefinition(): ObjectDefinition
+        {
+            return new ObjectDefinition(self::getName(), self::getDescription(), self::getParameters());
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getParameters(): array
+        {
+            return [
+                new ParameterDefinition('id', [
+                    new TypeDefinition(BuiltinTypes::String, false)
+                ], true, 'The ID of the document'),
+
+                new ParameterDefinition('file_mime', [
+                    new TypeDefinition(BuiltinTypes::String, false)
+                ], true, 'The Mime of the file'),
+
+                new ParameterDefinition('file_name', [
+                    new TypeDefinition(BuiltinTypes::String, false)
+                ], true, 'The original name of the file'),
+
+                new ParameterDefinition('file_size', [
+                    new TypeDefinition(BuiltinTypes::Integer, false)
+                ], true, 'The size of the file in bytes'),
+
+                new ParameterDefinition('file_type', [
+                    new TypeDefinition(BuiltinTypes::String, false)
+                ], true, 'The type of file detected by the server'),
+
+                new ParameterDefinition('flags', [
+                    new TypeDefinition(BuiltinTypes::String, true)
+                ], true, 'An array of flags associated with this document'),
+            ];
         }
     }

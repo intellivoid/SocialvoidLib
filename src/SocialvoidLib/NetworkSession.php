@@ -71,12 +71,18 @@
     use SocialvoidLib\Network\Timeline;
     use SocialvoidLib\Network\Users;
     use SocialvoidLib\Objects\ActiveSession;
-    use SocialvoidLib\Objects\ProtocolDefinitions;
+    use SocialvoidLib\Objects\Standard\Profile;
+    use SocialvoidLib\Objects\Standard\ProtocolDefinitions;
+    use SocialvoidLib\Objects\Standard\DisplayPictureSize;
+    use SocialvoidLib\Objects\Standard\Document;
     use SocialvoidLib\Objects\Standard\HelpDocument;
     use SocialvoidLib\Objects\Standard\Peer;
+    use SocialvoidLib\Objects\Standard\Post;
     use SocialvoidLib\Objects\Standard\ServerInformation;
+    use SocialvoidLib\Objects\Standard\Session;
     use SocialvoidLib\Objects\Standard\SessionEstablished;
     use SocialvoidLib\Objects\Standard\SessionIdentification;
+    use SocialvoidLib\Objects\Standard\TextEntity;
     use SocialvoidLib\Objects\User;
 
     /**
@@ -580,6 +586,20 @@
                 InvalidVersionException::getDefinition(),
                 TooManyAttachmentsException::getDefinition(),
                 UsernameAlreadyExistsException::getDefinition()
+            ];
+
+            $ProtocolDefinitions->ObjectDefinitions = [
+                DisplayPictureSize::getDefinition(),
+                Document::getDefinition(),
+                HelpDocument::getDefinition(),
+                Peer::getDefinition(),
+                Post::getDefinition(),
+                Profile::getDefinition(),
+                ServerInformation::getDefinition(),
+                Session::getDefinition(),
+                SessionEstablished::getDefinition(),
+                SessionIdentification::getDefinition(),
+                TextEntity::getDefinition()
             ];
 
             return $ProtocolDefinitions;

@@ -5,7 +5,7 @@ namespace SocialvoidLib\Exceptions\Standard\Validation;
     use Exception;
     use SocialvoidLib\Abstracts\StandardErrorCodes;
     use SocialvoidLib\Interfaces\StandardErrorInterface;
-    use SocialvoidLib\Objects\Definitions\ErrorDefinition;
+    use SocialvoidLib\Objects\Standard\ErrorDefinition;
     use Throwable;
 
     class FileTooLargeException extends Exception implements StandardErrorInterface

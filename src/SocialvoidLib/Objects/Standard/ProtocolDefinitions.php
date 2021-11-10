@@ -1,8 +1,9 @@
 <?php
 
-    namespace SocialvoidLib\Objects;
+    namespace SocialvoidLib\Objects\Standard;
 
-    use SocialvoidLib\Objects\Definitions\ErrorDefinition;
+    use SocialvoidLib\Objects\Standard\ErrorDefinition;
+    use SocialvoidLib\Objects\Standard\ObjectDefinition;
 
     class ProtocolDefinitions
     {
@@ -21,6 +22,13 @@
         public $ErrorDefinitions;
 
         /**
+         * An array of object definitions that the server uses
+         *
+         * @var ObjectDefinition[]
+         */
+        public $ObjectDefinitions;
+
+        /**
          * Returns an array representation of the protocol definition object
          *
          * @return array[]
@@ -32,9 +40,14 @@
             foreach($this->ErrorDefinitions as $definition)
                 $error_definitions[] = $definition->toArray();
 
+            $object_definitions = [];
+            foreach($this->ObjectDefinitions as $definition)
+                $object_definitions[] = $definition->toArray();
+
             return [
                 'version' => $this->Version,
-                'errors' => $error_definitions
+                'errors' => $error_definitions,
+                'objects' => $object_definitions
             ];
         }
     }

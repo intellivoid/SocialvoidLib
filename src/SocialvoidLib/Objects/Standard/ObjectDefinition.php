@@ -2,9 +2,11 @@
 
     /** @noinspection PhpMissingFieldTypeInspection */
 
-    namespace SocialvoidLib\Objects\Definitions;
+    namespace SocialvoidLib\Objects\Standard;
 
-    class ErrorDefinition
+    use SocialvoidLib\Objects\Standard\ParameterDefinition;
+
+    class ObjectDefinition
     {
         /**
          * The version of the protocol being used
@@ -14,37 +16,37 @@
         public $ProtocolVersion;
 
         /**
-         * The name of the error definition
+         * The name of the type
          *
          * @var string
          */
         public $Name;
 
         /**
-         * The description of the error
+         * The description of the type
          *
          * @var string
          */
         public $Description;
 
         /**
-         * The error code associated with the error
+         * The structure of the object
          *
-         * @var int
+         * @var ParameterDefinition[]|array
          */
-        public $ErrorCode;
+        public $Parameters;
 
         /**
          * @param string|null $name
          * @param string|null $description
-         * @param int|null $standard_error_code
+         * @param array|null $parameters
          */
-        public function __construct(?string $name=null, ?string $description=null, ?int $standard_error_code=null)
+        public function __construct(?string $name=null, ?string $description=null, ?array $parameters=[])
         {
             $this->ProtocolVersion = '1.0';
             $this->Name = $name;
             $this->Description = $description;
-            $this->ErrorCode = $standard_error_code;
+            $this->Parameters = $parameters;
         }
 
         /**
@@ -52,7 +54,7 @@
          */
         public function getId(): string
         {
-            return hash('crc32',  $this->ProtocolVersion . ':' . $this->Name . ':' . $this->ErrorCode);
+            return hash('crc32',  $this->ProtocolVersion . ':' . $this->Name);
         }
 
         /**
@@ -60,11 +62,15 @@
          */
         public function toArray(): array
         {
+            $parameters = [];
+            foreach($this->Parameters as $item)
+                $parameters[] = $item->toArray();
+
             return [
                 'id' => $this->getId(),
                 'name' => $this->Name,
                 'description' => $this->Description,
-                'error_code' => (int)$this->ErrorCode
+                'parameters' => $parameters
             ];
         }
 
@@ -72,11 +78,11 @@
          * Returns an array representation of the error definition
          *
          * @param array $data
-         * @return ErrorDefinition
+         * @return ObjectDefinition
          */
-        public static function fromArray(array $data): ErrorDefinition
+        public static function fromArray(array $data): ObjectDefinition
         {
-            $definition = new ErrorDefinition();
+            $definition = new ObjectDefinition();
 
             if(isset($data['name']))
                 $definition->Name = $data['name'];
@@ -84,8 +90,11 @@
             if(isset($data['description']))
                 $definition->Description = $data['description'];
 
-            if(isset($data['error_code']))
-                $definition->ErrorCode = (int)$data['error_code'];
+            if(isset($data['parameters']))
+            {
+                foreach($data['parameters'] as $parameters)
+                    $definition->Parameters[] = ParameterDefinition::fromArray($parameters);
+            }
 
             return $definition;
         }

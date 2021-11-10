@@ -4,9 +4,14 @@
 
     namespace SocialvoidLib\Objects\Standard;
 
+    use SocialvoidLib\Abstracts\Types\BuiltinTypes;
+    use SocialvoidLib\Interfaces\StandardObjectInterface;
+    use SocialvoidLib\Objects\Standard\ObjectDefinition;
+    use SocialvoidLib\Objects\Standard\ParameterDefinition;
+    use SocialvoidLib\Objects\Standard\TypeDefinition;
     use SocialvoidLib\Objects\User;
 
-    class Profile
+    class Profile implements StandardObjectInterface
     {
         /**
          * The user's first name
@@ -181,5 +186,78 @@
             }
 
             return $ProfileObject;
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getName(): string
+        {
+            return 'Profile';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDescription(): string
+        {
+            return 'The profile object provides a profile display for a peer entity, this is mainly used to represent a "Profile" display of a peer.';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDefinition(): ObjectDefinition
+        {
+            return new ObjectDefinition(self::getName(), self::getDescription(), self::getParameters());
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getParameters(): array
+        {
+            return [
+                new ParameterDefinition('first_name', [
+                    new TypeDefinition(BuiltinTypes::String, false)
+                ], true, 'The first name of the entity'),
+
+                new ParameterDefinition('last_name', [
+                    new TypeDefinition(BuiltinTypes::String, false),
+                    new TypeDefinition(BuiltinTypes::Null, false)
+                ], true, 'The last name of the entity'),
+
+                new ParameterDefinition('name', [
+                    new TypeDefinition(BuiltinTypes::String, false)
+                ], true, 'The full display name of the entity'),
+
+                new ParameterDefinition('biography', [
+                    new TypeDefinition(BuiltinTypes::String, false),
+                    new TypeDefinition(BuiltinTypes::Null, false)
+                ], true, 'A biography or description of the entity'),
+
+                new ParameterDefinition('location', [
+                    new TypeDefinition(BuiltinTypes::String, false),
+                    new TypeDefinition(BuiltinTypes::Null, false)
+                ], true, 'The location of the entity'),
+
+                new ParameterDefinition('url', [
+                    new TypeDefinition(BuiltinTypes::String, false),
+                    new TypeDefinition(BuiltinTypes::Null, false)
+                ], true, 'The URL of the entity (Can be a website or a blog, etc)'),
+
+                new ParameterDefinition('followers_count', [
+                    new TypeDefinition(BuiltinTypes::Integer, false)
+                ], true, 'The amount of followers that this entity has'),
+
+                new ParameterDefinition('following_count', [
+                    new TypeDefinition(BuiltinTypes::Integer, false)
+                ], true, 'The amount of peers that this entity is following'),
+
+                new ParameterDefinition('display_picture_sizes', [
+                    new TypeDefinition('DisplayPictureSize', true)
+                ], true, 'An array of display picture size objects that represents the entity\'s display picture'),
+
+            ];
         }
     }

@@ -7,7 +7,7 @@
     use Exception;
     use SocialvoidLib\Abstracts\StandardErrorCodes;
     use SocialvoidLib\Interfaces\StandardErrorInterface;
-    use SocialvoidLib\Objects\Definitions\ErrorDefinition;
+    use SocialvoidLib\Objects\Standard\ErrorDefinition;
     use Throwable;
 
     class DocumentNotFoundException extends Exception implements StandardErrorInterface

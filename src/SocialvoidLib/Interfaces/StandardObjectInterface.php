@@ -2,9 +2,10 @@
 
     namespace SocialvoidLib\Interfaces;
 
-    use SocialvoidLib\Objects\Standard\ErrorDefinition;
+    use SocialvoidLib\Objects\Standard\ObjectDefinition;
+    use SocialvoidLib\Objects\Standard\ParameterDefinition;
 
-    interface StandardErrorInterface
+    interface StandardObjectInterface
     {
         /**
          * Returns the name of the standard error
@@ -21,16 +22,16 @@
         public static function getDescription(): string;
 
         /**
-         * Returns the standard error code used
+         * Returns the type
          *
-         * @return int
+         * @return ParameterDefinition[]
          */
-        public static function getErrorCode(): int;
+        public static function getParameters(): array;
 
         /**
-         * Returns an error definition object of the standard error
+         * Returns an object definition object of the standard object
          *
-         * @return ErrorDefinition
+         * @return ObjectDefinition
          */
-        public static function getDefinition(): ErrorDefinition;
+        public static function getDefinition(): ObjectDefinition;
     }

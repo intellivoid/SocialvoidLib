@@ -5,13 +5,15 @@
 
     namespace SocialvoidLib\Objects\Standard;
 
+    use SocialvoidLib\Abstracts\Types\BuiltinTypes;
+    use SocialvoidLib\Interfaces\StandardObjectInterface;
     use SocialvoidLib\Objects\ActiveSession;
 
     /**
      * Class Session
      * @package SocialvoidLib\Objects\Standard
      */
-    class Session
+    class Session implements StandardObjectInterface
     {
         /**
          * The Session ID
@@ -110,5 +112,57 @@
             $SessionObject->Flags = $activeSession->Flags;
 
             return $SessionObject;
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getName(): string
+        {
+            return 'Session';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDescription(): string
+        {
+            return 'A session object is contains basic information about the session.';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDefinition(): ObjectDefinition
+        {
+            return new ObjectDefinition(self::getName(), self::getDescription(), self::getParameters());
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getParameters(): array
+        {
+            return [
+                new ParameterDefinition('id', [
+                    new TypeDefinition(BuiltinTypes::String, false)
+                ], true, 'The ID of the session obtained when establishing a session'),
+
+                new ParameterDefinition('flags', [
+                    new TypeDefinition(BuiltinTypes::String, true)
+                ], true, 'An array of flags that has been set to this session'),
+
+                new ParameterDefinition('authenticated', [
+                    new TypeDefinition(BuiltinTypes::Boolean, false)
+                ], true, 'Indicates if the session is currently authenticated to a user'),
+
+                new ParameterDefinition('created', [
+                    new TypeDefinition(BuiltinTypes::Integer, false)
+                ], true, 'The Unix Timestamp for when this session was first created'),
+
+                new ParameterDefinition('expires', [
+                    new TypeDefinition(BuiltinTypes::Integer, false)
+                ], true, 'The Unix Timestamp for when this session expires'),
+            ];
         }
     }

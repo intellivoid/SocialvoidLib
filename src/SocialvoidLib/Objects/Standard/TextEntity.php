@@ -2,9 +2,11 @@
 
     namespace SocialvoidLib\Objects\Standard;
 
+    use SocialvoidLib\Abstracts\Types\BuiltinTypes;
     use SocialvoidLib\Abstracts\Types\Standard\TextEntityType;
+    use SocialvoidLib\Interfaces\StandardObjectInterface;
 
-    class TextEntity
+    class TextEntity implements StandardObjectInterface
     {
         /**
          * The text entity type
@@ -75,5 +77,54 @@
                 $textEntityObject->Value = $data['value'];
 
             return $textEntityObject;
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getName(): string
+        {
+            return 'TextEntity';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDescription(): string
+        {
+            return 'The text entity object describes the text type, this is useful for clients to render the given text correctly. For example a "@mention" will have a TextEntity with the value mention. So that the client can perform an action when this entity is clicked.';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDefinition(): ObjectDefinition
+        {
+            return new ObjectDefinition(self::getName(), self::getDescription(), self::getParameters());
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getParameters(): array
+        {
+            return [
+                new ParameterDefinition('type', [
+                    new TypeDefinition(BuiltinTypes::String, false)
+                ], true, 'The text entity type'),
+
+                new ParameterDefinition('offset', [
+                    new TypeDefinition(BuiltinTypes::Integer, false)
+                ], true, 'The offset for when the entity begins in the text'),
+
+                new ParameterDefinition('length', [
+                    new TypeDefinition(BuiltinTypes::Integer, false)
+                ], true, 'The length of the entity'),
+
+                new ParameterDefinition('value', [
+                    new TypeDefinition(BuiltinTypes::String, false),
+                    new TypeDefinition(BuiltinTypes::Null, false)
+                ], true, 'The value of the entity, for styling entities such as BOLD, ITALIC, etc. this value will be null, but for values such as MENTION, HASHTAG & URL the value will contain the respective value for the entity, for example a URL entity will contain a value of a http URL')
+            ];
         }
     }

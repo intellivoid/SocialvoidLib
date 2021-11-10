@@ -5,11 +5,13 @@
 
     namespace SocialvoidLib\Objects\Standard;
 
+    use SocialvoidLib\Abstracts\Types\BuiltinTypes;
     use SocialvoidLib\Classes\Utilities;
     use SocialvoidLib\Classes\Validate;
     use SocialvoidLib\Exceptions\Standard\Authentication\BadSessionChallengeAnswerException;
     use SocialvoidLib\Exceptions\Standard\Authentication\SessionNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPublicHashException;
+    use SocialvoidLib\Interfaces\StandardObjectInterface;
     use tsa\Classes\Crypto;
     use tsa\Exceptions\InvalidSecretException;
 
@@ -17,7 +19,7 @@
      * Class SessionIdentification
      * @package SocialvoidLib\Objects\Standard
      */
-    class SessionIdentification
+    class SessionIdentification implements StandardObjectInterface
     {
         /**
          * The ID of the session
@@ -154,5 +156,45 @@
                 $sessionIdentificationObject->ChallengeAnswer = $data["challenge_answer"];
 
             return $sessionIdentificationObject;
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getName(): string
+        {
+            return 'SessionIdentification';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDescription(): string
+        {
+            return 'A SessionIdentification object allows your client to identify the session it\'s using and prove that it is the owner of the session, it proves as a identification effort and security effort.';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDefinition(): ObjectDefinition
+        {
+            return new ObjectDefinition(self::getName(), self::getDescription(), self::getParameters());
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getParameters(): array
+        {
+            return [
+                new ParameterDefinition('id', [
+                    new TypeDefinition(BuiltinTypes::String, false)
+                ], true, 'The ID of the session obtained when establishing a session'),
+
+                new ParameterDefinition('challenge', [
+                    new TypeDefinition(BuiltinTypes::String, true)
+                ], true, 'The TOTP based challenge secret')
+            ];
         }
     }

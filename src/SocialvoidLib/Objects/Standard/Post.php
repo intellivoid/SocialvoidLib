@@ -5,15 +5,20 @@
     namespace SocialvoidLib\Objects\Standard;
 
     use SocialvoidLib\Abstracts\Flags\PostFlags;
+    use SocialvoidLib\Abstracts\Types\BuiltinTypes;
     use SocialvoidLib\Abstracts\Types\Standard\PostType;
     use SocialvoidLib\Classes\Converter;
     use SocialvoidLib\Classes\Utilities;
+    use SocialvoidLib\Interfaces\StandardObjectInterface;
+    use SocialvoidLib\Objects\Standard\ObjectDefinition;
+    use SocialvoidLib\Objects\Standard\ParameterDefinition;
+    use SocialvoidLib\Objects\Standard\TypeDefinition;
 
     /**
      * Class Post
      * @package SocialvoidLib\Objects\Standard
      */
-    class Post
+    class Post implements StandardObjectInterface
     {
         /**
          * The Public ID of the post
@@ -327,5 +332,120 @@
             }
 
             return $StandardPostObject;
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getName(): string
+        {
+            return 'Post';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDescription(): string
+        {
+            return 'A post object is used to represent a post submitted either by a peer, this object can contain recursive objects.';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDefinition(): ObjectDefinition
+        {
+            return new ObjectDefinition(self::getName(), self::getDescription(), self::getParameters());
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getParameters(): array
+        {
+            return [
+                new ParameterDefinition('id', [
+                    new TypeDefinition(BuiltinTypes::String, false)
+                ], true, 'The unique ID for the post'),
+
+                new ParameterDefinition('type', [
+                    new TypeDefinition(BuiltinTypes::String, false)
+                ], true, 'The post type used to represent the true intention of the post'),
+
+                new ParameterDefinition('peer', [
+                    new TypeDefinition('Peer', false),
+                    new TypeDefinition(BuiltinTypes::Null, false)
+                ], true, 'The author peer of the post, this property can be null if the post was deleted.'),
+
+                new ParameterDefinition('source', [
+                    new TypeDefinition(BuiltinTypes::String, false),
+                    new TypeDefinition(BuiltinTypes::Null, false)
+                ], true, 'The source for where this post was composed from or collected from (eg; the client the user is using or the third-party source that the post was collected. This is determined by the server). This property can be null if the post was deleted.'),
+
+                new ParameterDefinition('text', [
+                    new TypeDefinition(BuiltinTypes::String, false),
+                    new TypeDefinition(BuiltinTypes::Null, false)
+                ], true, 'The text content of the post source. This property can be null if the post has been deleted'),
+
+                new ParameterDefinition('attachments', [
+                    new TypeDefinition('Document', true)
+                ], true, 'An array of attached documents to the post'),
+
+                new ParameterDefinition('entities', [
+                    new TypeDefinition('TextEntity', true)
+                ], true, 'An array of entities extracted from the text, can be used by the client to highlight clickable entities that preforms an action.'),
+
+                new ParameterDefinition('mentioned_peers', [
+                    new TypeDefinition('Peer', true)
+                ], true, 'An array of resolved peers that was mentioned in the post text.'),
+
+                new ParameterDefinition('reply_to_post', [
+                    new TypeDefinition('Post', false),
+                    new TypeDefinition(BuiltinTypes::Null, false)
+                ], true, 'The original post that this post is replying to if applicable, otherwise null.'),
+
+                new ParameterDefinition('quoted_post', [
+                    new TypeDefinition('Post', false),
+                    new TypeDefinition(BuiltinTypes::Null, false)
+                ], true, 'The original post that this post is quoting if applicable, otherwise null'),
+
+                new ParameterDefinition('reposted_post', [
+                    new TypeDefinition('Post', false),
+                    new TypeDefinition(BuiltinTypes::Null, false)
+                ], true, 'The original post that this post is reposting if applicable, otherwise null'),
+
+                new ParameterDefinition('original_thread_post', [
+                    new TypeDefinition('Post', false),
+                    new TypeDefinition(BuiltinTypes::Null, false)
+                ], true, 'The original thread post, only applicable to replies. This value indicates the main thread post where all the replies originated from. This value will remain the same for all sub-replies of the main post.'),
+
+                new ParameterDefinition('like_count', [
+                    new TypeDefinition(BuiltinTypes::Integer, false),
+                    new TypeDefinition(BuiltinTypes::Null, false)
+                ], true, 'The amount of likes that this post has if applicable, otherwise null'),
+
+                new ParameterDefinition('repost_count', [
+                    new TypeDefinition(BuiltinTypes::Integer, false),
+                    new TypeDefinition(BuiltinTypes::Null, false)
+                ], true, 'The amount of repost that this post has if applicable, otherwise null'),
+
+                new ParameterDefinition('quote_count', [
+                    new TypeDefinition(BuiltinTypes::Integer, false),
+                    new TypeDefinition(BuiltinTypes::Null, false)
+                ], true, 'The amount of quoted posts that this post has if applicable, otherwise null'),
+
+                new ParameterDefinition('reply_count', [
+                    new TypeDefinition(BuiltinTypes::Integer, false),
+                    new TypeDefinition(BuiltinTypes::Null, false)
+                ], true, 'The amount of replies that this post has if applicable, otherwise null'),
+
+                new ParameterDefinition('posted_timestamp', [
+                    new TypeDefinition(BuiltinTypes::Integer, false)
+                ], true, 'The Unix Timestamp for when this post was created'),
+
+                new ParameterDefinition('flags', [
+                    new TypeDefinition(BuiltinTypes::String, true)
+                ], true, 'The flags associated with this post'),
+            ];
         }
     }

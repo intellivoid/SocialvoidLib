@@ -3,9 +3,14 @@
     namespace SocialvoidLib\Objects\Standard;
 
     use SocialvoidLib\Abstracts\Modes\Standard\ParseMode;
+    use SocialvoidLib\Abstracts\Types\BuiltinTypes;
     use SocialvoidLib\Classes\Utilities;
+    use SocialvoidLib\Interfaces\StandardObjectInterface;
+    use SocialvoidLib\Objects\Standard\ObjectDefinition;
+    use SocialvoidLib\Objects\Standard\ParameterDefinition;
+    use SocialvoidLib\Objects\Standard\TypeDefinition;
 
-    class HelpDocument
+    class HelpDocument implements StandardObjectInterface
     {
         /**
          * The ID of the help document
@@ -92,5 +97,49 @@
             $helpDocumentObject->Entities = Utilities::extractTextEntities($input, ParseMode::Markdown);
 
             return $helpDocumentObject;
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getName(): string
+        {
+            return 'HelpDocument';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDescription(): string
+        {
+            return 'A help document is often retrieved from the server as a way to represent a document to the user for multiple purposes, from quick guides to server announcements or the legal documents required to be shown to the user before they register an account to the network.';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDefinition(): ObjectDefinition
+        {
+            return new ObjectDefinition(self::getName(), self::getDescription(), self::getParameters());
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getParameters(): array
+        {
+            return [
+                new ParameterDefinition('id', [
+                    new TypeDefinition(BuiltinTypes::String, false)
+                ], true, 'The ID of the document, if the document gets updated then the ID will change'),
+
+                new ParameterDefinition('text', [
+                    new TypeDefinition(BuiltinTypes::String, false)
+                ], true, 'The text contents of the document'),
+
+                new ParameterDefinition('entities', [
+                    new TypeDefinition('TextEntity', true)
+                ], true, 'An array of text entities being represented in the text')
+            ];
         }
     }

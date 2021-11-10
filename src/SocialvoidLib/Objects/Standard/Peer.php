@@ -13,14 +13,19 @@
 
     namespace SocialvoidLib\Objects\Standard;
 
+    use SocialvoidLib\Abstracts\Types\BuiltinTypes;
     use SocialvoidLib\Abstracts\Types\Standard\PeerType;
+    use SocialvoidLib\Interfaces\StandardObjectInterface;
+    use SocialvoidLib\Objects\Standard\ObjectDefinition;
+    use SocialvoidLib\Objects\Standard\ParameterDefinition;
+    use SocialvoidLib\Objects\Standard\TypeDefinition;
     use SocialvoidLib\Objects\User;
 
     /**
      * Class StandardPeer
      * @package SocialvoidLib\Objects\Standard
      */
-    class Peer
+    class Peer implements StandardObjectInterface
     {
         /**
          * The ID of the peer
@@ -126,5 +131,57 @@
                 $PeerObject->Flags = $data["flags"];
 
             return $PeerObject;
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getName(): string
+        {
+            return 'Peer';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDescription(): string
+        {
+            return 'A peer object provides a basic description and identification a peer entity that can contain information used to identify a peer on the client or basic flags and properties of the peer to pre-determine what actions are available for a peer.';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDefinition(): ObjectDefinition
+        {
+            return new ObjectDefinition(self::getName(), self::getDescription(), self::getParameters());
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getParameters(): array
+        {
+            return [
+                new ParameterDefinition('id', [
+                    new TypeDefinition(BuiltinTypes::String, false)
+                ], true, 'The ID of the document, if the document gets updated then the ID will change'),
+
+                new ParameterDefinition('type', [
+                    new TypeDefinition(BuiltinTypes::String, false)
+                ], true, 'The type of the peer entity'),
+
+                new ParameterDefinition('name', [
+                    new TypeDefinition(BuiltinTypes::String, false)
+                ], true, 'The display name of the peer'),
+
+                new ParameterDefinition('username', [
+                    new TypeDefinition(BuiltinTypes::String, false)
+                ], true, 'The username associated with this peer'),
+
+                new ParameterDefinition('flags', [
+                    new TypeDefinition(BuiltinTypes::String, true)
+                ], true, 'Flags associated with this peer')
+            ];
         }
     }

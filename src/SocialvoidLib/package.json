@@ -203,6 +203,10 @@
         },
         {
             "required": true,
+            "file": "Abstracts/Types/BuiltinTypes.php"
+        },
+        {
+            "required": true,
             "file": "Abstracts/Types/CacheEntryObjectType.php"
         },
         {
@@ -667,6 +671,10 @@
         },
         {
             "required": true,
+            "file": "Interfaces/StandardObjectInterface.php"
+        },
+        {
+            "required": true,
             "file": "Managers/BasicRedisCacheManager.php"
         },
         {
@@ -775,10 +783,6 @@
         },
         {
             "required": true,
-            "file": "Objects/Definitions/ErrorDefinition.php"
-        },
-        {
-            "required": true,
             "file": "Objects/Document/File.php"
         },
         {
@@ -831,10 +835,6 @@
         },
         {
             "required": true,
-            "file": "Objects/ProtocolDefinitions.php"
-        },
-        {
-            "required": true,
             "file": "Objects/QuoteRecord.php"
         },
         {
@@ -855,7 +855,19 @@
         },
         {
             "required": true,
+            "file": "Objects/Standard/ErrorDefinition.php"
+        },
+        {
+            "required": true,
             "file": "Objects/Standard/HelpDocument.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/Standard/ObjectDefinition.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/Standard/ParameterDefinition.php"
         },
         {
             "required": true,
@@ -868,6 +880,10 @@
         {
             "required": true,
             "file": "Objects/Standard/Profile.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/Standard/ProtocolDefinitions.php"
         },
         {
             "required": true,
@@ -892,6 +908,10 @@
         {
             "required": true,
             "file": "Objects/Standard/TimelineState.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/Standard/TypeDefinition.php"
         },
         {
             "required": true,
@@ -976,7 +996,6 @@
     ],
     "files": [
         "Classes/PostText/TwitterMethod/README.md",
-        "Objects/Standard/README.md",
         "package.json",
         "Templates/community_guidelines.md",
         "Templates/privacy_policy.md",

@@ -5,7 +5,13 @@
 
     namespace SocialvoidLib\Objects\Standard;
 
-    class DisplayPictureSize
+    use SocialvoidLib\Abstracts\Types\BuiltinTypes;
+    use SocialvoidLib\Interfaces\StandardObjectInterface;
+    use SocialvoidLib\Objects\Standard\ObjectDefinition;
+    use SocialvoidLib\Objects\Standard\ParameterDefinition;
+    use SocialvoidLib\Objects\Standard\TypeDefinition;
+
+    class DisplayPictureSize implements StandardObjectInterface
     {
         /**
          * The width of the image
@@ -62,5 +68,49 @@
                 $displayPictureObject->Document = Document::fromArray($data['document']);
 
             return $displayPictureObject;
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getName(): string
+        {
+            return 'DisplayPictureSize';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDescription(): string
+        {
+            return 'This object describes the size of a display picture followed by a document object that results in said display picture size.';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDefinition(): ObjectDefinition
+        {
+            return new ObjectDefinition(self::getName(), self::getDescription(), self::getParameters());
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getParameters(): array
+        {
+            return [
+                new ParameterDefinition('width', [
+                    new TypeDefinition(BuiltinTypes::Integer, false)
+                ], true, 'The width of the image'),
+
+                new ParameterDefinition('height', [
+                    new TypeDefinition(BuiltinTypes::Integer, false)
+                ], true, 'The height of the image'),
+
+                new ParameterDefinition('height', [
+                    new TypeDefinition('Document', false)
+                ], true, 'The document object that points to the display picture'),
+            ];
         }
     }
