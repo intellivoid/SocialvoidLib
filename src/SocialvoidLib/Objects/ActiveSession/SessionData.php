@@ -8,9 +8,12 @@
      * must have a written permission from Intellivoid Technologies to do so.
      */
 
+    /** @noinspection PhpMissingFieldTypeInspection */
     /** @noinspection PhpUnused */
 
 namespace SocialvoidLib\Objects\ActiveSession;
+
+    use SocialvoidLib\Abstracts\Flags\PermissionSets;
 
     /**
      * Class SessionData
@@ -19,13 +22,22 @@ namespace SocialvoidLib\Objects\ActiveSession;
     class SessionData
     {
         /**
+         * Permissions set to the current session
+         *
+         * @var array|string[]|PermissionSets[]
+         */
+        public $PermissionSets;
+
+        /**
          * Returns an array representation of the object
          *
          * @return array
          */
         public function toArray(): array
         {
-            return [];
+            return [
+                'permission_sets' => $this->PermissionSets
+            ];
         }
 
         /**
@@ -37,6 +49,9 @@ namespace SocialvoidLib\Objects\ActiveSession;
         public static function fromArray(array $data): SessionData
         {
             $SessionDataObject = new SessionData();
+
+            if(isset($data['permission_sets']))
+                $SessionDataObject->PermissionSets = $data['permission_sets'];
 
             return $SessionDataObject;
         }

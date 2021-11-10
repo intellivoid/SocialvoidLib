@@ -13,7 +13,6 @@
 
     namespace SocialvoidLib\Objects;
 
-    use SocialvoidLib\Abstracts\Flags\ActiveSessionFlag;
     use SocialvoidLib\Abstracts\UserAuthenticationMethod;
     use SocialvoidLib\Objects\ActiveSession\SessionData;
     use SocialvoidLib\Objects\ActiveSession\SessionSecurity;
@@ -34,7 +33,7 @@
         /**
          * The current flags set to this session
          *
-         * @var ActiveSessionFlag[]
+         * @var string[]
          */
         public $Flags;
 
@@ -104,7 +103,7 @@
         }
 
         /**
-         * @return ActiveSessionFlag[]
+         * @return string[]
          */
         public function getFlags(): array
         {
@@ -112,7 +111,7 @@
         }
 
         /**
-         * @param ActiveSessionFlag[] $Flags
+         * @param string[] $Flags
          */
         public function setFlags(array $Flags): void
         {

@@ -30,6 +30,13 @@
         public $Flags;
 
         /**
+         * An array of permissions assigned to the current session
+         * 
+         * @var array
+         */
+        public $Permissions;
+
+        /**
          * Indicates if the session is authenticated or not
          *
          * @var bool
@@ -58,11 +65,12 @@
         public function toArray(): array
         {
             return [
-                "id" => $this->ID,
-                "flags" => $this->Flags,
-                "authenticated" => $this->Authenticated,
-                "created" => $this->EstablishedTimestamp,
-                "expires" => $this->ExpiresTimestamp
+                'id' => $this->ID,
+                'flags' => $this->Flags,
+                'permissions' => $this->Permissions,
+                'authenticated' => $this->Authenticated,
+                'created' => $this->EstablishedTimestamp,
+                'expires' => $this->ExpiresTimestamp
             ];
         }
 
@@ -76,20 +84,23 @@
         {
             $SessionObject = new Session();
 
-            if(isset($data["id"]))
-                $SessionObject->ID = $data["id"];
+            if(isset($data['id']))
+                $SessionObject->ID = $data['id'];
 
-            if(isset($data["flags"]))
-                $SessionObject->Flags = $data["flags"];
+            if(isset($data['flags']))
+                $SessionObject->Flags = $data['flags'];
 
-            if(isset($data["authenticated"]))
-                $SessionObject->Authenticated = $data["authenticated"];
+            if(isset($data['permissions']))
+                $SessionObject->Permissions = $data['permissions'];
 
-            if(isset($data["created"]))
-                $SessionObject->EstablishedTimestamp = $data["created"];
+            if(isset($data['authenticated']))
+                $SessionObject->Authenticated = $data['authenticated'];
 
-            if(isset($data["expires"]))
-                $SessionObject->ExpiresTimestamp = $data["expires"];
+            if(isset($data['created']))
+                $SessionObject->EstablishedTimestamp = $data['created'];
+
+            if(isset($data['expires']))
+                $SessionObject->ExpiresTimestamp = $data['expires'];
 
             return $SessionObject;
         }
@@ -110,6 +121,7 @@
             $SessionObject->EstablishedTimestamp = $activeSession->CreatedTimestamp;
             $SessionObject->ExpiresTimestamp = $activeSession->ExpiresTimestamp;
             $SessionObject->Flags = $activeSession->Flags;
+            $SessionObject->Permissions = $activeSession->Data->PermissionSets;
 
             return $SessionObject;
         }
@@ -151,6 +163,10 @@
                 new ParameterDefinition('flags', [
                     new TypeDefinition(BuiltinTypes::String, true)
                 ], true, 'An array of flags that has been set to this session'),
+
+                new ParameterDefinition('permissions', [
+                    new TypeDefinition(BuiltinTypes::String, true)
+                ], true, 'An array of permission sets that has been set to this session'),
 
                 new ParameterDefinition('authenticated', [
                     new TypeDefinition(BuiltinTypes::Boolean, false)
