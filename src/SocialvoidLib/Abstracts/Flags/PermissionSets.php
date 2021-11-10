@@ -51,10 +51,4 @@
          * actions on the network (Dangerous)
          */
         const Administrator = 'ADMINISTRATOR';
-
-        /**
-         * Indicates that the current session allows the authenticated entity to preform administrator
-         * actions on the server
-         */
-        const ServerAdministrator = 'SERVER_ADMINISTRATOR';
     }

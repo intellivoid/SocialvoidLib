@@ -18,7 +18,8 @@
     use SocialvoidLib\Abstracts\Flags\PermissionSets;
     use SocialvoidLib\Abstracts\SearchMethods\ActiveSessionSearchMethod;
     use SocialvoidLib\Abstracts\SearchMethods\UserSearchMethod;
-    use SocialvoidLib\Abstracts\StatusStates\UserStatus;
+    use SocialvoidLib\Abstracts\Types\Standard\PeerRole;
+    use SocialvoidLib\Abstracts\Types\Standard\PeerType;
     use SocialvoidLib\Abstracts\UserAuthenticationMethod;
     use SocialvoidLib\Classes\Converter;
     use SocialvoidLib\Classes\Validate;
@@ -85,7 +86,6 @@
     use SocialvoidLib\Objects\Standard\SessionEstablished;
     use SocialvoidLib\Objects\Standard\SessionIdentification;
     use SocialvoidLib\Objects\Standard\TextEntity;
-    use SocialvoidLib\Objects\Peer;
 
     /**
      * Class Network
@@ -191,15 +191,16 @@
          * Loads a session from a session identification
          *
          * @param SessionIdentification $sessionIdentification
+         * @throws BadSessionChallengeAnswerException
+         * @throws DocumentNotFoundException
          * @throws Exceptions\GenericInternal\CacheException
          * @throws Exceptions\GenericInternal\DatabaseException
          * @throws Exceptions\GenericInternal\DisplayPictureException
          * @throws Exceptions\GenericInternal\InvalidSearchMethodException
-         * @throws Exceptions\Standard\Authentication\BadSessionChallengeAnswerException
          * @throws Exceptions\Standard\Authentication\SessionNotFoundException
-         * @throws Exceptions\Standard\Network\DocumentNotFoundException
-         * @throws Exceptions\Standard\Validation\InvalidClientPublicHashException
          * @throws InternalServerException
+         * @throws InvalidClientPublicHashException
+         * @throws InvalidFileNameException
          * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
          * @throws SessionExpiredException
@@ -253,11 +254,12 @@
         /**
          * Loads the authenticated peer into the network session
          *
+         * @throws DocumentNotFoundException
          * @throws Exceptions\GenericInternal\CacheException
          * @throws Exceptions\GenericInternal\DatabaseException
          * @throws Exceptions\GenericInternal\DisplayPictureException
          * @throws Exceptions\GenericInternal\InvalidSearchMethodException
-         * @throws Exceptions\Standard\Network\DocumentNotFoundException
+         * @throws InvalidFileNameException
          * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
          */
@@ -316,21 +318,22 @@
          * @return bool
          * @throws AlreadyAuthenticatedException
          * @throws AuthenticationFailureException
+         * @throws AuthenticationNotApplicableException
+         * @throws DocumentNotFoundException
          * @throws Exceptions\GenericInternal\CacheException
          * @throws Exceptions\GenericInternal\DatabaseException
          * @throws Exceptions\GenericInternal\DisplayPictureException
          * @throws Exceptions\GenericInternal\InvalidSearchMethodException
          * @throws Exceptions\Internal\NoPasswordAuthenticationAvailableException
-         * @throws Exceptions\Standard\Authentication\AuthenticationNotApplicableException
-         * @throws Exceptions\Standard\Authentication\IncorrectTwoFactorAuthenticationCodeException
-         * @throws Exceptions\Standard\Authentication\PrivateAccessTokenRequiredException
          * @throws Exceptions\Standard\Authentication\SessionNotFoundException
-         * @throws Exceptions\Standard\Authentication\TwoFactorAuthenticationRequiredException
-         * @throws Exceptions\Standard\Network\DocumentNotFoundException
          * @throws IncorrectLoginCredentialsException
+         * @throws IncorrectTwoFactorAuthenticationCodeException
          * @throws InternalServerException
+         * @throws InvalidFileNameException
          * @throws InvalidPasswordException
          * @throws PeerNotFoundException
+         * @throws PrivateAccessTokenRequiredException
+         * @throws TwoFactorAuthenticationRequiredException
          */
         public function authenticateUser(string $username, string $password, ?string $otp=null): bool
         {
@@ -378,7 +381,34 @@
             $this->active_session->UserID = $authenticating_peer->ID;
             $this->active_session->AuthenticationMethodUsed = $authenticating_peer->AuthenticationMethod;
 
-            Converter::addFlag($this->active_session->Data->PermissionSets, PermissionSets::User);
+            Converter::addFlag($this->active_session->Data->PermissionSets, PermissionSets::ModifyAccountSettings);
+            Converter::addFlag($this->active_session->Data->PermissionSets, PermissionSets::ModifySecuritySettings);
+
+            switch($authenticating_peer->Type)
+            {
+                case PeerType::User:
+                    Converter::addFlag($this->active_session->Data->PermissionSets, PermissionSets::User);
+                    break;
+
+                case PeerType::Bot:
+                    Converter::addFlag($this->active_session->Data->PermissionSets, PermissionSets::Bot);
+                    break;
+
+                case PeerType::Proxy:
+                    Converter::addFlag($this->active_session->Data->PermissionSets, PermissionSets::Proxy);
+                    break;
+            }
+
+            switch($authenticating_peer->Role)
+            {
+                case PeerRole::Administrator:
+                    Converter::addFlag($this->active_session->Data->PermissionSets, PermissionSets::Administrator);
+                    break;
+
+                case PeerRole::Moderator:
+                    Converter::addFlag($this->active_session->Data->PermissionSets, PermissionSets::Moderator);
+                    break;
+            }
 
             try
             {
@@ -403,18 +433,19 @@
          * @param string|null $last_name
          * @return Peer
          * @throws AlreadyAuthenticatedException
+         * @throws DocumentNotFoundException
          * @throws Exceptions\GenericInternal\CacheException
          * @throws Exceptions\GenericInternal\DatabaseException
          * @throws Exceptions\GenericInternal\DisplayPictureException
          * @throws Exceptions\GenericInternal\InvalidSearchMethodException
-         * @throws Exceptions\Standard\Network\DocumentNotFoundException
          * @throws Exceptions\Standard\Validation\InvalidFirstNameException
-         * @throws Exceptions\Standard\Validation\InvalidLastNameException
-         * @throws Exceptions\Standard\Validation\InvalidUsernameException
-         * @throws Exceptions\Standard\Validation\UsernameAlreadyExistsException
          * @throws InternalServerException
+         * @throws InvalidFileNameException
+         * @throws InvalidLastNameException
          * @throws InvalidPasswordException
+         * @throws InvalidUsernameException
          * @throws PeerNotFoundException
+         * @throws UsernameAlreadyExistsException
          */
         public function registerUser(string $username, string $password, string $first_name, ?string $last_name=null): Peer
         {
