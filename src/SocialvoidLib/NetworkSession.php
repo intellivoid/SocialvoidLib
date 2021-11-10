@@ -294,10 +294,9 @@
             $this->active_session->Authenticated = false;
             $this->active_session->UserID = null;
             $this->active_session->AuthenticationMethodUsed = UserAuthenticationMethod::None;
+            $this->active_session->Data->PermissionSets = [PermissionSets::Public];
 
             $this->authenticated_user = null;
-
-            Converter::removeFlag($this->flags, NetworkFlags::Authenticated);
 
             try
             {
@@ -418,9 +417,7 @@
             {
                 throw new InternalServerException("There was an error while trying to process your request", $e);
             }
-
-            Converter::addFlag($this->flags, NetworkFlags::Authenticated);
-
+            
             return true;
         }
 
