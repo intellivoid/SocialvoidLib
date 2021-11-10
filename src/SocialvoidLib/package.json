@@ -235,6 +235,10 @@
         },
         {
             "required": true,
+            "file": "Abstracts/Types/Standard/PeerRole.php"
+        },
+        {
+            "required": true,
             "file": "Abstracts/Types/Standard/PeerType.php"
         },
         {
@@ -687,6 +691,10 @@
         },
         {
             "required": true,
+            "file": "Managers/PeerManager.php"
+        },
+        {
+            "required": true,
             "file": "Managers/PostsManager.php"
         },
         {
@@ -724,10 +732,6 @@
         {
             "required": true,
             "file": "Managers/TimelineManager.php"
-        },
-        {
-            "required": true,
-            "file": "Managers/UserManager.php"
         },
         {
             "required": true,
