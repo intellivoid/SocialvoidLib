@@ -15,6 +15,7 @@
 
     use Exception;
     use msqg\QueryBuilder;
+    use SocialvoidLib\Abstracts\Flags\PermissionSets;
     use SocialvoidLib\Abstracts\SearchMethods\ActiveSessionSearchMethod;
     use SocialvoidLib\Abstracts\Types\CacheEntryObjectType;
     use SocialvoidLib\Abstracts\UserAuthenticationMethod;
@@ -73,6 +74,9 @@
         {
             // TODO: Validate the hashes
             $SessionData = new SessionData();
+            $SessionData->PermissionSets = [
+                PermissionSets::Public // Public only
+            ];
             $SessionSecurity = new ActiveSession\SessionSecurity();
             $SessionSecurity->ClientPublicHash = $sessionClient->PublicHash;
             $SessionSecurity->ClientPrivateHash = $sessionClient->PrivateHash;
