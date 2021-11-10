@@ -45,7 +45,7 @@
     use SocialvoidLib\Exceptions\Standard\Validation\TooManyAttachmentsException;
     use SocialvoidLib\InputTypes\RegisterCacheInput;
     use SocialvoidLib\Objects\Post;
-    use SocialvoidLib\Objects\User;
+    use SocialvoidLib\Objects\Peer;
     use SocialvoidLib\SocialvoidLib;
     use Symfony\Component\Uid\Uuid;
     use ZiProto\ZiProto;
@@ -116,7 +116,7 @@
         /**
          * Publishes a post to the network
          *
-         * @param User $user
+         * @param Peer $user
          * @param string $source
          * @param string $text
          * @param string|null $session_id
@@ -137,7 +137,7 @@
          * @noinspection DuplicatedCode
          * @noinspection PhpBooleanCanBeSimplifiedInspection
          */
-        public function publishPost(User $user, string $source, string $text, string $session_id=null, array $attachments=[], string $priority=PostPriorityLevel::None, array $flags=[]): Post
+        public function publishPost(Peer $user, string $source, string $text, string $session_id=null, array $attachments=[], string $priority=PostPriorityLevel::None, array $flags=[]): Post
         {
             $timestamp = time();
 
@@ -384,7 +384,7 @@
         /**
          * Likes an existing post
          *
-         * @param User $user
+         * @param Peer $user
          * @param Post $post
          * @param bool $skip_errors
          * @throws CacheException
@@ -400,7 +400,7 @@
          * @throws TooManyAttachmentsException
          * @noinspection DuplicatedCode
          */
-        public function likePost(User $user, Post $post, bool $skip_errors=False): void
+        public function likePost(Peer $user, Post $post, bool $skip_errors=False): void
         {
             try
             {
@@ -439,7 +439,7 @@
         /**
          * Unlikes an existing post
          *
-         * @param User $user
+         * @param Peer $user
          * @param Post $post
          * @param bool $skip_errors
          * @throws CacheException
@@ -455,7 +455,7 @@
          * @throws TooManyAttachmentsException
          * @noinspection DuplicatedCode
          */
-        public function unlikePost(User $user, Post $post, bool $skip_errors=False): void
+        public function unlikePost(Peer $user, Post $post, bool $skip_errors=False): void
         {
             try
             {
@@ -494,7 +494,7 @@
         /**
          * Reposts an existing post
          *
-         * @param User $user
+         * @param Peer $user
          * @param Post $post
          * @param string|null $session_id
          * @param string $priority
@@ -516,7 +516,7 @@
          * @noinspection DuplicatedCode
          * @noinspection PhpBooleanCanBeSimplifiedInspection
          */
-        public function repostPost(User $user, Post $post, string $session_id, string $priority=PostPriorityLevel::None, array $flags=[]): Post
+        public function repostPost(Peer $user, Post $post, string $session_id, string $priority=PostPriorityLevel::None, array $flags=[]): Post
         {
             // Do not repost the post if it's deleted
             if(Converter::hasFlag($post->Flags, PostFlags::Deleted))
@@ -610,7 +610,7 @@
         /**
          * Reposts an existing post
          *
-         * @param User $user
+         * @param Peer $user
          * @param Post $post
          * @param string $text
          * @param string $source
@@ -634,7 +634,7 @@
          * @noinspection DuplicatedCode
          * @noinspection PhpBooleanCanBeSimplifiedInspection
          */
-        public function quotePost(User $user, Post $post, string $text, string $source, string $session_id=null, array $attachments=[], string $priority=PostPriorityLevel::None, array $flags=[]): Post
+        public function quotePost(Peer $user, Post $post, string $text, string $source, string $session_id=null, array $attachments=[], string $priority=PostPriorityLevel::None, array $flags=[]): Post
         {
             // Do not quote the post if it's deleted
             if(Converter::hasFlag($post->Flags, PostFlags::Deleted))
@@ -723,7 +723,7 @@
         }
 
         /**
-         * @param User $user
+         * @param Peer $user
          * @param Post $post
          * @param string $text
          * @param string $source
@@ -748,7 +748,7 @@
          * @noinspection PhpBooleanCanBeSimplifiedInspection
          * @noinspection PhpCastIsUnnecessaryInspection
          */
-        public function replyToPost(User $user, Post $post, string $text, string $source, string $session_id=null, array $attachments=[], string $priority=PostPriorityLevel::None, array $flags=[]): Post
+        public function replyToPost(Peer $user, Post $post, string $text, string $source, string $session_id=null, array $attachments=[], string $priority=PostPriorityLevel::None, array $flags=[]): Post
         {
             // Do not repost the post if it's deleted
             if(Converter::hasFlag($post->Flags, PostFlags::Deleted))

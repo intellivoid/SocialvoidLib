@@ -11,7 +11,7 @@
     /** @noinspection PhpMissingFieldTypeInspection */
     /** @noinspection PhpUnused */
 
-    namespace SocialvoidLib\Objects\User;
+    namespace SocialvoidLib\Objects\Peer;
 
     use Exception;
     use SocialvoidLib\Classes\Security\Hashing;

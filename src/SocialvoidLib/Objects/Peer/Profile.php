@@ -11,7 +11,7 @@
     /** @noinspection PhpUnused */
     /** @noinspection PhpMissingFieldTypeInspection */
 
-    namespace SocialvoidLib\Objects\User;
+    namespace SocialvoidLib\Objects\Peer;
 
     /**
      * Class Name

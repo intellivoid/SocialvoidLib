@@ -51,7 +51,7 @@
     use SocialvoidLib\Objects\Standard\Document;
     use SocialvoidLib\Objects\Standard\Peer;
     use SocialvoidLib\Objects\Standard\TimelineState;
-    use SocialvoidLib\Objects\User;
+    use SocialvoidLib\Objects\Peer;
     use Zimage\Exceptions\CannotGetOriginalImageException;
     use Zimage\Exceptions\FileNotFoundException;
     use Zimage\Exceptions\InvalidZimageFileException;
@@ -814,7 +814,7 @@
          *
          * @param string $post_public_id
          * @param int $page
-         * @return User[]
+         * @return Peer[]
          * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
          * @throws DatabaseException

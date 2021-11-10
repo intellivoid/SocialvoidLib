@@ -21,7 +21,7 @@
     use SocialvoidLib\Exceptions\Internal\RepostRecordNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\PostNotFoundException;
     use SocialvoidLib\Objects\RepostRecord;
-    use SocialvoidLib\Objects\User;
+    use SocialvoidLib\Objects\Peer;
     use SocialvoidLib\SocialvoidLib;
 
     /**

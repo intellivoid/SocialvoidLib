@@ -48,7 +48,7 @@
     use SocialvoidLib\InputTypes\DocumentInput;
     use SocialvoidLib\InputTypes\RegisterCacheInput;
     use SocialvoidLib\Objects\Document;
-    use SocialvoidLib\Objects\User;
+    use SocialvoidLib\Objects\Peer;
     use SocialvoidLib\SocialvoidLib;
     use udp2\Abstracts\ColorScheme;
     use udp2\Abstracts\DefaultAvatarType;
@@ -82,7 +82,7 @@
          * @param string $username
          * @param string $first_name
          * @param string|null $last_name
-         * @return User
+         * @return Peer
          * @throws CacheException
          * @throws DatabaseException
          * @throws DisplayPictureException
@@ -95,7 +95,7 @@
          * @throws UsernameAlreadyExistsException
          * @throws InvalidFileNameException
          */
-        public function registerUser(string $username, string $first_name, string $last_name=null): User
+        public function registerUser(string $username, string $first_name, string $last_name=null): Peer
         {
             if(Validate::username($username) == false)
                 throw new InvalidUsernameException('The given username is invalid', $username);
@@ -168,7 +168,7 @@
          *
          * @param string $search_method
          * @param string|int $value
-         * @return User
+         * @return Peer
          * @throws CacheException
          * @throws DatabaseException
          * @throws DisplayPictureException
@@ -177,7 +177,7 @@
          * @throws PeerNotFoundException
          * @throws InvalidFileNameException
          */
-        public function getUser(string $search_method, $value): User
+        public function getUser(string $search_method, $value): Peer
         {
             switch($search_method)
             {
@@ -249,7 +249,7 @@
                     $Row['profile'] = ZiProto::decode($Row['profile']);
                     $Row['settings'] = ZiProto::decode($Row['settings']);
 
-                    $ReturnResults = User::fromArray($Row);
+                    $ReturnResults = Peer::fromArray($Row);
                     $DisplayPictureDocument = $this->getDisplayPictureDocument($ReturnResults);
                     $ReturnResults->DisplayPictureDocument = $DisplayPictureDocument;
                     $this->registerUserCacheEntry($ReturnResults);
@@ -269,12 +269,12 @@
         /**
          * Updates an existing user in the network
          *
-         * @param User $user
-         * @return User
+         * @param Peer $user
+         * @return Peer
          * @throws DatabaseException
          * @throws CacheException
          */
-        public function updateUser(User $user): User
+        public function updateUser(Peer $user): Peer
         {
             $user->LastActivityTimestamp = time();
             $Query = QueryBuilder::update('peers', [
@@ -338,7 +338,7 @@
          * @param array $query
          * @param bool $skip_errors
          * @param int $utilization
-         * @return User[]
+         * @return Peer[]
          * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
          * @throws DatabaseException
@@ -381,10 +381,10 @@
         /**
          * Registers a user cache entry
          *
-         * @param User $user
+         * @param Peer $user
          * @throws CacheException
          */
-        private function registerUserCacheEntry(User $user): void
+        private function registerUserCacheEntry(Peer $user): void
         {
             if($this->socialvoidLib->getRedisBasicCacheConfiguration()['Enabled'])
             {
@@ -412,10 +412,10 @@
          * Gets a user cache entry, returns null if it's a miss
          *
          * @param string $value
-         * @return User|null
+         * @return Peer|null
          * @throws CacheException
          */
-        private function getUserCacheEntry(string $value): ?User
+        private function getUserCacheEntry(string $value): ?Peer
         {
             if($this->socialvoidLib->getRedisBasicCacheConfiguration()['Enabled'] == false)
                 throw new CacheException('BasicRedisCache is not enabled');
@@ -434,13 +434,13 @@
                 throw new CacheException('There was an issue while trying to request a user cache entry', 0, $e);
             }
 
-            return User::fromArray($CacheEntryResults->ObjectData);
+            return Peer::fromArray($CacheEntryResults->ObjectData);
         }
 
         /**
          * Gets the default profile picture of the user
          *
-         * @param User $user
+         * @param Peer $user
          * @return Document
          * @throws CacheException
          * @throws DatabaseException
@@ -448,7 +448,7 @@
          * @throws DocumentNotFoundException
          * @throws InvalidFileNameException
          */
-        public function getDefaultDisplayPictureDocument(User &$user): Document
+        public function getDefaultDisplayPictureDocument(Peer &$user): Document
         {
             if($user->Properties->DefaultProfilePictureDocumentID == null)
             {
@@ -503,7 +503,7 @@
         /**
          * Gets the profile picture of the user, if none is set then it will return the default value.
          *
-         * @param User $user
+         * @param Peer $user
          * @return Document
          * @throws CacheException
          * @throws DatabaseException
@@ -511,7 +511,7 @@
          * @throws DocumentNotFoundException
          * @throws InvalidFileNameException
          */
-        public function getDisplayPictureDocument(User &$user): Document
+        public function getDisplayPictureDocument(Peer &$user): Document
         {
             if($user->Properties->ProfilePictureDocumentID == null)
                 return $this->getDefaultDisplayPictureDocument($user);
@@ -529,7 +529,7 @@
         /**
          * Applies a new profile picture to the user
          *
-         * @param User $user
+         * @param Peer $user
          * @param string $filePath
          * @throws CacheException
          * @throws DatabaseException
@@ -537,7 +537,7 @@
          * @throws DocumentNotFoundException
          * @throws InvalidFileNameException
          */
-        public function setDisplayPicture(User &$user, string $filePath)
+        public function setDisplayPicture(Peer &$user, string $filePath)
         {
             try
             {
@@ -588,14 +588,14 @@
         /**
          * Deletes the users profile picture if it exists
          *
-         * @param User $user
+         * @param Peer $user
          * @throws CacheException
          * @throws DatabaseException
          * @throws DisplayPictureException
          * @throws DocumentNotFoundException \
          * @throws InvalidFileNameException
          */
-        public function deleteDisplayPicture(User &$user)
+        public function deleteDisplayPicture(Peer &$user)
         {
             if($user->Properties->ProfilePictureDocumentID !== null)
             {
@@ -611,11 +611,11 @@
         /**
          * Returns the path of the user display picture
          *
-         * @param User $user
+         * @param Peer $user
          * @return Zimage
          * @throws DisplayPictureException
          */
-        public function getDisplayPicture(User &$user): Zimage
+        public function getDisplayPicture(Peer &$user): Zimage
         {
             try
             {

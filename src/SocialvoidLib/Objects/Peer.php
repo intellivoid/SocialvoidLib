@@ -31,16 +31,16 @@
     use SocialvoidLib\Exceptions\Standard\Authentication\TwoFactorAuthenticationRequiredException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPasswordException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidUsernameException;
-    use SocialvoidLib\Objects\User\Profile;
-    use SocialvoidLib\Objects\User\UserAuthenticationProperties;
-    use SocialvoidLib\Objects\User\UserProperties;
-    use SocialvoidLib\Objects\User\UserSettings;
+    use SocialvoidLib\Objects\Peer\Profile;
+    use SocialvoidLib\Objects\Peer\UserAuthenticationProperties;
+    use SocialvoidLib\Objects\Peer\UserProperties;
+    use SocialvoidLib\Objects\Peer\UserSettings;
 
     /**
      * Class User
      * @package SocialvoidLib\Objects
      */
-    class User
+    class Peer
     {
         /**
          * The Unique Internal Database ID for this user
@@ -347,11 +347,11 @@
          * Constructs the object from an array representation
          *
          * @param array $data
-         * @return User
+         * @return Peer
          */
-        public static function fromArray(array $data): User
+        public static function fromArray(array $data): Peer
         {
-            $UserObject = new User();
+            $UserObject = new Peer();
 
             if(isset($data['id']))
             {

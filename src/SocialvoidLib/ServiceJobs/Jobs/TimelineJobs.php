@@ -22,7 +22,7 @@
     use SocialvoidLib\Exceptions\Internal\UserTimelineNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\DocumentNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
-    use SocialvoidLib\Objects\User;
+    use SocialvoidLib\Objects\Peer;
     use SocialvoidLib\ServiceJobs\ServiceJobQuery;
     use SocialvoidLib\ServiceJobs\ServiceJobResults;
     use SocialvoidLib\SocialvoidLib;
@@ -51,7 +51,7 @@
         /**
          * Constructs a job that resolves multiple users and returns their results
          *
-         * @param User $user
+         * @param Peer $user
          * @param string $post_id
          * @param int $utilization
          * @param bool $skip_errors
@@ -63,7 +63,7 @@
          * @throws UserTimelineNotFoundException
          * @noinspection PhpCastIsUnnecessaryInspection
          */
-        public function distributeTimelinePosts(User $user, string $post_id, int $utilization=100, bool $skip_errors=False): void
+        public function distributeTimelinePosts(Peer $user, string $post_id, int $utilization=100, bool $skip_errors=False): void
         {
             /**
              * This method now determines how many followers the post must be distributed to, then calculates the job
@@ -142,7 +142,7 @@
         public function processDistributeTimelinePost(ServiceJobQuery $serviceJobQuery): ServiceJobResults
         {
             $ServiceJobResults = ServiceJobResults::fromServiceJobQuery($serviceJobQuery);
-            $User = User::fromArray($serviceJobQuery->getJobData()[0x002]);
+            $User = Peer::fromArray($serviceJobQuery->getJobData()[0x002]);
 
             // Resolve the followers to distribute the post to
             $FollowerIds = $this->socialvoidLib->getRelationStateManager()->getFollowers(
@@ -189,14 +189,14 @@
         /**
          * Constructs a job that removes the requested Post IDs from the
          *
-         * @param User $user
+         * @param Peer $user
          * @param array $post_ids
          * @param bool $skip_errors
          * @throws BackgroundWorkerNotEnabledException
          * @throws ServerNotReachableException
          * @noinspection PhpCastIsUnnecessaryInspection
          */
-        public function removeTimelinePosts(User $user, array $post_ids, bool $skip_errors=False): void
+        public function removeTimelinePosts(Peer $user, array $post_ids, bool $skip_errors=False): void
         {
             $ServiceJobQuery = new ServiceJobQuery();
             $ServiceJobQuery->setJobType(JobType::RemoveTimelinePosts);
@@ -232,7 +232,7 @@
             try
             {
                 $Timeline = $this->socialvoidLib->getTimelineManager()->retrieveTimeline(
-                    User::fromArray($serviceJobQuery->getJobData()[0x001])
+                    Peer::fromArray($serviceJobQuery->getJobData()[0x001])
                 );
 
             }

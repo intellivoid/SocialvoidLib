@@ -32,7 +32,7 @@
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Objects\Standard\TimelineState;
     use SocialvoidLib\Objects\Timeline;
-    use SocialvoidLib\Objects\User;
+    use SocialvoidLib\Objects\Peer;
     use SocialvoidLib\SocialvoidLib;
     use ZiProto\ZiProto;
 
@@ -59,14 +59,14 @@
         /**
          * Retrieves an existing timeline, creates one if it doesn't exist
          *
-         * @param User $user
+         * @param Peer $user
          * @return Timeline
          * @throws DatabaseException
          * @throws InvalidSlaveHashException
          * @throws UserHasInvalidSlaveHashException
          * @throws UserTimelineNotFoundException
          */
-        public function retrieveTimeline(User $user): Timeline
+        public function retrieveTimeline(Peer $user): Timeline
         {
             try
             {
@@ -139,12 +139,12 @@
         /**
          * Creates a new timeline for a user
          *
-         * @param User $user
+         * @param Peer $user
          * @throws DatabaseException
          * @throws UserHasInvalidSlaveHashException
          * @noinspection PhpCastIsUnnecessaryInspection
          */
-        public function createTimeline(User $user): void
+        public function createTimeline(Peer $user): void
         {
             $Query = QueryBuilder::insert_into('peer_timelines', [
                 'user_id' => (int)$user->ID,
@@ -175,14 +175,14 @@
         /**
          * Returns an existing timeline from the database
          *
-         * @param User $user
+         * @param Peer $user
          * @return Timeline
          * @throws DatabaseException
          * @throws UserTimelineNotFoundException
          * @throws InvalidSlaveHashException
          * @noinspection PhpCastIsUnnecessaryInspection
          */
-        public function getTimeline(User $user): Timeline
+        public function getTimeline(Peer $user): Timeline
         {
             $Query = QueryBuilder::select('peer_timelines', [
                 'user_id',
@@ -259,7 +259,7 @@
         /**
          * Distributes a post to the array of followers
          *
-         * @param User $user
+         * @param Peer $user
          * @param string $post_id
          * @param int $utilization
          * @param bool $skip_errors
@@ -276,7 +276,7 @@
          * @throws DocumentNotFoundException
          * @throws PeerNotFoundException
          */
-        public function distributePost(User $user, string $post_id, int $utilization=15, bool $skip_errors=true): void
+        public function distributePost(Peer $user, string $post_id, int $utilization=15, bool $skip_errors=true): void
         {
             // If background worker is enabled, split the query into multiple workers to speed up the process
             if(Utilities::getBoolDefinition('SOCIALVOID_LIB_BACKGROUND_WORKER_ENABLED'))
@@ -333,7 +333,7 @@
         /**
          * Removes multiple posts from a timeline and reconstructs the chunks
          *
-         * @param User $user
+         * @param Peer $user
          * @param array $post_ids
          * @param bool $skip_errors
          * @throws BackgroundWorkerNotEnabledException
@@ -343,7 +343,7 @@
          * @throws UserHasInvalidSlaveHashException
          * @throws UserTimelineNotFoundException
          */
-        public function removePosts(User $user, array $post_ids, bool $skip_errors=true): void
+        public function removePosts(Peer $user, array $post_ids, bool $skip_errors=true): void
         {
             if(Utilities::getBoolDefinition('SOCIALVOID_LIB_BACKGROUND_WORKER_ENABLED'))
             {

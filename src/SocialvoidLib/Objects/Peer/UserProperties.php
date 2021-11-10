@@ -12,7 +12,7 @@
     /** @noinspection PhpMissingFieldTypeInspection */
     /** @noinspection PhpUnused */
 
-    namespace SocialvoidLib\Objects\User;
+    namespace SocialvoidLib\Objects\Peer;
 
     /**
      * Class UserProperties

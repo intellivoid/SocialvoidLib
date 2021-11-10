@@ -9,7 +9,7 @@
     use SocialvoidLib\Objects\Standard\ObjectDefinition;
     use SocialvoidLib\Objects\Standard\ParameterDefinition;
     use SocialvoidLib\Objects\Standard\TypeDefinition;
-    use SocialvoidLib\Objects\User;
+    use SocialvoidLib\Objects\Peer;
 
     class Profile implements StandardObjectInterface
     {
@@ -152,10 +152,10 @@
         /**
          * Constructs a profile object from a user object
          *
-         * @param User $user
+         * @param Peer $user
          * @return Profile
          */
-        public static function fromUser(User $user): Profile
+        public static function fromUser(Peer $user): Profile
         {
             $ProfileObject = new Profile();
 

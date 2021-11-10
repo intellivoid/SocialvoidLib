@@ -85,7 +85,7 @@
     use SocialvoidLib\Objects\Standard\SessionEstablished;
     use SocialvoidLib\Objects\Standard\SessionIdentification;
     use SocialvoidLib\Objects\Standard\TextEntity;
-    use SocialvoidLib\Objects\User;
+    use SocialvoidLib\Objects\Peer;
 
     /**
      * Class Network
@@ -110,7 +110,7 @@
         /**
          * The current user that's currently authenticated
          *
-         * @var User|null
+         * @var Peer|null
          */
         public $authenticated_user;
 
@@ -625,9 +625,9 @@
         /**
          * Returns the current authenticated user on the network
          *
-         * @return User|null
+         * @return Peer|null
          */
-        public function getAuthenticatedUser(): ?User
+        public function getAuthenticatedUser(): ?Peer
         {
             return $this->authenticated_user;
         }
@@ -698,7 +698,7 @@
                 $NetworkSessionObject->active_session = ActiveSession::fromArray($data["active_session"]);
 
             if(isset($data["authenticated_user"]))
-                $NetworkSessionObject->authenticated_user = User::fromArray($data["authenticated_user"]);
+                $NetworkSessionObject->authenticated_user = Peer::fromArray($data["authenticated_user"]);
 
             return $NetworkSessionObject;
         }
@@ -712,9 +712,9 @@
         }
 
         /**
-         * @param User|null $authenticated_user
+         * @param Peer|null $authenticated_user
          */
-        public function setAuthenticatedUser(?User $authenticated_user): void
+        public function setAuthenticatedUser(?Peer $authenticated_user): void
         {
             $this->authenticated_user = $authenticated_user;
         }

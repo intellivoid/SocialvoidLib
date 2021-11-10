@@ -12,7 +12,7 @@
 namespace SocialvoidLib\Service\Jobs\UserManager;
 
 
-    use SocialvoidLib\Objects\User;
+    use SocialvoidLib\Objects\Peer;
     use SocialvoidLib\ServiceJobs\Jobs\UserJobs;
 
     /**
@@ -30,7 +30,7 @@ namespace SocialvoidLib\Service\Jobs\UserManager;
         public $JobID;
 
         /**
-         * @var User|null
+         * @var Peer|null
          */
         public $User;
 
@@ -43,9 +43,9 @@ namespace SocialvoidLib\Service\Jobs\UserManager;
         }
 
         /**
-         * @return User|null
+         * @return Peer|null
          */
-        public function getUser(): ?User
+        public function getUser(): ?Peer
         {
             return $this->User;
         }
@@ -77,7 +77,7 @@ namespace SocialvoidLib\Service\Jobs\UserManager;
                 $GetUserJobResultsObject->JobID = $data[0x001];
 
             if(isset($data[0x002]))
-                $GetUserJobResultsObject->User = ($data[0x002] == null ? null : User::fromArray($data[0x002]));
+                $GetUserJobResultsObject->User = ($data[0x002] == null ? null : Peer::fromArray($data[0x002]));
 
             return $GetUserJobResultsObject;
         }

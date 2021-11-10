@@ -15,7 +15,7 @@
     use msqg\QueryBuilder;
     use SocialvoidLib\Abstracts\StatusStates\RelationState;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
-    use SocialvoidLib\Objects\User;
+    use SocialvoidLib\Objects\Peer;
     use SocialvoidLib\SocialvoidLib;
 
     /**
@@ -41,13 +41,13 @@
         /**
          * Registers a relation state into the database, drops it if none.
          *
-         * @param User $user
-         * @param User $target_user
+         * @param Peer $user
+         * @param Peer $target_user
          * @param int $state
          * @throws DatabaseException
          * @noinspection PhpCastIsUnnecessaryInspection
          */
-        public function registerState(User $user, User $target_user, int $state)
+        public function registerState(Peer $user, Peer $target_user, int $state)
         {
             // Drop the state if it's none
             if($state == RelationState::None)
@@ -83,12 +83,12 @@
         /**
          * Drops an existing relation state from the database
          *
-         * @param User $user
-         * @param User $target_user
+         * @param Peer $user
+         * @param Peer $target_user
          * @throws DatabaseException
          * @noinspection PhpCastIsUnnecessaryInspection
          */
-        public function dropState(User $user, User $target_user)
+        public function dropState(Peer $user, Peer $target_user)
         {
             $user_id = (int)$user->ID;
             $target_user_id = (int)$target_user->ID;
@@ -106,13 +106,13 @@
         /**
          * Gets an existing following state from the database
          *
-         * @param User $user
-         * @param User $target_user
+         * @param Peer $user
+         * @param Peer $target_user
          * @return int|RelationState
          * @throws DatabaseException
          * @noinspection PhpCastIsUnnecessaryInspection
          */
-        public function getState(User $user, User $target_user): int
+        public function getState(Peer $user, Peer $target_user): int
         {
             $user_id = (int)$user->ID;
             $target_user_id = (int)$target_user->ID;
@@ -144,14 +144,14 @@
         /**
          * Updates an existing following state
          *
-         * @param User $user
-         * @param User $target_user
+         * @param Peer $user
+         * @param Peer $target_user
          * @param int $state
          * @return void
          * @throws DatabaseException
          * @noinspection PhpCastIsUnnecessaryInspection
          */
-        public function updateState(User $user, User $target_user, int $state)
+        public function updateState(Peer $user, Peer $target_user, int $state)
         {
             $state = (int)$state;
             $user_id = (int)$user->ID;
@@ -171,12 +171,12 @@
         /**
          * Returns the number of followers that this peer has
          *
-         * @param User $user
+         * @param Peer $user
          * @return int
          * @throws DatabaseException
          * @noinspection PhpCastIsUnnecessaryInspection
          */
-        public function getFollowersCount(User $user): int
+        public function getFollowersCount(Peer $user): int
         {
             $user_id = (int)$user->ID;
             $state = (int)RelationState::Following;
@@ -198,14 +198,14 @@
         /**
          * Returns an array of User IDs that currently follows the requested peer
          *
-         * @param User $user
+         * @param Peer $user
          * @param int $limit
          * @param int $offset
          * @return array|int
          * @throws DatabaseException
          * @noinspection PhpCastIsUnnecessaryInspection
          */
-        public function getFollowers(User $user, int $limit=100, int $offset=0): array
+        public function getFollowers(Peer $user, int $limit=100, int $offset=0): array
         {
             $user_id = (int)$user->ID;
             $state = (int)RelationState::Following;
@@ -238,14 +238,14 @@
         /**
          * Returns an array of user IDs that this peer follows
          *
-         * @param User $user
+         * @param Peer $user
          * @param int $limit
          * @param int $offset
          * @return array
          * @throws DatabaseException
          * @noinspection PhpCastIsUnnecessaryInspection
          */
-        public function getFollowing(User $user, int $limit=100, int $offset=0): array
+        public function getFollowing(Peer $user, int $limit=100, int $offset=0): array
         {
             $user_id = (int)$user->ID;
             $state = (int)RelationState::Following;
@@ -278,12 +278,12 @@
         /**
          * Returns the number of peers that this peer is following
          *
-         * @param User $user
+         * @param Peer $user
          * @return int
          * @throws DatabaseException
          * @noinspection PhpCastIsUnnecessaryInspection
          */
-        public function getFollowingCount(User $user): int
+        public function getFollowingCount(Peer $user): int
         {
             $user_id = (int)$user->ID;
             $state = (int)RelationState::Following;

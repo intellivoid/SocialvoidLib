@@ -35,7 +35,7 @@
     use SocialvoidLib\NetworkSession;
     use SocialvoidLib\Objects\Cursor;
     use SocialvoidLib\Objects\Standard\Profile;
-    use SocialvoidLib\Objects\User;
+    use SocialvoidLib\Objects\Peer;
 
     /**
      * Class Users
@@ -62,7 +62,7 @@
          *
          * @param $peer
          * @param bool $resolve_internally
-         * @return User
+         * @return Peer
          * @throws CacheException
          * @throws DatabaseException
          * @throws DocumentNotFoundException
@@ -73,12 +73,12 @@
          * @throws DisplayPictureException
          * @throws InvalidFileNameException
          */
-        public function resolvePeer($peer, bool $resolve_internally=True): User
+        public function resolvePeer($peer, bool $resolve_internally=True): Peer
         {
             if($this->networkSession->isAuthenticated() == false)
                 throw new NotAuthenticatedException();
 
-            if(gettype($peer) == 'object' && get_class($peer) == User::class)
+            if(gettype($peer) == 'object' && get_class($peer) == Peer::class)
                 return $peer; // No need to resolve an already constructed object!
 
             // Probably an ID
@@ -127,7 +127,7 @@
 
         /**
          * @param array $peers
-         * @return User[]
+         * @return Peer[]
          * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
          * @throws DatabaseException
@@ -317,7 +317,7 @@
          *
          * @param $peer
          * @param int $page
-         * @return User[]
+         * @return Peer[]
          * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
          * @throws DatabaseException
@@ -378,7 +378,7 @@
          *
          * @param $peer
          * @param int $page
-         * @return User[]
+         * @return Peer[]
          * @throws BackgroundWorkerNotEnabledException
          * @throws CacheException
          * @throws DatabaseException

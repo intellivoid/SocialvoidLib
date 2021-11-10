@@ -19,7 +19,7 @@
     use SocialvoidLib\Objects\Standard\ObjectDefinition;
     use SocialvoidLib\Objects\Standard\ParameterDefinition;
     use SocialvoidLib\Objects\Standard\TypeDefinition;
-    use SocialvoidLib\Objects\User;
+    use SocialvoidLib\Objects\Peer;
 
     /**
      * Class StandardPeer
@@ -81,10 +81,10 @@
         /**
          * Constructs a peer object from a user object (Lib)
          *
-         * @param User $user
+         * @param Peer $user
          * @return Peer
          */
-        public static function fromUser(User $user): Peer
+        public static function fromUser(Peer $user): Peer
         {
             $PeerObject = new Peer();
 

@@ -13,7 +13,7 @@ namespace SocialvoidLib\Exceptions\Internal;
 
     use Exception;
     use SocialvoidLib\Abstracts\InternalErrorCodes;
-    use SocialvoidLib\Objects\User\UserAuthenticationProperties;
+    use SocialvoidLib\Objects\Peer\UserAuthenticationProperties;
     use Throwable;
 
     /**

@@ -13,7 +13,7 @@
     use SocialvoidLib\Classes\Utilities;
     use SocialvoidLib\Exceptions\GenericInternal\BackgroundWorkerNotEnabledException;
     use SocialvoidLib\Exceptions\GenericInternal\ServiceJobException;
-    use SocialvoidLib\Objects\User;
+    use SocialvoidLib\Objects\Peer;
     use SocialvoidLib\ServiceJobs\ServiceJobQuery;
     use SocialvoidLib\ServiceJobs\ServiceJobResults;
     use SocialvoidLib\SocialvoidLib;
@@ -45,7 +45,7 @@
          * @param array $query
          * @param int $utilization
          * @param bool $skip_errors
-         * @return User[]
+         * @return Peer[]
          * @throws BackgroundWorkerNotEnabledException
          * @throws ServiceJobException
          * @throws ServerNotReachableException
@@ -122,7 +122,7 @@
                 if($result->getJobResults() !== null)
                 {
                     foreach($result->getJobResults() as $jobResult)
-                        $return_results[] = User::fromArray($jobResult);
+                        $return_results[] = Peer::fromArray($jobResult);
                 }
             }
 
