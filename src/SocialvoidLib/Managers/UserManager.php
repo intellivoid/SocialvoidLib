@@ -22,6 +22,8 @@
     use SocialvoidLib\Abstracts\StatusStates\UserStatus;
     use SocialvoidLib\Abstracts\Types\CacheEntryObjectType;
     use SocialvoidLib\Abstracts\Types\Security\DocumentAccessType;
+    use SocialvoidLib\Abstracts\Types\Standard\PeerRole;
+    use SocialvoidLib\Abstracts\Types\Standard\PeerType;
     use SocialvoidLib\Abstracts\UserAuthenticationMethod;
     use SocialvoidLib\Classes\Converter;
     use SocialvoidLib\Classes\Standard\BaseIdentification;
@@ -38,6 +40,7 @@
     use SocialvoidLib\Exceptions\GenericInternal\ServiceJobException;
     use SocialvoidLib\Exceptions\Standard\Network\DocumentNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidFileNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidFirstNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidLastNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidUsernameException;
@@ -90,23 +93,24 @@
          * @throws InvalidUsernameException
          * @throws PeerNotFoundException
          * @throws UsernameAlreadyExistsException
+         * @throws InvalidFileNameException
          */
         public function registerUser(string $username, string $first_name, string $last_name=null): User
         {
             if(Validate::username($username) == false)
-                throw new InvalidUsernameException("The given username is invalid", $username);
+                throw new InvalidUsernameException('The given username is invalid', $username);
 
             if(Validate::firstName($first_name) == false)
-                throw new InvalidFirstNameException("The given first name is invalid or empty", $first_name);
+                throw new InvalidFirstNameException('The given first name is invalid or empty', $first_name);
 
             if($last_name !== null)
             {
                 if(Validate::lastName($last_name) == false)
-                    throw new InvalidLastNameException("The given last name is invalid or empty", $last_name);
+                    throw new InvalidLastNameException('The given last name is invalid or empty', $last_name);
             }
 
             if($this->checkUsernameExists($username))
-                throw new UsernameAlreadyExistsException("The given username is already registered on the network", $username);
+                throw new UsernameAlreadyExistsException('The given username is already registered on the network', $username);
 
             $Profile = new User\Profile();
             $Profile->FirstName = Converter::emptyString($first_name);
@@ -120,24 +124,26 @@
             $public_id = BaseIdentification::userPublicId($timestamp);
             $slave_server = $this->socialvoidLib->getSlaveManager()->getRandomMySqlServer();
 
-            $Query = QueryBuilder::insert_into("users", [
-                "public_id" => $this->socialvoidLib->getDatabase()->real_escape_string($public_id),
-                "username" => $this->socialvoidLib->getDatabase()->real_escape_string($username),
-                "username_safe" => $this->socialvoidLib->getDatabase()->real_escape_string(strtolower($username)),
-                "network" => $this->socialvoidLib->getDatabase()->real_escape_string($this->socialvoidLib->getMainConfiguration()["MainDomain"]),
-                "status" => $this->socialvoidLib->getDatabase()->real_escape_string(UserStatus::Active),
-                "status_change_timestamp" => 0,
-                "properties" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($UserProperties->toArray())),
-                "flags" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
-                "authentication_method" => $this->socialvoidLib->getDatabase()->real_escape_string(UserAuthenticationMethod::None),
-                "authentication_properties" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($UserAuthenticationProperties->toArray())),
-                "private_access_token" => null,
-                "profile" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Profile->toArray())),
-                "settings" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Settings->toArray())),
-                "privacy_state" => $this->socialvoidLib->getDatabase()->real_escape_string(UserPrivacyState::Public),
-                "slave_server" => $this->socialvoidLib->getDatabase()->real_escape_string($slave_server->MysqlServerPointer->HashPointer),
-                "last_activity_timestamp" => $timestamp,
-                "created_timestamp" => $timestamp
+            $Query = QueryBuilder::insert_into('peers', [
+                'public_id' => $this->socialvoidLib->getDatabase()->real_escape_string($public_id),
+                'username' => $this->socialvoidLib->getDatabase()->real_escape_string($username),
+                'username_safe' => $this->socialvoidLib->getDatabase()->real_escape_string(strtolower($username)),
+                'network' => $this->socialvoidLib->getDatabase()->real_escape_string($this->socialvoidLib->getMainConfiguration()['MainDomain']),
+                'status' => $this->socialvoidLib->getDatabase()->real_escape_string(UserStatus::Active),
+                'status_change_timestamp' => 0,
+                'type' => $this->socialvoidLib->getDatabase()->real_escape_string(PeerType::User),
+                'role' => $this->socialvoidLib->getDatabase()->real_escape_string(PeerRole::Peer),
+                'properties' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($UserProperties->toArray())),
+                'flags' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode([])),
+                'authentication_method' => $this->socialvoidLib->getDatabase()->real_escape_string(UserAuthenticationMethod::None),
+                'authentication_properties' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($UserAuthenticationProperties->toArray())),
+                'private_access_token' => null,
+                'profile' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Profile->toArray())),
+                'settings' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($Settings->toArray())),
+                'privacy_state' => $this->socialvoidLib->getDatabase()->real_escape_string(UserPrivacyState::Public),
+                'slave_server' => $this->socialvoidLib->getDatabase()->real_escape_string($slave_server->MysqlServerPointer->HashPointer),
+                'last_activity_timestamp' => $timestamp,
+                'created_timestamp' => $timestamp
             ]);
 
             $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
@@ -151,7 +157,7 @@
             }
             else
             {
-                throw new DatabaseException("There was an error while trying to register the user",
+                throw new DatabaseException('There was an error while trying to register the user',
                     $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
                 );
             }
@@ -169,6 +175,7 @@
          * @throws DocumentNotFoundException
          * @throws InvalidSearchMethodException
          * @throws PeerNotFoundException
+         * @throws InvalidFileNameException
          */
         public function getUser(string $search_method, $value): User
         {
@@ -191,35 +198,37 @@
 
                 default:
                     throw new InvalidSearchMethodException(
-                        "The search method '$search_method' is not applicable to getUser()",
+                        'The search method \'' . $search_method . '\' is not applicable to getUser()',
                         $search_method, $value);
             }
 
-            if($this->socialvoidLib->getRedisBasicCacheConfiguration()["Enabled"])
+            if($this->socialvoidLib->getRedisBasicCacheConfiguration()['Enabled'])
             {
                 $CachedUser = $this->getUserCacheEntry($value);
                 if($CachedUser !== null) return $CachedUser;
             }
 
-            $Query = QueryBuilder::select("users", [
-                "id",
-                "public_id",
-                "username",
-                "username_safe",
-                "network",
-                "status",
-                "status_change_timestamp",
-                "properties",
-                "flags",
-                "authentication_method",
-                "authentication_properties",
-                "private_access_token",
-                "profile",
-                "settings",
-                "privacy_state",
-                "slave_server",
-                "last_activity_timestamp",
-                "created_timestamp"
+            $Query = QueryBuilder::select('peers', [
+                'id',
+                'public_id',
+                'username',
+                'username_safe',
+                'network',
+                'status',
+                'status_change_timestamp',
+                'type',
+                'role',
+                'properties',
+                'flags',
+                'authentication_method',
+                'authentication_properties',
+                'private_access_token',
+                'profile',
+                'settings',
+                'privacy_state',
+                'slave_server',
+                'last_activity_timestamp',
+                'created_timestamp'
             ], $search_method, $value, null, null, 1);
 
             $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
@@ -230,15 +239,15 @@
 
                 if ($Row == False)
                 {
-                    throw new PeerNotFoundException("The requested peer was not found in the network");
+                    throw new PeerNotFoundException('The requested peer was not found in the network');
                 }
                 else
                 {
-                    $Row["properties"] = ZiProto::decode($Row["properties"]);
-                    $Row["flags"] = ZiProto::decode($Row["flags"]);
-                    $Row["authentication_properties"] = ZiProto::decode($Row["authentication_properties"]);
-                    $Row["profile"] = ZiProto::decode($Row["profile"]);
-                    $Row["settings"] = ZiProto::decode($Row["settings"]);
+                    $Row['properties'] = ZiProto::decode($Row['properties']);
+                    $Row['flags'] = ZiProto::decode($Row['flags']);
+                    $Row['authentication_properties'] = ZiProto::decode($Row['authentication_properties']);
+                    $Row['profile'] = ZiProto::decode($Row['profile']);
+                    $Row['settings'] = ZiProto::decode($Row['settings']);
 
                     $ReturnResults = User::fromArray($Row);
                     $DisplayPictureDocument = $this->getDisplayPictureDocument($ReturnResults);
@@ -251,7 +260,7 @@
             else
             {
                 throw new DatabaseException(
-                    "There was an error while trying retrieve the user from the network",
+                    'There was an error while trying retrieve the user from the network',
                     $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
                 );
             }
@@ -268,22 +277,24 @@
         public function updateUser(User $user): User
         {
             $user->LastActivityTimestamp = time();
-            $Query = QueryBuilder::update("users", [
-                "username" => $this->socialvoidLib->getDatabase()->real_escape_string($user->Username),
-                "username_safe" => $this->socialvoidLib->getDatabase()->real_escape_string($user->UsernameSafe),
-                "network" => $this->socialvoidLib->getDatabase()->real_escape_string($user->Network),
-                "status" => $user->Status,
-                "status_change_timestamp" => ($user->StatusChangeTimestamp !== null ? $user->StatusChangeTimestamp : null),
-                "properties" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($user->Properties->toArray())),
-                "flags" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($user->Flags)),
-                "authentication_method" => $this->socialvoidLib->getDatabase()->real_escape_string($user->AuthenticationMethod),
-                "authentication_properties" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($user->AuthenticationProperties->toArray())),
-                "private_access_token" => ($user->PrivateAccessToken !== null ? $this->socialvoidLib->getDatabase()->real_escape_string($user->PrivateAccessToken) : null),
-                "profile" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($user->Profile->toArray())),
-                "settings" => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($user->Settings->toArray())),
-                "privacy_state" => $this->socialvoidLib->getDatabase()->real_escape_string($user->PrivacyState),
-                "last_activity_timestamp" => $this->socialvoidLib->getDatabase()->real_escape_string($user->LastActivityTimestamp),
-            ], "id", $user->ID);
+            $Query = QueryBuilder::update('peers', [
+                'username' => $this->socialvoidLib->getDatabase()->real_escape_string($user->Username),
+                'username_safe' => $this->socialvoidLib->getDatabase()->real_escape_string($user->UsernameSafe),
+                'network' => $this->socialvoidLib->getDatabase()->real_escape_string($user->Network),
+                'status' => $user->Status,
+                'status_change_timestamp' => ($user->StatusChangeTimestamp !== null ? $user->StatusChangeTimestamp : null),
+                'type' => $this->socialvoidLib->getDatabase()->real_escape_string($user->Type),
+                'role' => $this->socialvoidLib->getDatabase()->real_escape_string($user->Role),
+                'properties' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($user->Properties->toArray())),
+                'flags' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($user->Flags)),
+                'authentication_method' => $this->socialvoidLib->getDatabase()->real_escape_string($user->AuthenticationMethod),
+                'authentication_properties' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($user->AuthenticationProperties->toArray())),
+                'private_access_token' => ($user->PrivateAccessToken !== null ? $this->socialvoidLib->getDatabase()->real_escape_string($user->PrivateAccessToken) : null),
+                'profile' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($user->Profile->toArray())),
+                'settings' => $this->socialvoidLib->getDatabase()->real_escape_string(ZiProto::encode($user->Settings->toArray())),
+                'privacy_state' => $this->socialvoidLib->getDatabase()->real_escape_string($user->PrivacyState),
+                'last_activity_timestamp' => $this->socialvoidLib->getDatabase()->real_escape_string($user->LastActivityTimestamp),
+            ], 'id', $user->ID);
 
             $QueryResults = $this->socialvoidLib->getDatabase()->query($Query);
 
@@ -295,7 +306,7 @@
             else
             {
                 throw new DatabaseException(
-                    "There was an error while trying to update the user",
+                    'There was an error while trying to update the user',
                     $Query, $this->socialvoidLib->getDatabase()->error, $this->socialvoidLib->getDatabase()
                 );
             }
@@ -337,10 +348,11 @@
          * @throws PeerNotFoundException
          * @throws ServerNotReachableException
          * @throws ServiceJobException
+         * @throws InvalidFileNameException
          */
         public function getMultipleUsers(array $query, bool $skip_errors=True, int $utilization=15): array
         {
-            if(Utilities::getBoolDefinition("SOCIALVOID_LIB_BACKGROUND_WORKER_ENABLED"))
+            if(Utilities::getBoolDefinition('SOCIALVOID_LIB_BACKGROUND_WORKER_ENABLED'))
             {
                 return $this->socialvoidLib->getServiceJobManager()->getUserJobs()->resolveUsers(
                     $query, $utilization, $skip_errors
@@ -374,7 +386,7 @@
          */
         private function registerUserCacheEntry(User $user): void
         {
-            if($this->socialvoidLib->getRedisBasicCacheConfiguration()["Enabled"])
+            if($this->socialvoidLib->getRedisBasicCacheConfiguration()['Enabled'])
             {
                 $CacheEntryInput = new RegisterCacheInput();
                 $CacheEntryInput->ObjectType = CacheEntryObjectType::User;
@@ -385,13 +397,13 @@
                 {
                     $this->socialvoidLib->getBasicRedisCacheManager()->registerCache(
                         $CacheEntryInput,
-                        $this->socialvoidLib->getRedisBasicCacheConfiguration()["PeerCacheTTL"],
-                        $this->socialvoidLib->getRedisBasicCacheConfiguration()["PeerCacheLimit"]
+                        $this->socialvoidLib->getRedisBasicCacheConfiguration()['PeerCacheTTL'],
+                        $this->socialvoidLib->getRedisBasicCacheConfiguration()['PeerCacheLimit']
                     );
                 }
                 catch(Exception $e)
                 {
-                    throw new CacheException("There was an error while trying to register the peer cache entry", 0, $e);
+                    throw new CacheException('There was an error while trying to register the peer cache entry', 0, $e);
                 }
             }
         }
@@ -405,8 +417,8 @@
          */
         private function getUserCacheEntry(string $value): ?User
         {
-            if($this->socialvoidLib->getRedisBasicCacheConfiguration()["Enabled"] == false)
-                throw new CacheException("BasicRedisCache is not enabled");
+            if($this->socialvoidLib->getRedisBasicCacheConfiguration()['Enabled'] == false)
+                throw new CacheException('BasicRedisCache is not enabled');
 
             try
             {
@@ -419,7 +431,7 @@
             }
             catch (DependencyError | RedisCacheException $e)
             {
-                throw new CacheException("There was an issue while trying to request a user cache entry", 0, $e);
+                throw new CacheException('There was an issue while trying to request a user cache entry', 0, $e);
             }
 
             return User::fromArray($CacheEntryResults->ObjectData);
@@ -434,6 +446,7 @@
          * @throws DatabaseException
          * @throws DisplayPictureException
          * @throws DocumentNotFoundException
+         * @throws InvalidFileNameException
          */
         public function getDefaultDisplayPictureDocument(User &$user): Document
         {
@@ -447,7 +460,7 @@
                         DefaultAvatarType::InitialsBase, ColorScheme::Dark
                     );
 
-                    $avatar_zimage = $this->socialvoidLib->getUserDisplayPictureManager()->getAvatar($user->PublicID . "_default");
+                    $avatar_zimage = $this->socialvoidLib->getUserDisplayPictureManager()->getAvatar($user->PublicID . '_default');
                 }
                 catch(Exception $e)
                 {
@@ -458,11 +471,11 @@
                 $document_input->AccessType = DocumentAccessType::Public;
                 $document_input->OwnerUserID = $user->ID;
                 $document_input->ContentSource = ContentSource::UserProfilePicture;
-                $document_input->ContentIdentifier = $user->PublicID . "_default";
+                $document_input->ContentIdentifier = $user->PublicID . '_default';
 
                 try
                 {
-                    $document_input->Files = Converter::zimageToFiles($avatar_zimage, $user->PublicID . "_default");
+                    $document_input->Files = Converter::zimageToFiles($avatar_zimage, $user->PublicID . '_default');
                 }
                 catch(Exception $e)
                 {
@@ -496,6 +509,7 @@
          * @throws DatabaseException
          * @throws DisplayPictureException
          * @throws DocumentNotFoundException
+         * @throws InvalidFileNameException
          */
         public function getDisplayPictureDocument(User &$user): Document
         {
@@ -519,8 +533,9 @@
          * @param string $filePath
          * @throws CacheException
          * @throws DatabaseException
-         * @throws DocumentNotFoundException
          * @throws DisplayPictureException
+         * @throws DocumentNotFoundException
+         * @throws InvalidFileNameException
          */
         public function setDisplayPicture(User &$user, string $filePath)
         {
@@ -577,8 +592,9 @@
          * @throws CacheException
          * @throws DatabaseException
          * @throws DisplayPictureException
-         * @throws DocumentNotFoundException
-         \*/
+         * @throws DocumentNotFoundException \
+         * @throws InvalidFileNameException
+         */
         public function deleteDisplayPicture(User &$user)
         {
             if($user->Properties->ProfilePictureDocumentID !== null)

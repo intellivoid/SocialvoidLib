@@ -27,7 +27,7 @@ create table if not exists replies
     constraint replies_posts_public_id_fk_2
         foreign key (post_id) references posts (public_id),
     constraint replies_users_id_fk
-        foreign key (user_id) references users (id)
+        foreign key (user_id) references peers (id)
 )
     comment 'Table for housing replies to posts';
 

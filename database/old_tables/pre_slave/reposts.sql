@@ -27,7 +27,7 @@ create table if not exists reposts
     constraint reposts_posts_public_id_fk_2
         foreign key (original_post_id) references posts (public_id),
     constraint reposts_users_id_fk
-        foreign key (user_id) references users (id)
+        foreign key (user_id) references peers (id)
 )
     comment 'Table for housing reposts for posts';
 

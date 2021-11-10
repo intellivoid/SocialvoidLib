@@ -22,7 +22,7 @@ create table if not exists likes
     constraint likes_posts_public_id_fk
         foreign key (post_id) references posts (public_id),
     constraint likes_users_id_fk
-        foreign key (user_id) references users (id)
+        foreign key (user_id) references peers (id)
 )
     comment 'Table for housing likes for posts';
 

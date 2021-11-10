@@ -15,8 +15,10 @@
 
     use Exception;
     use SocialvoidLib\Abstracts\Flags\NetworkFlags;
+    use SocialvoidLib\Abstracts\Flags\PermissionSets;
     use SocialvoidLib\Abstracts\SearchMethods\ActiveSessionSearchMethod;
     use SocialvoidLib\Abstracts\SearchMethods\UserSearchMethod;
+    use SocialvoidLib\Abstracts\StatusStates\UserStatus;
     use SocialvoidLib\Abstracts\UserAuthenticationMethod;
     use SocialvoidLib\Classes\Converter;
     use SocialvoidLib\Classes\Validate;
@@ -375,6 +377,12 @@
             $this->active_session->Authenticated = true;
             $this->active_session->UserID = $authenticating_peer->ID;
             $this->active_session->AuthenticationMethodUsed = $authenticating_peer->AuthenticationMethod;
+
+            switch($authenticating_peer->)
+            {
+                case UserStatus::
+            }
+            Converter::addFlag($this->active_session->Data->PermissionSets, PermissionSets::User);
 
             try
             {

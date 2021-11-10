@@ -21,9 +21,9 @@ create table if not exists follower_states
     constraint follower_states_user_id_target_user_id_uindex
         unique (user_id, target_user_id),
     constraint follower_states_users_id_fk
-        foreign key (user_id) references users (id),
+        foreign key (user_id) references peers (id),
     constraint follower_states_users_id_fk_2
-        foreign key (target_user_id) references users (id)
+        foreign key (target_user_id) references peers (id)
 )
     comment 'Table for holding follower states between users';
 

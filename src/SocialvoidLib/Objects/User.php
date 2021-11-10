@@ -17,6 +17,8 @@
     use SocialvoidLib\Abstracts\Flags\UserFlags;
     use SocialvoidLib\Abstracts\StatusStates\UserPrivacyState;
     use SocialvoidLib\Abstracts\StatusStates\UserStatus;
+    use SocialvoidLib\Abstracts\Types\Standard\PeerRole;
+    use SocialvoidLib\Abstracts\Types\Standard\PeerType;
     use SocialvoidLib\Abstracts\UserAuthenticationMethod;
     use SocialvoidLib\Classes\Validate;
     use SocialvoidLib\Exceptions\Internal\AuthenticationFailureException;
@@ -85,11 +87,25 @@
 
         /**
          * The Unix Timestamp for when this user's status is
-         * changed back to "Active"
+         * changed back to 'Active'
          *
          * @var int
          */
         public $StatusChangeTimestamp;
+
+        /**
+         * The type of peer this entity which indicates the permission sets
+         * 
+         * @var string|PeerType
+         */
+        public $Type;
+
+        /**
+         * The role of the peer which indicates the permission sets
+         * 
+         * @var string|PeerRole
+         */
+        public $Role;
 
         /**
          * Serializable set of properties attached to this user
@@ -198,7 +214,7 @@
         public function setUsername(string $username): void
         {
             if(Validate::username($username) == false)
-                throw new InvalidUsernameException("The given username isn't valid for the network standard", $username);
+                throw new InvalidUsernameException('The given username isn\'t valid for the network standard', $username);
 
             $this->Username = $username;
             $this->UsernameSafe = strtolower($username);
@@ -232,7 +248,7 @@
 
                 case UserAuthenticationMethod::SimpleSecured:
                     if($otp == null && $ignore_otp == false)
-                        throw new TwoFactorAuthenticationRequiredException("Two factor authentication is required");
+                        throw new TwoFactorAuthenticationRequiredException('Two factor authentication is required');
 
                     $this->AuthenticationProperties->passwordAuthentication($password);
 
@@ -243,21 +259,21 @@
                         }
                         catch (IncorrectTwoFactorAuthenticationCodeException | NoRecoveryCodesAvailableException $e)
                         {
-                            throw new IncorrectTwoFactorAuthenticationCodeException("The provided two factor authentication is incorrect", $e);
+                            throw new IncorrectTwoFactorAuthenticationCodeException('The provided two factor authentication is incorrect', $e);
                         }
                         catch(Exception $e)
                         {
-                            throw new AuthenticationFailureException("There was an unexpected error while trying to process the authentication", $e);
+                            throw new AuthenticationFailureException('There was an unexpected error while trying to process the authentication', $e);
                         }
 
                     break;
 
                 case UserAuthenticationMethod::None:
-                    throw new AuthenticationNotApplicableException("The user has no traditional authentication method available");
+                    throw new AuthenticationNotApplicableException('The user has no traditional authentication method available');
 
 
                 case UserAuthenticationMethod::PrivateAccessToken:
-                    throw new PrivateAccessTokenRequiredException("The user uses a private access token to authenticate");
+                    throw new PrivateAccessTokenRequiredException('The user uses a private access token to authenticate');
 
             }
 
@@ -303,25 +319,27 @@
         public function toArray(): array
         {
             return [
-                "id" => $this->ID,
-                "public_id" => $this->PublicID,
-                "username" => $this->Username,
-                "username_safe" => $this->UsernameSafe,
-                "network" => $this->Network,
-                "status" => $this->Status,
-                "status_change_timestamp" => $this->StatusChangeTimestamp,
-                "properties" => $this->Properties->toArray(),
-                "flags" => $this->Flags,
-                "authentication_method" => $this->AuthenticationMethod,
-                "authentication_properties" => $this->AuthenticationProperties->toArray(),
-                "private_access_token" => $this->PrivateAccessToken,
-                "profile" => $this->Profile->toArray(),
-                "display_picture_document" => $this->DisplayPictureDocument->toArray(),
-                "settings" => $this->Settings->toArray(),
-                "privacy_state" => $this->PrivacyState,
-                "slave_server" => $this->SlaveServer,
-                "last_activity_timestamp" => $this->LastActivityTimestamp,
-                "created_timestamp" => $this->CreatedTimestamp
+                'id' => $this->ID,
+                'public_id' => $this->PublicID,
+                'username' => $this->Username,
+                'username_safe' => $this->UsernameSafe,
+                'network' => $this->Network,
+                'status' => $this->Status,
+                'status_change_timestamp' => $this->StatusChangeTimestamp,
+                'type' => $this->Type,
+                'role' => $this->Role,
+                'properties' => $this->Properties->toArray(),
+                'flags' => $this->Flags,
+                'authentication_method' => $this->AuthenticationMethod,
+                'authentication_properties' => $this->AuthenticationProperties->toArray(),
+                'private_access_token' => $this->PrivateAccessToken,
+                'profile' => $this->Profile->toArray(),
+                'display_picture_document' => $this->DisplayPictureDocument->toArray(),
+                'settings' => $this->Settings->toArray(),
+                'privacy_state' => $this->PrivacyState,
+                'slave_server' => $this->SlaveServer,
+                'last_activity_timestamp' => $this->LastActivityTimestamp,
+                'created_timestamp' => $this->CreatedTimestamp
             ];
         }
 
@@ -335,75 +353,81 @@
         {
             $UserObject = new User();
 
-            if(isset($data["id"]))
+            if(isset($data['id']))
             {
-                if($data["id"] !== null)
-                    $UserObject->ID = (int)$data["id"];
+                if($data['id'] !== null)
+                    $UserObject->ID = (int)$data['id'];
             }
 
-            if(isset($data["public_id"]))
-                $UserObject->PublicID = $data["public_id"];
+            if(isset($data['public_id']))
+                $UserObject->PublicID = $data['public_id'];
 
-            if(isset($data["username"]))
-                $UserObject->Username = $data["username"];
+            if(isset($data['username']))
+                $UserObject->Username = $data['username'];
 
-            if(isset($data["username_safe"]))
-                $UserObject->UsernameSafe = $data["username_safe"];
+            if(isset($data['username_safe']))
+                $UserObject->UsernameSafe = $data['username_safe'];
 
-            if(isset($data["network"]))
-                $UserObject->Network = $data["network"];
+            if(isset($data['network']))
+                $UserObject->Network = $data['network'];
 
-            if(isset($data["status"]))
-                $UserObject->Status = $data["status"];
+            if(isset($data['status']))
+                $UserObject->Status = $data['status'];
 
-            if(isset($data["status_change_timestamp"]))
+            if(isset($data['status_change_timestamp']))
             {
-                if($data["status_change_timestamp"] !== null)
+                if($data['status_change_timestamp'] !== null)
                 {
-                    $UserObject->StatusChangeTimestamp = (int)$data["status_change_timestamp"];
+                    $UserObject->StatusChangeTimestamp = (int)$data['status_change_timestamp'];
                 }
             }
 
-            if(isset($data["properties"]))
-                $UserObject->Properties = UserProperties::fromArray($data["properties"]);
+            if(isset($data['type']))
+                $UserObject->Type = $data['type'];
 
-            if(isset($data["flags"]))
-                $UserObject->Flags = $data["flags"];
+            if(isset($data['role']))
+                $UserObject->Role = $data['role'];
 
-            if(isset($data["authentication_method"]))
-                $UserObject->AuthenticationMethod = $data["authentication_method"];
+            if(isset($data['properties']))
+                $UserObject->Properties = UserProperties::fromArray($data['properties']);
 
-            if(isset($data["authentication_properties"]))
-                $UserObject->AuthenticationProperties = UserAuthenticationProperties::fromArray($data["authentication_properties"]);
+            if(isset($data['flags']))
+                $UserObject->Flags = $data['flags'];
 
-            if(isset($data["private_access_token"]))
-                $UserObject->PrivateAccessToken = $data["private_access_token"];
+            if(isset($data['authentication_method']))
+                $UserObject->AuthenticationMethod = $data['authentication_method'];
 
-            if(isset($data["profile"]))
-                $UserObject->Profile = Profile::fromArray($data["profile"]);
+            if(isset($data['authentication_properties']))
+                $UserObject->AuthenticationProperties = UserAuthenticationProperties::fromArray($data['authentication_properties']);
 
-            if(isset($data["display_picture_document"]))
-                $UserObject->DisplayPictureDocument = Document::fromArray($data["display_picture_document"]);
+            if(isset($data['private_access_token']))
+                $UserObject->PrivateAccessToken = $data['private_access_token'];
 
-            if(isset($data["settings"]))
-                $UserObject->Settings = UserSettings::fromArray($data["settings"]);
+            if(isset($data['profile']))
+                $UserObject->Profile = Profile::fromArray($data['profile']);
 
-            if(isset($data["privacy_state"]))
-                $UserObject->PrivacyState = $data["privacy_state"];
+            if(isset($data['display_picture_document']))
+                $UserObject->DisplayPictureDocument = Document::fromArray($data['display_picture_document']);
 
-            if(isset($data["slave_server"]))
-                $UserObject->SlaveServer = $data["slave_server"];
+            if(isset($data['settings']))
+                $UserObject->Settings = UserSettings::fromArray($data['settings']);
 
-            if(isset($data["last_activity_timestamp"]))
+            if(isset($data['privacy_state']))
+                $UserObject->PrivacyState = $data['privacy_state'];
+
+            if(isset($data['slave_server']))
+                $UserObject->SlaveServer = $data['slave_server'];
+
+            if(isset($data['last_activity_timestamp']))
             {
-                if($data["last_activity_timestamp"] !== null)
-                    $UserObject->LastActivityTimestamp = (int)$data["last_activity_timestamp"];
+                if($data['last_activity_timestamp'] !== null)
+                    $UserObject->LastActivityTimestamp = (int)$data['last_activity_timestamp'];
             }
 
-            if(isset($data["created_timestamp"]))
+            if(isset($data['created_timestamp']))
             {
-                if($data["created_timestamp"] !== null)
-                    $UserObject->CreatedTimestamp = (int)$data["created_timestamp"];
+                if($data['created_timestamp'] !== null)
+                    $UserObject->CreatedTimestamp = (int)$data['created_timestamp'];
             }
 
             return $UserObject;

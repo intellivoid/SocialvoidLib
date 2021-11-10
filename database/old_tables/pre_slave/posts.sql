@@ -45,13 +45,13 @@ create table if not exists posts
     constraint posts_sessions_id_fk
         foreign key (session_id) references sessions (id),
     constraint posts_users_id_fk
-        foreign key (poster_user_id) references users (id),
+        foreign key (poster_user_id) references peers (id),
     constraint posts_users_id_fk_2
-        foreign key (reply_to_user_id) references users (id),
+        foreign key (reply_to_user_id) references peers (id),
     constraint posts_users_id_fk_3
-        foreign key (quote_original_user_id) references users (id),
+        foreign key (quote_original_user_id) references peers (id),
     constraint posts_users_id_fk_4
-        foreign key (repost_original_user_id) references users (id)
+        foreign key (repost_original_user_id) references peers (id)
 )
     comment 'Posts made by users on the network';
 

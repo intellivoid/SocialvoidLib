@@ -21,7 +21,7 @@ create table if not exists user_timelines
     constraint user_timelines_user_id_uindex
         unique (user_id),
     constraint user_timelines_users_id_fk
-        foreign key (user_id) references users (id)
+        foreign key (user_id) references peers (id)
 )
     comment 'Data for housing personalized Timelines for users';
 

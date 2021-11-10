@@ -41,17 +41,17 @@ create table if not exists users
     comment 'The main table for housing users and their own data';
 
 create index users_network_name_index
-    on users (network);
+    on peers (network);
 
 create index users_privacy_state_index
-    on users (privacy_state);
+    on peers (privacy_state);
 
 create index users_status_index
-    on users (status);
+    on peers (status);
 
 create index users_username_index
-    on users (username);
+    on peers (username);
 
-alter table users
+alter table peers
     add primary key (id);
 

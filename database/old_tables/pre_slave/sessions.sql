@@ -28,7 +28,7 @@ create table if not exists sessions
     constraint sessions_public_id_user_id_uindex
         unique (id, user_id),
     constraint sessions_users_id_fk
-        foreign key (user_id) references users (id)
+        foreign key (user_id) references peers (id)
 )
     comment 'Table for housing active sessions for clients to the network';
 

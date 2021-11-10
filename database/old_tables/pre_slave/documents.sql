@@ -16,9 +16,9 @@ create table if not exists documents
     constraint documents_id_uindex
         unique (id),
     constraint documents_users_id_fk
-        foreign key (owner_user_id) references users (id),
+        foreign key (owner_user_id) references peers (id),
     constraint documents_users_id_fk_2
-        foreign key (forward_user_id) references users (id)
+        foreign key (forward_user_id) references peers (id)
 )
     comment 'Table for housing documents uploaded to the network';
 

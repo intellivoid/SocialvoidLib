@@ -1,4 +1,4 @@
-create table users
+create table peers
 (
     id                        int auto_increment comment 'The Unique Internal Database ID for this record',
     public_id                 varchar(256) null comment 'The Unique Public ID for this record',
@@ -7,6 +7,8 @@ create table users
     network                   varchar(255) null comment 'The network name that the user is from',
     status                    varchar(64)  null comment 'The Status of the user',
     status_change_timestamp   int          null comment 'The Unix Timestamp for when the user status is reverted',
+    type                      varchar(32)  null comment 'The peer type',
+    role                      varchar(32)  null comment 'The peer role',
     properties                blob         null comment 'ZiProto encoded blob of the user properties',
     flags                     tinyblob     null comment 'The current flags set to this user',
     authentication_method     varchar(64)  null comment 'The authentication method used by the user',
@@ -29,20 +31,20 @@ create table users
     constraint users_username_username_safe_uindex
         unique (username, username_safe)
 )
-    comment 'The main table for housing users and their own data';
+    comment 'The main table for housing peers and their own data';
 
 create index users_network_name_index
-    on users (network);
+    on peers (network);
 
 create index users_privacy_state_index
-    on users (privacy_state);
+    on peers (privacy_state);
 
 create index users_status_index
-    on users (status);
+    on peers (status);
 
 create index users_username_index
-    on users (username);
+    on peers (username);
 
-alter table users
+alter table peers
     add primary key (id);
 

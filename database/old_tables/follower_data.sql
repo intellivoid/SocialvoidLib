@@ -19,7 +19,7 @@ create table if not exists follower_data
     constraint follower_data_user_id_uindex
         unique (user_id),
     constraint follower_data_users_id_fk
-        foreign key (user_id) references users (id)
+        foreign key (user_id) references peers (id)
 )
     comment 'The following data for users, intended to use for faster indexing';
 
