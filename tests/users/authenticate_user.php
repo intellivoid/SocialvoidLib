@@ -4,7 +4,7 @@
     ppm_import("net.intellivoid.socialvoidlib");
 
     $Socialvoid = new \SocialvoidLib\SocialvoidLib();
-    $User = $Socialvoid->getUserManager()->getUser(\SocialvoidLib\Abstracts\SearchMethods\UserSearchMethod::ByUsername, "netkas");
+    $User = $Socialvoid->getPeerManager()->getUser(\SocialvoidLib\Abstracts\SearchMethods\UserSearchMethod::ByUsername, "netkas");
 
     function getInput(string $prompt): string
     {
@@ -20,6 +20,6 @@
         \SocialvoidLib\Classes\Converter::emptyString(getInput("Password: ")),
         \SocialvoidLib\Classes\Converter::emptyString(getInput("Optional 2FA: "))
     );
-    $Socialvoid->getUserManager()->updateUser($User);
+    $Socialvoid->getPeerManager()->updateUser($User);
 
     print("Success!" . PHP_EOL);

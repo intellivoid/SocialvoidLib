@@ -14,7 +14,7 @@
     foreach($usernames as $username)
     {
         print("Creating session for $username" . PHP_EOL);
-        $User = $Socialvoid->getUserManager()->getUser(\SocialvoidLib\Abstracts\SearchMethods\UserSearchMethod::ByUsername, $username);
+        $User = $Socialvoid->getPeerManager()->getUser(\SocialvoidLib\Abstracts\SearchMethods\UserSearchMethod::ByUsername, $username);
 
         $NetworkSession = new \SocialvoidLib\NetworkSession($Socialvoid); // Create network session
         $NetworkSession->authenticateUser(

@@ -301,8 +301,8 @@
             }
 
             $ResolvedSubPosts = $this->networkSession->getSocialvoidLib()->getPostsManager()->getMultiplePosts($SubPosts, false);
-            $ResolvedUsers = $this->networkSession->getSocialvoidLib()->getUserManager()->getMultipleUsers($UserIDs, false);
-            $ResolvedMentionedUsers = $this->networkSession->getSocialvoidLib()->getUserManager()->getMultipleUsers($MentionUserIDs, true);
+            $ResolvedUsers = $this->networkSession->getSocialvoidLib()->getPeerManager()->getMultipleUsers($UserIDs, false);
+            $ResolvedMentionedUsers = $this->networkSession->getSocialvoidLib()->getPeerManager()->getMultipleUsers($MentionUserIDs, true);
 
             // Sort results
             $SortedPostResolutions = [];
@@ -323,7 +323,7 @@
                 }
             }
 
-            $ResolvedSubMentionedUsers = $this->networkSession->getSocialvoidLib()->getUserManager()->getMultipleUsers($MentionSubUserIDs, true);
+            $ResolvedSubMentionedUsers = $this->networkSession->getSocialvoidLib()->getPeerManager()->getMultipleUsers($MentionSubUserIDs, true);
             $SortedSubMentionedUsers = [];
 
             foreach($ResolvedSubMentionedUsers as $resolvedSubMentionedUser)

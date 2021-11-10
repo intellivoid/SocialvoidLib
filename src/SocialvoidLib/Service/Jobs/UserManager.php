@@ -38,7 +38,7 @@ namespace SocialvoidLib\Service\Jobs;
 
             try
             {
-                $User = SocialvoidService::getSocialvoidLib()->getUserManager()->getUser(
+                $User = SocialvoidService::getSocialvoidLib()->getPeerManager()->getUser(
                     $getUserJob->SearchMethod, $getUserJob->Value
                 );
             }

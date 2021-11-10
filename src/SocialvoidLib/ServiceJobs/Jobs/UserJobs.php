@@ -145,7 +145,7 @@
             {
                 try
                 {
-                    $UserResults[] = $this->socialvoidLib->getUserManager()->getUser(
+                    $UserResults[] = $this->socialvoidLib->getPeerManager()->getUser(
                         $search_method, $query_value
                     )->toArray();
                 }

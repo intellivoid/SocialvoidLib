@@ -271,7 +271,7 @@
 
             if($this->active_session->Authenticated && $this->active_session->UserID !== null)
             {
-                $this->authenticated_user = $this->socialvoidLib->getUserManager()->getUser(UserSearchMethod::ById, $this->active_session->UserID);
+                $this->authenticated_user = $this->socialvoidLib->getPeerManager()->getUser(UserSearchMethod::ById, $this->active_session->UserID);
                 Converter::addFlag($this->flags, NetworkFlags::Authenticated);
             }
         }
@@ -345,7 +345,7 @@
 
             try
             {
-                $authenticating_peer = $this->socialvoidLib->getUserManager()->getUser(UserSearchMethod::ByUsername, $username);
+                $authenticating_peer = $this->socialvoidLib->getPeerManager()->getUser(UserSearchMethod::ByUsername, $username);
             }
             catch (PeerNotFoundException $e)
             {
@@ -363,7 +363,7 @@
 
             try
             {
-                $this->socialvoidLib->getUserManager()->updateUser($authenticating_peer);
+                $this->socialvoidLib->getPeerManager()->updateUser($authenticating_peer);
             }
             catch(Exception $e)
             {
@@ -378,10 +378,6 @@
             $this->active_session->UserID = $authenticating_peer->ID;
             $this->active_session->AuthenticationMethodUsed = $authenticating_peer->AuthenticationMethod;
 
-            switch($authenticating_peer->)
-            {
-                case UserStatus::
-            }
             Converter::addFlag($this->active_session->Data->PermissionSets, PermissionSets::User);
 
             try
@@ -430,7 +426,7 @@
 
             try
             {
-                $registered_peer = $this->socialvoidLib->getUserManager()->registerUser($username, $first_name, $last_name);
+                $registered_peer = $this->socialvoidLib->getPeerManager()->registerUser($username, $first_name, $last_name);
             }
             catch(Exception $e)
             {
@@ -447,7 +443,7 @@
 
             try
             {
-                $this->socialvoidLib->getUserManager()->updateUser($registered_peer);
+                $this->socialvoidLib->getPeerManager()->updateUser($registered_peer);
             }
             catch(Exception $e)
             {

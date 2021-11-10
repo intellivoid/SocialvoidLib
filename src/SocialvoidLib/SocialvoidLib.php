@@ -42,7 +42,7 @@
     use SocialvoidLib\Managers\SlaveManager;
     use SocialvoidLib\Managers\TelegramCdnManager;
     use SocialvoidLib\Managers\TimelineManager;
-    use SocialvoidLib\Managers\UserManager;
+    use SocialvoidLib\Managers\PeerManager;
     use TmpFile\TmpFile;
     use udp2\udp2;
 
@@ -78,9 +78,9 @@
         private $database;
 
         /**
-         * @var UserManager|null
+         * @var PeerManager|null
          */
-        private $UserManager;
+        private $PeerManager;
 
         /**
          * @var RelationStateManager|null
@@ -485,14 +485,14 @@
         }
 
         /**
-         * @return UserManager
+         * @return PeerManager
          */
-        public function getUserManager(): UserManager
+        public function getPeerManager(): PeerManager
         {
-            if($this->UserManager == null)
-                $this->UserManager = new UserManager($this);
+            if($this->PeerManager == null)
+                $this->PeerManager = new PeerManager($this);
             
-            return $this->UserManager;
+            return $this->PeerManager;
         }
 
         /**

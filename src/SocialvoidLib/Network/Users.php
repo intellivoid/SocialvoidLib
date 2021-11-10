@@ -28,6 +28,7 @@
     use SocialvoidLib\Exceptions\Standard\Network\BlockedPeerException;
     use SocialvoidLib\Exceptions\Standard\Network\DocumentNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\SelfInteractionNotPermittedException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidFileNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPageValueException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPeerInputException;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
@@ -70,6 +71,7 @@
          * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
          * @throws DisplayPictureException
+         * @throws InvalidFileNameException
          */
         public function resolvePeer($peer, bool $resolve_internally=True): User
         {
@@ -87,7 +89,7 @@
                     return $this->networkSession->getAuthenticatedUser();
 
                 // Ask the database
-                $peer_result = $this->networkSession->getSocialvoidLib()->getUserManager()->getUser(
+                $peer_result = $this->networkSession->getSocialvoidLib()->getPeerManager()->getUser(
                     UserSearchMethod::ById, $peer
                 );
             }
@@ -99,7 +101,7 @@
                     return $this->networkSession->getAuthenticatedUser();
 
                 // Ask the database
-                $peer_result = $this->networkSession->getSocialvoidLib()->getUserManager()->getUser(
+                $peer_result = $this->networkSession->getSocialvoidLib()->getPeerManager()->getUser(
                     UserSearchMethod::ByUsername, substr($peer, 1)
                 );
             }
@@ -111,7 +113,7 @@
                     return $this->networkSession->getAuthenticatedUser();
 
                 // Ask the database
-                $peer_result = $this->networkSession->getSocialvoidLib()->getUserManager()->getUser(
+                $peer_result = $this->networkSession->getSocialvoidLib()->getPeerManager()->getUser(
                     UserSearchMethod::ByPublicId, $peer
                 );
             }
@@ -135,10 +137,11 @@
          * @throws ServerNotReachableException
          * @throws ServiceJobException
          * @throws DisplayPictureException
+         * @throws InvalidFileNameException
          */
         public function resolveMultiplePeers(array $peers): array
         {
-            return $this->networkSession->getSocialvoidLib()->getUserManager()->getMultipleUsers($peers);
+            return $this->networkSession->getSocialvoidLib()->getPeerManager()->getMultipleUsers($peers);
         }
 
         /**
@@ -146,12 +149,13 @@
          * @return int
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DisplayPictureException
          * @throws DocumentNotFoundException
+         * @throws InvalidFileNameException
          * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
          * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
-         * @throws DisplayPictureException
          */
         public function resolveRelation($peer): int
         {
@@ -193,6 +197,7 @@
          * @throws DatabaseException
          * @throws DisplayPictureException
          * @throws DocumentNotFoundException
+         * @throws InvalidFileNameException
          * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
          * @throws NotAuthenticatedException
@@ -245,12 +250,13 @@
          * @throws BlockedPeerException
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DisplayPictureException
          * @throws DocumentNotFoundException
+         * @throws InvalidFileNameException
          * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
          * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
-         * @throws DisplayPictureException
          */
         public function unfollowPeer($peer): int
         {
@@ -283,12 +289,13 @@
          * @return Profile
          * @throws CacheException
          * @throws DatabaseException
+         * @throws DisplayPictureException
          * @throws DocumentNotFoundException
+         * @throws InvalidFileNameException
          * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
          * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
-         * @throws DisplayPictureException
          */
         public function getProfile($peer): Profile
         {
@@ -316,6 +323,7 @@
          * @throws DatabaseException
          * @throws DisplayPictureException
          * @throws DocumentNotFoundException
+         * @throws InvalidFileNameException
          * @throws InvalidPageValueException
          * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
@@ -376,6 +384,7 @@
          * @throws DatabaseException
          * @throws DisplayPictureException
          * @throws DocumentNotFoundException
+         * @throws InvalidFileNameException
          * @throws InvalidPageValueException
          * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException

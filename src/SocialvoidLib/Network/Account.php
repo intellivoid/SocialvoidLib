@@ -125,7 +125,7 @@
 
             try
             {
-                $this->networkSession->getSocialvoidLib()->getUserManager()->setDisplayPicture(
+                $this->networkSession->getSocialvoidLib()->getPeerManager()->setDisplayPicture(
                     $user, $TmpFile->getFileName()
                 );
             }
@@ -154,7 +154,7 @@
 
             try
             {
-                $this->networkSession->getSocialvoidLib()->getUserManager()->deleteDisplayPicture($user);
+                $this->networkSession->getSocialvoidLib()->getPeerManager()->deleteDisplayPicture($user);
             }
             catch(Exception $e)
             {
@@ -194,7 +194,7 @@
 
             try
             {
-                $this->networkSession->getSocialvoidLib()->getUserManager()->updateUser($user);
+                $this->networkSession->getSocialvoidLib()->getPeerManager()->updateUser($user);
             }
             catch(Exception $e)
             {
@@ -228,7 +228,7 @@
 
             try
             {
-                $this->networkSession->getSocialvoidLib()->getUserManager()->updateUser($user);
+                $this->networkSession->getSocialvoidLib()->getPeerManager()->updateUser($user);
             }
             catch(Exception $e)
             {
@@ -257,7 +257,7 @@
 
             try
             {
-                $this->networkSession->getSocialvoidLib()->getUserManager()->updateUser($user);
+                $this->networkSession->getSocialvoidLib()->getPeerManager()->updateUser($user);
             }
             catch(Exception $e)
             {
@@ -291,7 +291,7 @@
 
             try
             {
-                $this->networkSession->getSocialvoidLib()->getUserManager()->updateUser($user);
+                $this->networkSession->getSocialvoidLib()->getPeerManager()->updateUser($user);
             }
             catch(Exception $e)
             {
@@ -320,7 +320,7 @@
 
             try
             {
-                $this->networkSession->getSocialvoidLib()->getUserManager()->updateUser($user);
+                $this->networkSession->getSocialvoidLib()->getPeerManager()->updateUser($user);
             }
             catch(Exception $e)
             {
@@ -354,7 +354,7 @@
 
             try
             {
-                $this->networkSession->getSocialvoidLib()->getUserManager()->updateUser($user);
+                $this->networkSession->getSocialvoidLib()->getPeerManager()->updateUser($user);
             }
             catch(Exception $e)
             {
@@ -383,7 +383,7 @@
 
             try
             {
-                $this->networkSession->getSocialvoidLib()->getUserManager()->updateUser($user);
+                $this->networkSession->getSocialvoidLib()->getPeerManager()->updateUser($user);
             }
             catch(Exception $e)
             {

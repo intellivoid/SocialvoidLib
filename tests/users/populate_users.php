@@ -11,11 +11,11 @@
     foreach($usernames as $username)
     {
         print("Registering $username" . PHP_EOL);
-        $Socialvoid->getUserManager()->registerUser($username, "John", "Smith");
+        $Socialvoid->getPeerManager()->registerUser($username, "John", "Smith");
 
-        $User = $Socialvoid->getUserManager()->getUser(\SocialvoidLib\Abstracts\SearchMethods\UserSearchMethod::ByUsername, $username);
+        $User = $Socialvoid->getPeerManager()->getUser(\SocialvoidLib\Abstracts\SearchMethods\UserSearchMethod::ByUsername, $username);
         $User->disableAllAuthenticationMethods();
         $User->AuthenticationProperties->setPassword("SuperExtreme1Password24...");
         $User->AuthenticationMethod = \SocialvoidLib\Abstracts\UserAuthenticationMethod::Simple;
-        $User = $Socialvoid->getUserManager()->updateUser($User);
+        $User = $Socialvoid->getPeerManager()->updateUser($User);
     }

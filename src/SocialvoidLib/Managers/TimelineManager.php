@@ -306,7 +306,7 @@
                         $QueryResults = [];
                         foreach($FollowerIds as $followerId)
                             $QueryResults[$followerId] = UserSearchMethod::ById;
-                        $ResolvedFollowers = $this->socialvoidLib->getUserManager()->getMultipleUsers($QueryResults, true, 15);
+                        $ResolvedFollowers = $this->socialvoidLib->getPeerManager()->getMultipleUsers($QueryResults, true, 15);
 
 
                         foreach($ResolvedFollowers as $user)

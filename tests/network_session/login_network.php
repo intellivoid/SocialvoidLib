@@ -25,7 +25,7 @@
     $Password = \SocialvoidLib\Classes\Converter::emptyString(getInput("Password: "));
     $TwoFactorCode = \SocialvoidLib\Classes\Converter::emptyString(getInput("2FA Code (Optional): "));
 
-    $User = $Socialvoid->getUserManager()->getUser(\SocialvoidLib\Abstracts\SearchMethods\UserSearchMethod::ByUsername, $Username);
+    $User = $Socialvoid->getPeerManager()->getUser(\SocialvoidLib\Abstracts\SearchMethods\UserSearchMethod::ByUsername, $Username);
     if($User->simpleAuthentication($Password, $TwoFactorCode))
     {
         print("Authenticated!" . PHP_EOL);

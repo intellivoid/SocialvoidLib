@@ -10,6 +10,6 @@
         "jaytoo" => \SocialvoidLib\Abstracts\SearchMethods\UserSearchMethod::ByUsername,
         "jaytoo2" => \SocialvoidLib\Abstracts\SearchMethods\UserSearchMethod::ByUsername
     ];
-    $res = $Socialvoid->getUserManager()->getMultipleUsers($jobs, false);
+    $res = $Socialvoid->getPeerManager()->getMultipleUsers($jobs, false);
     var_dump($jobs);
     var_dump($res);

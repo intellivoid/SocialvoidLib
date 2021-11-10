@@ -59,7 +59,7 @@
      * Class UserManager
      * @package SocialvoidLib\Managers
      */
-    class UserManager
+    class PeerManager
     {
         /**
          * @var SocialvoidLib
