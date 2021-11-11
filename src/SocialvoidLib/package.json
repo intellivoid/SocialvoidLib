@@ -755,6 +755,10 @@
         },
         {
             "required": true,
+            "file": "Network/Captcha.php"
+        },
+        {
+            "required": true,
             "file": "Network/Cloud.php"
         },
         {
