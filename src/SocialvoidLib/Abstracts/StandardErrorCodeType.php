@@ -55,9 +55,16 @@
 
         /**
          * 40-Set error codes (server)
-         * 16384 - *
+         * 16384 - 24575
          *
          * All error codes made in relation to the network's server
          */
         const ServerError = "SERVER_ERROR";
+
+        /**
+         * 60-Set error codes (security)
+         *
+         * 24576 - *
+         */
+        const SecurityError = "SECURITY_ERROR";
     }

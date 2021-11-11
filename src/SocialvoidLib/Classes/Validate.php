@@ -162,8 +162,17 @@ namespace SocialvoidLib\Classes;
         public static function determineStandardErrorType(int $error_code): string
         {
             /**
+             * 60-Set error codes (Security)
+             * 24576 - *
+             */
+            if($error_code >= 24576)
+            {
+                return StandardErrorCodeType::SecurityError;
+            }
+
+            /**
              * 40-Set error codes (Server)
-             * 16384 - *
+             * 16384 - 24575
              */
             if($error_code >= 16384)
             {

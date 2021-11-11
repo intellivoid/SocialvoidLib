@@ -179,6 +179,10 @@
         },
         {
             "required": true,
+            "file": "Abstracts/StatusStates/CaptchaState.php"
+        },
+        {
+            "required": true,
             "file": "Abstracts/StatusStates/HealthStatusCode.php"
         },
         {
@@ -228,6 +232,10 @@
         {
             "required": true,
             "file": "Abstracts/Types/Security/DocumentAccessType.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/Types/Standard/CaptchaType.php"
         },
         {
             "required": true,
@@ -555,6 +563,10 @@
         },
         {
             "required": true,
+            "file": "Exceptions/Standard/Security/CaptchaNotFoundException.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/Standard/Server/DocumentUploadException.php"
         },
         {
@@ -683,6 +695,10 @@
         },
         {
             "required": true,
+            "file": "Managers/CaptchaManager.php"
+        },
+        {
+            "required": true,
             "file": "Managers/DocumentsManager.php"
         },
         {
@@ -776,6 +792,10 @@
         {
             "required": true,
             "file": "Objects/CacheEntryPointer.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/Captcha.php"
         },
         {
             "required": true,

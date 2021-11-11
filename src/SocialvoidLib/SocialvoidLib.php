@@ -12,8 +12,6 @@
     /** @noinspection PhpRedundantDocCommentInspection */
     /** @noinspection PhpMissingFieldTypeInspection */
 
-    // TODO: Add the ability to retrieve user likes & reposts
-
     namespace SocialvoidLib;
 
     use acm2\acm2;
@@ -30,6 +28,7 @@
     use SocialvoidLib\Exceptions\GenericInternal\DependencyError;
     use SocialvoidLib\Exceptions\GenericInternal\RedisCacheException;
     use SocialvoidLib\Managers\BasicRedisCacheManager;
+    use SocialvoidLib\Managers\CaptchaManager;
     use SocialvoidLib\Managers\DocumentsManager;
     use SocialvoidLib\Managers\RelationStateManager;
     use SocialvoidLib\Managers\LikesRecordManager;
@@ -204,6 +203,11 @@
          * @var int
          */
         private $LastConnectedDatabaseTimestamp;
+
+        /**
+         * @var CaptchaManager
+         */
+        private $CaptchaManager;
 
         /**
          * SocialvoidLib constructor.
@@ -792,5 +796,15 @@
         public function getMainConfiguration()
         {
             return $this->MainConfiguration;
+        }
+
+        /**
+         * @return CaptchaManager
+         */
+        public function getCaptchaManager(): CaptchaManager
+        {
+            if($this->CaptchaManager == null)
+                $this->CaptchaManager = new CaptchaManager($this);
+            return $this->CaptchaManager;
         }
     }

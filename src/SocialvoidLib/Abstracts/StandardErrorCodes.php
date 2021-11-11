@@ -390,4 +390,8 @@
          * @see DocumentUploadException
          */
         const DocumentUploadException = 0x04001;
+
+        /** 60-Set error codes (Security) */
+
+        const CaptchaNotFoundException = 0x06000;
     }

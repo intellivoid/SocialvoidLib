@@ -1,5 +1,7 @@
 <?php
 
+    /** @noinspection PhpMissingFieldTypeInspection */
+
     namespace SocialvoidLib\Objects\Standard;
 
     use SocialvoidLib\Objects\Standard\ErrorDefinition;
