@@ -4,10 +4,10 @@
 
     namespace SocialvoidLib\Objects\Standard;
 
-    use SocialvoidLib\Objects\Standard\ErrorDefinition;
-    use SocialvoidLib\Objects\Standard\ObjectDefinition;
+    use SocialvoidLib\Abstracts\Types\BuiltinTypes;
+    use SocialvoidLib\Interfaces\StandardObjectInterface;
 
-    class ProtocolDefinitions
+    class ProtocolDefinitions implements StandardObjectInterface
     {
         /**
          * The version of the protocol
@@ -50,6 +50,50 @@
                 'version' => $this->Version,
                 'errors' => $error_definitions,
                 'objects' => $object_definitions
+            ];
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getName(): string
+        {
+            return 'ProtocolDefinitions';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDescription(): string
+        {
+            return 'The ProtocolDefinitions object contains object definitions of what the server\'s version of the protocol has defined and what their use cases are. Much like a documentation representation in a object structure that can be understood by clients which allows for constructors during runtime.';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDefinition(): ObjectDefinition
+        {
+            return new ObjectDefinition(self::getName(), self::getDescription(), self::getParameters());
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getParameters(): array
+        {
+            return [
+                new ParameterDefinition('version', [
+                    new TypeDefinition(BuiltinTypes::String, false)
+                ], true, 'The version of the protocol being used by the server, eg; 1.0'),
+
+                    new ParameterDefinition('errors', [
+                    new TypeDefinition('ErrorDefinition', true)
+                ], true, 'A list of error definitions defined by the server and protocol with their respective error codes and descriptions'),
+
+                new ParameterDefinition('objects', [
+                    new TypeDefinition('ObjectDefinition', true)
+                ], true, 'A list of object definitions defined by the server and protocol with their respective descriptions, names and parameters.')
             ];
         }
     }

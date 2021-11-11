@@ -627,6 +627,7 @@
                 Peer::getDefinition(),
                 Post::getDefinition(),
                 Profile::getDefinition(),
+                ProtocolDefinitions::getDefinition(),
                 ServerInformation::getDefinition(),
                 Session::getDefinition(),
                 SessionEstablished::getDefinition(),
