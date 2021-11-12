@@ -271,6 +271,10 @@
         },
         {
             "required": true,
+            "file": "Classes/CaptchaBuilder.php"
+        },
+        {
+            "required": true,
             "file": "Classes/Converter.php"
         },
         {
@@ -1036,14 +1040,14 @@
     ],
     "files": [
         "Classes/PostText/TwitterMethod/README.md",
-        "Data/Font/captcha0.ttf",
-        "Data/Font/captcha1.ttf",
-        "Data/Font/captcha2.ttf",
-        "Data/Font/captcha3.ttf",
-        "Data/Font/captcha4.ttf",
-        "Data/Font/captcha5.ttf",
-        "Data/Font/captcha6.ttf",
-        "Data/Font/captcha7.otf",
+        "Data/Fonts/captcha0.ttf",
+        "Data/Fonts/captcha1.ttf",
+        "Data/Fonts/captcha2.ttf",
+        "Data/Fonts/captcha3.ttf",
+        "Data/Fonts/captcha4.ttf",
+        "Data/Fonts/captcha5.ttf",
+        "Data/Fonts/captcha6.ttf",
+        "Data/Fonts/captcha7.otf",
         "package.json",
         "Templates/community_guidelines.md",
         "Templates/privacy_policy.md",
