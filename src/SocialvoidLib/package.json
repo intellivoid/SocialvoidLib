@@ -267,6 +267,10 @@
         },
         {
             "required": true,
+            "file": "Classes/Captcha/PhraseBuilder.php"
+        },
+        {
+            "required": true,
             "file": "Classes/Converter.php"
         },
         {
