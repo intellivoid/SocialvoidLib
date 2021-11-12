@@ -687,6 +687,10 @@
         },
         {
             "required": true,
+            "file": "Interfaces/CaptchaPhraseInterface.php"
+        },
+        {
+            "required": true,
             "file": "Interfaces/StandardErrorInterface.php"
         },
         {
