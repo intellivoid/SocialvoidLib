@@ -527,7 +527,7 @@
          * @throws Exception
          * @noinspection PhpUndefinedVariableInspection
          */
-        public function build($width = 150, $height = 40, $font = null, $fingerprint = null): CaptchaBuilder
+        public function build($width = 150, $height = 40, $font=null, $fingerprint=null): CaptchaBuilder
         {
             if (null !== $fingerprint)
             {
@@ -541,7 +541,7 @@
             }
 
             if ($font === null)
-                $font = __DIR__ . '..' . DIRECTORY_SEPARATOR . 'Data' . DIRECTORY_SEPARATOR .'Fonts' . DIRECTORY_SEPARATOR . 'captcha'.$this->rand(0, 7).'.ttf';
+                $font = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Data' . DIRECTORY_SEPARATOR .'Fonts' . DIRECTORY_SEPARATOR . 'captcha'.$this->rand(0, 5).'.ttf';
 
             if (empty($this->backgroundImages))
             {
