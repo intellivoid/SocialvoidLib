@@ -541,7 +541,7 @@
             }
 
             if ($font === null)
-                $font = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Data' . DIRECTORY_SEPARATOR .'Fonts' . DIRECTORY_SEPARATOR . 'captcha'.$this->rand(0, 5).'.ttf';
+                $font = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Data' . DIRECTORY_SEPARATOR .'Fonts' . DIRECTORY_SEPARATOR . 'captcha'.$this->rand(0, 16).'.ttf';
 
             if (empty($this->backgroundImages))
             {
