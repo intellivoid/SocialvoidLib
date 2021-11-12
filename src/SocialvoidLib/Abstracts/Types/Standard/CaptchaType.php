@@ -32,6 +32,14 @@
         const ImageTextScrambleChallenge = 'IMAGE_TEXT_SCRAMBLE_CHALLENGE';
 
         /**
+         * Indicates that the client must display the captcha image to the user from the value, the value
+         * being a base64 encoded data uri scheme representation. The user must provide an answer from the
+         * math equation that's scrambled shown in the images. This is easy for a human to do but difficult
+         * for a computer.
+         */
+        const ImageTextScrambleMathChallenge = 'IMAGE_TEXT_SCRAMBLE_MATH_CHALLENGE';
+
+        /**
          * Indicates that the client must display the captcha image to the user from a value, the value being
          * a base64 encoded data uri scheme representation. The user must provide an answer from the image shown,
          * the image, eg if the image is a picture of a clown then the answer would be "Clown"
