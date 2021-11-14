@@ -87,6 +87,15 @@
         public $CreatedTimestamp;
 
         /**
+         * Syncs the current properties to be up-to-date
+         */
+        public function sync()
+        {
+            if(time() >= $this->ExpiryTimestamp)
+                $this->State = CaptchaState::Expired;
+        }
+
+        /**
          * Returns an array representation of the object
          *
          * @return array
@@ -112,6 +121,7 @@
          *
          * @param array $data
          * @return Captcha
+         * @noinspection DuplicatedCode
          */
         public static function fromArray(array $data): Captcha
         {
@@ -147,6 +157,7 @@
             if(isset($data['created_timestamp']))
                 $CaptchaObject->CreatedTimestamp = (int)$data['created_timestamp'];
 
+            $CaptchaObject->sync();
             return $CaptchaObject;
         }
     }

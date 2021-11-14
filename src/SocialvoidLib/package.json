@@ -571,7 +571,31 @@
         },
         {
             "required": true,
+            "file": "Exceptions/Standard/Security/CaptchaAlreadyAnsweredException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Security/CaptchaAlreadyUsedException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Security/CaptchaAnswerNotApplicableException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Security/CaptchaBlockedException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Security/CaptchaExpiredException.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/Standard/Security/CaptchaNotFoundException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Security/IncorrectCaptchaAnswerException.php"
         },
         {
             "required": true,
@@ -596,6 +620,10 @@
         {
             "required": true,
             "file": "Exceptions/Standard/Validation/InvalidBiographyException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/Standard/Validation/InvalidCaptchaIdException.php"
         },
         {
             "required": true,
@@ -908,6 +936,10 @@
         {
             "required": true,
             "file": "Objects/RepostRecord.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/Standard/Captcha.php"
         },
         {
             "required": true,

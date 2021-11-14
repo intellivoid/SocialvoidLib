@@ -189,17 +189,8 @@ namespace SocialvoidLib\Classes;
             }
 
             /**
-             * 23-Set Error codes (Media)
-             * 8960 - 12543
-             */
-            if($error_code >= 8960)
-            {
-                return StandardErrorCodeType::MediaError;
-            }
-
-            /**
              * 22-Set Error codes (Authentication)
-             * 8704 - 8979
+             * 8704 - 12543
              */
             if($error_code >= 8704)
             {

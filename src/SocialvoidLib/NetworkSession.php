@@ -70,6 +70,7 @@
     use SocialvoidLib\Exceptions\Standard\Validation\UsernameAlreadyExistsException;
     use SocialvoidLib\InputTypes\SessionClient;
     use SocialvoidLib\Network\Account;
+    use SocialvoidLib\Network\Captcha;
     use SocialvoidLib\Network\Cloud;
     use SocialvoidLib\Network\Timeline;
     use SocialvoidLib\Network\Users;
@@ -140,6 +141,11 @@
         private Account $account;
 
         /**
+         * @var Captcha
+         */
+        private Captcha $captcha;
+
+        /**
          * @var Cloud
          */
         //private Cloud $cloud;
@@ -156,6 +162,7 @@
             $this->users = new Users($this);
             $this->timeline = new Timeline($this);
             $this->account = new Account($this);
+            $this->captcha = new Captcha($this);
         }
 
         /**
@@ -778,5 +785,13 @@
         public function getAccount(): Account
         {
             return $this->account;
+        }
+
+        /**
+         * @return Captcha
+         */
+        public function getCaptcha(): Captcha
+        {
+            return $this->captcha;
         }
     }

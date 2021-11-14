@@ -115,6 +115,11 @@
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Account\UpdateProfileName());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Account\UpdateProfileUrl());
 
+            // Captcha Methods
+            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Captcha\AnswerCaptcha());
+            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Captcha\CreateCaptcha());
+            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Captcha\GetCaptcha());
+
             // Cloud Methods
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Cloud\GetDocument());
 
@@ -171,6 +176,7 @@
         {
             if(self::$RpcServer->isEnableBackgroundWorker() == false)
                 return;
+            /** @noinspection PhpCastIsUnnecessaryInspection */
             SocialvoidRPC::setLastWorkerActivity((int)time()); // Set the last activity timestamp
             SocialvoidRPC::processSleepCycle(); // Wake worker if it's sleeping
         }

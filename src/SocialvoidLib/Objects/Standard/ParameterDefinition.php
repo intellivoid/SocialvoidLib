@@ -4,7 +4,6 @@
 
     namespace SocialvoidLib\Objects\Standard;
 
-    use SocialvoidLib\Objects\Standard\TypeDefinition;
 
     class ParameterDefinition
     {

@@ -65,6 +65,18 @@
         },
         {
             "required": true,
+            "file": "Methods/Captcha/AnswerCaptcha.php"
+        },
+        {
+            "required": true,
+            "file": "Methods/Captcha/CreateCaptcha.php"
+        },
+        {
+            "required": true,
+            "file": "Methods/Captcha/GetCaptcha.php"
+        },
+        {
+            "required": true,
             "file": "Methods/Cloud/GetDocument.php"
         },
         {

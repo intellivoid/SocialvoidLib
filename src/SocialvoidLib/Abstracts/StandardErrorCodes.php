@@ -29,6 +29,15 @@
     use SocialvoidLib\Exceptions\Standard\Network\PostNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\SelfInteractionNotPermittedException;
+    use SocialvoidLib\Exceptions\Standard\Security\CaptchaAlreadyAnsweredException;
+    use SocialvoidLib\Exceptions\Standard\Security\CaptchaAlreadyUsedException;
+    use SocialvoidLib\Exceptions\Standard\Security\CaptchaAnswerNotApplicableException;
+    use SocialvoidLib\Exceptions\Standard\Security\CaptchaBlockedException;
+    use SocialvoidLib\Exceptions\Standard\Security\CaptchaExpiredException;
+    use SocialvoidLib\Exceptions\Standard\Security\CaptchaNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Security\IncompleteCaptchaException;
+    use SocialvoidLib\Exceptions\Standard\Security\IncorrectCaptchaAnswerException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidCaptchaIdException;
     use SocialvoidLib\Exceptions\Standard\Server\DocumentUploadException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
     use SocialvoidLib\Exceptions\Standard\Validation\AgreementRequiredException;
@@ -224,6 +233,13 @@
          */
         const InvalidFileNameException = 0x02117;
 
+        /**
+         * Raised when the given Captcha ID is invalid
+         *
+         * @see InvalidCaptchaIdException
+         */
+        const InvalidCaptchaIdException = 0x02118;
+
         /** 22-Set error codes (Authentication) */
 
         /**
@@ -393,5 +409,59 @@
 
         /** 60-Set error codes (Security) */
 
+        /**
+         * Raised when the requested captcha record was not found
+         *
+         * @see CaptchaNotFoundException
+         */
         const CaptchaNotFoundException = 0x06000;
+
+        /**
+         * Raised when the requested captcha has expired and cannot be used
+         *
+         * @see CaptchaExpiredException
+         */
+        const CaptchaExpiredException = 0x06001;
+
+        /**
+         * Raised when the requested captcha has already been used
+         *
+         * @see CaptchaAlreadyUsedException
+         */
+        const CaptchaAlreadyUsedException = 0x06002;
+
+        /**
+         * Raised when the given answer to the captcha is invalid
+         *
+         * @see IncorrectCaptchaAnswerException
+         */
+        const IncorrectCaptchaAnswerException = 0x06003;
+
+        /**
+         * Raised when attempting to answer a captcha that has already been answered
+         *
+         * @see CaptchaAlreadyAnsweredException
+         */
+        const CaptchaAlreadyAnsweredException = 0x06004;
+
+        /**
+         * Raised when attempting to use a captcha that has been blocked by the server
+         *
+         * @see CaptchaBlockedException
+         */
+        const CaptchaBlockedException = 0x06005;
+
+        /**
+         * Raised when the captcha does not accept answers from the client
+         *
+         * @see CaptchaAnswerNotApplicableException
+         */
+        const CaptchaAnswerNotApplicableException = 0x06006;
+
+        /**
+         * Raised when attempting to use a captcha that has not been answered
+         *
+         * @see IncompleteCaptchaException
+         */
+        const IncompleteCaptchaException = 0x06007;
     }

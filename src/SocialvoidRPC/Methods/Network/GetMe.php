@@ -20,6 +20,7 @@
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPublicHashException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidFileNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidSessionIdentificationException;
     use SocialvoidLib\NetworkSession;
     use SocialvoidLib\Objects\Standard\Peer;
@@ -93,6 +94,7 @@
          * @throws PeerNotFoundException
          * @throws SessionExpiredException
          * @throws SessionNotFoundException
+         * @throws InvalidFileNameException
          * @noinspection DuplicatedCode
          */
         public function execute(Request $request): Response

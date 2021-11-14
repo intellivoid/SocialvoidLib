@@ -31,19 +31,11 @@
 
         /**
          * 22-Set Error codes (Authentication)
-         * 8704 - 8960
+         * 8704 - 12543
          *
          * An error was raised in relation to the authentication made by the client
          */
         const AuthenticationError = "AUTHENTICATION_ERROR";
-
-        /**
-         * 23-Set Error codes (Media)
-         * 8960 - 12543
-         *
-         * An error was raised in relation to the media content being uploaded or downloaded
-         */
-        const MediaError = "MEDIA_ERROR";
 
         /**
          * 31-Set error codes (Network)
