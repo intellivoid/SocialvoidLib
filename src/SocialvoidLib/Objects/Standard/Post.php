@@ -373,7 +373,7 @@
                 ], true, 'The post type used to represent the true intention of the post'),
 
                 new ParameterDefinition('peer', [
-                    new TypeDefinition('Peer', false),
+                    new TypeDefinition(Peer::getName(), false),
                     new TypeDefinition(BuiltinTypes::Null, false)
                 ], true, 'The author peer of the post, this property can be null if the post was deleted.'),
 
@@ -388,34 +388,34 @@
                 ], true, 'The text content of the post source. This property can be null if the post has been deleted'),
 
                 new ParameterDefinition('attachments', [
-                    new TypeDefinition('Document', true)
+                    new TypeDefinition(Document::getName(), true)
                 ], true, 'An array of attached documents to the post'),
 
                 new ParameterDefinition('entities', [
-                    new TypeDefinition('TextEntity', true)
+                    new TypeDefinition(TextEntity::getName(), true)
                 ], true, 'An array of entities extracted from the text, can be used by the client to highlight clickable entities that preforms an action.'),
 
                 new ParameterDefinition('mentioned_peers', [
-                    new TypeDefinition('Peer', true)
+                    new TypeDefinition(Peer::getName(), true)
                 ], true, 'An array of resolved peers that was mentioned in the post text.'),
 
                 new ParameterDefinition('reply_to_post', [
-                    new TypeDefinition('Post', false),
+                    new TypeDefinition(Post::getName(), false),
                     new TypeDefinition(BuiltinTypes::Null, false)
                 ], true, 'The original post that this post is replying to if applicable, otherwise null.'),
 
                 new ParameterDefinition('quoted_post', [
-                    new TypeDefinition('Post', false),
+                    new TypeDefinition(Post::getName(), false),
                     new TypeDefinition(BuiltinTypes::Null, false)
                 ], true, 'The original post that this post is quoting if applicable, otherwise null'),
 
                 new ParameterDefinition('reposted_post', [
-                    new TypeDefinition('Post', false),
+                    new TypeDefinition(Post::getName(), false),
                     new TypeDefinition(BuiltinTypes::Null, false)
                 ], true, 'The original post that this post is reposting if applicable, otherwise null'),
 
                 new ParameterDefinition('original_thread_post', [
-                    new TypeDefinition('Post', false),
+                    new TypeDefinition(Post::getName(), false),
                     new TypeDefinition(BuiltinTypes::Null, false)
                 ], true, 'The original thread post, only applicable to replies. This value indicates the main thread post where all the replies originated from. This value will remain the same for all sub-replies of the main post.'),
 

@@ -138,7 +138,7 @@
                 ], true, 'The text contents of the document'),
 
                 new ParameterDefinition('entities', [
-                    new TypeDefinition('TextEntity', true)
+                    new TypeDefinition(TextEntity::getName(), true)
                 ], true, 'An array of text entities being represented in the text')
             ];
         }

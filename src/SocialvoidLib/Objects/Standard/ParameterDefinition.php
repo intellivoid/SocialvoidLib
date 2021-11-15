@@ -5,7 +5,10 @@
     namespace SocialvoidLib\Objects\Standard;
 
 
-    class ParameterDefinition
+    use SocialvoidLib\Abstracts\Types\BuiltinTypes;
+    use SocialvoidLib\Interfaces\StandardObjectInterface;
+
+    class ParameterDefinition implements StandardObjectInterface
     {
         /**
          * The name of the parameter
@@ -93,5 +96,54 @@
                 $definition->Description = $data['description'];
 
             return $definition;
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getName(): string
+        {
+            return 'ParameterDefinition';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDescription(): string
+        {
+            return 'The object ParameterDefinition contains information about the parameters used and or available, usually represented within an array; this object indicates the availabe types, name, description and requirement of the parameter. This can be applied to object property structures or method parameters';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDefinition(): ObjectDefinition
+        {
+            return new ObjectDefinition(self::getName(), self::getDescription(), self::getParameters());
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getParameters(): array
+        {
+            return [
+                new ParameterDefinition('name', [
+                    new TypeDefinition(BuiltinTypes::String, false)
+                ], true, 'The name of the parameter'),
+
+                new ParameterDefinition('types', [
+                    new TypeDefinition(TypeDefinition::getName(), true)
+                ], true, 'An array of types that are used for this parameter'),
+
+                new ParameterDefinition('required', [
+                    new TypeDefinition(BuiltinTypes::Boolean, false)
+                ], true, 'Indicates if this parameter is required or not, for objects this will always be true.'),
+
+                new ParameterDefinition('description', [
+                    new TypeDefinition(BuiltinTypes::String, false)
+                ], true, 'The description of the parameter'),
+
+            ];
         }
     }

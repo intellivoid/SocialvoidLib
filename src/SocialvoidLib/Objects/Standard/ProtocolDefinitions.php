@@ -88,7 +88,7 @@
                 ], true, 'The version of the protocol being used by the server, eg; 1.0'),
 
                     new ParameterDefinition('errors', [
-                    new TypeDefinition('ErrorDefinition', true)
+                    new TypeDefinition(ErrorDefinition::getName(), true)
                 ], true, 'A list of error definitions defined by the server and protocol with their respective error codes and descriptions'),
 
                 new ParameterDefinition('objects', [

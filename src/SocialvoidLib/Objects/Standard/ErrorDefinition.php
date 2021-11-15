@@ -5,8 +5,9 @@
     namespace SocialvoidLib\Objects\Standard;
 
     use SocialvoidLib\Abstracts\Types\BuiltinTypes;
+    use SocialvoidLib\Interfaces\StandardObjectInterface;
 
-    class ErrorDefinition
+    class ErrorDefinition implements StandardObjectInterface
     {
         /**
          * The version of the protocol being used
@@ -90,5 +91,53 @@
                 $definition->ErrorCode = (int)$data['error_code'];
 
             return $definition;
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getName(): string
+        {
+            return 'ErrorDefinition';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDescription(): string
+        {
+            return 'The object ErrorDefinition contains information about an error that the server is capable of returning if a method fails to execute.';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDefinition(): ObjectDefinition
+        {
+            return new ObjectDefinition(self::getName(), self::getDescription(), self::getParameters());
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getParameters(): array
+        {
+            return [
+                new ParameterDefinition('id', [
+                    new TypeDefinition(BuiltinTypes::String, false)
+                ], true, 'The ID of the ErrorDefinition, which is a crc32 hash of the following value; <ProtocolVersion>:<ErrorName>:<ErrorCode> (1.0:InternalServerError:16384)'),
+
+                new ParameterDefinition('name', [
+                    new TypeDefinition(BuiltinTypes::String, false)
+                ], true, 'The name of the error, this is a unique value.'),
+
+                new ParameterDefinition('description', [
+                    new TypeDefinition(BuiltinTypes::String, false)
+                ], true, 'A description of the error'),
+
+                new ParameterDefinition('error_code', [
+                    new TypeDefinition(BuiltinTypes::Integer, false)
+                ], true, 'The error code, this is a unique value.')
+            ];
         }
     }

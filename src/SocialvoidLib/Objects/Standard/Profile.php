@@ -255,7 +255,7 @@
                 ], true, 'The amount of peers that this entity is following'),
 
                 new ParameterDefinition('display_picture_sizes', [
-                    new TypeDefinition('DisplayPictureSize', true)
+                    new TypeDefinition(DisplayPictureSize::getName(), true)
                 ], true, 'An array of display picture size objects that represents the entity\'s display picture'),
 
             ];

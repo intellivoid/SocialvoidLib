@@ -4,9 +4,10 @@
 
     namespace SocialvoidLib\Objects\Standard;
 
-    use SocialvoidLib\Objects\Standard\ParameterDefinition;
+    use SocialvoidLib\Abstracts\Types\BuiltinTypes;
+    use SocialvoidLib\Interfaces\StandardObjectInterface;
 
-    class ObjectDefinition
+    class ObjectDefinition implements StandardObjectInterface
     {
         /**
          * The version of the protocol being used
@@ -97,5 +98,54 @@
             }
 
             return $definition;
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getName(): string
+        {
+            return 'ObjectDefinition';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDescription(): string
+        {
+            return 'The object ObjectDefinition explains the structure of a object that the server could return or work with.';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDefinition(): ObjectDefinition
+        {
+            return new ObjectDefinition(self::getName(), self::getDescription(), self::getParameters());
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getParameters(): array
+        {
+            return [
+                new ParameterDefinition('id', [
+                    new TypeDefinition(BuiltinTypes::String, false)
+                ], true, 'A crc32 hash of the object\'s ID following the value; <ProtocolVersion>:<ObjectName> eg; 1.0:Peer'),
+
+                new ParameterDefinition('name', [
+                    new TypeDefinition(BuiltinTypes::String, false)
+                ], true, 'The name of the object'),
+
+                new ParameterDefinition('description', [
+                    new TypeDefinition(BuiltinTypes::String, false)
+                ], true, 'A description of the object'),
+
+                new ParameterDefinition('parameters', [
+                    new TypeDefinition(ParameterDefinition::getName(), true)
+                ], true, 'An array of ParameterDefinitions explaining the object structure'),
+
+            ];
         }
     }
