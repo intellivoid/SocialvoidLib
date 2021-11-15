@@ -92,7 +92,7 @@
                 ], true, 'A list of error definitions defined by the server and protocol with their respective error codes and descriptions'),
 
                 new ParameterDefinition('objects', [
-                    new TypeDefinition('ObjectDefinition', true)
+                    new TypeDefinition(ObjectDefinition::getName(), true)
                 ], true, 'A list of object definitions defined by the server and protocol with their respective descriptions, names and parameters.')
             ];
         }

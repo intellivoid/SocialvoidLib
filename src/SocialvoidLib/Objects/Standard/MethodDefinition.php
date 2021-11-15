@@ -61,6 +61,13 @@
         public $Parameters;
 
         /**
+         * An array of possible error codes
+         *
+         * @var int[]
+         */
+        public $PossibleErrorCodes;
+
+        /**
          * @var TypeDefinition[]|array
          */
         public $ReturnTypes;
@@ -72,11 +79,12 @@
          * @param string|null $description
          * @param array|null $permission_requirements
          * @param array|null $parameters
+         * @param array|null $possible_error_codes
          * @param array|null $return_types
          */
         public function __construct(
             ?string $namespace=null, ?string $method_name=null, ?string $method=null, ?string $description=null,
-            ?array $permission_requirements=[], ?array $parameters=[], ?array $return_types=[]
+            ?array $permission_requirements=[], ?array $parameters=[], ?array $possible_error_codes=[], ?array $return_types=[]
         )
         {
             $this->ProtocolVersion = '1.0';
@@ -86,6 +94,7 @@
             $this->Description = $description;
             $this->PermissionRequirements = $permission_requirements;
             $this->Parameters = $parameters;
+            $this->PossibleErrorCodes = $possible_error_codes;
             $this->ReturnTypes = $return_types;
         }
 
@@ -121,6 +130,7 @@
                 'description' => $this->Description,
                 'permission_requirements' => $this->PermissionRequirements,
                 'parameters' => $parameters,
+                'possible_error_codes' => $this->PossibleErrorCodes,
                 'return_types' => $return_types
             ];
         }
@@ -155,6 +165,9 @@
                 foreach($data['parameters'] as $parameter)
                     $method_definition->Parameters[] = ParameterDefinition::fromArray($parameter);
             }
+
+            if(isset($data['possible_error_codes']))
+                $method_definition->PossibleErrorCodes = $data['possible_error_codes'];
 
             if(isset($data['return_types']))
             {
