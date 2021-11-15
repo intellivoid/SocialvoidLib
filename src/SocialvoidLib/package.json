@@ -595,6 +595,10 @@
         },
         {
             "required": true,
+            "file": "Exceptions/Standard/Security/IncompleteCaptchaException.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/Standard/Security/IncorrectCaptchaAnswerException.php"
         },
         {
@@ -728,6 +732,10 @@
         {
             "required": true,
             "file": "Interfaces/StandardErrorInterface.php"
+        },
+        {
+            "required": true,
+            "file": "Interfaces/StandardMethodInterface.php"
         },
         {
             "required": true,
@@ -956,6 +964,10 @@
         {
             "required": true,
             "file": "Objects/Standard/HelpDocument.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/Standard/MethodDefinition.php"
         },
         {
             "required": true,
