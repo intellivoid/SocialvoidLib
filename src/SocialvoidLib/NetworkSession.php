@@ -75,6 +75,10 @@
     use SocialvoidLib\Network\Timeline;
     use SocialvoidLib\Network\Users;
     use SocialvoidLib\Objects\ActiveSession;
+    use SocialvoidLib\Objects\Standard\ErrorDefinition;
+    use SocialvoidLib\Objects\Standard\MethodDefinition;
+    use SocialvoidLib\Objects\Standard\ObjectDefinition;
+    use SocialvoidLib\Objects\Standard\ParameterDefinition;
     use SocialvoidLib\Objects\Standard\Profile;
     use SocialvoidLib\Objects\Standard\ProtocolDefinitions;
     use SocialvoidLib\Objects\Standard\DisplayPictureSize;
@@ -87,6 +91,9 @@
     use SocialvoidLib\Objects\Standard\SessionEstablished;
     use SocialvoidLib\Objects\Standard\SessionIdentification;
     use SocialvoidLib\Objects\Standard\TextEntity;
+    use SocialvoidLib\Objects\Standard\TypeDefinition;
+    use SocialvoidRPC\Methods\Account\ClearProfileBiography;
+    use SocialvoidRPC\Methods\Account\ClearProfileLocation;
 
     /**
      * Class Network
@@ -301,7 +308,7 @@
             $this->active_session->Authenticated = false;
             $this->active_session->UserID = null;
             $this->active_session->AuthenticationMethodUsed = UserAuthenticationMethod::None;
-            $this->active_session->Data->PermissionSets = [PermissionSets::Public];
+            $this->active_session->Data->PermissionSets = [PermissionSets::Guest];
 
             $this->authenticated_user = null;
 
@@ -387,17 +394,10 @@
             $this->active_session->UserID = $authenticating_peer->ID;
             $this->active_session->AuthenticationMethodUsed = $authenticating_peer->AuthenticationMethod;
 
-            Converter::addFlag($this->active_session->Data->PermissionSets, PermissionSets::ModifyAccountSettings);
-            Converter::addFlag($this->active_session->Data->PermissionSets, PermissionSets::ModifySecuritySettings);
-
             switch($authenticating_peer->Type)
             {
                 case PeerType::User:
                     Converter::addFlag($this->active_session->Data->PermissionSets, PermissionSets::User);
-                    break;
-
-                case PeerType::Bot:
-                    Converter::addFlag($this->active_session->Data->PermissionSets, PermissionSets::Bot);
                     break;
 
                 case PeerType::Proxy:
@@ -408,7 +408,15 @@
             switch($authenticating_peer->Role)
             {
                 case PeerRole::Administrator:
-                    Converter::addFlag($this->active_session->Data->PermissionSets, PermissionSets::Administrator);
+                    if($authenticating_peer->Type == PeerType::Bot)
+                    {
+                        Converter::addFlag($this->active_session->Data->PermissionSets, PermissionSets::AdministratorBot);
+
+                    }
+                    else
+                    {
+                        Converter::addFlag($this->active_session->Data->PermissionSets, PermissionSets::Administrator);
+                    }
                     break;
 
                 case PeerRole::Moderator:
@@ -624,13 +632,17 @@
                 InvalidUsernameException::getDefinition(),
                 InvalidVersionException::getDefinition(),
                 TooManyAttachmentsException::getDefinition(),
-                UsernameAlreadyExistsException::getDefinition()
+                UsernameAlreadyExistsException::getDefinition(),
             ];
 
             $ProtocolDefinitions->ObjectDefinitions = [
                 DisplayPictureSize::getDefinition(),
                 Document::getDefinition(),
+                ErrorDefinition::getDefinition(),
                 HelpDocument::getDefinition(),
+                MethodDefinition::getDefinition(),
+                ObjectDefinition::getDefinition(),
+                ParameterDefinition::getDefinition(),
                 Peer::getDefinition(),
                 Post::getDefinition(),
                 Profile::getDefinition(),
@@ -639,7 +651,13 @@
                 Session::getDefinition(),
                 SessionEstablished::getDefinition(),
                 SessionIdentification::getDefinition(),
-                TextEntity::getDefinition()
+                TextEntity::getDefinition(),
+                TypeDefinition::getDefinition()
+            ];
+
+            $ProtocolDefinitions->MethodDefinitions = [
+                ClearProfileBiography::getDefinition(),
+                ClearProfileLocation::getDefinition()
             ];
 
             return $ProtocolDefinitions;

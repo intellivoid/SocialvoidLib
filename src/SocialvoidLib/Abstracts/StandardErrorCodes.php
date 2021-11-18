@@ -140,7 +140,7 @@
          *
          * @see InvalidPlatformException
          */
-        const InvalidPlatformException = 0x02110;
+        const InvalidPlatformException = 0x0210a;
 
         /**
          * Raised when the given version is invalid

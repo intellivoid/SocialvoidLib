@@ -108,7 +108,7 @@
                     new TypeDefinition(BuiltinTypes::Integer, false)
                 ], true, 'The height of the image'),
 
-                new ParameterDefinition('height', [
+                new ParameterDefinition('document', [
                     new TypeDefinition(Document::getName(), false)
                 ], true, 'The document object that points to the display picture'),
             ];

@@ -5,50 +5,55 @@
     abstract class PermissionSets
     {
         /**
-         * Indicates that the current session currently contains "public" permissions which allows
-         * the execution of methods without requiring authentication
+         * Guest permissions allows the execution of methods without requiring authentication. Read-only mode
          */
-        const Public = 'PUBLIC';
+        const Guest = 'GUEST';
 
         /**
-         * Indicates that the current session allows the client to modify the account settings of
-         * the current authenticated entity
-         */
-        const ModifyAccountSettings = 'MODIFY_ACCOUNT_SETTINGS';
-
-        /**
-         * Indicates that the current session allows the client to modify the security settings of
-         * the current authenticated entity
-         */
-        const ModifySecuritySettings = 'MODIFY_SECURITY_SETTINGS';
-
-        /**
-         * Indicates that the current session allows both "public" permissions and user permissions
-         * that allows the execution of user methods
+         * User permissions allow the execution of user methods and interactivity with the network and other peers
          */
         const User = 'USER';
 
         /**
-         * Indicates that the current session has limited actions on the network and can only preform
-         * actions of a proxy account
+         * Proxy permissions are much like user permissions but are restricted to proxy related methods, the server does
+         * not treat proxy peers the same as users. Proxy peers should not be allowed to interact with other peers on
+         * its own and simply serves the purpose of providing content to the network (much like a bridge for Twitter,
+         * Telegram or other service)
          */
         const Proxy = 'PROXY';
 
         /**
-         * Indicates that the current session has limited actions and or special access to special functions
-         * that can only be preformed by a bot
+         * Bot permissions are much like user permissions but are restricted to bot related methods, the server does not
+         * treat bot peers the same as users. Bot peers should not be allowed to interact with other peers on the network
+         * unless it's being invoked by a peer, bots can inherit proxy permissions but with additional access to methods
+         * and bot exclusive methods for the purpose of providing some sort of automated interactivity on the network
          */
         const Bot = 'BOT';
 
         /**
-         * Indicates that the current session allows the authenticated entity to preform moderation
-         * actions on the network
+         * An administrator bot inherits bot, moderator and administrator permissions which can have unrestricted
+         * access to other methods or means of listening to events that would be useful for the network, such as a bot
+         * that posts updates at an interval about server events or acts accordingly to events going on in the server.
+         * These are usually back-end related bots.
+         */
+        const AdministratorBot = 'ADMINISTRATOR_BOT';
+
+        /**
+         * Moderator permissions grants the same permissions as user but access to methods that permits the peer to
+         * preform moderation tasks on the server such as removing posts, warning peers and so on.
          */
         const Moderator = 'MODERATOR';
 
         /**
-         * Indicates that the current session allows the authenticated entity to preform administrator
-         * actions on the network (Dangerous)
+         * Administrator permissions inherits user & moderator permissions but has the ability to grant manage peers,
+         * moderators, change network settings and so on.
          */
         const Administrator = 'ADMINISTRATOR';
+
+        /**
+         * The highest permission available, inherits user, moderator and administrator permissions but also grants
+         * special access to methods that could otherwise be dangerous. Should only be granted to one peer that is
+         * only used by the server and not by a human.
+         */
+        const ServerAdministrator = 'SERVER_ADMINISTRATOR';
     }

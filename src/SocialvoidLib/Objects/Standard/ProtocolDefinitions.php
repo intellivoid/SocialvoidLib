@@ -31,6 +31,13 @@
         public $ObjectDefinitions;
 
         /**
+         * An array of method definitions that the server uses
+         *
+         * @var MethodDefinition[]
+         */
+        public $MethodDefinitions;
+
+        /**
          * Returns an array representation of the protocol definition object
          *
          * @return array[]
@@ -46,10 +53,15 @@
             foreach($this->ObjectDefinitions as $definition)
                 $object_definitions[] = $definition->toArray();
 
+            $method_definitions = [];
+            foreach($this->MethodDefinitions as $definition)
+                $method_definitions[] = $definition->toArray();
+
             return [
                 'version' => $this->Version,
                 'errors' => $error_definitions,
-                'objects' => $object_definitions
+                'objects' => $object_definitions,
+                'methods' => $method_definitions
             ];
         }
 
@@ -93,7 +105,11 @@
 
                 new ParameterDefinition('objects', [
                     new TypeDefinition(ObjectDefinition::getName(), true)
-                ], true, 'A list of object definitions defined by the server and protocol with their respective descriptions, names and parameters.')
+                ], true, 'A list of object definitions defined by the server and protocol with their respective descriptions, names and parameters.'),
+
+                new ParameterDefinition('methods', [
+                    new TypeDefinition(MethodDefinition::getName(), true)
+                ], true, 'A list of method definitions defined by the server and protocol with their respective descriptions, names and parameters.')
             ];
         }
     }

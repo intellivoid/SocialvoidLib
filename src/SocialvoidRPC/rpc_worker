@@ -11,9 +11,9 @@
     /** @noinspection PhpUndefinedClassInspection */
     /** @noinspection DuplicatedCode */
 
-use KimchiRPC\Abstracts\ServerMode;
-use KimchiRPC\KimchiRPC;
-use ppm\ppm;
+    use KimchiRPC\Abstracts\ServerMode;
+    use KimchiRPC\KimchiRPC;
+    use ppm\ppm;
     use SocialvoidLib\SocialvoidLib;
     use SocialvoidRPC\SocialvoidRPC;
     use VerboseAdventure\Abstracts\EventType;

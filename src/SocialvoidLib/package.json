@@ -91,6 +91,12 @@
                 "version": "latest",
                 "source": "default@github/intellivoid/HttpStream",
                 "required": true
+            },
+            {
+                "package": "net.intellivoid.socialvoid_rpc",
+                "version": "latest",
+                "source": null,
+                "required": true
             }
         ],
         "configuration": {
