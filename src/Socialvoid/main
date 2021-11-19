@@ -1,6 +1,11 @@
 <?php
 
+    use ProcLib\Process;
+    use SocialvoidLib\Abstracts\SearchMethods\UserSearchMethod;
     use SocialvoidLib\Abstracts\StatusStates\HealthStatusCode;
+    use SocialvoidLib\Abstracts\Types\Standard\PeerRole;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidFileNameException;
+    use SocialvoidLib\SocialvoidLib;
 
     require("ppm");
 
@@ -9,7 +14,7 @@
 
     $current_directory = getcwd();
     define('SERVICE_NAME', 'main');
-    $SocialvoidLib = new \SocialvoidLib\SocialvoidLib();
+    $SocialvoidLib = new SocialvoidLib();
     $SocialvoidLib->getHealthMonitoring()->sync(SERVICE_NAME, HealthStatusCode::Starting);
 
     if(file_exists($current_directory . DIRECTORY_SEPARATOR . 'banner.txt'))
@@ -24,9 +29,29 @@
     sleep(1);
 
     /**
+     * Administrator check
+     */
+    try
+    {
+        $Peer = $SocialvoidLib->getPeerManager()->getUser(UserSearchMethod::ByUsername, 'admin');
+    }
+    catch (InvalidFileNameException $e)
+    {
+        print('The admin account was not found in the system, creating one' . PHP_EOL);
+        $Peer = $SocialvoidLib->getPeerManager()->registerUser('admin', 'Administrator');
+    }
+
+    if($Peer->Role !== PeerRole::Administrator)
+    {
+        print('The peer \'admin\' is not an administrator, correcting the issue' . PHP_EOL);
+        $Peer->Role = PeerRole::Administrator;
+        $Peer = $SocialvoidLib->getPeerManager()->updateUser($Peer);
+    }
+
+    /**
      * Socialvoid Service
      */
-    $ServiceProcess = new \ProcLib\Process(["ppm", "--main=net.intellivoid.socialvoid_service"]);
+    $ServiceProcess = new Process(["ppm", "--main=net.intellivoid.socialvoid_service"]);
     $ServiceProcess->enableOutput();
     $ServiceProcess->setTimeout(null);
     $ServiceProcess->start(function ($type, $buffer)
@@ -37,7 +62,7 @@
     /**
      * Socialvoid RPC
      */
-    $RpcProcess = new \ProcLib\Process(["ppm", "--main=net.intellivoid.socialvoid_rpc"]);
+    $RpcProcess = new Process(["ppm", "--main=net.intellivoid.socialvoid_rpc"]);
     $RpcProcess->enableOutput();
     $RpcProcess->setTimeout(null);
     $RpcProcess->start(function ($type, $buffer)

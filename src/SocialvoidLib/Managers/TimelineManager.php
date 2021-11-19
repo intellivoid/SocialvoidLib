@@ -30,6 +30,7 @@
     use SocialvoidLib\Exceptions\Internal\UserTimelineNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\DocumentNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidFileNameException;
     use SocialvoidLib\Objects\Standard\TimelineState;
     use SocialvoidLib\Objects\Timeline;
     use SocialvoidLib\Objects\Peer;
@@ -275,7 +276,7 @@
          * @throws ServiceJobException
          * @throws DocumentNotFoundException
          * @throws PeerNotFoundException
-         * @throws \SocialvoidLib\Exceptions\Standard\Validation\InvalidFileNameException
+         * @throws InvalidFileNameException
          */
         public function distributePost(Peer $user, string $post_id, int $utilization=15, bool $skip_errors=true): void
         {
