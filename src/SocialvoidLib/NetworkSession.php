@@ -347,6 +347,7 @@
          * @throws PeerNotFoundException
          * @throws PrivateAccessTokenRequiredException
          * @throws TwoFactorAuthenticationRequiredException
+         * @throws NotAuthenticatedException
          */
         public function authenticateUser(string $username, string $password, ?string $otp=null): bool
         {
@@ -432,6 +433,8 @@
             {
                 throw new InternalServerException("There was an error while trying to process your request", $e);
             }
+
+            $this->loadAuthenticatedPeer();
 
             return true;
         }
