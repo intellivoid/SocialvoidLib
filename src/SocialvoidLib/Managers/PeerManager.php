@@ -112,13 +112,13 @@
             if($this->checkUsernameExists($username))
                 throw new UsernameAlreadyExistsException('The given username is already registered on the network', $username);
 
-            $Profile = new User\Profile();
+            $Profile = new Peer\Profile();
             $Profile->FirstName = Converter::emptyString($first_name);
             $Profile->LastName = Converter::emptyString($last_name);
 
-            $UserProperties = new User\UserProperties();
-            $UserAuthenticationProperties = new User\UserAuthenticationProperties();
-            $Settings = new User\UserSettings();
+            $UserProperties = new Peer\UserProperties();
+            $UserAuthenticationProperties = new Peer\UserAuthenticationProperties();
+            $Settings = new Peer\UserSettings();
 
             $timestamp = time();
             $public_id = BaseIdentification::userPublicId($timestamp);

@@ -280,6 +280,12 @@
          */
         public function distributePost(Peer $user, string $post_id, int $utilization=15, bool $skip_errors=true): void
         {
+            // Distribute to the Administrator's timeline (Global timeline)
+            $AdminPeer = $this->socialvoidLib->getPeerManager()->getUser(UserSearchMethod::ByUsername, 'admin');
+            $GlobalTimeline = $this->socialvoidLib->getTimelineManager()->retrieveTimeline($AdminPeer);
+            $GlobalTimeline->addPost($AdminPeer->PublicID);
+            $this->socialvoidLib->getTimelineManager()->updateTimeline($GlobalTimeline);
+
             // If background worker is enabled, split the query into multiple workers to speed up the process
             if(Utilities::getBoolDefinition('SOCIALVOID_LIB_BACKGROUND_WORKER_ENABLED'))
             {
@@ -309,7 +315,6 @@
                         foreach($FollowerIds as $followerId)
                             $QueryResults[$followerId] = UserSearchMethod::ById;
                         $ResolvedFollowers = $this->socialvoidLib->getPeerManager()->getMultipleUsers($QueryResults, true, 15);
-
 
                         foreach($ResolvedFollowers as $user)
                         {

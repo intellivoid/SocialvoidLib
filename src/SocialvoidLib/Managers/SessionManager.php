@@ -75,7 +75,7 @@
             // TODO: Validate the hashes
             $SessionData = new SessionData();
             $SessionData->PermissionSets = [
-                PermissionSets::Public // Public only
+                PermissionSets::Guest // Public only
             ];
             $SessionSecurity = new ActiveSession\SessionSecurity();
             $SessionSecurity->ClientPublicHash = $sessionClient->PublicHash;
