@@ -331,11 +331,11 @@
             $SortedSubMentionedUsers = [];
 
             foreach($ResolvedSubMentionedUsers as $resolvedSubMentionedUser)
-                $SortedSubMentionedUsers[$resolvedSubMentionedUser->Username] = Peer::fromUser($resolvedSubMentionedUser);
+                $SortedSubMentionedUsers[$resolvedSubMentionedUser->Username] = Peer::fromInternalPeer($resolvedSubMentionedUser);
 
 
             $stdPost = \SocialvoidLib\Objects\Standard\Post::fromPost($post);
-            $stdPost->Peer = Peer::fromUser($SortedUserResolutions[$post->PosterUserID]);
+            $stdPost->Peer = Peer::fromInternalPeer($SortedUserResolutions[$post->PosterUserID]);
 
             foreach($post->Attachments as $attachment)
             {
@@ -370,7 +370,7 @@
 
                 if($post->Quote->OriginalUserID !== null && Converter::hasFlag($SortedPostResolutions[$post->Quote->OriginalPostID]->Flags, PostFlags::Deleted) == false)
                 {
-                    $stdPost->QuotedPost->Peer = Peer::fromUser(
+                    $stdPost->QuotedPost->Peer = Peer::fromInternalPeer(
                         $SortedUserResolutions[$post->Quote->OriginalUserID]
                     );
                 }
@@ -398,7 +398,7 @@
                         }
                     }
 
-                    $stdPost->ReplyToPost->Peer = Peer::fromUser(
+                    $stdPost->ReplyToPost->Peer = Peer::fromInternalPeer(
                         $SortedUserResolutions[$post->Reply->ReplyToUserID]
                     );
                 }
@@ -430,7 +430,7 @@
             {
                 foreach($ResolvedMentionedUsers as $user)
                 {
-                    $stdPost->MentionedPeers[] = Peer::fromUser($user);
+                    $stdPost->MentionedPeers[] = Peer::fromInternalPeer($user);
                 }
 
                 // Register the standard post to cache
