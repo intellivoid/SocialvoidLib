@@ -133,7 +133,7 @@
             return [
                 new ParameterDefinition('session_identification', [
                     new TypeDefinition(SessionIdentification::getName())
-                ])
+                ], true, 'The Session Identification object')
             ];
         }
 
