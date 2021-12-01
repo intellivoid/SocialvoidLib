@@ -44,6 +44,7 @@
     use SocialvoidLib\Exceptions\Standard\Network\PostNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidFileNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPageValueException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidPeerInputException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPostTextException;
     use SocialvoidLib\Exceptions\Standard\Validation\TooManyAttachmentsException;
     use SocialvoidLib\NetworkSession;
@@ -497,6 +498,8 @@
          * @throws DisplayPictureException
          * @throws DocumentNotFoundException
          * @throws FileNotFoundException
+         * @throws InvalidFileNameException
+         * @throws InvalidPeerInputException
          * @throws InvalidSearchMethodException
          * @throws InvalidSlaveHashException
          * @throws InvalidZimageFileException
@@ -511,7 +514,6 @@
          * @throws UnsupportedImageTypeException
          * @throws UserHasInvalidSlaveHashException
          * @throws UserTimelineNotFoundException
-         * @throws InvalidFileNameException
          * @noinspection DuplicatedCode
          */
         public function retrieveFeed(int $page_number, bool $recursive=True): array
@@ -525,15 +527,100 @@
                 $this->networkSession->getAuthenticatedUser()
             );
 
+            return $this->processTimeline($UserTimeline, $page_number, 'user', $recursive);
+        }
+
+        /**
+         * Returns the global timeline to the user
+         *
+         * @param int $page_number
+         * @param bool $recursive
+         * @return array|\SocialvoidLib\Objects\Standard\Post[]
+         * @throws AccessDeniedException
+         * @throws BackgroundWorkerNotEnabledException
+         * @throws CacheException
+         * @throws CannotGetOriginalImageException
+         * @throws DatabaseException
+         * @throws DependencyError
+         * @throws DisplayPictureException
+         * @throws DocumentNotFoundException
+         * @throws FileNotFoundException
+         * @throws InvalidFileNameException
+         * @throws InvalidSearchMethodException
+         * @throws InvalidSlaveHashException
+         * @throws InvalidZimageFileException
+         * @throws NotAuthenticatedException
+         * @throws PeerNotFoundException
+         * @throws PostNotFoundException
+         * @throws RedisCacheException
+         * @throws ServerNotReachableException
+         * @throws ServiceJobException
+         * @throws SizeNotSetException
+         * @throws TooManyAttachmentsException
+         * @throws UnsupportedImageTypeException
+         * @throws UserHasInvalidSlaveHashException
+         * @throws UserTimelineNotFoundException
+         * @throws InvalidPeerInputException
+         */
+        public function retrieveGlobalFeed(int $page_number, bool $recursive=True): array
+        {
+            if($this->networkSession->isAuthenticated() == false)
+                throw new NotAuthenticatedException();
+
+            if($page_number < 1) return [];
+
+            $admin_peer = $this->networkSession->getUsers()->resolvePeer('@admin');
+            $GlobalTimeline = $this->networkSession->getSocialvoidLib()->getTimelineManager()->retrieveTimeline($admin_peer);
+
+            return $this->processTimeline($GlobalTimeline, $page_number, 'global', $recursive);
+        }
+
+        /**
+         * Processes the timeline into usable results
+         *
+         * @param \SocialvoidLib\Objects\Timeline $timeline
+         * @param int $page_number
+         * @param string $callback
+         * @param bool $recursive
+         * @return array|\SocialvoidLib\Objects\Standard\Post[]
+         * @throws AccessDeniedException
+         * @throws BackgroundWorkerNotEnabledException
+         * @throws CacheException
+         * @throws CannotGetOriginalImageException
+         * @throws DatabaseException
+         * @throws DependencyError
+         * @throws DisplayPictureException
+         * @throws DocumentNotFoundException
+         * @throws FileNotFoundException
+         * @throws InvalidFileNameException
+         * @throws InvalidPeerInputException
+         * @throws InvalidSearchMethodException
+         * @throws InvalidSlaveHashException
+         * @throws InvalidZimageFileException
+         * @throws NotAuthenticatedException
+         * @throws PeerNotFoundException
+         * @throws PostNotFoundException
+         * @throws RedisCacheException
+         * @throws ServerNotReachableException
+         * @throws ServiceJobException
+         * @throws SizeNotSetException
+         * @throws TooManyAttachmentsException
+         * @throws UnsupportedImageTypeException
+         * @throws UserHasInvalidSlaveHashException
+         * @throws UserTimelineNotFoundException
+         * @noinspection DuplicatedCode
+         */
+        private function processTimeline(\SocialvoidLib\Objects\Timeline $timeline, int $page_number, string $callback, bool $recursive=true): array
+        {
             // Anti-Dumbass check
-            if(count($UserTimeline->PostChunks) == 0) return [];
-            if($page_number > count($UserTimeline->PostChunks)) return [];
+            if(count($timeline->PostChunks) == 0) return [];
+            if($page_number > count($timeline->PostChunks)) return [];
 
             // Retrieve posts
             $ResolvedPostIds = [];
             $InvalidatedPostIDs = [];
 
-            foreach($UserTimeline->PostChunks[($page_number - 1)] as $postID)
+            foreach($timeline->PostChunks[($page_number - 1)] as $postID)
             {
                 $StandardPost = $this->getStandardPost($postID);
 
@@ -555,7 +642,17 @@
                 );
 
                 // Re-run the function since the timeline may have changed since this update.
-                if($recursive) return $this->retrieveFeed($page_number, $recursive);
+                if($recursive)
+                {
+                    switch($callback)
+                    {
+                        case 'user':
+                            return $this->retrieveFeed($page_number, $recursive);
+
+                        case 'global':
+                            return $this->retrieveGlobalFeed($page_number, $recursive);
+                    }
+                }
             }
 
             return $ResolvedPostIds;
