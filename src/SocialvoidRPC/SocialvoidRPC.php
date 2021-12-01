@@ -158,6 +158,7 @@
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\Reply());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\Repost());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\RetrieveFeed());
+            self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\RetrieveGlobalFeed());
             self::$RpcServer->registerMethod(new \SocialvoidRPC\Methods\Timeline\Unlike());
         }
 

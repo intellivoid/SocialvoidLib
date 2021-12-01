@@ -564,9 +564,6 @@
          */
         public function retrieveGlobalFeed(int $page_number, bool $recursive=True): array
         {
-            if($this->networkSession->isAuthenticated() == false)
-                throw new NotAuthenticatedException();
-
             if($page_number < 1) return [];
 
             $admin_peer = $this->networkSession->getUsers()->resolvePeer('@admin');

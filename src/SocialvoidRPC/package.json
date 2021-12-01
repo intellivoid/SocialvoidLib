@@ -193,6 +193,10 @@
         },
         {
             "required": true,
+            "file": "Methods/Timeline/RetrieveGlobalFeed.php"
+        },
+        {
+            "required": true,
             "file": "Methods/Timeline/Unlike.php"
         },
         {
