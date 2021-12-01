@@ -266,6 +266,71 @@
         }
 
         /**
+         * Determines if the user has permission to execute the method with the required permissions
+         *
+         * @param array $requiredPermissionSets
+         * @return bool
+         * @throws NotAuthenticatedException
+         */
+        public function hasPermissionToExecute(array $requiredPermissionSets): bool
+        {
+            // Level 1 permissions, guest can execute anything as a guest
+            if(in_array(PermissionSets::Guest, $requiredPermissionSets))
+            {
+                return true;
+            }
+
+            if($this->isAuthenticated() == false)
+            {
+                throw new NotAuthenticatedException();
+            }
+
+            // Level 2 permissions
+            if(
+                in_array(PermissionSets::Proxy, $requiredPermissionSets) ||
+                in_array(PermissionSets::User, $requiredPermissionSets) ||
+                in_array(PermissionSets::Bot, $requiredPermissionSets)
+            )
+            {
+                if(in_array(PermissionSets::User, $this->active_session->Data->PermissionSets))
+                    return true;
+
+                if(in_array(PermissionSets::Bot, $this->active_session->Data->PermissionSets))
+                    return true;
+
+                if(in_array(PermissionSets::Proxy, $this->active_session->Data->PermissionSets))
+                    return true;
+
+                // Administrators can execute anything as a user-level permission
+                if(in_array(PermissionSets::Administrator, $this->active_session->Data->PermissionSets))
+                    return true;
+            }
+
+            // Level 3 permissions
+            if(
+                in_array(PermissionSets::AdministratorBot, $requiredPermissionSets) ||
+                in_array(PermissionSets::Moderator, $requiredPermissionSets) ||
+                in_array(PermissionSets::Administrator, $requiredPermissionSets)
+            )
+            {
+                if(in_array(PermissionSets::AdministratorBot, $this->active_session->Data->PermissionSets))
+                    return true;
+
+                if(in_array(PermissionSets::Moderator, $this->active_session->Data->PermissionSets))
+                    return true;
+
+                if(in_array(PermissionSets::Administrator, $this->active_session->Data->PermissionSets))
+                    return true;
+            }
+
+            // Server administrator can execute anything
+            if(in_array(PermissionSets::ServerAdministrator, $this->active_session->Data->PermissionSets))
+                return true;
+
+            return false;
+        }
+
+        /**
          * Loads the authenticated peer into the network session
          *
          * @throws DocumentNotFoundException
@@ -412,7 +477,6 @@
                     if($authenticating_peer->Type == PeerType::Bot)
                     {
                         Converter::addFlag($this->active_session->Data->PermissionSets, PermissionSets::AdministratorBot);
-
                     }
                     else
                     {
