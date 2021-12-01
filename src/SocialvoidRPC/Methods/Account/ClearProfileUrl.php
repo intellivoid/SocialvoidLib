@@ -22,11 +22,11 @@
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPublicHashException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidFileNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidSessionIdentificationException;
     use SocialvoidLib\Interfaces\StandardMethodInterface;
     use SocialvoidLib\NetworkSession;
     use SocialvoidLib\Objects\Standard\MethodDefinition;
-    use SocialvoidLib\Objects\Standard\ParameterDefinition;
     use SocialvoidLib\Objects\Standard\SessionIdentification;
     use SocialvoidLib\Objects\Standard\TypeDefinition;
     use SocialvoidRPC\SocialvoidRPC;
@@ -193,6 +193,7 @@
          * @throws PeerNotFoundException
          * @throws SessionExpiredException
          * @throws SessionNotFoundException
+         * @throws InvalidFileNameException
          * @noinspection DuplicatedCode
          */
         public function execute(Request $request): Response
