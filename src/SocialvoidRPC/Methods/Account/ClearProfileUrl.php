@@ -27,6 +27,7 @@
     use SocialvoidLib\Interfaces\StandardMethodInterface;
     use SocialvoidLib\NetworkSession;
     use SocialvoidLib\Objects\Standard\MethodDefinition;
+    use SocialvoidLib\Objects\Standard\ParameterDefinition;
     use SocialvoidLib\Objects\Standard\SessionIdentification;
     use SocialvoidLib\Objects\Standard\TypeDefinition;
     use SocialvoidRPC\SocialvoidRPC;
@@ -129,7 +130,11 @@
          */
         public static function getStandardParameters(): array
         {
-            return [];
+            return [
+                new ParameterDefinition('session_identification', [
+                    new TypeDefinition(SessionIdentification::getName())
+                ])
+            ];
         }
 
         /**
