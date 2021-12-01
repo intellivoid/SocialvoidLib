@@ -299,9 +299,6 @@
          */
         public function getProfile($peer): Profile
         {
-            if($this->networkSession->isAuthenticated() == false)
-                throw new NotAuthenticatedException();
-
             // Resolve the Peer ID
             $target_peer = $this->resolvePeer($peer);
 

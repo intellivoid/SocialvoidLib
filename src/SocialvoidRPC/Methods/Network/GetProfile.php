@@ -20,6 +20,7 @@
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPublicHashException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidFileNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPeerInputException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidSessionIdentificationException;
     use SocialvoidLib\NetworkSession;
@@ -99,6 +100,7 @@
          * @throws PeerNotFoundException
          * @throws SessionExpiredException
          * @throws SessionNotFoundException
+         * @throws InvalidFileNameException
          */
         public function execute(Request $request): Response
         {
@@ -129,14 +131,17 @@
 
             try
             {
-                $requested_peer = null;
-
                 if(isset($request->Parameters['peer']))
                 {
                     $requested_peer = $request->Parameters['peer'];
                 }
                 else
                 {
+                    if($NetworkSession->isAuthenticated() == false)
+                    {
+                        throw new PeerNotFoundException('The requested peer was not found in the network');
+                    }
+
                     $requested_peer = $NetworkSession->getAuthenticatedUser()->PublicID;
                 }
 
