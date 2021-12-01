@@ -17,6 +17,7 @@
     use SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException;
     use SocialvoidLib\Exceptions\Standard\Network\AccessDeniedException;
     use SocialvoidLib\Exceptions\Standard\Network\DocumentNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Security\InsufficientPermissionsException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
     use SocialvoidLib\Exceptions\Standard\Validation\FileTooLargeException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidBiographyException;
@@ -26,6 +27,7 @@
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidLastNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidUrlValueException;
     use SocialvoidLib\NetworkSession;
+    use SocialvoidRPC\Methods\Account\ClearProfileBiography;
     use TelegramCDN\Exceptions\FileSecurityException;
     use TmpFile\TmpFile;
     use udp2\Exceptions\AvatarNotFoundException;
@@ -244,13 +246,14 @@
          * Clears the user biography
          *
          * @return bool
+         * @throws InsufficientPermissionsException
          * @throws InternalServerException
          * @throws NotAuthenticatedException
          */
         public function clearProfileBiography(): bool
         {
-            if($this->networkSession->isAuthenticated() == false)
-                throw new NotAuthenticatedException();
+            if($this->networkSession->hasPermissionToExecute(ClearProfileBiography::getStandardPermissionRequirements()) == false)
+                throw new InsufficientPermissionsException();
 
             $user = $this->networkSession->getAuthenticatedUser();
             $user->Profile->Biography = null;

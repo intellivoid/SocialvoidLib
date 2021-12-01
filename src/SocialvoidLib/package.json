@@ -609,6 +609,10 @@
         },
         {
             "required": true,
+            "file": "Exceptions/Standard/Security/InsufficientPermissionsException.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/Standard/Server/DocumentUploadException.php"
         },
         {

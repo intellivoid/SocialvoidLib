@@ -37,6 +37,7 @@
     use SocialvoidLib\Exceptions\Standard\Security\CaptchaNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Security\IncompleteCaptchaException;
     use SocialvoidLib\Exceptions\Standard\Security\IncorrectCaptchaAnswerException;
+    use SocialvoidLib\Exceptions\Standard\Security\InsufficientPermissionsException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidCaptchaIdException;
     use SocialvoidLib\Exceptions\Standard\Server\DocumentUploadException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
@@ -464,4 +465,11 @@
          * @see IncompleteCaptchaException
          */
         const IncompleteCaptchaException = 0x06007;
+
+        /**
+         * Raised when the user is attempting to execute a method with insufficient permissions
+         *
+         * @see InsufficientPermissionsException
+         */
+        const InsufficientPermissionsException = 0x06008;
     }
