@@ -403,11 +403,13 @@
          *
          * @param string $username
          * @param string $password
+         * @param string $captcha
          * @param string|null $otp
          * @return bool
          * @throws AlreadyAuthenticatedException
          * @throws AuthenticationFailureException
          * @throws AuthenticationNotApplicableException
+         * @throws CaptchaAlreadyUsedException
          * @throws DocumentNotFoundException
          * @throws Exceptions\GenericInternal\CacheException
          * @throws Exceptions\GenericInternal\DatabaseException
@@ -415,20 +417,26 @@
          * @throws Exceptions\GenericInternal\InvalidSearchMethodException
          * @throws Exceptions\Internal\NoPasswordAuthenticationAvailableException
          * @throws Exceptions\Standard\Authentication\SessionNotFoundException
+         * @throws Exceptions\Standard\Security\CaptchaBlockedException
+         * @throws Exceptions\Standard\Security\CaptchaExpiredException
+         * @throws Exceptions\Standard\Security\CaptchaNotFoundException
+         * @throws Exceptions\Standard\Security\IncompleteCaptchaException
          * @throws IncorrectLoginCredentialsException
          * @throws IncorrectTwoFactorAuthenticationCodeException
          * @throws InternalServerException
          * @throws InvalidFileNameException
          * @throws InvalidPasswordException
+         * @throws NotAuthenticatedException
          * @throws PeerNotFoundException
          * @throws PrivateAccessTokenRequiredException
          * @throws TwoFactorAuthenticationRequiredException
-         * @throws NotAuthenticatedException
          */
-        public function authenticateUser(string $username, string $password, ?string $otp=null): bool
+        public function authenticateUser(string $username, string $password, string $captcha, ?string $otp=null): bool
         {
             if($this->active_session->Authenticated)
                 throw new AlreadyAuthenticatedException("You are already authenticated to the network");
+
+            $this->getCaptcha()->useCaptcha($captcha);
 
             if(Validate::username($username) == false)
                 throw new IncorrectLoginCredentialsException("The given password or username is incorrect");

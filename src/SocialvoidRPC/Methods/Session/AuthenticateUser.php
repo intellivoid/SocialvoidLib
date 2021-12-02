@@ -21,6 +21,7 @@
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPublicHashException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidFileNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidPasswordException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidSessionIdentificationException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidUsernameException;
@@ -39,7 +40,7 @@
          */
         public function getMethodName(): string
         {
-            return "AuthenticateUser";
+            return 'AuthenticateUser';
         }
 
         /**
@@ -47,7 +48,7 @@
          */
         public function getMethod(): string
         {
-            return "session.authenticate_user";
+            return 'session.authenticate_user';
         }
 
         /**
@@ -55,7 +56,7 @@
          */
         public function getDescription(): string
         {
-            return "Authenticates a user to the requested session";
+            return 'Authenticates a user to the requested session';
         }
 
         /**
@@ -63,7 +64,7 @@
          */
         public function getVersion(): string
         {
-            return "1.0.0.0";
+            return '1.0.0.0';
         }
 
         /**
@@ -79,20 +80,25 @@
         private function checkParameters(Request $request)
         {
             /** @noinspection DuplicatedCode */
-            if(isset($request->Parameters["session_identification"]) == false)
-                throw new MissingParameterException("Missing parameter 'session_identification'");
-            if(gettype($request->Parameters["session_identification"]) !== "array")
-                throw new InvalidSessionIdentificationException("The parameter 'session_identification' is not a object");
+            if(isset($request->Parameters['session_identification']) == false)
+                throw new MissingParameterException('Missing parameter \'session_identification\'');
+            if(gettype($request->Parameters['session_identification']) !== 'array')
+                throw new InvalidSessionIdentificationException('The parameter \'session_identification\' is not a object');
 
-            if(isset($request->Parameters["username"]) == false)
-                throw new MissingParameterException("Missing parameter 'username'");
-            if(gettype($request->Parameters["username"]) !== "string")
-                throw new InvalidUsernameException("The 'username' parameter must be a string", $request->Parameters["username"]);
+            if(isset($request->Parameters['username']) == false)
+                throw new MissingParameterException('Missing parameter \'username\'');
+            if(gettype($request->Parameters['username']) !== 'string')
+                throw new InvalidUsernameException('The \'username\' parameter must be a string', $request->Parameters['username']);
 
-            if(isset($request->Parameters["password"]) == false)
-                throw new MissingParameterException("Missing parameter 'password'");
-            if(gettype($request->Parameters["password"]) !== "string")
-                throw new InvalidPasswordException("The 'password' parameter must be a string", $request->Parameters["password"]);
+            if(isset($request->Parameters['password']) == false)
+                throw new MissingParameterException('Missing parameter \'password\'');
+            if(gettype($request->Parameters['password']) !== 'string')
+                throw new InvalidPasswordException('The \'password\' parameter must be a string', $request->Parameters['password']);
+
+            if(isset($request->Parameters['captcha']) == false)
+                throw new MissingParameterException('Missing parameter \'captcha\'');
+            if(gettype($request->Parameters['captcha']) !== 'string')
+                throw new InvalidUsernameException('The \'captcha\' parameter must be a string', $request->Parameters['captcha']);
         }
 
         /**
@@ -105,6 +111,7 @@
          * @throws DocumentNotFoundException
          * @throws InternalServerException
          * @throws InvalidClientPublicHashException
+         * @throws InvalidFileNameException
          * @throws InvalidPasswordException
          * @throws InvalidSearchMethodException
          * @throws InvalidSessionIdentificationException
@@ -114,13 +121,12 @@
          * @throws PeerNotFoundException
          * @throws SessionExpiredException
          * @throws SessionNotFoundException
-         * @noinspection DuplicatedCode
          */
         public function execute(Request $request): Response
         {
             $this->checkParameters($request);
 
-            $SessionIdentification = SessionIdentification::fromArray($request->Parameters["session_identification"]);
+            $SessionIdentification = SessionIdentification::fromArray($request->Parameters['session_identification']);
             $SessionIdentification->validate();
 
             // Wake the worker up
@@ -146,18 +152,19 @@
             $otp_code = null;
 
             if(
-                isset($request->Parameters["otp"]) &&
-                gettype($request->Parameters["otp"]) == "string" &&
-                strlen($request->Parameters["otp"]) > 0 &&
-                strlen($request->Parameters["otp"] < 64)
+                isset($request->Parameters['otp']) &&
+                gettype($request->Parameters['otp']) == 'string' &&
+                strlen($request->Parameters['otp']) > 0 &&
+                strlen($request->Parameters['otp'] < 64)
             )
-                $otp_code = $request->Parameters["otp"];
+                $otp_code = $request->Parameters['otp'];
 
             try
             {
                 $NetworkSession->authenticateUser(
-                    $request->Parameters["username"],
-                    $request->Parameters["password"],
+                    $request->Parameters['username'],
+                    $request->Parameters['password'],
+                    $request->Parameters['captcha'],
                     $otp_code // The parameter is null if it isn't included
                 );
             }
@@ -168,7 +175,7 @@
                     throw $e;
 
                 // If anything else, suppress the error.
-                throw new InternalServerException("There was an unexpected error while tyring to establish your session", $e);
+                throw new InternalServerException('There was an unexpected error while tyring to establish your session', $e);
             }
 
             $Response = Response::fromRequest($request);
