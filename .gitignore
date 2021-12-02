@@ -4,3 +4,4 @@ tests/client_tests/data/simulations/
 timeline.json
 .cache
 *.pyc
+protocol_definitions_v1.json
