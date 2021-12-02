@@ -28,6 +28,9 @@
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidUrlValueException;
     use SocialvoidLib\NetworkSession;
     use SocialvoidRPC\Methods\Account\ClearProfileBiography;
+    use SocialvoidRPC\Methods\Account\ClearProfileLocation;
+    use SocialvoidRPC\Methods\Account\ClearProfileUrl;
+    use SocialvoidRPC\Methods\Account\DeleteProfilePicture;
     use TelegramCDN\Exceptions\FileSecurityException;
     use TmpFile\TmpFile;
     use udp2\Exceptions\AvatarNotFoundException;
@@ -150,7 +153,7 @@
          */
         public function deleteProfilePicture(): bool
         {
-            if($this->networkSession->hasPermissionToExecute(ClearProfileBiography::getStandardPermissionRequirements()) == false)
+            if($this->networkSession->hasPermissionToExecute(DeleteProfilePicture::getStandardPermissionRequirements()) == false)
                 throw new InsufficientPermissionsException();
 
             $user = $this->networkSession->getAuthenticatedUser();
@@ -317,7 +320,7 @@
          */
         public function clearProfileLocation(): bool
         {
-            if($this->networkSession->hasPermissionToExecute(ClearProfileBiography::getStandardPermissionRequirements()) == false)
+            if($this->networkSession->hasPermissionToExecute(ClearProfileLocation::getStandardPermissionRequirements()) == false)
                 throw new InsufficientPermissionsException();
 
             $user = $this->networkSession->getAuthenticatedUser();
@@ -381,7 +384,7 @@
          */
         public function clearProfileUrl(): bool
         {
-            if($this->networkSession->hasPermissionToExecute(ClearProfileBiography::getStandardPermissionRequirements()) == false)
+            if($this->networkSession->hasPermissionToExecute(ClearProfileUrl::getStandardPermissionRequirements()) == false)
                 throw new InsufficientPermissionsException();
 
             $user = $this->networkSession->getAuthenticatedUser();
