@@ -200,6 +200,7 @@
          * @throws PeerNotFoundException
          * @throws SessionExpiredException
          * @throws SessionNotFoundException
+         * @noinspection DuplicatedCode
          */
         public function execute(Request $request): Response
         {

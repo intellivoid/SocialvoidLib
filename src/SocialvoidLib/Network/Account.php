@@ -374,13 +374,14 @@
          * Clears the user url
          *
          * @return bool
+         * @throws InsufficientPermissionsException
          * @throws InternalServerException
          * @throws NotAuthenticatedException
          */
         public function clearProfileUrl(): bool
         {
-            if($this->networkSession->isAuthenticated() == false)
-                throw new NotAuthenticatedException();
+            if($this->networkSession->hasPermissionToExecute(ClearProfileBiography::getStandardPermissionRequirements()) == false)
+                throw new InsufficientPermissionsException();
 
             $user = $this->networkSession->getAuthenticatedUser();
             $user->Profile->URL = null;
