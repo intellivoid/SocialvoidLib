@@ -21,6 +21,7 @@
     use SocialvoidLib\Exceptions\Standard\Network\AccessDeniedException;
     use SocialvoidLib\Exceptions\Standard\Network\DocumentNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Security\InsufficientPermissionsException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
     use SocialvoidLib\Exceptions\Standard\Validation\FileTooLargeException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPublicHashException;
@@ -119,7 +120,8 @@
                 DocumentNotFoundException::getErrorCode(),
                 AccessDeniedException::getErrorCode(),
                 InvalidFileForProfilePictureException::getErrorCode(),
-                FileTooLargeException::getErrorCode()
+                FileTooLargeException::getErrorCode(),
+                InsufficientPermissionsException::getErrorCode()
             ];
         }
 

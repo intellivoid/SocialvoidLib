@@ -113,6 +113,7 @@
                 NotAuthenticatedException::getErrorCode(),
                 SessionExpiredException::getErrorCode(),
                 SessionExpiredException::getErrorCode(),
+                InsufficientPermissionsException::getErrorCode()
             ];
         }
 

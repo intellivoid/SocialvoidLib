@@ -14,6 +14,7 @@
     use SocialvoidLib\Exceptions\Standard\Authentication\NotAuthenticatedException;
     use SocialvoidLib\Exceptions\Standard\Authentication\SessionExpiredException;
     use SocialvoidLib\Exceptions\Standard\Authentication\SessionNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Security\InsufficientPermissionsException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPublicHashException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidSessionIdentificationException;
@@ -104,7 +105,8 @@
                 InvalidSessionIdentificationException::getErrorCode(),
                 NotAuthenticatedException::getErrorCode(),
                 SessionExpiredException::getErrorCode(),
-                SessionExpiredException::getErrorCode()
+                SessionExpiredException::getErrorCode(),
+                InsufficientPermissionsException::getErrorCode()
             ];
         }
 
