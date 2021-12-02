@@ -100,6 +100,10 @@
     use SocialvoidRPC\Methods\Account\ClearProfileUrl;
     use SocialvoidRPC\Methods\Account\DeleteProfilePicture;
     use SocialvoidRPC\Methods\Account\SetProfilePicture;
+    use SocialvoidRPC\Methods\Account\UpdateProfileBiography;
+    use SocialvoidRPC\Methods\Account\UpdateProfileLocation;
+    use SocialvoidRPC\Methods\Account\UpdateProfileName;
+    use SocialvoidRPC\Methods\Account\UpdateProfileUrl;
 
     /**
      * Class Network
@@ -738,7 +742,11 @@
                 ClearProfileLocation::getDefinition(),
                 ClearProfileUrl::getDefinition(),
                 DeleteProfilePicture::getDefinition(),
-                SetProfilePicture::getDefinition()
+                SetProfilePicture::getDefinition(),
+                UpdateProfileBiography::getDefinition(),
+                UpdateProfileLocation::getDefinition(),
+                UpdateProfileName::getDefinition(),
+                UpdateProfileUrl::getDefinition()
             ];
 
             return $ProtocolDefinitions;
