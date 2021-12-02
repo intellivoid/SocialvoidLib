@@ -43,6 +43,9 @@
     use SocialvoidLib\Exceptions\Standard\Network\PostDeletedException;
     use SocialvoidLib\Exceptions\Standard\Network\PostNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\SelfInteractionNotPermittedException;
+    use SocialvoidLib\Exceptions\Standard\Security\CaptchaAlreadyAnsweredException;
+    use SocialvoidLib\Exceptions\Standard\Security\CaptchaAlreadyUsedException;
+    use SocialvoidLib\Exceptions\Standard\Security\CaptchaAnswerNotApplicableException;
     use SocialvoidLib\Exceptions\Standard\Server\DocumentUploadException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
     use SocialvoidLib\Exceptions\Standard\Validation\AgreementRequiredException;
@@ -94,6 +97,9 @@
     use SocialvoidLib\Objects\Standard\TypeDefinition;
     use SocialvoidRPC\Methods\Account\ClearProfileBiography;
     use SocialvoidRPC\Methods\Account\ClearProfileLocation;
+    use SocialvoidRPC\Methods\Account\ClearProfileUrl;
+    use SocialvoidRPC\Methods\Account\DeleteProfilePicture;
+    use SocialvoidRPC\Methods\Account\SetProfilePicture;
 
     /**
      * Class Network
@@ -671,6 +677,11 @@
                 PostNotFoundException::getDefinition(),
                 SelfInteractionNotPermittedException::getDefinition(),
 
+                // Security
+                CaptchaAlreadyAnsweredException::getDefinition(),
+                CaptchaAlreadyUsedException::getDefinition(),
+                CaptchaAnswerNotApplicableException::getDefinition(),
+
                 // Server
                 DocumentUploadException::getDefinition(),
                 InternalServerException::getDefinition(),
@@ -724,7 +735,10 @@
 
             $ProtocolDefinitions->MethodDefinitions = [
                 ClearProfileBiography::getDefinition(),
-                ClearProfileLocation::getDefinition()
+                ClearProfileLocation::getDefinition(),
+                ClearProfileUrl::getDefinition(),
+                DeleteProfilePicture::getDefinition(),
+                SetProfilePicture::getDefinition()
             ];
 
             return $ProtocolDefinitions;
