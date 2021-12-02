@@ -52,6 +52,7 @@
     use SocialvoidLib\Exceptions\Standard\Validation\FileTooLargeException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidAttachmentsException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidBiographyException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidCaptchaIdException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPrivateHashException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPublicHashException;
@@ -695,6 +696,7 @@
                 FileTooLargeException::getDefinition(),
                 InvalidAttachmentsException::getDefinition(),
                 InvalidBiographyException::getDefinition(),
+                InvalidCaptchaIdException::getDefinition(),
                 InvalidClientNameException::getDefinition(),
                 InvalidClientPrivateHashException::getDefinition(),
                 InvalidClientPublicHashException::getDefinition(),
