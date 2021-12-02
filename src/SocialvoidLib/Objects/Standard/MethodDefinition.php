@@ -126,7 +126,7 @@
                 'id' => $this->getId(),
                 'namespace' => $this->Namespace,
                 'method_name' => $this->MethodName,
-                'method' => $this->MethodName,
+                'method' => $this->Method,
                 'description' => $this->Description,
                 'permission_requirements' => $this->PermissionRequirements,
                 'parameters' => $parameters,
