@@ -31,6 +31,11 @@
     use SocialvoidRPC\Methods\Account\ClearProfileLocation;
     use SocialvoidRPC\Methods\Account\ClearProfileUrl;
     use SocialvoidRPC\Methods\Account\DeleteProfilePicture;
+    use SocialvoidRPC\Methods\Account\SetProfilePicture;
+    use SocialvoidRPC\Methods\Account\UpdateProfileBiography;
+    use SocialvoidRPC\Methods\Account\UpdateProfileLocation;
+    use SocialvoidRPC\Methods\Account\UpdateProfileName;
+    use SocialvoidRPC\Methods\Account\UpdateProfileUrl;
     use TelegramCDN\Exceptions\FileSecurityException;
     use TmpFile\TmpFile;
     use udp2\Exceptions\AvatarNotFoundException;
@@ -71,6 +76,8 @@
          * @throws FileNotFoundException
          * @throws FileSecurityException
          * @throws FileTooLargeException
+         * @throws IOException
+         * @throws InsufficientPermissionsException
          * @throws InternalServerException
          * @throws InvalidFileForProfilePictureException
          * @throws InvalidZimageFileException
@@ -79,12 +86,11 @@
          * @throws TelegramException
          * @throws UnsupportedImageTypeException
          * @throws WrongKeyOrModifiedCiphertextException
-         * @throws IOException
          */
         public function setProfilePicture(string $document_id): bool
         {
-            if($this->networkSession->isAuthenticated() == false)
-                throw new NotAuthenticatedException();
+            if($this->networkSession->hasPermissionToExecute(SetProfilePicture::getStandardPermissionRequirements()) == false)
+                throw new InsufficientPermissionsException();
 
             $requested_document = $this->networkSession->getCloud()->getDocument($document_id);
             if($requested_document->FileType !== DocumentType::Photo)
@@ -178,6 +184,7 @@
          * @param string $first_name
          * @param string|null $last_name
          * @return bool
+         * @throws InsufficientPermissionsException
          * @throws InternalServerException
          * @throws InvalidFirstNameException
          * @throws InvalidLastNameException
@@ -185,8 +192,8 @@
          */
         public function updateProfileName(string $first_name, ?string $last_name=null): bool
         {
-            if($this->networkSession->isAuthenticated() == false)
-                throw new NotAuthenticatedException();
+            if($this->networkSession->hasPermissionToExecute(UpdateProfileName::getStandardPermissionRequirements()) == false)
+                throw new InsufficientPermissionsException();
 
             if(Validate::firstName($first_name) == false)
                 throw new InvalidFirstNameException('The given first name is invalid', $first_name);
@@ -217,14 +224,15 @@
          *
          * @param string $biography
          * @return bool
+         * @throws InsufficientPermissionsException
          * @throws InternalServerException
          * @throws InvalidBiographyException
          * @throws NotAuthenticatedException
          */
         public function updateProfileBiography(string $biography): bool
         {
-            if($this->networkSession->isAuthenticated() == false)
-                throw new NotAuthenticatedException();
+            if($this->networkSession->hasPermissionToExecute(UpdateProfileBiography::getStandardPermissionRequirements()) == false)
+                throw new InsufficientPermissionsException();
 
             if(Validate::biography($biography) == false)
                 throw new InvalidBiographyException('The given biography is invalid', $biography);
@@ -281,14 +289,15 @@
          *
          * @param string $location
          * @return bool
+         * @throws InsufficientPermissionsException
          * @throws InternalServerException
          * @throws InvalidGeoLocationException
          * @throws NotAuthenticatedException
          */
         public function updateProfileLocation(string $location): bool
         {
-            if($this->networkSession->isAuthenticated() == false)
-                throw new NotAuthenticatedException();
+            if($this->networkSession->hasPermissionToExecute(UpdateProfileLocation::getStandardPermissionRequirements()) == false)
+                throw new InsufficientPermissionsException();
 
             if(Validate::location($location) == false)
                 throw new InvalidGeoLocationException();
@@ -345,14 +354,15 @@
          *
          * @param string $url
          * @return bool
+         * @throws InsufficientPermissionsException
          * @throws InternalServerException
          * @throws InvalidUrlValueException
          * @throws NotAuthenticatedException
          */
         public function updateProfileUrl(string $url): bool
         {
-            if($this->networkSession->isAuthenticated() == false)
-                throw new NotAuthenticatedException();
+            if($this->networkSession->hasPermissionToExecute(UpdateProfileUrl::getStandardPermissionRequirements()) == false)
+                throw new InsufficientPermissionsException();
 
             if(Validate::url($url) == false)
                 throw new InvalidUrlValueException();
