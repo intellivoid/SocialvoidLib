@@ -144,13 +144,14 @@
          * Deletes the current profile picture set by the user
          *
          * @return bool
+         * @throws InsufficientPermissionsException
          * @throws InternalServerException
          * @throws NotAuthenticatedException
          */
         public function deleteProfilePicture(): bool
         {
-            if($this->networkSession->isAuthenticated() == false)
-                throw new NotAuthenticatedException();
+            if($this->networkSession->hasPermissionToExecute(ClearProfileBiography::getStandardPermissionRequirements()) == false)
+                throw new InsufficientPermissionsException();
 
             $user = $this->networkSession->getAuthenticatedUser();
 
