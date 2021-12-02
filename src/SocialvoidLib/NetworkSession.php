@@ -527,15 +527,21 @@
          *
          * @param string $username
          * @param string $password
+         * @param string $captcha
          * @param string $first_name
          * @param string|null $last_name
          * @return Peer
          * @throws AlreadyAuthenticatedException
+         * @throws CaptchaAlreadyUsedException
          * @throws DocumentNotFoundException
          * @throws Exceptions\GenericInternal\CacheException
          * @throws Exceptions\GenericInternal\DatabaseException
          * @throws Exceptions\GenericInternal\DisplayPictureException
          * @throws Exceptions\GenericInternal\InvalidSearchMethodException
+         * @throws Exceptions\Standard\Security\CaptchaBlockedException
+         * @throws Exceptions\Standard\Security\CaptchaExpiredException
+         * @throws Exceptions\Standard\Security\CaptchaNotFoundException
+         * @throws Exceptions\Standard\Security\IncompleteCaptchaException
          * @throws Exceptions\Standard\Validation\InvalidFirstNameException
          * @throws InternalServerException
          * @throws InvalidFileNameException
@@ -545,10 +551,12 @@
          * @throws PeerNotFoundException
          * @throws UsernameAlreadyExistsException
          */
-        public function registerUser(string $username, string $password, string $first_name, ?string $last_name=null): Peer
+        public function registerUser(string $username, string $password, string $captcha, string $first_name, ?string $last_name=null): Peer
         {
             if($this->active_session->Authenticated)
                 throw new AlreadyAuthenticatedException("You are already authenticated to the network");
+
+            $this->getCaptcha()->useCaptcha($captcha);
 
             // Validate the password and throw the proper exception
             Validate::password($password, true);

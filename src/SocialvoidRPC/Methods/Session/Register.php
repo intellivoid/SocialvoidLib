@@ -21,6 +21,7 @@
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
     use SocialvoidLib\Exceptions\Standard\Validation\AgreementRequiredException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPublicHashException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidFileNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidFirstNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidHelpDocumentId;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidLastNameException;
@@ -39,7 +40,7 @@
          */
         public function getMethodName(): string
         {
-            return "Register";
+            return 'Register';
         }
 
         /**
@@ -47,7 +48,7 @@
          */
         public function getMethod(): string
         {
-            return "session.register";
+            return 'session.register';
         }
 
         /**
@@ -55,7 +56,7 @@
          */
         public function getDescription(): string
         {
-            return "Registers a new peer into the network";
+            return 'Registers a new peer into the network';
         }
 
         /**
@@ -63,7 +64,7 @@
          */
         public function getVersion(): string
         {
-            return "1.0.0.0";
+            return '1.0.0.0';
         }
 
         /** @noinspection DuplicatedCode */
@@ -79,40 +80,45 @@
          */
         private function checkParameters(Request $request)
         {
-            if(isset($request->Parameters["session_identification"]) == false)
-                throw new MissingParameterException("Missing parameter 'session_identification'");
-            if(gettype($request->Parameters["session_identification"]) !== "array")
-                throw new InvalidSessionIdentificationException("The parameter 'session_identification' is not a object");
+            if(isset($request->Parameters['session_identification']) == false)
+                throw new MissingParameterException('Missing parameter \'session_identification\'');
+            if(gettype($request->Parameters['session_identification']) !== 'array')
+                throw new InvalidSessionIdentificationException('The parameter \'session_identification\' is not a object');
 
-            if(isset($request->Parameters["terms_of_service_id"]) == false)
-                throw new MissingParameterException("Missing parameter 'terms_of_service_id'");
-            if(gettype($request->Parameters["terms_of_service_id"]) !== "string")
-                throw new InvalidHelpDocumentId("The 'terms_of_service_id' parameter must be a string", $request->Parameters["terms_of_service_id"]);
-            if(isset($request->Parameters["terms_of_service_agree"]) == false)
-                throw new MissingParameterException("Missing parameter 'terms_of_service_agree'");
-            if(gettype($request->Parameters["terms_of_service_agree"]) !== "boolean")
-                throw new AgreementRequiredException("The 'terms_of_service_id' parameter must be a boolean", $request->Parameters["terms_of_service_agree"]);
+            if(isset($request->Parameters['terms_of_service_id']) == false)
+                throw new MissingParameterException('Missing parameter \'terms_of_service_id\'');
+            if(gettype($request->Parameters['terms_of_service_id']) !== 'string')
+                throw new InvalidHelpDocumentId('The \'terms_of_service_id\' parameter must be a string', $request->Parameters['terms_of_service_id']);
+            if(isset($request->Parameters['terms_of_service_agree']) == false)
+                throw new MissingParameterException('Missing parameter \'terms_of_service_agree\'');
+            if(gettype($request->Parameters['terms_of_service_agree']) !== 'boolean')
+                throw new AgreementRequiredException('The \'terms_of_service_id\' parameter must be a boolean', $request->Parameters['terms_of_service_agree']);
 
-            if(isset($request->Parameters["username"]) == false)
-                throw new MissingParameterException("Missing parameter 'username'");
-            if(gettype($request->Parameters["username"]) !== "string")
-                throw new InvalidUsernameException("The 'username' parameter must be a string", $request->Parameters["username"]);
+            if(isset($request->Parameters['username']) == false)
+                throw new MissingParameterException('Missing parameter \'username\'');
+            if(gettype($request->Parameters['username']) !== 'string')
+                throw new InvalidUsernameException('The \'username\' parameter must be a string', $request->Parameters['username']);
 
-            if(isset($request->Parameters["password"]) == false)
-                throw new MissingParameterException("Missing parameter 'password'");
-            if(gettype($request->Parameters["password"]) !== "string")
-                throw new InvalidPasswordException("The 'password' parameter must be a string", $request->Parameters["password"]);
+            if(isset($request->Parameters['password']) == false)
+                throw new MissingParameterException('Missing parameter \'password\'');
+            if(gettype($request->Parameters['password']) !== 'string')
+                throw new InvalidPasswordException('The \'password\' parameter must be a string', $request->Parameters['password']);
 
-            if(isset($request->Parameters["first_name"]) == false)
-                throw new MissingParameterException("Missing parameter 'first_name'");
-            if(gettype($request->Parameters["first_name"]) !== "string")
-                throw new InvalidFirstNameException("The 'first_name' parameter must be a string", $request->Parameters["first_name"]);
+            if(isset($request->Parameters['first_name']) == false)
+                throw new MissingParameterException('Missing parameter \'first_name\'');
+            if(gettype($request->Parameters['first_name']) !== 'string')
+                throw new InvalidFirstNameException('The \'first_name\' parameter must be a string', $request->Parameters['first_name']);
 
-            if(isset($request->Parameters["last_name"]))
+            if(isset($request->Parameters['last_name']))
             {
-                if(gettype($request->Parameters["last_name"]) !== "string")
-                    throw new InvalidLastNameException("The 'last_name' parameter must be a string", $request->Parameters["last_name"]);
+                if(gettype($request->Parameters['last_name']) !== 'string')
+                    throw new InvalidLastNameException('The \'last_name\' parameter must be a string', $request->Parameters['last_name']);
             }
+
+            if(isset($request->Parameters['captcha']) == false)
+                throw new MissingParameterException('Missing parameter \'captcha\'');
+            if(gettype($request->Parameters['captcha']) !== 'string')
+                throw new InvalidUsernameException('The \'captcha\' parameter must be a string', $request->Parameters['captcha']);
         }
 
         /**
@@ -138,13 +144,14 @@
          * @throws PeerNotFoundException
          * @throws SessionExpiredException
          * @throws SessionNotFoundException
+         * @throws InvalidFileNameException
          * @noinspection DuplicatedCode
          */
         public function execute(Request $request): Response
         {
             $this->checkParameters($request);
 
-            $SessionIdentification = SessionIdentification::fromArray($request->Parameters["session_identification"]);
+            $SessionIdentification = SessionIdentification::fromArray($request->Parameters['session_identification']);
             $SessionIdentification->validate();
 
             // Wake the worker up
@@ -176,10 +183,11 @@
             try
             {
                 $RegisteredPeer = $NetworkSession->registerUser(
-                    $request->Parameters["username"],
-                    $request->Parameters["password"],
-                    $request->Parameters["first_name"],
-                    ($request->Parameters["last_name"] ?? null),
+                    $request->Parameters['username'],
+                    $request->Parameters['password'],
+                    $request->Parameters['captcha'],
+                    $request->Parameters['first_name'],
+                    ($request->Parameters['last_name'] ?? null),
                 );
             }
             catch (Exception $e)
@@ -189,7 +197,7 @@
                     throw $e;
 
                 // If anything else, suppress the error.
-                throw new InternalServerException("There was an unexpected error while tyring to register the peer to the network", $e);
+                throw new InternalServerException('There was an unexpected error while tyring to register the peer to the network', $e);
             }
 
             $Response = Response::fromRequest($request);
