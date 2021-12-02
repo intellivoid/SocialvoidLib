@@ -7,6 +7,8 @@
     use KimchiRPC\Interfaces\MethodInterface;
     use KimchiRPC\Objects\Request;
     use KimchiRPC\Objects\Response;
+    use SocialvoidLib\Abstracts\Flags\PermissionSets;
+    use SocialvoidLib\Abstracts\Types\BuiltinTypes;
     use SocialvoidLib\Classes\Validate;
     use SocialvoidLib\Exceptions\GenericInternal\CacheException;
     use SocialvoidLib\Exceptions\GenericInternal\DatabaseException;
@@ -20,14 +22,19 @@
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPublicHashException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidFileNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidFirstNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidLastNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidSessionIdentificationException;
+    use SocialvoidLib\Interfaces\StandardMethodInterface;
     use SocialvoidLib\NetworkSession;
+    use SocialvoidLib\Objects\Standard\MethodDefinition;
+    use SocialvoidLib\Objects\Standard\ParameterDefinition;
     use SocialvoidLib\Objects\Standard\SessionIdentification;
+    use SocialvoidLib\Objects\Standard\TypeDefinition;
     use SocialvoidRPC\SocialvoidRPC;
 
-    class UpdateProfileName implements MethodInterface
+    class UpdateProfileName implements MethodInterface, StandardMethodInterface
     {
 
         /**
@@ -60,6 +67,113 @@
         public function getVersion(): string
         {
             return '1.0.0.0';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getStandardNamespace(): string
+        {
+            return 'account';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getStandardMethodName(): string
+        {
+            return 'update_profile_name';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getStandardMethod(): string
+        {
+            return self::getStandardNamespace() . '.' . self::getStandardMethodName();
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getStandardDescription(): string
+        {
+            return 'Sets a new First and or Last name to the profile';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getStandardPossibleErrorCodes(): array
+        {
+            return [
+                BadSessionChallengeAnswerException::getErrorCode(),
+                InternalServerException::getErrorCode(),
+                InvalidClientPublicHashException::getErrorCode(),
+                InvalidSessionIdentificationException::getErrorCode(),
+                NotAuthenticatedException::getErrorCode(),
+                SessionExpiredException::getErrorCode(),
+                SessionExpiredException::getErrorCode(),
+                InvalidFirstNameException::getErrorCode(),
+                InvalidLastNameException::getErrorCode()
+            ];
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getReturnTypes(): array
+        {
+            return [
+                new TypeDefinition(BuiltinTypes::Boolean, false)
+            ];
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getStandardParameters(): array
+        {
+            return [
+                new ParameterDefinition('session_identification', [
+                    new TypeDefinition(SessionIdentification::getName()),
+                ], true, 'The Session Identification object'),
+                new ParameterDefinition('first_name', [
+                    new TypeDefinition(BuiltinTypes::String)
+                ], true, 'The first name to set to the profile'),
+                new ParameterDefinition('last_name', [
+                    new TypeDefinition(BuiltinTypes::String)
+                ], false, 'The last name to set to the profile (Optional)')
+            ];
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getStandardPermissionRequirements(): array
+        {
+            return [
+                PermissionSets::User,
+                PermissionSets::Proxy,
+                PermissionSets::Bot
+            ];
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDefinition(): MethodDefinition
+        {
+            return new MethodDefinition(
+                self::getStandardNamespace(),
+                self::getStandardMethodName(),
+                self::getStandardMethod(),
+                self::getStandardDescription(),
+                self::getStandardPermissionRequirements(),
+                self::getStandardParameters(),
+                self::getStandardPossibleErrorCodes(),
+                self::getReturnTypes()
+            );
         }
 
         /**
@@ -108,6 +222,7 @@
          * @throws PeerNotFoundException
          * @throws SessionExpiredException
          * @throws SessionNotFoundException
+         * @throws InvalidFileNameException
          * @noinspection DuplicatedCode
          */
         public function execute(Request $request): Response
