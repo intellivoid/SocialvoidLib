@@ -20,6 +20,7 @@
     use SocialvoidLib\Exceptions\Standard\Authentication\SessionNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\DocumentNotFoundException;
     use SocialvoidLib\Exceptions\Standard\Network\PeerNotFoundException;
+    use SocialvoidLib\Exceptions\Standard\Security\InsufficientPermissionsException;
     use SocialvoidLib\Exceptions\Standard\Server\InternalServerException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPublicHashException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidFileNameException;
