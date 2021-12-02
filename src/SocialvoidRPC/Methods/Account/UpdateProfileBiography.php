@@ -27,6 +27,7 @@
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidBiographyException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidClientPublicHashException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidFileForProfilePictureException;
+    use SocialvoidLib\Exceptions\Standard\Validation\InvalidFileNameException;
     use SocialvoidLib\Exceptions\Standard\Validation\InvalidSessionIdentificationException;
     use SocialvoidLib\Interfaces\StandardMethodInterface;
     use SocialvoidLib\NetworkSession;
@@ -212,6 +213,7 @@
          * @throws PeerNotFoundException
          * @throws SessionExpiredException
          * @throws SessionNotFoundException
+         * @throws InvalidFileNameException
          * @noinspection DuplicatedCode
          */
         public function execute(Request $request): Response
