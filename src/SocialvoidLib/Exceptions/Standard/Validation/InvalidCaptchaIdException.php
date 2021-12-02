@@ -4,9 +4,11 @@
 
     use Exception;
     use SocialvoidLib\Abstracts\StandardErrorCodes;
+    use SocialvoidLib\Interfaces\StandardErrorInterface;
+    use SocialvoidLib\Objects\Standard\ErrorDefinition;
     use Throwable;
 
-    class InvalidCaptchaIdException extends Exception
+    class InvalidCaptchaIdException extends Exception implements StandardErrorInterface
     {
         /**
          * @param string $message
@@ -15,5 +17,37 @@
         public function __construct($message = "The given captcha ID is invalid", Throwable $previous = null)
         {
             parent::__construct($message, StandardErrorCodes::InvalidCaptchaIdException, $previous);
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDefinition(): ErrorDefinition
+        {
+            return new ErrorDefinition(self::getName(), self::getDescription(), self::getErrorCode());
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getName(): string
+        {
+            return 'InvalidCaptchaId';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getDescription(): string
+        {
+            return 'Raised when the given Captcha ID is invalid';
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public static function getErrorCode(): int
+        {
+            return StandardErrorCodes::InvalidCaptchaIdException;
         }
     }
