@@ -1,0 +1,45 @@
+version: "3"
+
+networks:
+  master_socialvoid:
+    external: false
+
+services:
+
+  rpc_server:
+    build: src/rpc_docker
+    container_name: socialvoid_rpc
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+    restart: always
+    networks:
+      - master_socialvoid
+    volumes:
+      - /mnt/HDD04/gitea:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "3000:3000"
+    depends_on:
+      - master_gearman
+      - master_database
+
+  master_database:
+    image: mysql
+    restart: always
+    container_name: socialvoid_master_mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    networks:
+      - master_socialvoid
+    volumes:
+      - /var/socialvoid/mysql:/var/lib/mysql
+
+  master_gearman:
+    image: artefactual/gearmand:latest
+    restart: always
+    environment:
+      - VERBOSE=INFO
+    networks:
+      - master_socialvoid
