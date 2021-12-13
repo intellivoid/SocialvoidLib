@@ -29,11 +29,35 @@
     "components": [
         {
             "required": true,
-            "file": "Methods/Account/ClearProfileBiography.php"
+            "file": "Methods/Network/GetProfile.php"
         },
         {
             "required": true,
-            "file": "Methods/Account/ClearProfileLocation.php"
+            "file": "Methods/Network/FollowPeer.php"
+        },
+        {
+            "required": true,
+            "file": "Methods/Network/UnfollowPeer.php"
+        },
+        {
+            "required": true,
+            "file": "Methods/Network/GetMe.php"
+        },
+        {
+            "required": true,
+            "file": "Methods/Network/GetFollowing.php"
+        },
+        {
+            "required": true,
+            "file": "Methods/Network/GetFollowers.php"
+        },
+        {
+            "required": true,
+            "file": "Methods/Network/ResolvePeer.php"
+        },
+        {
+            "required": true,
+            "file": "Methods/Cloud/GetDocument.php"
         },
         {
             "required": true,
@@ -41,7 +65,11 @@
         },
         {
             "required": true,
-            "file": "Methods/Account/DeleteProfilePicture.php"
+            "file": "Methods/Account/UpdateProfileLocation.php"
+        },
+        {
+            "required": true,
+            "file": "Methods/Account/ClearProfileLocation.php"
         },
         {
             "required": true,
@@ -53,7 +81,7 @@
         },
         {
             "required": true,
-            "file": "Methods/Account/UpdateProfileLocation.php"
+            "file": "Methods/Account/UpdateProfileUrl.php"
         },
         {
             "required": true,
@@ -61,7 +89,11 @@
         },
         {
             "required": true,
-            "file": "Methods/Account/UpdateProfileUrl.php"
+            "file": "Methods/Account/ClearProfileBiography.php"
+        },
+        {
+            "required": true,
+            "file": "Methods/Account/DeleteProfilePicture.php"
         },
         {
             "required": true,
@@ -69,15 +101,35 @@
         },
         {
             "required": true,
-            "file": "Methods/Captcha/CreateCaptcha.php"
-        },
-        {
-            "required": true,
             "file": "Methods/Captcha/GetCaptcha.php"
         },
         {
             "required": true,
-            "file": "Methods/Cloud/GetDocument.php"
+            "file": "Methods/Captcha/CreateCaptcha.php"
+        },
+        {
+            "required": true,
+            "file": "Methods/Session/AuthenticateUser.php"
+        },
+        {
+            "required": true,
+            "file": "Methods/Session/Register.php"
+        },
+        {
+            "required": true,
+            "file": "Methods/Session/Logout.php"
+        },
+        {
+            "required": true,
+            "file": "Methods/Session/GetSession.php"
+        },
+        {
+            "required": true,
+            "file": "Methods/Session/CreateSession.php"
+        },
+        {
+            "required": true,
+            "file": "Methods/Help/GetTermsOfService.php"
         },
         {
             "required": true,
@@ -93,107 +145,7 @@
         },
         {
             "required": true,
-            "file": "Methods/Help/GetTermsOfService.php"
-        },
-        {
-            "required": true,
-            "file": "Methods/Network/FollowPeer.php"
-        },
-        {
-            "required": true,
-            "file": "Methods/Network/GetFollowers.php"
-        },
-        {
-            "required": true,
-            "file": "Methods/Network/GetFollowing.php"
-        },
-        {
-            "required": true,
-            "file": "Methods/Network/GetMe.php"
-        },
-        {
-            "required": true,
-            "file": "Methods/Network/GetProfile.php"
-        },
-        {
-            "required": true,
-            "file": "Methods/Network/ResolvePeer.php"
-        },
-        {
-            "required": true,
-            "file": "Methods/Network/UnfollowPeer.php"
-        },
-        {
-            "required": true,
-            "file": "Methods/Session/AuthenticateUser.php"
-        },
-        {
-            "required": true,
-            "file": "Methods/Session/CreateSession.php"
-        },
-        {
-            "required": true,
-            "file": "Methods/Session/GetSession.php"
-        },
-        {
-            "required": true,
-            "file": "Methods/Session/Logout.php"
-        },
-        {
-            "required": true,
-            "file": "Methods/Session/Register.php"
-        },
-        {
-            "required": true,
-            "file": "Methods/Timeline/Compose.php"
-        },
-        {
-            "required": true,
-            "file": "Methods/Timeline/Delete.php"
-        },
-        {
-            "required": true,
             "file": "Methods/Timeline/GetLikes.php"
-        },
-        {
-            "required": true,
-            "file": "Methods/Timeline/GetPost.php"
-        },
-        {
-            "required": true,
-            "file": "Methods/Timeline/GetQuotes.php"
-        },
-        {
-            "required": true,
-            "file": "Methods/Timeline/GetReplies.php"
-        },
-        {
-            "required": true,
-            "file": "Methods/Timeline/GetRepostedPeers.php"
-        },
-        {
-            "required": true,
-            "file": "Methods/Timeline/Like.php"
-        },
-        {
-            "required": true,
-            "file": "Methods/Timeline/Quote.php"
-        },
-        {
-            "required": true,
-            "file": "Methods/Timeline/Reply.php"
-        },
-        {
-            "required": true,
-            "file": "Methods/Timeline/Repost.php"
-        },
-        {
-            "required": true,
-            "file": "Methods/Timeline/RetrieveFeed.php"
-        },
-        {
-            "required": true,
-            "file": "Methods/Timeline/RetrieveGlobalFeed.php"
         },
         {
             "required": true,
@@ -201,12 +153,60 @@
         },
         {
             "required": true,
+            "file": "Methods/Timeline/Compose.php"
+        },
+        {
+            "required": true,
+            "file": "Methods/Timeline/GetReplies.php"
+        },
+        {
+            "required": true,
+            "file": "Methods/Timeline/GetPost.php"
+        },
+        {
+            "required": true,
+            "file": "Methods/Timeline/Reply.php"
+        },
+        {
+            "required": true,
+            "file": "Methods/Timeline/GetRepostedPeers.php"
+        },
+        {
+            "required": true,
+            "file": "Methods/Timeline/Delete.php"
+        },
+        {
+            "required": true,
+            "file": "Methods/Timeline/RetrieveFeed.php"
+        },
+        {
+            "required": true,
+            "file": "Methods/Timeline/Like.php"
+        },
+        {
+            "required": true,
+            "file": "Methods/Timeline/RetrieveGlobalFeed.php"
+        },
+        {
+            "required": true,
+            "file": "Methods/Timeline/GetQuotes.php"
+        },
+        {
+            "required": true,
+            "file": "Methods/Timeline/Quote.php"
+        },
+        {
+            "required": true,
+            "file": "Methods/Timeline/Repost.php"
+        },
+        {
+            "required": true,
             "file": "SocialvoidRPC.php"
         }
     ],
     "files": [
-        "main",
+        "rpc_worker",
         "package.json",
-        "rpc_worker"
+        "main"
     ]
 }

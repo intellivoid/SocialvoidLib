@@ -51,10 +51,10 @@
         }
     ],
     "files": [
-        "main",
-        "package.json",
         "process_worker",
+        "update_worker",
+        "package.json",
         "query_worker",
-        "update_worker"
+        "main"
     ]
 }

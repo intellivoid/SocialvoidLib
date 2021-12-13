@@ -1,5 +1,5 @@
 #!/bin/sh
-echo "### Initializing Intellivoid Web 0w0  ###"
+echo "### Initializing Socialvoid RPC 0w0  ###"
 if [ ! -f /firstrun.pass ]; then
 	echo "(!) First run! Installing resources..."
 	#update.shx || exit 1
@@ -14,16 +14,7 @@ if [ ! -f /firstrun.pass ]; then
 else
 	echo "### Starting Web Services ###"
 	chown -R nobody:nobody /var/log
-	ppm --update
-	echo "### Starting Nginx ###"
-	/usr/sbin/nginx -t && /usr/sbin/nginx
-	echo "### Starting PHP-FPM ###"
 	mkdir -p /run/php-fpm/
-	/usr/sbin/php-fpm8 --nodaemonize --allow-to-run-as-root
-		exit 0
-	else
-	sleep 1
-		exit 1
-	fi
-	ppm --main="net.intellivoid.socialvoid_rpc" --version="latest"
+	/usr/sbin/nginx -t
+	/usr/bin/supervisord -c /etc/supervisord.conf
 fi

@@ -14,6 +14,12 @@ socialvoid_src_dir = src/Socialvoid
 socialvoid_name = net.intellivoid.socialvoid
 
 #######################
+# Docker
+#######################
+rpc_docker:
+	DOCKER_BUILDKIT=1 docker build -t "socialvoid_rpc:dockerfile" --secret id=GIT_API_KEY,env=GIT_API_KEY src/rpc_docker --no-cache --progress plain
+
+#######################
 # SocialvoidLib
 #######################
 socialvoidlib:

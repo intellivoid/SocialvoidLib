@@ -29,7 +29,11 @@
     "components": [
         {
             "required": true,
-            "file": "Interfaces/MenuInterface.php"
+            "file": "Menus/HealthStatusMenu.php"
+        },
+        {
+            "required": true,
+            "file": "Menus/VersionInformationMenu.php"
         },
         {
             "required": true,
@@ -49,24 +53,20 @@
         },
         {
             "required": true,
-            "file": "Menus/HealthStatusMenu.php"
-        },
-        {
-            "required": true,
             "file": "Menus/MainMenu.php"
         },
         {
             "required": true,
-            "file": "Menus/VersionInformationMenu.php"
+            "file": "SocialvoidAdmin.php"
         },
         {
             "required": true,
-            "file": "SocialvoidAdmin.php"
+            "file": "Interfaces/MenuInterface.php"
         }
     ],
     "files": [
-        "main",
         "Menus/banner.txt",
-        "package.json"
+        "package.json",
+        "main"
     ]
 }
