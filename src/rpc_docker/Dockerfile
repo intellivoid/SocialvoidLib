@@ -6,6 +6,7 @@ MAINTAINER Zi Xing Narrakas (netkas@intellivoid.net)
 
 # Expose the ports
 EXPOSE 5200
+STOPSIGNAL SIGQUIT
 
 # Copy the bootstrap file
 COPY bootstrap.shx /usr/local/bin/bootstrap.shx
@@ -34,6 +35,8 @@ RUN rm -rf ppm && apk del php8-dev build-base && rm /etc/logrotate.conf
 RUN --mount=type=secret,id=GIT_API_KEY git clone https://$(cat /run/secrets/GIT_API_KEY):x-oauth-basic@github.com/intellivoid/SocialvoidLib.git/ -b v1.0.0.2 --single-branch
 RUN cd SocialvoidLib && make update_p build_p install_fast install
 RUN rm -rf SocialvoidLib
+RUN mkdir /etc/acm; chown -R nobody:nobody /etc/acm
+RUN mkdir /var/log/php; chown -R nobody:nobody /var/log/php
 
 # Really make sure nginx's damn configs are gone. This shit is like the fucking clap:
 # You can't get rid of it.
@@ -47,6 +50,6 @@ COPY supervisored.conf /etc/supervisord.conf
 
 # Copy the frontend
 RUN mkdir /var/www/frontend
-COPY index.php /var/www/frontend/index.php
+COPY index.php /var/www/index.php
 
 CMD ["/bin/sh", "/usr/local/bin/bootstrap.shx"]

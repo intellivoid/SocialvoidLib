@@ -2,19 +2,13 @@
 echo "### Initializing Socialvoid RPC 0w0  ###"
 if [ ! -f /firstrun.pass ]; then
 	echo "(!) First run! Installing resources..."
-	#update.shx || exit 1
-	echo "[...] PHP Configuration:"
-	php --ini
-	php -m
-	echo "======================================================================================================="
-	php -i
 	echo "(+) Setting boot flag..."
 	touch /firstrun.pass
-	echo "[...] Restarting server in detached mode..."
-else
-	echo "### Starting Web Services ###"
-	chown -R nobody:nobody /var/log
-	mkdir -p /run/php-fpm/
-	/usr/sbin/nginx -t
-	/usr/bin/supervisord -c /etc/supervisord.conf
 fi
+
+echo "### Starting Web Services ###"
+chown -R nobody:nobody /var/log
+chown -R nobody:nobody /etc/acm
+mkdir -p /run/php-fpm/
+/usr/sbin/nginx -t
+/usr/bin/supervisord -c /etc/supervisord.conf

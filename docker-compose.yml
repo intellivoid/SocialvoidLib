@@ -3,43 +3,51 @@ version: "3"
 networks:
   master_socialvoid:
     external: false
+    ipam:
+      config:
+        - subnet: 172.16.57.0/24
 
 services:
 
   rpc_server:
-    build: src/rpc_docker
+    image: socialvoid_rpc:dockerfile
     container_name: socialvoid_rpc
-    environment:
-      - USER_UID=1000
-      - USER_GID=1000
     restart: always
+    hostname: socialvoid_rpc
     networks:
       - master_socialvoid
+    depends_on:
+      - gearman
     volumes:
-      - /mnt/HDD04/gitea:/data
+      - /var/socialvoid/config/acm:/etc/acm
+      - /var/socialvoid/lib:/var/socialvoid/lib
+      - /var/socialvoid/legal:/var/socialvoid/legal
+      - /var/socialvoid/avatars:/var/socialvoid/avatars
+      - /var/socialvoid/config/rpc_nginx.conf:/etc/nginx/nginx.conf:ro
+      - /var/socialvoid/config/socialvoid_rpc.conf:/etc/nginx/http.d/socialvoid_rpc.conf:ro
+      - /var/socialvoid/config/rpc_supervisord.conf:/etc/supervisord.conf:ro
+      - /var/socialvoid/logs/rpc_nginx:/var/log/nginx
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     ports:
-      - "3000:3000"
-    depends_on:
-      - master_gearman
-      - master_database
+      - "5200:5200"
 
-  master_database:
-    image: mysql
-    restart: always
-    container_name: socialvoid_master_mysql
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
+  gearman_redis:
+    image: redis:alpine
+    container_name: socialvoid_gearmand_redis
+    hostname: gearmand_redis
     networks:
       - master_socialvoid
-    volumes:
-      - /var/socialvoid/mysql:/var/lib/mysql
 
-  master_gearman:
+  gearman:
     image: artefactual/gearmand:latest
-    restart: always
-    environment:
-      - VERBOSE=INFO
+    container_name: socialvoid_gearmand
+    hostname: gearmand
+    depends_on:
+      - gearman_redis
     networks:
       - master_socialvoid
+    command:
+      - "--queue-type=redis"
+      - "--redis-server=gearmand_redis"
+      - "--redis-port=6379"
