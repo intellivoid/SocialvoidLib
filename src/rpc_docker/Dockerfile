@@ -22,7 +22,7 @@ RUN apk --no-cache add php8 libgcc libstdc\+\+ build-base php8-dev
 RUN apk --no-cache add php8-gd php8-pear php8-mbstring php8-posix php8-curl php8-json php8-phar php8-tokenizer php8-fileinfo  \
     php8-mysqlnd php8-pdo php8-pdo_mysql php8-mysqli php8-calendar php8-pecl-mongodb php8-pecl-gearman imagemagick-dev \
     g++ imagemagick libtool pcre-dev php8 php8-redis redis gearman-dev openssl-dev git curl logrotate make nginx  \
-    php8-fpm php8-pecl-imagick supervisor
+    php8-fpm php8-pecl-imagick supervisor php8-ctype
 RUN ln -sf /usr/bin/php8 /usr/bin/php && ln -sf /usr/bin/pecl8 /usr/bin/pecl && ln -sf /usr/bin/pear8 /usr/bin/pear
 RUN pecl channel-update pecl.php.net
 RUN sed -i 's/^memory_limit = .*$/memory_limit = -1/' /etc/php8/php.ini

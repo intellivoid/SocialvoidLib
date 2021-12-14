@@ -20,6 +20,32 @@ rpc_docker:
 	DOCKER_BUILDKIT=1 docker build -t "socialvoid_rpc:dockerfile" --secret id=GIT_API_KEY,env=GIT_API_KEY src/rpc_docker --no-cache --progress plain
 
 #######################
+# MySQL Tables
+#######################
+master_database:
+	@mkdir -p build
+	touch build/master.sql
+	cat database/production/master_database/database.sql >> build/master.sql
+	cat database/production/master_database/peers.sql >> build/master.sql
+	cat database/production/master_database/peer_relations.sql >> build/master.sql
+	cat database/production/master_database/telegram_cdn.sql >> build/master.sql
+
+slave_database:
+	@mkdir -p build
+	touch build/slave.sql
+	cat database/production/slave_database/database.sql >> build/slave.sql
+	cat database/production/slave_database/sessions.sql >> build/slave.sql
+	cat database/production/slave_database/documents.sql >> build/slave.sql
+	cat database/production/slave_database/captcha.sql >> build/slave.sql
+	cat database/production/slave_database/peer_timelines.sql >> build/slave.sql
+	cat database/production/slave_database/posts.sql >> build/slave.sql
+	cat database/production/slave_database/posts_likes.sql >> build/slave.sql
+	cat database/production/slave_database/posts_quotes.sql >> build/slave.sql
+	cat database/production/slave_database/posts_replies.sql >> build/slave.sql
+	cat database/production/slave_database/posts_reposts.sql >> build/slave.sql
+
+
+#######################
 # SocialvoidLib
 #######################
 socialvoidlib:
@@ -99,9 +125,11 @@ update_p:
 	wait;
 build:
 	mkdir build
-	make socialvoidlib socialvoid_service socialvoid_rpc socialvoid_admin socialvoid
+	make master_database slave_database socialvoidlib socialvoid_service socialvoid_rpc socialvoid_admin socialvoid
 build_p:
 	mkdir build
+	make master_database & \
+	make slave_database & \
 	make socialvoidlib & \
 	make socialvoid_service & \
 	make socialvoid_rpc & \
