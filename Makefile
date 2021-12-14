@@ -18,6 +18,11 @@ socialvoid_name = net.intellivoid.socialvoid
 #######################
 rpc_docker:
 	DOCKER_BUILDKIT=1 docker build -t "socialvoid_rpc:dockerfile" --secret id=GIT_API_KEY,env=GIT_API_KEY src/rpc_docker --no-cache --progress plain
+	docker save -o build/socialovid_rpc.tar socialvoid_rpc:dockerfile
+
+cdn_docker:
+	DOCKER_BUILDKIT=1 docker build -t "socialvoid_cdn:dockerfile" --secret id=GIT_API_KEY,env=GIT_API_KEY src/cdn_docker --no-cache --progress plain
+	docker save -o build/socialovid_cdn.tar socialvoid_cdn:dockerfile
 
 #######################
 # MySQL Tables
