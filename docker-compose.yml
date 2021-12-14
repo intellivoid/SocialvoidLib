@@ -19,8 +19,14 @@ services:
     depends_on:
       gearman:
         condition: "service_started"
+      redis:
+        condition: "service_started"
       mysql_master:
         condition: "service_healthy"
+      mysql_slave:
+        condition: "service_healthy"
+      telegram_bot_api:
+        condition: "service_started"
     volumes:
       - /var/socialvoid/config/acm:/etc/acm
       - /var/socialvoid/lib:/var/socialvoid/lib
@@ -54,15 +60,44 @@ services:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "master_mysql"]
       timeout: 20s
       retries: 10
 
+  mysql_slave:
+    image: mariadb:latest
+    container_name: socialvoid_slave_mysql
+    hostname: slave_mysql
+    restart: unless-stopped
+    networks:
+      - master_socialvoid
+    environment:
+      MYSQL_DATABASE: socialvoid
+      MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: "yes"
+      MYSQL_USER: socialvoid
+      MYSQL_PASSWORD: socialvoid
+      MYSQL_TCP_PORT: 3306
+      MYSQL_ROOT_HOST: "%"
+    volumes:
+      - ./build/slave.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "slave_mysql"]
+      timeout: 20s
+      retries: 10
 
   gearman_redis:
     image: redis:alpine
     container_name: socialvoid_gearmand_redis
     hostname: gearmand_redis
+    networks:
+      - master_socialvoid
+
+  redis:
+    image: redis:alpine
+    container_name: socialvoid_redis
+    hostname: redis
     networks:
       - master_socialvoid
 
@@ -80,3 +115,20 @@ services:
       - "--queue-type=redis"
       - "--redis-server=gearmand_redis"
       - "--redis-port=6379"
+
+  telegram_bot_api:
+    image: aiogram/telegram-bot-api:latest
+    container_name: socialvoid_tdlib
+    networks:
+      - master_socialvoid
+    environment:
+      TELEGRAM_API_ID: "${TELEGRAM_API_ID}"
+      TELEGRAM_API_HASH: "${TELEGRAM_API_HASH}"
+      TELEGRAM_LOCAL: "1"
+      TELEGRAM_STAT: "1"
+    ports:
+      - "5202:8081"
+      - "5203:8082"
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
