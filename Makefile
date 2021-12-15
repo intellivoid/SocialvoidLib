@@ -24,6 +24,10 @@ cdn_docker:
 	DOCKER_BUILDKIT=1 docker build -t "socialvoid_cdn:dockerfile" --secret id=GIT_API_KEY,env=GIT_API_KEY src/cdn_docker --no-cache --progress plain
 	docker save -o build/socialovid_cdn.tar socialvoid_cdn:dockerfile
 
+socialvoid_docker:
+	DOCKER_BUILDKIT=1 docker build -t "socialvoid:dockerfile" --secret id=GIT_API_KEY,env=GIT_API_KEY src/socialvoid_docker --no-cache --progress plain
+	docker save -o build/socialovid.tar socialvoid:dockerfile
+
 #######################
 # MySQL Tables
 #######################

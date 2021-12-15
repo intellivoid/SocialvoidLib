@@ -1,0 +1,12 @@
+#!/bin/sh
+echo "### Initializing Socialvoid RPC 0w0  ###"
+if [ ! -f /firstrun.pass ]; then
+	echo "(!) First run! Installing resources..."
+	echo "(+) Setting boot flag..."
+	touch /firstrun.pass
+fi
+
+echo "### Starting Web Services ###"
+chown -R nobody:nobody /var/log
+chown -R nobody:nobody /etc/acm
+/usr/bin/php /var/ppm/ppm.php --ppm  --main="net.intellivoid.socialvoid_service" --no-tty --version="latest"

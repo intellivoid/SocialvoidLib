@@ -9,6 +9,32 @@ networks:
 
 services:
 
+  socialvoid:
+    image: socialvoid:dockerfile
+    container_name: socialvoid
+    restart: always
+    hostname: socialvoid
+    networks:
+      - master_socialvoid
+    depends_on:
+      gearman:
+        condition: "service_started"
+      redis:
+        condition: "service_started"
+      mysql_master:
+        condition: "service_healthy"
+      mysql_slave:
+        condition: "service_healthy"
+      telegram_bot_api:
+        condition: "service_started"
+    volumes:
+      - /var/socialvoid/config/acm:/etc/acm
+      - /var/socialvoid/lib:/var/socialvoid/lib
+      - /var/socialvoid/legal:/var/socialvoid/legal
+      - /var/socialvoid/avatars:/var/socialvoid/avatars
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+
   rpc_server:
     image: socialvoid_rpc:dockerfile
     container_name: socialvoid_rpc
@@ -26,6 +52,8 @@ services:
       mysql_slave:
         condition: "service_healthy"
       telegram_bot_api:
+        condition: "service_started"
+      socialvoid:
         condition: "service_started"
     volumes:
       - /var/socialvoid/config/acm:/etc/acm
@@ -52,12 +80,14 @@ services:
       gearman:
         condition: "service_started"
       redis:
-        condition: "service_started"
+        condition: "service_healthy"
       mysql_master:
         condition: "service_healthy"
       mysql_slave:
         condition: "service_healthy"
       telegram_bot_api:
+        condition: "service_started"
+      socialvoid:
         condition: "service_started"
     volumes:
       - /var/socialvoid/config/acm:/etc/acm
@@ -91,6 +121,16 @@ services:
       - ./build/master.sql:/docker-entrypoint-initdb.d/init.sql:ro
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
+      - /var/socialvoid/data/master_mysql:/var/lib/mysql
+      - /var/socialvoid/data/backup_master_mysql:/backup
+      - /var/socialvoid/config/master_mysql/my.cnf:/etc/mysql/my.cnf:ro
+      - /var/socialvoid/config/master_mysql/mariadb.cnf:/etc/mysql/mariadb.cnf:ro
+      - /var/socialvoid/config/master_mysql/mariadb.conf.d/50-client.cnf:/etc/mysql/mariadb.conf.d/50-client.cnf:ro
+      - /var/socialvoid/config/master_mysql/mariadb.conf.d/50-mysql-clients.cnf:/etc/mysql/mariadb.conf.d/50-mysql-clients.cnf:ro
+      - /var/socialvoid/config/master_mysql/mariadb.conf.d/50-mysqld_safe.cnf:/etc/mysql/mariadb.conf.d/50-mysqld_safe.cnf:ro
+      - /var/socialvoid/config/master_mysql/mariadb.conf.d/50-server.cnf:/etc/mysql/mariadb.conf.d/50-server.cnf:ro
+      - /var/socialvoid/config/master_mysql/mariadb.conf.d/60-galera.cnf:/etc/mysql/mariadb.conf.d/60-galera.cnf:ro
+      - /var/socialvoid/config/master_mysql/mariadb.conf.d/99-enable-encryption.cnf.preset/enable_encryption.preset:/etc/mysql/mariadb.conf.d/99-enable-encryption.cnf.preset/enable_encryption.preset:ro
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "master_mysql"]
       timeout: 20s
@@ -114,17 +154,20 @@ services:
       - ./build/slave.sql:/docker-entrypoint-initdb.d/init.sql:ro
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
+      - /var/socialvoid/data/slave_mysql:/var/lib/mysql
+      - /var/socialvoid/data/backup_slave_mysql:/backup
+      - /var/socialvoid/config/slave_mysql/my.cnf:/etc/mysql/my.cnf:ro
+      - /var/socialvoid/config/slave_mysql/mariadb.cnf:/etc/mysql/mariadb.cnf:ro
+      - /var/socialvoid/config/slave_mysql/mariadb.conf.d/50-client.cnf:/etc/mysql/mariadb.conf.d/50-client.cnf:ro
+      - /var/socialvoid/config/slave_mysql/mariadb.conf.d/50-mysql-clients.cnf:/etc/mysql/mariadb.conf.d/50-mysql-clients.cnf:ro
+      - /var/socialvoid/config/slave_mysql/mariadb.conf.d/50-mysqld_safe.cnf:/etc/mysql/mariadb.conf.d/50-mysqld_safe.cnf:ro
+      - /var/socialvoid/config/slave_mysql/mariadb.conf.d/50-server.cnf:/etc/mysql/mariadb.conf.d/50-server.cnf:ro
+      - /var/socialvoid/config/slave_mysql/mariadb.conf.d/60-galera.cnf:/etc/mysql/mariadb.conf.d/60-galera.cnf:ro
+      - /var/socialvoid/config/slave_mysql/mariadb.conf.d/99-enable-encryption.cnf.preset/enable_encryption.preset:/etc/mysql/mariadb.conf.d/99-enable-encryption.cnf.preset/enable_encryption.preset:ro
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "slave_mysql"]
       timeout: 20s
       retries: 10
-
-  gearman_redis:
-    image: redis:alpine
-    container_name: socialvoid_gearmand_redis
-    hostname: gearmand_redis
-    networks:
-      - master_socialvoid
 
   redis:
     image: redis:alpine
@@ -132,21 +175,20 @@ services:
     hostname: redis
     networks:
       - master_socialvoid
+    volumes:
+      - /var/socialvoid/config/redis.conf:/usr/local/etc/redis/redis.conf:ro
+    command: redis-server /usr/local/etc/redis/redis.conf
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
 
   gearman:
     image: artefactual/gearmand:latest
     container_name: socialvoid_gearmand
     hostname: gearmand
-    depends_on:
-      - gearman_redis
     networks:
       - master_socialvoid
     environment:
       VERBOSE: ERROR
-    command:
-      - "--queue-type=redis"
-      - "--redis-server=gearmand_redis"
-      - "--redis-port=6379"
 
   telegram_bot_api:
     image: aiogram/telegram-bot-api:latest
